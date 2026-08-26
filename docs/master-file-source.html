@@ -157,7 +157,7 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
 
 <div class="shell">
 <aside class="side">
-  <div class="mark">WICFL<br>Microsite Factory<span>Master reference &middot; v1.1</span></div>
+  <div class="mark">WICFL<br>Microsite Factory<span>Master reference &middot; v1.4</span></div>
   <nav>
     <div class="grp">Orientation</div>
     <a href="#objective">Objective</a>
@@ -186,15 +186,15 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
   <h1>Microsite Factory</h1>
   <p class="lede">One reference for the whole project. What gets built, who builds it, how long it takes, what it costs, and what has to be true before we scale.</p>
   <div class="meta">
-    <span>Version 1.1</span><span>25 Aug 2026</span><span>Owner: Victor</span><span>Kevin &middot; Pavel &middot; Victor</span>
+    <span>Version 1.4</span><span>25 Aug 2026</span><span>Owner: Victor</span><span>Kevin &middot; Pavel &middot; Victor</span>
   </div>
 </div>
 
 <div class="strip">
   <div class="tile"><div class="k">Current phase</div><div class="v">Phase 0</div><div class="s">Alignment and decisions</div></div>
   <div class="tile pend"><div class="k">Next gate</div><div class="v">13 Nov 2026</div><div class="s">Gate A, repeatability</div></div>
-  <div class="tile alert"><div class="k">Open blockers</div><div class="v">3</div><div class="s">GoTo quote, content owner, brand assets</div></div>
-  <div class="tile pend"><div class="k">Schedule risk</div><div class="v">Phase 3</div><div class="s">Start date unconfirmed</div></div>
+  <div class="tile alert"><div class="k">Open items on Kevin</div><div class="v">6</div><div class="s">Accounts, brand assets, reviewer, CRM</div></div>
+  <div class="tile"><div class="k">Site #1 launch</div><div class="v">9 Oct 2026</div><div class="s">Dates confirmed 25 Aug</div></div>
 </div>
 
 <!-- ================= OBJECTIVE ================= -->
@@ -530,13 +530,13 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
       </ul>
     </div>
     <div class="card">
-      <div class="role">Unassigned</div>
+      <div class="role">Pavel &middot; second hat</div>
       <h4>Content owner</h4>
       <ul>
+        <li>Assigned 25 Aug 2026 by Kevin</li>
         <li>15 to 25 pages per site, English</li>
-        <li>A native Spanish writer for Spanish sites</li>
-        <li>The largest cost line in the project</li>
-        <li>Closing this is activity 0.4</li>
+        <li>Writes native Spanish, so Site #2 needs no hire</li>
+        <li>Workable for the pilots, revisit at Gate B</li>
       </ul>
     </div>
   </div>
@@ -559,24 +559,37 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
       <tr><td><strong>0 &middot; Alignment</strong></td><td class="mono">24&ndash;28 Aug 26</td><td>Kevin</td><td>Niches selected, content owner named, GoTo quote obtained, Gate B number defined</td></tr>
       <tr><td><strong>1 &middot; Infrastructure + validation</strong></td><td class="mono">31 Aug&ndash;4 Sep</td><td>Victor + Pavel</td><td>Cloudflare and GitHub accounts, roles and 2FA, deploy pipeline. Pavel validates the niches before any domain is bought</td></tr>
       <tr><td><strong>1b &middot; Domains</strong></td><td class="mono">7&ndash;8 Sep</td><td>Victor</td><td>Domains approved and registered, only after niche validation passes</td></tr>
-      <tr><td><strong>2 &middot; Framework</strong></td><td class="mono">8&ndash;18 Sep</td><td>Victor</td><td>Config schema, Astro template, bilingual routing, SEO baseline, minimal generator, CI gate, QA checklist, handoff</td></tr>
+      <tr><td><strong>2 &middot; Framework</strong></td><td class="mono">8&ndash;18 Sep</td><td>Victor</td><td><strong>Block A only:</strong> config schema, Astro template, bilingual routing, minimal generator, handoff. Block B is gated by the launch, not the handoff</td></tr>
       <tr><td><strong>Parallel &middot; Pavel ramp</strong></td><td class="mono">31 Aug&ndash;18 Sep</td><td>Pavel</td><td>HTML and CSS to read and diagnose, Astro concepts, Git, Cloudflare, plus shadowing the framework build</td></tr>
-      <tr><td><strong>3 &middot; Site #1 English</strong></td><td class="mono">21 Sep&ndash;9 Oct</td><td>Pavel</td><td>Generated from config, content written, tracking wired, QA, launch. <span class="pill p-amber">Start date at risk</span></td></tr>
+      <tr><td><strong>3 &middot; Site #1 English</strong></td><td class="mono">21 Sep&ndash;9 Oct</td><td>Pavel</td><td>Generated from config, content written, tracking wired, QA, launch</td></tr>
       <tr><td><strong>4 &middot; Site #2 Spanish</strong></td><td class="mono">12&ndash;30 Oct</td><td>Pavel</td><td>Same flow, validates bilingual support. Content written natively in Spanish</td></tr>
       <tr><td><strong>5 &middot; Refinement</strong></td><td class="mono">2&ndash;6 Nov</td><td>Victor + Pavel</td><td>Everything that was manual gets folded back into the framework</td></tr>
       <tr class="gate"><td><strong>Gate A &middot; Site #3</strong></td><td class="mono">9&ndash;13 Nov</td><td>Pavel alone</td><td>Repeatability test. Pass or return to Phase 5</td></tr>
       <tr><td><strong>7 &middot; Automation</strong></td><td class="mono">16 Nov&ndash;11 Dec</td><td>Victor</td><td>Domain registration, DNS, Search Console and tracking numbers, all through APIs</td></tr>
       <tr><td><strong>8 &middot; SEO window</strong></td><td class="mono">12 Oct&ndash;5 Feb 27</td><td>Pavel reports</td><td>Runs in parallel. Monthly reporting while sites accumulate organic data</td></tr>
-      <tr class="gate"><td><strong>Gate B &middot; Go or no-go</strong></td><td class="mono">8&ndash;12 Feb 27</td><td>Kevin</td><td>Commercial decision against the criteria set in Phase 0</td></tr>
-      <tr><td><strong>10 &middot; Scale to 20</strong></td><td class="mono">from 16 Feb 27</td><td>Pavel</td><td>Conditional. Nothing here starts unless Gate B passes</td></tr>
+      <tr class="gate"><td><strong>Gate B &middot; Go or no-go</strong></td><td class="mono">1&ndash;5 Mar 27</td><td>Kevin</td><td>Commercial decision. Moved from February so Site #2 gets its full 120 days</td></tr>
+      <tr><td><strong>10 &middot; Scale to 20</strong></td><td class="mono">from 8 Mar 27</td><td>Pavel</td><td>Conditional. Nothing here starts unless Gate B passes</td></tr>
     </tbody>
   </table>
   </div>
 
+  <div class="note">
+    <h4>Phase 2 is split by real deadline, not trimmed</h4>
+    <p>Ten items in nine working days does not fit, especially with Pavel shadowing, which costs velocity rather than adding it. The fix is not cutting scope, it is noticing that only half of Phase 2 is actually gated by the 18 September handoff.</p>
+    <p><strong>Block A, due 18 September:</strong> config schema, Astro template, bilingual routing, the minimal generator, and the handoff session. Without these Pavel cannot start Site #1 on 21 September.</p>
+    <p><strong>Block B, due 9 October:</strong> full technical SEO, tracking number wiring, analytics and CRM capture, the CI differentiation gate, and the QA checklist. These are gated by Site #1's launch and get built during Phase 3 with Pavel already operating. If one overruns it slides inside October without touching the 21 September start.</p>
+    <p>One caveat that keeps this honest: the CI differentiation gate must exist before the first content publishes, which is early October, not before the handoff. It is the guardrail the whole portfolio depends on.</p>
+  </div>
+
+  <div class="note">
+    <h4>Dates confirmed 25 August 2026</h4>
+    <p>Pavel confirmed his dedication to the project and that he writes native Spanish. Phase 3 starts 21 September, Site #1 launches 9 October, and Gate B lands the week of 1 March 2027. Site #2 no longer needs an external writer, which removes a hire we had planned for late October and produces better Spanish than a translation ever would.</p>
+  </div>
+
   <div class="note warn">
-    <h4>Phase 3's start date is not confirmed</h4>
-    <p>Pavel is ramping on HTML, CSS, Astro, Git and Cloudflare in parallel with this schedule. The plan as originally written assumed he would be ready to operate on day one of Phase 3. Open item W-009 asks for his real weekly availability so the date is adjusted deliberately rather than discovered in October.</p>
-    <p>This reaches further than Phase 3. Site #1's launch starts the 120 day clock for Gate B, so moving the launch moves Gate B. If the ramp needs more time, the preferred adjustment is extending the shadowing period during Phase 2 rather than compressing Phase 3, because a rushed first site produces a framework tuned to the wrong assumptions.</p>
+    <h4>What confirming availability did not solve</h4>
+    <p>Pavel now holds three roles at once: project lead, SEO lead and content owner. That is workable across three pilot sites, roughly 50 to 75 pages. At twenty sites it becomes 400 to 500 pages on top of everything else, and content turns into the bottleneck. The failure mode is not lateness, it is thinner content, which is precisely what the spam policies penalize. The role gets revisited at Gate B, and that conversation should be expected rather than arrive as a surprise.</p>
+    <p><strong>A related gap opened on 25 August:</strong> nobody reviews the content before it publishes. Pavel writes it, optimizes it and ships it. For insurance copy that also means nobody at Walker is checking coverage claims, disclosures and Florida advertising compliance. One review per site by someone who actually sells insurance is not a bottleneck, but it needs a name on it.</p>
   </div>
 </section>
 
@@ -657,18 +670,24 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
         <td><strong>Gate A</strong><br><span class="pill p-teal">Technical</span></td>
         <td>Does the factory work?</td>
         <td class="mono">13 Nov 26</td>
-        <td>Site #3 is generated from a config file and launches in <strong>5 working days or fewer</strong>, with <strong>zero code written by Victor</strong>.</td>
+        <td><strong>Factory time of 2 working days or fewer</strong>, measured from approved content and a filled config in hand, to a live site that passes QA, with <strong>zero code written by Victor</strong>. Total elapsed time including research and writing is logged as an informational second clock. Pavel picks the niche himself.</td>
         <td>Return to Phase 5. The framework is not repeatable yet, and building more sites would only multiply manual work.</td>
       </tr>
       <tr class="gate">
         <td><strong>Gate B</strong><br><span class="pill p-brick">Commercial</span></td>
         <td>Do the sites produce business?</td>
-        <td class="mono">12 Feb 27</td>
-        <td>Sites #1 and #2 hit the qualified call target defined in activity 0.7, measured 120 days after each launch.</td>
+        <td class="mono">5 Mar 27</td>
+        <td>Sites #1 and #2 hit the qualified call target defined in activity 0.7, each measured 120 days after its own launch.</td>
         <td>Do not scale. Either the niche selection was wrong and we retest, or the microsite model does not work for this market.</td>
       </tr>
     </tbody>
   </table>
+  </div>
+
+  <div class="note">
+    <h4>Why Gate A excludes the writing, and why Gate B moved</h4>
+    <p><strong>Gate A</strong> originally said "five working days," which never specified whether writing the content counted inside them. If it counts, nobody passes: 15 to 25 pages of original insurance copy takes longer than that. If it does not count, five days is far too generous and the gate measures almost nothing. Splitting it into factory time and elapsed time isolates the variable actually under test, and tightens the bar rather than loosening it.</p>
+    <p><strong>Gate B moved from 12 February to the week of 1 March.</strong> The gate promises 120 days of data on both pilots, but Site #2 launches 30 October and its 120 days land on 27 February, fifteen days after the original date. Rather than quietly evaluate Site #2 at 105 days, the gate moves. Two and a half weeks against a four month wait is noise. Deciding to build twenty sites on thinner data than we promised ourselves is not.</p>
   </div>
 
   <div class="note warn">
@@ -730,18 +749,23 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
       <tr><td>DNS, SSL, CDN, DDoS</td><td class="num">$0</td><td class="num">$0</td><td class="num">$0</td></tr>
       <tr><td>Domains, .com after 1 Nov 2026</td><td class="num">$34</td><td class="num">$279</td><td class="num">$1,115</td></tr>
       <tr><td>Build pipeline</td><td class="num">$0</td><td class="num">$0</td><td class="num">$0&ndash;300</td></tr>
-      <tr><td>Tracking numbers, forwarding route</td><td class="num">$57</td><td class="num">$470</td><td class="num">$1,900</td></tr>
-      <tr class="total"><td>Platform subtotal</td><td class="num">$151</td><td class="num">$809</td><td class="num">$3,375</td></tr>
-      <tr><td>Tracking numbers, direct DID route <span class="pill p-amber">unconfirmed</span></td><td class="num">$180&ndash;540</td><td class="num">$1,500&ndash;4,500</td><td class="num">$6,000&ndash;18,000</td></tr>
+      <tr><td>Tracking numbers, GoTo at $0.99/mo <span class="pill p-green">confirmed</span></td><td class="num">$36</td><td class="num">$297</td><td class="num">$1,188</td></tr>
+      <tr class="total"><td>Platform subtotal</td><td class="num">$130</td><td class="num">$636</td><td class="num">$2,363&ndash;2,663</td></tr>
       <tr><td>Content, one time, at $50 per page</td><td class="num">$3,000</td><td class="num">$25,000</td><td class="num">$100,000</td></tr>
     </tbody>
   </table>
   </div>
 
+  <div class="note">
+    <h4>Tracking numbers, resolved 25 Aug 2026</h4>
+    <p>GoTo confirmed <strong>$0.99 per standard phone number</strong>, which is $1,188 a year at 100 numbers. That comes in below the forwarding alternative we had costed near $1,900, and it is operationally simpler because the numbers live natively in the phone system the team already uses. <strong>Decision: buy tracking numbers directly from GoTo.</strong></p>
+    <p>Worth noting why we held for the written quote. Third party comparison sites put GoTo's additional numbers at $4.99 to $14.99 each per month, projecting to $6,000 to $18,000 a year at 100 numbers. The real figure is roughly a fifth of the bottom of that range. Planning against published comparisons would have over budgeted this line by up to $15,000 a year, or killed the hundred site scenario on a constraint that does not exist.</p>
+    <p>One item still to confirm: that the $0.99 is monthly and that inbound minutes are not billed separately as volume grows.</p>
+  </div>
+
   <div class="note warn">
-    <h4>Two numbers that need attention</h4>
-    <p><strong>Tracking numbers are the largest unknown.</strong> GoTo does not publish per number pricing, and the third party range spans $6,000 to $18,000 a year at 100 numbers, five to fifteen times the entire domain budget. A written quote is required before committing to a site count. The forwarding alternative, buying numbers elsewhere and routing them into the existing GoTo system, lands near $1,900 a year at the same scale.</p>
-    <p><strong>Domain prices rise on 1 November 2026.</strong> The .com wholesale fee goes from $10.26 to $10.97, and this is the first of a four year cycle of roughly 7 percent annual increases. Budget approximately $11.90 in 2027, $12.70 in 2028 and $13.60 in 2029 per domain.</p>
+    <h4>Domain prices rise on 1 November 2026</h4>
+    <p>The .com wholesale fee goes from $10.26 to $10.97, and this is the first of a four year cycle of roughly 7 percent annual increases. Budget approximately $11.90 in 2027, $12.70 in 2028 and $13.60 in 2029 per domain.</p>
   </div>
 </section>
 
@@ -754,15 +778,17 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
   <table>
     <thead><tr><th>Item</th><th>Owner</th><th>Needed by</th><th>Status</th><th>What it blocks</th></tr></thead>
     <tbody>
-      <tr><td>Written per number monthly quote from GoTo</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-brick">Blocker</span></td><td>Activity 2.6, and the whole tracking budget</td></tr>
-      <tr><td>Content owner named, plus a native Spanish writer</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-brick">Blocker</span></td><td>Phases 3 and 4. Largest cost line in the project</td></tr>
+      <tr><td>Who reviews content before it publishes, including insurance compliance</td><td>Kevin</td><td class="mono">4 Sep 26</td><td><span class="pill p-brick">Blocker</span></td><td>Site #1. Pavel writes, optimizes and ships with no second reader</td></tr>
+      <tr><td>Company email to own the Cloudflare account, plus the second Super Administrator</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Blocks the morning of 31 August</td></tr>
+      <tr><td>Shared password vault and a company card for billing</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Account setup</td></tr>
+      <tr><td>Existing GitHub organization, or do we create one</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Repository setup</td></tr>
       <tr><td>English niche and target market for Site #1</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Domain selection, Phase 3</td></tr>
       <tr><td>Spanish niche and target market for Site #2</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Phase 4</td></tr>
       <tr><td>Numeric target for Gate B</td><td>Kevin + Victor</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Gate B is undecidable without it</td></tr>
       <tr><td>Do pilot sites get their own Google Business Profiles</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>May change which niches are viable at all</td></tr>
       <tr><td>Domain names approved for Sites #1 and #2</td><td>Kevin</td><td class="mono">7 Sep 26</td><td><span class="pill p-amber">Open</span></td><td>Moved after niche validation, so we never buy a domain for a niche we cannot win</td></tr>
       <tr><td>Walker brand assets: logo, approved contact, disclosures, license numbers</td><td>Kevin</td><td class="mono">4 Sep 26</td><td><span class="pill p-brick">Blocker</span></td><td>Site #1 cannot publish without it</td></tr>
-      <tr><td>Pavel's real weekly availability for the technical ramp</td><td>Pavel</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>The Phase 3 start date, and therefore Gate B</td></tr>
+      <tr><td>Which CRM does WICFL use, the same HighLevel instance as WAGS, a sub-account, or something else</td><td>Kevin</td><td class="mono">4 Sep 26</td><td><span class="pill p-brick">Blocker</span></td><td>Analytics and lead capture. Surfaced mid Phase 2 and had never been named</td></tr>
       <tr><td>Confirm Cloudflare bulk zone additions at scale</td><td>Victor</td><td class="mono">at 25 domains</td><td><span class="pill p-grey">Watch</span></td><td>Nothing yet. Raise before it becomes urgent</td></tr>
     </tbody>
   </table>
@@ -788,9 +814,9 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
 </section>
 
 <footer>
-  WICFL Microsite Factory &middot; Master reference v1.1 &middot; 25 Aug 2026<br>v1.1 integrates Pavel's preparation research: niche validation ahead of domain purchase, the QA and launch checklist, Walker brand assets as a dependency, and the parallel ramp track.<br>
+  WICFL Microsite Factory &middot; Master reference v1.4 &middot; 26 Aug 2026<br>v1.4 applies an architecture review: Gate B moved so Site #2 gets its full 120 days, Gate A sharpened to measure factory time, Phase 2 split by real deadline, and the CRM opened as an undecided dependency. v1.3 locked the schedule and confirmed Pavel writes native Spanish. v1.2 confirmed GoTo pricing at $0.99 per number and assigned the content role. v1.1 integrated Pavel's preparation research.<br>
   Maintained by Victor. Living document, updated as decisions land.<br>
-  Pricing verified against Cloudflare Workers pricing and platform limits, Cloudflare Registrar documentation, Verisign's November 2026 .com fee notice, GitHub Actions billing, Twilio US voice pricing and CallRail's published plans. GoTo per number pricing is not published and remains unconfirmed.
+  Pricing verified against Cloudflare Workers pricing and platform limits, Cloudflare Registrar documentation, Verisign's November 2026 .com fee notice, GitHub Actions billing, Twilio US voice pricing and CallRail's published plans. GoTo per number pricing confirmed in writing by GoTo customer care on 25 Aug 2026.
 </footer>
 
 </main>

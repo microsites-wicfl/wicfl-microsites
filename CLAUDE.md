@@ -91,6 +91,13 @@ de Pavel confirmada, fechas fijas).
 
 ## Referencias vivas
 
-- **Master file (página web):** https://claude.ai/code/artifact/b1c34949-479b-48f6-a269-8522d4b2aa82
+- **Master file (página web publicada):** https://claude.ai/code/artifact/b1c34949-479b-48f6-a269-8522d4b2aa82
+  La página vive hospedada en claude.ai, no en este repo. Lo que sí vive aquí es su fuente:
+  `docs/master-file-source.html`.
+
+  **Regla: cada vez que se republique la página, la fuente se commitea aquí en el mismo movimiento.**
+  Se desincronizó tres versiones entre el 25 y el 26 de agosto porque se publicaba sin commitear.
+  Si la versión del `<title>`/sidebar del archivo no coincide con la de la página publicada,
+  el repo está atrasado y hay que sincronizarlo antes de editar nada más.
 - **Calendario de actividades:** `WICFL-microsite-schedule.xlsx` (tracker semanal)
 - Proyecto hermano: `../Walker Insurance Agency` (WAGS, Next.js, no comparte código con este)
