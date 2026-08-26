@@ -10,7 +10,7 @@ dependency lives in `WICFL-microsite-schedule.xlsx`.
 | **0 · Alignment** | 24–28 Aug 26 | Kevin | Niches selected, content owner named, GoTo quote obtained, Gate B number defined, Pavel's availability confirmed |
 | **1 · Infrastructure + validation** | 31 Aug–4 Sep | Victor + Pavel | Cloudflare and GitHub accounts, roles and 2FA, deploy pipeline. **Pavel validates the niches before any domain is bought** |
 | **1b · Domains** | 7–8 Sep | Victor | Domains registered, only after niche validation passes |
-| **2 · Framework** | 8–18 Sep | Victor | **Block A only:** config schema, Astro template, bilingual routing, minimal generator, handoff. See note below |
+| **2 · Framework** | 8–18 Sep | Victor | **Block A only:** config schema, Astro template, bilingual routing, minimal generator, branch previews, QA list, handoff. See note below |
 | **Parallel · Pavel ramp** | 31 Aug–18 Sep | Pavel | HTML/CSS to read and diagnose, Astro concepts, Git workflow, Cloudflare. Plus shadowing Phase 2 |
 | **3 · Site #1 English** | 21 Sep–9 Oct | Pavel | Generated from config, content written, tracking wired, QA, launch |
 | **4 · Site #2 Spanish** | 12–30 Oct | Pavel | Same flow, validates bilingual support. Content written natively in Spanish |
@@ -49,16 +49,46 @@ velocity rather than adding it. The fix is not cutting scope. It is noticing tha
 Phase 2 is actually gated by the 18 September handoff.
 
 **Block A, due 18 September.** Config schema, Astro template, bilingual routing, the minimal
-generator, and the handoff session. Without these Pavel cannot start Site #1 on 21 September.
+generator, **branch preview deploys**, **the QA list**, and the handoff session. Without these
+Pavel cannot start Site #1 on 21 September.
 
 **Block B, due 9 October.** Full technical SEO, tracking number wiring, analytics and CRM
-capture, the CI differentiation gate, and the QA checklist. These are gated by Site #1's launch,
-not by the handoff, and they get built during Phase 3 with Pavel already operating. If one
-overruns, it slides inside October without touching the 21 September start.
+capture, the CI differentiation gate, and the automation of the QA list. These are gated by
+Site #1's launch rather than by the handoff, and they get built during Phase 3 with Pavel
+already operating. If one overruns, it slides inside October without touching 21 September.
 
-One caveat that keeps this honest: the CI differentiation gate must exist **before the first
-content publishes**, which is early October, not before the handoff. Do not let it drift past
-that, because it is the guardrail the whole portfolio depends on.
+### Two items moved into Block A on 26 August
+
+**Branch preview deploys, W-098.** Pavel spends three weeks writing markdown between
+21 September and 9 October. If the only way to see a rendered page is running the Astro dev
+server, we are asking for `npm install` and a terminal from someone three weeks into a
+technical ramp. If that is not available he writes blind, or he asks Victor to show him, which
+is precisely the dependency the handoff exists to cut. Push markdown, get a URL. It costs
+little alongside the W-014 pipeline and a great deal to retrofit.
+
+**The QA list, W-029, split from its automation, W-099.** Automating the checklist is Block B.
+The list itself is not: it is Pavel's definition of ready to publish. If it does not exist on
+21 September he writes for three weeks without knowing what he is writing toward, and worse,
+the checklist ends up authored on 8 October to match whatever got built. Half a day, mostly
+his own work, and it makes Block B's automation aim at something real instead of something
+assumed.
+
+## The differentiation gate has two anchors, not one
+
+The 26 August draft anchored the CI gate at "before the first content publishes, early
+October." That date is wrong in both directions, so both are written down here.
+
+**The CI gate's real deadline is Site #2's content, mid October.** With one site live it has
+nothing to compare against; a portfolio similarity check needs a portfolio. Building it
+earlier is fine, but nothing is protected by it until Site #2 exists.
+
+**The human audit's deadline is the handoff, 18 September.** The swap test earns its keep
+while content is being written, not at publish time. If Pavel writes twenty pages through late
+September and the first similarity check runs on 5 October, a failure means rewriting three
+weeks of work four days before launch, and the pressure in that moment will be to loosen the
+threshold rather than rewrite. The `differentiation-audit` skill already exists for exactly
+this. Running it per page as he writes goes into the handoff documentation as a standing
+practice, not a launch step.
 
 ## Why niche validation moved ahead of domain purchase
 

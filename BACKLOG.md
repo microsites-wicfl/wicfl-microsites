@@ -39,7 +39,7 @@ Formato de id: `W-NNN` · Última actualización: 2026-08-26 (revisión de arqui
 | W-010 | Crear cuenta Cloudflare con correo de empresa, 2 Super Admins, Pavel como Administrator, 2FA, recovery codes en vault compartido | Vic | Ver `docs/ACCOUNTS_AND_ACCESS.md`. NUNCA con correo personal |
 | W-012 | Crear org de GitHub y monorepo, configurar accesos | Vic | |
 | W-013 | Configurar zonas, DNS y SSL | Vic | Depende de W-011 |
-| W-014 | Levantar pipeline de deploy con Workers Static Assets + GitHub Actions | Vic | |
+| W-014 | Levantar pipeline de deploy con Workers Static Assets + GitHub Actions | Vic | Incluye los preview deploys por rama de W-098. Montarlos después cuesta el doble |
 | W-015 | Cerrar `docs/ARCHITECTURE.md` en su versión de handoff | Vic | |
 | W-016 | **Validación SEO del nicho antes de comprar dominio**: keywords, search intent, competencia en SERP, ángulo local real | Pavel | *(aporte de Pavel)* Si el nicho está dominado por agregadores sin ángulo local, se descarta y Kevin elige otro. **Bloquea W-007 y W-011** |
 | W-017 | **Provisionar accesos a Pavel**: Cloudflare Administrator, GitHub, GoTo, GA4, Search Console | Vic | **Movido al 31 de agosto.** Pavel arranca de tiempo completo ese día; esperar accesos hasta el 2 de septiembre son dos días perdidos |
@@ -73,7 +73,9 @@ Sin esto Pavel no puede empezar el sitio #1 el 21 de septiembre.
 | W-021 | Template base de Astro: layouts, componentes, design system | Vic | |
 | W-022 | Ruteo bilingüe en/es con `hreflang` | Vic | Se construye ahora, no se retrofitea |
 | W-026 | Comando `new-site`: genera un sitio desde su config | Vic | **Versión mínima y tosca a propósito.** Solo renderiza el template desde config. Se reescribe durante los pilotos. Ver decisión en `docs/ARCHITECTURE.md` |
-| W-028 | Sesión de handoff con Pavel + documentación escrita | Vic + Pavel | Criterio de salida: Pavel genera un sitio vacío sin ayuda |
+| W-098 | **Preview deploy por rama**: Pavel hace push de markdown y recibe una URL con su sitio renderizado | Vic | **Hueco encontrado el 26-ago.** Sin esto Pavel escribe tres semanas a ciegas o te pide a ti que se lo enseñes, que es justo la dependencia que el handoff existe para cortar. Se monta junto con W-014 |
+| W-029 | **La lista** del checklist de QA y launch: técnico, SEO, contenido, mobile, conversión, tracking, deploy | Pavel + Vic | *(aporte de Pavel)* Es la definición de "listo para publicar" de Pavel. Si no existe el 21 de septiembre, escribe sin saber contra qué y la lista se acaba escribiendo el 8 de octubre para empatar con lo que ya construyó. Medio día, sobre todo trabajo suyo |
+| W-028 | Sesión de handoff con Pavel + documentación escrita | Vic + Pavel | Criterio de salida: Pavel genera un sitio vacío sin ayuda. **Correrlo el 17, no el 18**, para que una falla deje un día |
 
 ### Bloque B — obligatorio para el launch del sitio #1, 9 de octubre
 
@@ -85,8 +87,8 @@ dentro de octubre sin tocar el handoff ni el 21 de septiembre.
 | W-023 | SEO técnico: sitemap, robots, canonical, schema.org InsuranceAgency | Vic | El template del Bloque A no debe impedirlo |
 | W-024 | Número de tracking como campo de config, ruteado a GoTo | Vic | GoTo confirmado a $0.99/número |
 | W-025 | Analytics (GA4 + GTM) y captura de leads al CRM, con sitio de origen en cada lead | Vic | **Depende de W-096**, el CRM no está decidido |
-| W-027 | Gate de CI de diferenciación: bloquea deploy por similaridad entre sitios | Vic | Debe existir **antes de que se publique el primer contenido**, no antes del handoff |
-| W-029 | Checklist de QA y launch: técnico, SEO, contenido, mobile, conversión, tracking, deploy | Pavel + Vic | *(aporte de Pavel)* Lo automatizable va a CI |
+| W-027 | Gate de CI de diferenciación: bloquea deploy por similaridad entre sitios | Vic | **Ancla corregida el 26-ago: antes del contenido del sitio #2, mediados de octubre.** Con un solo sitio vivo no tiene contra qué comparar. La protección durante el sitio #1 es humana y va en el handoff: Pavel corre la skill `differentiation-audit` por página conforme escribe |
+| W-099 | **Automatizar** lo automatizable del checklist de W-029: llevarlo a CI en vez de a criterio humano | Vic | Se parte de W-029 el 26-ago. La lista es Bloque A porque es la definición de terminado; automatizarla es Bloque B porque solo apura, no desbloquea |
 
 ---
 

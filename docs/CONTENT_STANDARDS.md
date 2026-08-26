@@ -1,6 +1,6 @@
 # Content standards
 
-**Version 1.0 · 25 Aug 2026**
+**Version 1.1 · 26 Aug 2026. The differentiation check now has two anchors: by hand while writing, by CI before deploy.**
 
 ## The swap test
 
@@ -17,14 +17,28 @@ Google's published spam policy names our exact pattern under doorway abuse:
 
 Their June 2026 spam update enforced this against local and home services businesses.
 
-## This is enforced by CI, not by discipline
+## Enforced twice: by hand while writing, by CI before deploy
 
-Backlog item W-027 builds a check that compares content across every site in the portfolio
-and **blocks the deploy** when two pages are too similar. It costs a day and it protects the
-portfolio permanently, including from a future team member who was never in this conversation.
+**While writing, every page, by the person writing it.** Run the `differentiation-audit`
+skill on a page as it is drafted, not on a site as it is finished. This is the anchor that
+matters most and it is the one most easily skipped, because nothing blocks if you skip it.
 
-Do not disable it. If it produces a false positive, tune the threshold and record why in
-the bitácora.
+The reason is arithmetic. Twenty pages written across three weeks, first checked four days
+before launch, is three weeks of work to redo under launch pressure. Nobody rewrites in that
+situation. They tune the threshold, and then the guardrail is decoration. Catching one page
+on the day it is written costs an hour.
+
+**Before deploy, by CI, across the whole portfolio.** Backlog item W-027 builds a check that
+compares content across every site and **blocks the deploy** when two pages are too similar.
+It costs a day and it protects the portfolio permanently, including against a future team
+member who was never in this conversation.
+
+Note what the CI gate can and cannot do: with a single site live it has nothing to compare
+against. Its first real test is Site #2, in mid October. That is why the human pass is not
+optional during Site #1. It is the only differentiation check that exists at that point.
+
+Do not disable either one. If CI produces a false positive, tune the threshold and record why
+in the bitácora.
 
 ## Standing rules
 
