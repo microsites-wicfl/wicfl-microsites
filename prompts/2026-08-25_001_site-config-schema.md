@@ -22,27 +22,16 @@ sitio. El template, el generador, los gates de CI y toda la automatización de p
 construyen encima. Cambiarlo cuando ya existan tres sitios es caro. Este es el momento de
 romperlo.
 
-## Paso 0 — Limpieza de git antes de cualquier otra cosa
+## Estado del repo al momento de escribir esto
 
-El repo se inicializó el 2026-08-26 desde un bridge remoto que **no puede borrar archivos**.
-Quedaron residuos que hay que limpiar antes de que hagas tu primer commit, o te va a fallar:
+El repo tiene git desde el 2026-08-26. Al 26-ago 17:20 UTC: 5 commits, árbol limpio,
+`git fsck` sin hallazgos, HEAD en `b046f32`. Los residuos que dejó el `git init` corrido
+desde el bridge del escritorio (objetos `tmp_obj_*` huérfanos y locks sin borrar) **ya se
+limpiaron**. No tienes que hacer nada al respecto.
 
-- Archivos `tmp_obj_*` huérfanos dentro de `.git/objects/`
-- Una carpeta `.git/_stale/` donde se fueron moviendo locks que no se pudieron borrar
-
-Corre, en este orden, y **pega el output real en el reporte**:
-
-```
-git status
-rm -rf .git/_stale
-git gc --prune=now
-git fsck
-git log --oneline
-```
-
-Criterio: `git fsck` no debe reportar corrupción y `git log` debe mostrar los tres commits
-existentes (`beeb0c2`, `09045ec`, `6964f1e`). Si algo sale mal, **detente y repórtalo antes de
-tocar cualquier otro archivo**. No intentes reparar el repo por tu cuenta.
+Lo único que sí tienes que hacer: corre `git status` antes de empezar y confirma que el
+árbol esté limpio. Si no lo está, **deténte y repórtalo**: alguien más escribió en el repo
+y tu prompt puede estar desactualizado.
 
 ## Objetivo
 
@@ -109,7 +98,6 @@ El borrador las dejó marcadas. Cada una necesita decisión y razonamiento escri
 
 ## Criterio de aceptación
 
-- [ ] `git fsck` limpio y los tres commits previos intactos
 - [ ] Las seis preguntas abiertas están resueltas, cada una con razonamiento
 - [ ] `site.config.schema.json` existe y es JSON Schema válido
 - [ ] Los dos ejemplos validan contra él, con output real pegado en el reporte
@@ -121,7 +109,6 @@ El borrador las dejó marcadas. Cada una necesita decisión y razonamiento escri
 
 Escribe `reports/2026-08-25_001_site-config-schema.md` con:
 
-- **Limpieza de git** — el output real de los cinco comandos del Paso 0
 - **Qué se hizo** — archivos creados y modificados
 - **Las seis decisiones** — una sección por pregunta, con la decisión y por qué
 - **Verificación** — el output real de la validación de ambos ejemplos
