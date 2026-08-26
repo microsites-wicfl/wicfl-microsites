@@ -96,7 +96,7 @@ dentro de octubre sin tocar el handoff ni el 21 de septiembre.
 |---|---|---|
 | W-030 | Sitio #1 en inglés, generado desde config, launch 9 oct | Arranca el reloj de 120 días de Gate B. **Fecha confirmada el 25-ago** |
 | W-031 | Sitio #2 en español, launch 30 oct | **Pavel escribe el español nativo.** Nunca traducido ni generado desde brief en inglés |
-| W-032 | Registrar horas de ambos como línea base de Gate A | |
+| W-032 | Registrar horas de ambos como línea base de Gate A | Separar desde ya **tiempo de fábrica** de **tiempo de contenido** y de **esperas de vendor**. Si la línea base mezcla los tres, no es comparable contra Gate A |
 
 ---
 
@@ -105,7 +105,8 @@ dentro de octubre sin tocar el handoff ni el 21 de septiembre.
 | id | Item | Notas |
 |---|---|---|
 | W-040 | Retro: catalogar todo lo que fue manual en sitios #1 y #2, y regresarlo al framework | 2–6 nov |
-| W-041 | **Gate A**: ver criterio afinado en `docs/SCHEDULE.md`. Dos relojes: tiempo de fábrica ≤2 días hábiles desde contenido listo hasta sitio vivo, y cero código de Vic | 13 nov |
+| W-097 | **Ensayo de Gate A**: correr el reloj completo de la fábrica contra un config de juguete en un subdominio, sin comprar dominio ni escribir contenido | 2–6 nov, dentro de Fase 5. Hallar un hueco en el runbook el 4 de noviembre cuesta una tarde; hallarlo el 10 cuesta el gate |
+| W-041 | **Gate A**: cuatro criterios, todos obligatorios. Ver `docs/SCHEDULE.md`. Los dos que mandan son verificables por comando: el diff de Pavel solo toca `sites/<slug>/**`, y regenerar desde config reproduce el sitio publicado | 13 nov |
 | W-050 | Automatizar registro de dominio vía Cloudflare Registrar API | API en beta: solo registra, no renueva ni transfiere |
 | W-051 | Automatizar zona, DNS y attach de custom domain | |
 | W-052 | Automatizar alta en Search Console y envío de sitemap | |

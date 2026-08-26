@@ -1,6 +1,6 @@
 # Schedule
 
-**v1.2 · updated 26 Aug 2026 after architecture review: Gate B date corrected, Gate A criterion sharpened, Phase 2 split by real deadline**
+**v1.3 · updated 26 Aug 2026. Gate A now has command-verifiable criteria instead of a stopwatch, Phase 2 Block A gains branch previews and the QA list, and the differentiation gate gets its two correct anchors.**
 
 Ten phases plus one parallel track. The tracked version with every activity, owner and
 dependency lives in `WICFL-microsite-schedule.xlsx`.
@@ -15,7 +15,7 @@ dependency lives in `WICFL-microsite-schedule.xlsx`.
 | **3 · Site #1 English** | 21 Sep–9 Oct | Pavel | Generated from config, content written, tracking wired, QA, launch |
 | **4 · Site #2 Spanish** | 12–30 Oct | Pavel | Same flow, validates bilingual support. Content written natively in Spanish |
 | **5 · Refinement** | 2–6 Nov | Victor + Pavel | Everything that was manual gets folded back into the framework |
-| **Gate A · Site #3** | 9–13 Nov | Pavel alone | Repeatability test. Pass or return to Phase 5 |
+| **Gate A · Site #3** | 9–13 Nov | Pavel alone | Repeatability test, rehearsed in Phase 5. Pass or return to Phase 5 |
 | **7 · Automation** | 16 Nov–11 Dec | Victor | Domain registration, DNS, Search Console and tracking numbers, all through APIs |
 | **8 · SEO window** | 12 Oct–5 Feb 27 | Pavel reports | Runs in parallel. Monthly reporting while sites accumulate organic data |
 | **Gate B · Go or no-go** | 1–5 Mar 27 | Kevin | Commercial decision. Moved from February so Site #2 gets its full 120 days |
@@ -75,24 +75,56 @@ the domain purchase without touching the critical path.
 ### Gate A, does the factory work? · 13 Nov 2026 · Pavel, unassisted
 
 The original wording, "Site #3 launches in 5 working days or fewer," left a hole: it never said
-whether writing the content counted inside those five days. If it counts, nobody passes, because
-15 to 25 pages of original insurance copy takes longer than that. If it does not count, five days
-is far too generous and the gate measures almost nothing.
+whether writing the content counted inside those five days. Excluding it made five days far too
+generous; including it made the gate unpassable. The 26 August revision fixed that by excluding
+content and tightening to two days. This version fixes the remaining problem, which is that a
+stopwatch measures the wrong thing.
 
-**Two clocks, and only one of them is the gate.**
+**Two working days of wall clock also measures Cloudflare's certificate queue.** Universal SSL
+normally issues in about fifteen minutes, but the published allowance is up to 24 hours. If
+Pavel draws an unlucky domain he fails a gate that had nothing to do with the factory. If he
+draws a fast one he passes with room to spare and we learn nothing we did not already know.
+Time is a proxy. Better to measure the thing itself.
 
-**Factory time is the criterion.** Measured from the moment approved content and a filled config
-are in hand, to a live site that passes the QA checklist. **Pass: 2 working days or fewer, with
-zero code written by Victor.** If the factory works, this should be close to trivial; the
-allowance exists for DNS propagation and QA, not for building.
+**Pass requires all four. The first two are the real gate.**
 
-**Total elapsed time is informational.** From niche selection to live, including research and
-writing, compared against the same figure logged for Sites #1 and #2. It tells us whether the
-whole loop is getting faster, but it is dominated by writing speed, which is not what this gate
-is testing.
+**1 · Nothing outside the site directory was edited by hand.** Pavel's own commits for Site #3
+touch only `sites/<slug>/**`. Anything the generator writes elsewhere (pod routing, the site
+registry) is fine because the generator wrote it; a file Pavel opened and patched is not.
+Verified with `git diff --name-only`, so it is settled by a command rather than by argument
+in November.
+
+**2 · The live site is reproducible from its config.** Re-run `new-site` from
+`site.config.json` plus the content directory into a clean tree and diff against what shipped.
+They match. A difference means something was hand patched after generation, which is exactly
+the failure this gate exists to catch, and it is invisible to a stopwatch.
+
+**3 · Two working days or fewer of hands-on time, external waits excluded.** Measured from
+approved content and a filled config to a live site that passes the QA checklist. Time spent
+waiting on certificate issuance, registry propagation or GoTo number provisioning is logged
+with its start and end and excluded from the total. Those are vendor queues, not the factory.
+
+**4 · Zero code written by Victor, and every question logged.** "No code" alone misses the
+likelier failure: Pavel writes nothing and sends nine messages instead. Each question the
+handoff documentation fails to answer gets logged with its timestamp. The count is not itself
+pass or fail, but the log goes straight into Phase 5 as a list of documentation defects. A
+gate that only says yes or no teaches nothing.
 
 **Pavel picks the niche for Site #3 himself**, from candidates he validated. Running the full
 loop unaided is part of what is being measured.
+
+**Total elapsed time is informational.** From niche selection to live, including research and
+writing, compared against the same figure logged for Sites #1 and #2. It tells us whether the
+whole loop is getting faster, but it is dominated by writing speed, which is not what this
+gate tests.
+
+**Rehearse it in Phase 5.** Backlog item W-097. During the week of 2 November, run the full
+factory clock against a throwaway config on a subdomain, no domain purchased, no content
+written. Finding a hole in the runbook on 4 November costs an afternoon. Finding it on
+10 November costs the gate. Gate A should confirm something we already believe, not discover it.
+
+**One dependency people forget:** if Pavel picks the niche, Pavel buys the domain. That needs
+the company card and vault from W-093 in place since September, not on gate day.
 
 **Fail: return to Phase 5.** The framework is not repeatable yet, and building more sites would
 only multiply manual work.
