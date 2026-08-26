@@ -5,7 +5,7 @@ Léeme antes de ejecutar cualquier prompt de esta carpeta.
 ## Cómo funciona el flujo
 
 1. **Cowork** escribe un prompt en `prompts/YYYY-MM-DD_NNN_slug.md`
-2. **Vic** lo pega en el agente ejecutor (Claude Code)
+2. **Vic** lo pega en el agente ejecutor (Claude Code o Codex)
 3. **El ejecutor** lo ejecuta y escribe `reports/YYYY-MM-DD_NNN_slug.md` (mismo NNN, mismo slug)
 4. **Cowork** lee el reporte, actualiza `BITACORA.md` y `BACKLOG.md`
 

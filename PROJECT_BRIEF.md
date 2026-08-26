@@ -1,6 +1,6 @@
 # PROJECT BRIEF — WICFL Microsites
 
-**Última actualización:** 2026-08-25
+**Última actualización:** 2026-08-26
 **Para:** el agente que retome este proyecto sin haber estado en la conversación original.
 
 Este archivo existe para que puedas arrancar mañana sin preguntarle nada a Vic.
@@ -85,15 +85,26 @@ Detalle completo en `docs/ARCHITECTURE.md`. Resumen:
 
 ## 5. Los dos gates (lo más importante del plan)
 
-Son dos preguntas distintas que se resuelven en tiempos completamente distintos:
+Son dos preguntas distintas que se resuelven en tiempos completamente distintos.
+**El criterio completo y actualizado vive en `docs/SCHEDULE.md`**; esto es el resumen.
 
-**Gate A — ¿funciona la fábrica?** · 13 nov 2026 · Pavel
-Pasa si el sitio #3 se genera desde config y sale en 5 días hábiles o menos, con cero
-código escrito por Vic. Si falla, regresa a Fase 5.
+**Gate A — ¿funciona la fábrica?** · 13 nov 2026 · Pavel solo
+Cuatro criterios, todos obligatorios. Los dos que mandan se verifican con un comando: el diff
+de Pavel toca únicamente `sites/<slug>/**`, y regenerar el sitio desde su config reproduce lo
+que se publicó. Los otros dos son tiempo de fábrica ≤2 días hábiles con las esperas de vendor
+excluidas, y cero código de Vic con cada pregunta registrada. Si falla, regresa a Fase 5.
 
-**Gate B — ¿los sitios producen negocio?** · 12 feb 2027 · Kevin
-Pasa si los sitios #1 y #2 pegan el número de llamadas calificadas definido en la
-actividad 0.7, medido a 120 días de cada launch. Si falla, no se escala.
+*Historia de este criterio, porque va a volver a discutirse:* la primera versión decía "5 días
+hábiles" sin aclarar si escribir el contenido contaba adentro. El 26-ago se excluyó el contenido
+y se apretó a 2 días. Ese mismo día se cambió la unidad, porque dos días de reloj de pared miden
+también la cola de emisión de certificados de Cloudflare, que va de quince minutos a 24 horas.
+El tiempo quedó como tercer criterio; los verificables por comando son el gate.
+
+**Gate B — ¿los sitios producen negocio?** · 5 mar 2027 · Kevin
+Pasa si los sitios #1 y #2 pegan el número de llamadas calificadas de W-005, medido a 120 días
+de cada launch. **Movido desde el 12 de febrero**: los 120 días del sitio #2, que lanza el 30 de
+octubre, caen el 27 de febrero. El número todavía no existe, pero el modelo para derivarlo sí,
+en `docs/GATE_B_MODEL.md`. Si falla, no se escala.
 
 **Por qué separados:** un dominio nuevo tarda 3 a 6 meses en mostrar orgánico. Gate A se
 resuelve en semanas. Colapsarlos es como un equipo termina con 20 sitios que despliegan
@@ -111,9 +122,11 @@ Detalle y fuentes en `docs/COST_MODEL.md`. Los tres números que importan:
   la plataforma corre en ~$3,375/año.
 - **El .com sube el 1 de noviembre de 2026**, de $10.26 a $10.97 wholesale, y es la
   primera de cuatro alzas anuales de ~7%.
-- **Los números de tracking son la mayor incógnita.** GoTo no publica precio por DID.
-  El rango de comparativos terceros es $6,000–$18,000/año a 100 números, contra ~$1,900/año
-  si se compran los números aparte y se reenvían al mismo GoTo.
+- **Los números de tracking ya no son incógnita.** GoTo confirmó **$0.99 por número** el
+  25-ago, o sea $1,188/año a 100 números. Los comparativos terceros los ponían entre $6,000 y
+  $18,000/año. **Lección conservada: siempre pedir el quote escrito**, porque planear contra
+  comparativos publicados habría sobrepresupuestado esa línea hasta en $15,000 al año, o peor,
+  habría matado el escenario de 100 sitios por una restricción que no existía.
 
 El costo real del proyecto es el **contenido**: ~$100,000 a 100 sitios a $50/página.
 
@@ -121,13 +134,20 @@ El costo real del proyecto es el **contenido**: ~$100,000 a 100 sitios a $50/pá
 
 ## 7. Estado actual y qué sigue
 
-**Fase 0 (24–28 ago 2026):** alineación y decisiones. Casi todo es de Kevin.
+**Al 2026-08-26, Fase 0 cerrando.** No existe código de producto todavía. `BACKLOG.md` es la
+fuente de verdad; esto es el recordatorio.
 
-Bloqueadores activos, ambos de Kevin:
-- Quote escrito de GoTo por número mensual
-- Dueño del contenido asignado + escritor nativo de español
+**Cerrado el 25-ago:** quote de GoTo ($0.99/número), dueño del contenido (Pavel, que además
+escribe español nativo) y disponibilidad de Pavel (fechas fijas).
 
-Lo primero que se ejecuta en cuanto Fase 0 cierre está en `BACKLOG.md` bajo "Fase 1".
+**Bloqueadores activos, los seis de Kevin y ninguno respondido:** W-092 (correo de empresa para
+Cloudflare), W-093 (vault y tarjeta de empresa), W-094 (org de GitHub), W-096 (qué CRM usa
+WICFL), W-008 (assets de marca) y W-095 (quién firma el contenido antes de publicar).
+
+**El que corre reloj:** sin W-092 no hay cuenta de Cloudflare el lunes 31 de agosto, y Pavel
+arranca su primer día de tiempo completo sin accesos.
+
+**Lo primero que se ejecuta y no depende de Kevin:** `prompts/2026-08-25_001_site-config-schema.md`.
 
 ---
 

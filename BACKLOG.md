@@ -134,5 +134,5 @@ dentro de octubre sin tocar el handoff ni el 21 de septiembre.
 | id | Item | Cerrado | Resultado |
 |---|---|---|---|
 | W-002 | Dueño del contenido y escritor de español | 2026-08-25 | Kevin asignó el rol de contenido a Pavel, **y Pavel escribe español nativo.** Elimina la contratación que creíamos necesaria antes de finales de octubre. Se revisa en Gate B por el techo de escala |
-| W-009 | Disponibilidad de Pavel | 2026-08-25 | Confirmada con dedicación al proyecto. **La Fase 3 queda fija el 21 de septiembre y Gate B el 12 de febrero** |
+| W-009 | Disponibilidad de Pavel | 2026-08-25 | Confirmada con dedicación al proyecto. **La Fase 3 queda fija el 21 de septiembre.** (Gate B se movió después al 5 de marzo por los 120 días del sitio #2; ver W-070) |
 | W-001 | Quote escrito de GoTo por número mensual | 2026-08-25 | **$0.99 por número.** $1,188/año a 100 números, por debajo de la ruta de forwarding. Se compran directo en GoTo, se descarta Twilio. Ver `docs/COST_MODEL.md` |
