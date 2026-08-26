@@ -157,7 +157,7 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
 
 <div class="shell">
 <aside class="side">
-  <div class="mark">WICFL<br>Microsite Factory<span>Master reference &middot; v1.4</span></div>
+  <div class="mark">WICFL<br>Microsite Factory<span>Master reference &middot; v1.5</span></div>
   <nav>
     <div class="grp">Orientation</div>
     <a href="#objective">Objective</a>
@@ -226,11 +226,11 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
   <table>
     <thead><tr><th>What</th><th>Purpose</th><th>Target date</th><th>Owner</th></tr></thead>
     <tbody>
-      <tr><td><strong>The factory</strong><br>Template, schema, generator, deploy pipeline, CI gates, QA checklist</td><td>The reusable system every site is generated from</td><td class="mono">18 Sep 2026</td><td>Victor</td></tr>
+      <tr><td><strong>The factory</strong><br>Template, schema, generator, deploy pipeline, previews, QA list</td><td>The reusable system every site is generated from. CI gates and the tracking wiring follow with Site #1</td><td class="mono">18 Sep 2026</td><td>Victor</td></tr>
       <tr><td><strong>Site #1, English</strong></td><td>First real site. Validates the framework end to end</td><td class="mono">9 Oct 2026</td><td>Pavel</td></tr>
       <tr><td><strong>Site #2, Spanish</strong></td><td>Validates bilingual support before it is expensive to add</td><td class="mono">30 Oct 2026</td><td>Pavel</td></tr>
       <tr><td><strong>Site #3</strong></td><td>Proof the process is genuinely repeatable. Built by Pavel alone</td><td class="mono">13 Nov 2026</td><td>Pavel</td></tr>
-      <tr class="gate"><td><strong>Gate B decision</strong></td><td>Whether the model produces business at all</td><td class="mono">12 Feb 2027</td><td>Kevin</td></tr>
+      <tr class="gate"><td><strong>Gate B decision</strong></td><td>Whether the model produces business at all</td><td class="mono">5 Mar 2027</td><td>Kevin</td></tr>
       <tr><td>Sites #4 through #20</td><td>First real scaling</td><td class="mono">Conditional</td><td>Pavel</td></tr>
     </tbody>
   </table>
@@ -559,7 +559,7 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
       <tr><td><strong>0 &middot; Alignment</strong></td><td class="mono">24&ndash;28 Aug 26</td><td>Kevin</td><td>Niches selected, content owner named, GoTo quote obtained, Gate B number defined</td></tr>
       <tr><td><strong>1 &middot; Infrastructure + validation</strong></td><td class="mono">31 Aug&ndash;4 Sep</td><td>Victor + Pavel</td><td>Cloudflare and GitHub accounts, roles and 2FA, deploy pipeline. Pavel validates the niches before any domain is bought</td></tr>
       <tr><td><strong>1b &middot; Domains</strong></td><td class="mono">7&ndash;8 Sep</td><td>Victor</td><td>Domains approved and registered, only after niche validation passes</td></tr>
-      <tr><td><strong>2 &middot; Framework</strong></td><td class="mono">8&ndash;18 Sep</td><td>Victor</td><td><strong>Block A only:</strong> config schema, Astro template, bilingual routing, minimal generator, handoff. Block B is gated by the launch, not the handoff</td></tr>
+      <tr><td><strong>2 &middot; Framework</strong></td><td class="mono">8&ndash;18 Sep</td><td>Victor</td><td><strong>Block A only:</strong> config schema, Astro template, bilingual routing, minimal generator, branch previews, the QA list, handoff. Block B is gated by the launch, not the handoff</td></tr>
       <tr><td><strong>Parallel &middot; Pavel ramp</strong></td><td class="mono">31 Aug&ndash;18 Sep</td><td>Pavel</td><td>HTML and CSS to read and diagnose, Astro concepts, Git, Cloudflare, plus shadowing the framework build</td></tr>
       <tr><td><strong>3 &middot; Site #1 English</strong></td><td class="mono">21 Sep&ndash;9 Oct</td><td>Pavel</td><td>Generated from config, content written, tracking wired, QA, launch</td></tr>
       <tr><td><strong>4 &middot; Site #2 Spanish</strong></td><td class="mono">12&ndash;30 Oct</td><td>Pavel</td><td>Same flow, validates bilingual support. Content written natively in Spanish</td></tr>
@@ -576,9 +576,9 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
   <div class="note">
     <h4>Phase 2 is split by real deadline, not trimmed</h4>
     <p>Ten items in nine working days does not fit, especially with Pavel shadowing, which costs velocity rather than adding it. The fix is not cutting scope, it is noticing that only half of Phase 2 is actually gated by the 18 September handoff.</p>
-    <p><strong>Block A, due 18 September:</strong> config schema, Astro template, bilingual routing, the minimal generator, and the handoff session. Without these Pavel cannot start Site #1 on 21 September.</p>
-    <p><strong>Block B, due 9 October:</strong> full technical SEO, tracking number wiring, analytics and CRM capture, the CI differentiation gate, and the QA checklist. These are gated by Site #1's launch and get built during Phase 3 with Pavel already operating. If one overruns it slides inside October without touching the 21 September start.</p>
-    <p>One caveat that keeps this honest: the CI differentiation gate must exist before the first content publishes, which is early October, not before the handoff. It is the guardrail the whole portfolio depends on.</p>
+    <p><strong>Block A, due 18 September:</strong> config schema, Astro template, bilingual routing, the minimal generator, branch preview deploys, the QA list, and the handoff session. Without these Pavel cannot start Site #1 on 21 September.</p>
+    <p><strong>Block B, due 9 October:</strong> full technical SEO, tracking number wiring, analytics and CRM capture, the CI differentiation gate, and automating the QA list. These are gated by Site #1's launch and get built during Phase 3 with Pavel already operating. If one overruns it slides inside October without touching the 21 September start.</p>
+    <p><strong>Two items moved into Block A on 26 August.</strong> Pavel spends three weeks writing content between 21 September and 9 October. Without a preview link per branch he either writes without seeing his pages or asks Victor to show him, which is the exact dependency the handoff exists to remove. And the QA list is his own definition of ready to publish: if it does not exist on 21 September he writes for three weeks without knowing what he is writing toward. Automating that list stays in Block B.</p><p><strong>The differentiation guardrail has two deadlines, not one.</strong> The automated check compares pages across the whole portfolio, so with a single site live it has nothing to compare against; its first real test is Site #2 in mid October. The check that protects Site #1 is a human one, run page by page as the content is written, and it goes into the handoff on 18 September. That ordering matters: twenty pages first reviewed four days before launch cannot realistically be rewritten, and the pressure in that moment is to loosen the standard instead.</p>
   </div>
 
   <div class="note">
@@ -652,7 +652,7 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
       <line x1="882" y1="149" x2="882" y2="120" stroke="currentColor" stroke-width="1.4"/>
       <rect x="812" y="82" width="112" height="38" rx="6" fill="none" stroke="#9E2B25" stroke-width="2"/>
       <text x="868" y="97" text-anchor="middle" font-size="12" font-weight="700" fill="#9E2B25">GATE B</text>
-      <text x="868" y="112" text-anchor="middle" font-size="10.5" fill="#9E2B25">12 Feb 2027</text>
+      <text x="868" y="112" text-anchor="middle" font-size="10.5" fill="#9E2B25">5 Mar 2027</text>
 
       <line x1="868" y1="82" x2="868" y2="192" stroke="none"/>
       <text x="868" y="192" text-anchor="middle" font-size="11" font-weight="600" fill="currentColor">scale to 20</text>
@@ -670,7 +670,7 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
         <td><strong>Gate A</strong><br><span class="pill p-teal">Technical</span></td>
         <td>Does the factory work?</td>
         <td class="mono">13 Nov 26</td>
-        <td><strong>Factory time of 2 working days or fewer</strong>, measured from approved content and a filled config in hand, to a live site that passes QA, with <strong>zero code written by Victor</strong>. Total elapsed time including research and writing is logged as an informational second clock. Pavel picks the niche himself.</td>
+        <td><strong>Four conditions, all required.</strong> The two that decide it are settled by a command rather than by judgment: nothing outside the site&#39;s own folder was edited by hand, and rebuilding the site from its config file reproduces exactly what shipped. The other two are <strong>2 working days or fewer of hands-on time</strong> (waiting on certificates or phone numbers does not count) and <strong>zero code written by Victor</strong>, with every question the handoff failed to answer logged. Pavel picks the niche himself.</td>
         <td>Return to Phase 5. The framework is not repeatable yet, and building more sites would only multiply manual work.</td>
       </tr>
       <tr class="gate">
@@ -686,13 +686,16 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
 
   <div class="note">
     <h4>Why Gate A excludes the writing, and why Gate B moved</h4>
-    <p><strong>Gate A</strong> originally said "five working days," which never specified whether writing the content counted inside them. If it counts, nobody passes: 15 to 25 pages of original insurance copy takes longer than that. If it does not count, five days is far too generous and the gate measures almost nothing. Splitting it into factory time and elapsed time isolates the variable actually under test, and tightens the bar rather than loosening it.</p>
+    <p><strong>Gate A</strong> originally said "five working days," which never specified whether writing the content counted inside them. If it counts, nobody passes: 15 to 25 pages of original insurance copy takes longer than that. If it does not count, five days is far too generous. Excluding the writing and tightening to two days fixed that on 26 August.</p><p>Tightened again the same day, because a stopwatch was still measuring the wrong thing. Two days of calendar time also measures how long Cloudflare takes to issue a security certificate, which is usually fifteen minutes and can be a full day. Pavel could fail on the luck of the draw. The two conditions that now decide the gate answer the actual question, which is whether anything had to be built by hand: if a file outside the site folder was edited, or if rebuilding from the config no longer reproduces the site, the factory did not do the work. Neither of those is visible on a stopwatch, and neither is arguable in November.</p><p><strong>It also gets rehearsed.</strong> During the week of 2 November the full sequence runs against a throwaway configuration, with no domain bought and no content written. Finding a gap in the instructions that week costs an afternoon. Finding it on 10 November costs the gate.</p>
     <p><strong>Gate B moved from 12 February to the week of 1 March.</strong> The gate promises 120 days of data on both pilots, but Site #2 launches 30 October and its 120 days land on 27 February, fifteen days after the original date. Rather than quietly evaluate Site #2 at 105 days, the gate moves. Two and a half weeks against a four month wait is noise. Deciding to build twenty sites on thinner data than we promised ourselves is not.</p>
   </div>
 
   <div class="note warn">
-    <h4>Gate B has no number yet</h4>
-    <p>Activity 0.7 exists to set it. The bar has to be defined now, while there is no data, because that is the only moment it can be set honestly. Set afterward, it becomes whatever the results happen to say.</p>
+    <h4>Gate B has no number yet, but it now has a way to get one</h4>
+    <p>The bar has to be set now, while there is no data, because a bar set afterward becomes whatever the results happen to say, and a gate that cannot fail is not a gate.</p>
+    <p><strong>Kevin should not have to invent a number.</strong> It can be derived from three facts only he has: the average first year commission on a policy from these niches, the share of qualified calls that become a sale, and the annual return per site that would make him say yes to building twenty more. Those three produce the monthly call target directly.</p>
+    <p><strong>Break even is the wrong bar, and worth saying out loud.</strong> A site costs about $26 a year to keep running, so a single policy pays for it for a decade. A break even test would pass even if the portfolio were a failure. This gate is not asking whether the sites pay for themselves. It is asking whether twenty more of them is the best available use of Pavel&#39;s next six months.</p>
+    <p><strong>One thing has to be settled before launch:</strong> nobody has defined what makes a call qualified. That definition decides what the phone system has to record, and the phone system is wired before Site #1 goes live on 9 October. It also needs someone tagging calls weekly rather than reconstructing 120 days of them from memory in March.</p>
   </div>
 </section>
 
@@ -784,7 +787,8 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
       <tr><td>Existing GitHub organization, or do we create one</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Repository setup</td></tr>
       <tr><td>English niche and target market for Site #1</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Domain selection, Phase 3</td></tr>
       <tr><td>Spanish niche and target market for Site #2</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Phase 4</td></tr>
-      <tr><td>Numeric target for Gate B</td><td>Kevin + Victor</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Gate B is undecidable without it</td></tr>
+      <tr><td>Numeric target for Gate B. The arithmetic is ready, three business figures are needed to complete it</td><td>Kevin approves, Victor proposes</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Gate B is undecidable without it</td></tr>
+      <tr><td>What counts as a qualified call, and how it gets recorded</td><td>Kevin + Victor</td><td class="mono">25 Sep 26</td><td><span class="pill p-amber">Open</span></td><td>Gate B is measured in this unit, and the phone system has to record it before Site #1 launches</td></tr>
       <tr><td>Do pilot sites get their own Google Business Profiles</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>May change which niches are viable at all</td></tr>
       <tr><td>Domain names approved for Sites #1 and #2</td><td>Kevin</td><td class="mono">7 Sep 26</td><td><span class="pill p-amber">Open</span></td><td>Moved after niche validation, so we never buy a domain for a niche we cannot win</td></tr>
       <tr><td>Walker brand assets: logo, approved contact, disclosures, license numbers</td><td>Kevin</td><td class="mono">4 Sep 26</td><td><span class="pill p-brick">Blocker</span></td><td>Site #1 cannot publish without it</td></tr>
@@ -814,7 +818,7 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font
 </section>
 
 <footer>
-  WICFL Microsite Factory &middot; Master reference v1.4 &middot; 26 Aug 2026<br>v1.4 applies an architecture review: Gate B moved so Site #2 gets its full 120 days, Gate A sharpened to measure factory time, Phase 2 split by real deadline, and the CRM opened as an undecided dependency. v1.3 locked the schedule and confirmed Pavel writes native Spanish. v1.2 confirmed GoTo pricing at $0.99 per number and assigned the content role. v1.1 integrated Pavel's preparation research.<br>
+  WICFL Microsite Factory &middot; Master reference v1.5 &middot; 26 Aug 2026<br>v1.5 replaces the Gate A stopwatch with two conditions a command can settle, adds branch previews and the QA list to the September handoff, gives the differentiation guardrail its two correct deadlines, and turns the Gate B number from something Kevin invents into something he approves. v1.4 applied an architecture review: Gate B moved so Site #2 gets its full 120 days, Gate A sharpened to measure factory time, Phase 2 split by real deadline, and the CRM opened as an undecided dependency. v1.3 locked the schedule and confirmed Pavel writes native Spanish. v1.2 confirmed GoTo pricing at $0.99 per number and assigned the content role. v1.1 integrated Pavel's preparation research.<br>
   Maintained by Victor. Living document, updated as decisions land.<br>
   Pricing verified against Cloudflare Workers pricing and platform limits, Cloudflare Registrar documentation, Verisign's November 2026 .com fee notice, GitHub Actions billing, Twilio US voice pricing and CallRail's published plans. GoTo per number pricing confirmed in writing by GoTo customer care on 25 Aug 2026.
 </footer>
