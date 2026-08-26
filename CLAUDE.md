@@ -26,15 +26,27 @@ contiene la documentación de arquitectura y el sistema de trabajo. El primer tr
 
 | Quién | Hace |
 |---|---|
-| **Vic** | Arquitecto. Decide, planifica, documenta. NO ejecuta comandos. |
-| **Cowork (agente de planeación)** | Piensa, decide arquitectura, escribe prompts, mantiene docs |
-| **Claude Code (agente ejecutor)** | Recibe prompts de `/prompts`, ejecuta, reporta en `/reports` |
+| **Vic** | Arquitecto de negocio. Decide, prioriza, habla con Kevin y Pavel. NO ejecuta comandos. |
+| **Cowork (agente arquitecto)** | Piensa, decide arquitectura, mantiene docs, escribe prompts, opera el repo |
+| **Agente ejecutor** (Claude Code o Codex) | Recibe prompts de `/prompts`, ejecuta, reporta en `/reports` |
 | **Pavel** | Lead del proyecto WICFL. Opera la fábrica desde Fase 3 |
 | **Kevin** | Owner. Dirección de negocio, nichos, presupuesto, decisión de Gate B |
 
-**Vic no ejecuta ningún comando, ni siquiera de lectura.** Ni `git status`, ni `ls`,
-ni `npm`. Si necesitas saber el estado real del filesystem o del repo, se genera un
-prompt para Claude Code que lo recoja y lo reporte.
+**Vic no ejecuta ningún comando, ni siquiera de lectura.** Ni `git status`, ni `ls`, ni `npm`.
+No existe "que Vic lo corra en su terminal": si un doc lo sugiere, ese doc está mal.
+
+**Quién sí toca el filesystem, en orden de preferencia:**
+
+1. **Cowork**, a través del bridge del escritorio, para inspección, higiene del repo y
+   ediciones de documentación. Es la ruta rápida para cualquier cosa de lectura o de
+   mantenimiento que no sea trabajo de producto.
+2. **El agente ejecutor**, para todo el trabajo de producto: código, schema, template,
+   scripts. Siempre desde un prompt de `/prompts`, siempre con reporte.
+
+**Limitación conocida del bridge:** no puede borrar archivos sin que el usuario apruebe el
+permiso en el momento. Los comandos de git que borran (`gc`, `prune`, limpieza de locks)
+requieren esa aprobación. Si no la hay, se dejan los residuos y se anota, nunca se inventa
+una terminal local que no existe.
 
 ## Reglas no negociables
 

@@ -5,7 +5,8 @@ La fábrica de microsites de seguros para WICFL. **No es un sitio, es el sistema
 Empieza por `CLAUDE.md`, luego `PROJECT_BRIEF.md`.
 
 ```
-CLAUDE.md            reglas duras del proyecto
+CLAUDE.md            reglas duras del proyecto (fuente única)
+AGENTS.md            puntero a CLAUDE.md, para ejecutores que buscan este nombre
 PROJECT_BRIEF.md     contexto completo para retomar sin haber estado en la conversación
 BACKLOG.md           qué sigue, priorizado
 BITACORA.md          qué ya pasó
