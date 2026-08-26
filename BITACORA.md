@@ -5,6 +5,62 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-08-26 · Revisión de arquitectura externa, seis hallazgos
+
+**Quién:** Vic + arquitecto revisor + cowork
+
+Vic pidió una revisión independiente del repo completo. Seis hallazgos, todos válidos.
+**Dos eran errores míos y quedan reconocidos aquí para no repetirlos.**
+
+**1. No había repo de git. Error mío.** Yo lo había dejado fuera a propósito, argumentando que
+crear el monorepo era W-012. El argumento estaba mal: W-012 es la **org de GitHub**, no el git
+local. Sin git no había historia ni respaldo, y peor, `00_GUIA_GLOBAL.md` le exigía al ejecutor
+cerrar items "con refs a commit" cuando eso era imposible. **Corregido:** `git init` y commit
+cero con los 22 archivos, hoy.
+
+**2. `CLAUDE.md` estaba desincronizado. Error mío.** Actualicé backlog, bitácora, docs, xlsx y
+master file cuando se cerraron W-001, W-002 y W-009, y olvidé el archivo que **todo agente lee
+primero**. Un ejecutor literal se habría detenido a avisar de un bloqueador inexistente.
+**Corregido:** bloqueadores reales listados, cerrados marcados como "no los vuelvas a levantar",
+y nota de que ahora hay git.
+
+**3. Aritmética de Gate B rota. Hallazgo más filoso de la revisión.** El gate prometía 120 días
+de datos de ambos pilotos, pero el sitio #2 lanza el 30 de octubre y sus 120 días caen el 27 de
+febrero, quince días **después** del gate del 12 de febrero. El sitio #1 sí cerraba a tiempo, el
+6 de febrero. **Corregido: Gate B se mueve a la semana del 1 de marzo de 2027**, y la Fase 10 al
+8 de marzo. Dos semanas y media contra una espera de cuatro meses es ruido; decidir construir
+veinte sitios con datos más delgados de lo que nos prometimos, no.
+
+**4. Fase 2 subestimada.** Diez items en nueve días hábiles, con Pavel de sombra restando
+velocidad. **Corregido, y no recortando alcance:** se separó por deadline real. Solo la mitad de
+Fase 2 está amarrada al handoff del 18 de septiembre (Bloque A: schema, template, ruteo bilingüe,
+generador, handoff). La otra mitad está amarrada al launch del 9 de octubre (Bloque B: SEO
+técnico, tracking, analytics y CRM, gate de CI, checklist de QA) y se construye durante Fase 3
+con Pavel ya operando. Salvedad: el gate de diferenciación debe existir **antes de que se
+publique el primer contenido**, principios de octubre, no antes del handoff.
+
+**5. El CRM no estaba decidido en ningún lado.** W-025 decía "captura de leads al CRM" y el
+schema tiene bloque `crm`, pero nadie lo nombró. Abierto como **W-096**, dependencia de Kevin.
+Pregunta concreta: ¿la misma instancia de HighLevel que WAGS, una subcuenta, u otra cosa?
+
+**6. Gate A tenía hueco de definición.** "≤5 días hábiles" no decía si escribir el contenido
+contaba dentro. Si cuenta, nadie pasa. Si no cuenta, cinco días mide casi nada.
+**Corregido y endurecido, no solo aclarado:** dos relojes. El criterio del gate es **tiempo de
+fábrica ≤2 días hábiles**, desde contenido aprobado y config lleno hasta sitio vivo que pasa QA,
+con cero código de Vic. El tiempo total transcurrido queda como métrica informativa contra la
+línea base de los sitios #1 y #2. Y **Pavel elige el nicho del #3 él mismo**, porque correr el
+loop completo sin ayuda es parte de lo que se mide.
+
+**Nota técnica:** `git init` corrió desde el bridge del escritorio, que no puede borrar archivos.
+Quedaron archivos `tmp_obj_*` huérfanos en `.git/objects/`. Git los ignora, pero conviene
+limpiarlos con `git gc --prune=now` desde una terminal local antes del primer push.
+
+**Lección:** cuando un dato cambia, la lista de archivos a actualizar tiene que incluir
+`CLAUDE.md` de forma refleja. Es el único que un agente lee sin que nadie se lo pida, así que es
+donde una desincronización cuesta más.
+
+---
+
 ## 2026-08-25 (noche) · GoTo resuelto, roles cerrados, arranque
 
 **Quién:** Vic + cowork

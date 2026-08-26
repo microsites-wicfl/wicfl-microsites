@@ -10,8 +10,9 @@ marca hermana pero separada de Walker Insurance Agency (WAGS).
 No es un sitio. Es el sistema que genera sitios. Si alguna vez te encuentras escribiendo
 HTML para un sitio individual, eso es un defecto del framework y se arregla en el framework.
 
-**Estado al 2026-08-25:** Fase 0. Todavía no existe código. Este repo contiene la
-documentación de arquitectura y el sistema de trabajo. El código arranca en Fase 1.
+**Estado al 2026-08-26:** Fase 0, cerrando. Todavía no existe código de producto. Este repo
+contiene la documentación de arquitectura y el sistema de trabajo. El primer trabajo real es
+`prompts/2026-08-25_001_site-config-schema.md`.
 
 ## Lectura obligatoria antes de trabajar
 
@@ -59,6 +60,10 @@ prompt para Claude Code que lo recoja y lo reporte.
 
 8. **Todo prompt genera reporte.** Sin excepciones, aunque la tarea tome 30 segundos.
 
+9. **Este repo tiene git desde el 2026-08-26.** Todo cambio va con commit, y los items del
+   backlog se cierran con refs a prompt, report y commit. Todavía no hay remoto: el push a
+   GitHub llega con W-012.
+
 ## Idioma
 
 - **Docs operativos** (CLAUDE.md, BITACORA, BACKLOG, prompts, reports): español
@@ -67,15 +72,25 @@ prompt para Claude Code que lo recoja y lo reporte.
   "what we did / what's needed"
 - **Conversación con Vic**: español mexicano. NO voseo.
 
-## Bloqueadores activos
+## Bloqueadores activos al 2026-08-26
 
-Dos cosas paran la Fase 1 y ambas son de Kevin. Si siguen abiertas, dilo antes de avanzar:
+**Todos son de Kevin.** Si siguen abiertos, dilo antes de avanzar. La fuente de verdad es
+`BACKLOG.md`; esta lista es un recordatorio, no un sustituto.
 
-- Quote escrito de GoTo por número mensual (rango en juego: $1,900 vs $6,000–$18,000/año a 100 números)
-- Dueño del contenido asignado, más escritor nativo de español
+- **W-092** — correo de empresa para la cuenta de Cloudflare, y quién es el segundo Super Admin.
+  Sin esto no hay cuenta el lunes 31, y sin cuenta Pavel arranca sin accesos.
+- **W-093** — vault compartido de contraseñas y tarjeta de empresa para billing
+- **W-094** — ¿Walker ya tiene org de GitHub o creamos una?
+- **W-096** — **qué CRM usa WICFL.** Aparece a media Fase 2 en W-025 y nadie lo ha nombrado
+- **W-008** — assets de marca de Walker (logo, contacto aprobado, disclosures, license numbers)
+- **W-095** — quién firma el contenido antes de publicar, incluido compliance de seguros en Florida
+
+**Ya cerrados, no los vuelvas a levantar:** W-001 (GoTo confirmó $0.99 por número el 25-ago),
+W-002 (Kevin asignó contenido a Pavel, que además escribe español nativo), W-009 (disponibilidad
+de Pavel confirmada, fechas fijas).
 
 ## Referencias vivas
 
 - **Master file (página web):** https://claude.ai/code/artifact/b1c34949-479b-48f6-a269-8522d4b2aa82
-- **Calendario de actividades:** `WICFL-microsite-schedule.xlsx` (tracker semanal, vive fuera del repo)
+- **Calendario de actividades:** `WICFL-microsite-schedule.xlsx` (tracker semanal)
 - Proyecto hermano: `../Walker Insurance Agency` (WAGS, Next.js, no comparte código con este)

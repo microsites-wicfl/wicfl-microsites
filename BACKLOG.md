@@ -3,7 +3,7 @@
 Items priorizados. **Solo cowork crea items nuevos.** El agente ejecutor puede cerrar el
 item que su prompt cerraba, con refs a prompt/report/commit, pero no crea ni reprioriza.
 
-Formato de id: `W-NNN` · Última actualización: 2026-08-25 (GoTo, contenido y disponibilidad resueltos)
+Formato de id: `W-NNN` · Última actualización: 2026-08-26 (revisión de arquitectura: git, Gate B, recorte de Fase 2, CRM)
 
 ---
 
@@ -28,6 +28,7 @@ Formato de id: `W-NNN` · Última actualización: 2026-08-25 (GoTo, contenido y 
 | W-092 | Correo de empresa que será dueño de la cuenta de Cloudflare, y quién es el segundo Super Administrator | Kevin | 2026-08-28 | W-010. Bloquea la mañana del lunes 31 |
 | W-093 | Vault compartido de contraseñas y tarjeta de empresa para billing | Kevin | 2026-08-28 | W-010 |
 | W-094 | ¿Walker ya tiene org de GitHub o se crea una nueva? | Kevin | 2026-08-28 | W-012 |
+| W-096 | **¿Qué CRM usa WICFL?** ¿La misma instancia de HighLevel que WAGS, una subcuenta, u otra cosa? | Kevin | 2026-09-04 | W-025. Aparece a media Fase 2 y nadie lo había nombrado |
 
 ---
 
@@ -57,18 +58,35 @@ Formato de id: `W-NNN` · Última actualización: 2026-08-25 (GoTo, contenido y 
 
 ## Fase 2 — Framework (8–18 sep 2026) · Vic con Pavel de sombra
 
+Diez items en nueve días hábiles no cabe, sobre todo con Pavel de sombra restando velocidad.
+Lo que hicimos no es recortar alcance, es **separar por deadline real**: no todo lo de Fase 2
+está amarrado al handoff del 18 de septiembre. La mitad está amarrada al launch del sitio #1,
+el 9 de octubre, y Pavel puede construirla durante la Fase 3.
+
+### Bloque A — obligatorio para el handoff del 18 de septiembre
+
+Sin esto Pavel no puede empezar el sitio #1 el 21 de septiembre.
+
 | id | Item | Dueño | Notas |
 |---|---|---|---|
 | W-020 | Definir el `site.config.json` schema + validación | Vic + Pavel | **El artefacto más importante del proyecto.** Pavel revisa y rompe antes de cerrarlo |
 | W-021 | Template base de Astro: layouts, componentes, design system | Vic | |
 | W-022 | Ruteo bilingüe en/es con `hreflang` | Vic | Se construye ahora, no se retrofitea |
-| W-023 | SEO técnico: sitemap, robots, canonical, schema.org InsuranceAgency | Vic | Generado desde config |
-| W-024 | Número de tracking como campo de config, ruteado a GoTo | Vic | **Desbloqueado.** GoTo confirmó $0.99/número/mes el 25-ago. Se compran directo en GoTo |
-| W-025 | Analytics (GA4 + GTM) y captura de leads al CRM, con sitio de origen en cada lead | Vic | |
 | W-026 | Comando `new-site`: genera un sitio desde su config | Vic | **Versión mínima y tosca a propósito.** Solo renderiza el template desde config. Se reescribe durante los pilotos. Ver decisión en `docs/ARCHITECTURE.md` |
-| W-027 | Gate de CI de diferenciación: bloquea deploy por similaridad entre sitios | Vic | Cuesta ~1 día y protege el portfolio permanentemente |
-| W-029 | **Checklist de QA y launch**: técnico, SEO, contenido, mobile, conversión, tracking, deploy | Pavel + Vic | *(aporte de Pavel)* Todo lo automatizable va a CI, no a criterio humano |
 | W-028 | Sesión de handoff con Pavel + documentación escrita | Vic + Pavel | Criterio de salida: Pavel genera un sitio vacío sin ayuda |
+
+### Bloque B — obligatorio para el launch del sitio #1, 9 de octubre
+
+Se construye durante la Fase 3, con Pavel ya operando. Si alguno se desborda, se recorre
+dentro de octubre sin tocar el handoff ni el 21 de septiembre.
+
+| id | Item | Dueño | Notas |
+|---|---|---|---|
+| W-023 | SEO técnico: sitemap, robots, canonical, schema.org InsuranceAgency | Vic | El template del Bloque A no debe impedirlo |
+| W-024 | Número de tracking como campo de config, ruteado a GoTo | Vic | GoTo confirmado a $0.99/número |
+| W-025 | Analytics (GA4 + GTM) y captura de leads al CRM, con sitio de origen en cada lead | Vic | **Depende de W-096**, el CRM no está decidido |
+| W-027 | Gate de CI de diferenciación: bloquea deploy por similaridad entre sitios | Vic | Debe existir **antes de que se publique el primer contenido**, no antes del handoff |
+| W-029 | Checklist de QA y launch: técnico, SEO, contenido, mobile, conversión, tracking, deploy | Pavel + Vic | *(aporte de Pavel)* Lo automatizable va a CI |
 
 ---
 
@@ -87,14 +105,14 @@ Formato de id: `W-NNN` · Última actualización: 2026-08-25 (GoTo, contenido y 
 | id | Item | Notas |
 |---|---|---|
 | W-040 | Retro: catalogar todo lo que fue manual en sitios #1 y #2, y regresarlo al framework | 2–6 nov |
-| W-041 | **Gate A**: sitio #3 generado por Pavel solo, ≤5 días hábiles, cero código de Vic | 13 nov |
+| W-041 | **Gate A**: ver criterio afinado en `docs/SCHEDULE.md`. Dos relojes: tiempo de fábrica ≤2 días hábiles desde contenido listo hasta sitio vivo, y cero código de Vic | 13 nov |
 | W-050 | Automatizar registro de dominio vía Cloudflare Registrar API | API en beta: solo registra, no renueva ni transfiere |
 | W-051 | Automatizar zona, DNS y attach de custom domain | |
 | W-052 | Automatizar alta en Search Console y envío de sitemap | |
 | W-053 | Automatizar provisioning del número de tracking | |
 | W-054 | Comando end-to-end: config entra, sitio vivo sale | |
 | W-060 | Reporte mensual: impresiones, clics, llamadas, cotizaciones y ventas por sitio | Corre en paralelo desde 12 oct |
-| W-070 | **Gate B**: decisión comercial de Kevin contra el número de W-005 | 12 feb 2027 |
+| W-070 | **Gate B**: decisión comercial de Kevin contra el número de W-005 | **5 mar 2027** (movido: los 120 días del sitio #2 caen el 27 de feb) |
 
 ---
 
