@@ -20,16 +20,15 @@ Formato de id: `W-NNN` · Última actualización: 2026-08-26 (revisión de arqui
 
 | id | Item | Dueño | Debido | Bloquea |
 |---|---|---|---|---|
-| W-003 | Nicho y mercado en inglés para sitio #1 | Kevin | 2026-08-28 | W-016 |
-| W-004 | Nicho y mercado en español para sitio #2 | Kevin | 2026-08-28 | W-016 |
+| W-003 | Nicho y mercado en inglés para sitio #1 | **Pavel propone**, Kevin aprueba | 2026-08-28 | W-016. **Reasignado el 26-ago:** Kevin es owner, no ejecutor. Pavel ya hace la validación SEO en W-016, así que él trae el nicho con evidencia y Kevin lo aprueba junto con el dominio en W-007 |
+| W-004 | Nicho y mercado en español para sitio #2 | **Pavel propone**, Kevin aprueba | 2026-08-28 | Igual que W-003 |
 | W-005 | Número concreto para Gate B | Kevin **aprueba**, Vic propone | 2026-08-28 | Gate B es indecidible sin él. **El modelo ya está en `docs/GATE_B_MODEL.md`**: Kevin solo llena tres celdas (comisión promedio por póliza, tasa de cierre de llamada a venta, y qué retorno anual por sitio justifica seguir). Un número que hay que aprobar se aprueba; uno que hay que inventar se pospone hasta que los datos lo inventen solos |
 | W-100 | **Definir qué cuenta como "llamada calificada" y cómo se registra** | Kevin + Vic | 2026-09-25 | **Hueco encontrado el 26-ago.** El bar de Gate B se mide en llamadas calificadas y nadie ha dicho qué califica. La definición determina qué tiene que capturar el tracking, y el tracking se cablea antes del launch del 9 de octubre. Incluye disposición de llamadas en GoTo y etiquetado semanal, no trimestral: nadie clasifica 120 días de llamadas de memoria en marzo |
 | W-006 | ¿Los sitios piloto tienen su propio Google Business Profile? | Kevin | 2026-08-28 | Puede cambiar qué nichos son viables |
 | W-007 | Dominios aprobados para sitios #1 y #2 | Kevin | 2026-09-04 | W-011. Se aprueban DESPUÉS de W-016 |
-| W-092 | Correo de empresa que será dueño de la cuenta de Cloudflare, y quién es el segundo Super Administrator | Kevin | 2026-08-28 | W-010. Bloquea la mañana del lunes 31 |
-| W-093 | Vault compartido de contraseñas y tarjeta de empresa para billing | Kevin | 2026-08-28 | W-010 |
-| W-094 | ¿Walker ya tiene org de GitHub o se crea una nueva? | Kevin | 2026-08-28 | W-012 |
-| W-096 | **¿Qué CRM usa WICFL?** ¿La misma instancia de HighLevel que WAGS, una subcuenta, u otra cosa? | Kevin | 2026-09-04 | W-025. Aparece a media Fase 2 y nadie lo había nombrado |
+| W-092 | **Correo de empresa desde el que se gestiona todo el proyecto.** Se acuerda con Kevin; con ese correo Vic crea todas las cuentas | Kevin + Vic | 2026-08-28 | W-010, W-012. Bloquea la mañana del lunes 31. Un solo correo para Cloudflare, GitHub, GA4, Search Console y GoTo, nunca uno personal |
+| W-093 | **Datos de pago de la empresa** para el billing de Cloudflare y GoTo | Kevin | 2026-08-28 | W-010. **Acotado el 26-ago:** el vault de contraseñas lo monta Vic y ya no es pedido a Kevin. De él solo sale el medio de pago |
+| W-094 | ~~¿Walker ya tiene org de GitHub?~~ **Cerrado el 26-ago: la creamos nosotros.** Vic la levanta bajo el correo de W-092. Ver W-012 | Vic | — | Ya no bloquea nada |
 
 ---
 
@@ -87,7 +86,8 @@ dentro de octubre sin tocar el handoff ni el 21 de septiembre.
 |---|---|---|---|
 | W-023 | SEO técnico: sitemap, robots, canonical, schema.org InsuranceAgency | Vic | El template del Bloque A no debe impedirlo |
 | W-024 | Número de tracking como campo de config, ruteado a GoTo | Vic | GoTo confirmado a $0.99/número |
-| W-025 | Analytics (GA4 + GTM) y captura de leads al CRM, con sitio de origen en cada lead | Vic | **Depende de W-096**, el CRM no está decidido |
+| W-101 | Alta de la sub-account de GoHighLevel para WICFL, con credenciales de API y mapeo de campos del lead | Vic | Sale de cerrar W-096. Necesita el correo de W-092. Bloquea W-025 |
+| W-025 | Analytics (GA4 + GTM) y captura de leads al CRM, con sitio de origen en cada lead | Vic | **Desbloqueado el 26-ago: GoHighLevel con una sub-account propia de WICFL.** Falta solo el alta de la sub-account y sus credenciales de API |
 | W-027 | Gate de CI de diferenciación: bloquea deploy por similaridad entre sitios | Vic | **Ancla corregida el 26-ago: antes del contenido del sitio #2, mediados de octubre.** Con un solo sitio vivo no tiene contra qué comparar. La protección durante el sitio #1 es humana y va en el handoff: Pavel corre la skill `differentiation-audit` por página conforme escribe |
 | W-099 | **Automatizar** lo automatizable del checklist de W-029: llevarlo a CI en vez de a criterio humano | Vic | Se parte de W-029 el 26-ago. La lista es Bloque A porque es la definición de terminado; automatizarla es Bloque B porque solo apura, no desbloquea |
 
@@ -135,4 +135,5 @@ dentro de octubre sin tocar el handoff ni el 21 de septiembre.
 |---|---|---|---|
 | W-002 | Dueño del contenido y escritor de español | 2026-08-25 | Kevin asignó el rol de contenido a Pavel, **y Pavel escribe español nativo.** Elimina la contratación que creíamos necesaria antes de finales de octubre. Se revisa en Gate B por el techo de escala |
 | W-009 | Disponibilidad de Pavel | 2026-08-25 | Confirmada con dedicación al proyecto. **La Fase 3 queda fija el 21 de septiembre.** (Gate B se movió después al 5 de marzo por los 120 días del sitio #2; ver W-070) |
+| W-096 | Qué CRM usa WICFL | 2026-08-26 | **GoHighLevel con sub-account propia**, no la instancia de WAGS. Desbloquea W-025. Queda como tarea de Vic dar de alta la sub-account y sacar credenciales, no como pregunta a Kevin |
 | W-001 | Quote escrito de GoTo por número mensual | 2026-08-25 | **$0.99 por número.** $1,188/año a 100 números, por debajo de la ruta de forwarding. Se compran directo en GoTo, se descarta Twilio. Ver `docs/COST_MODEL.md` |

@@ -86,20 +86,29 @@ una terminal local que no existe.
 
 ## Bloqueadores activos al 2026-08-26
 
-**Todos son de Kevin.** Si siguen abiertos, dilo antes de avanzar. La fuente de verdad es
-`BACKLOG.md`; esta lista es un recordatorio, no un sustituto.
+La fuente de verdad es `BACKLOG.md`; esta lista es un recordatorio, no un sustituto.
 
-- **W-092** — correo de empresa para la cuenta de Cloudflare, y quién es el segundo Super Admin.
-  Sin esto no hay cuenta el lunes 31, y sin cuenta Pavel arranca sin accesos.
-- **W-093** — vault compartido de contraseñas y tarjeta de empresa para billing
-- **W-094** — ¿Walker ya tiene org de GitHub o creamos una?
-- **W-096** — **qué CRM usa WICFL.** Aparece a media Fase 2 en W-025 y nadie lo ha nombrado
-- **W-008** — assets de marca de Walker (logo, contacto aprobado, disclosures, license numbers)
-- **W-095** — quién firma el contenido antes de publicar, incluido compliance de seguros en Florida
+**De Kevin, y solo lo que nadie más puede hacer.** Kevin es owner, no ejecutor: si una tarea
+la puede resolver Vic o Pavel, no se le pide.
 
-**Ya cerrados, no los vuelvas a levantar:** W-001 (GoTo confirmó $0.99 por número el 25-ago),
-W-002 (Kevin asignó contenido a Pavel, que además escribe español nativo), W-009 (disponibilidad
-de Pavel confirmada, fechas fijas).
+- **W-092** — el correo de empresa desde el que se gestiona el proyecto. Se acuerda con él; con
+  ese correo Vic crea todas las cuentas. Sin esto no hay cuenta de Cloudflare el lunes 31, y
+  Pavel arranca sin accesos.
+- **W-093** — los datos de pago de la empresa para el billing. Solo el medio de pago; el vault
+  lo monta Vic.
+- **W-006** — ¿los sitios piloto tienen su propio Google Business Profile? Lo maneja Kevin.
+- **W-008** — assets de marca de Walker (logo, contacto aprobado, disclosures, license numbers).
+- **W-095** — quién firma el contenido antes de publicar, incluido compliance de Florida.
+- **W-005** — las tres cifras de negocio para derivar el número de Gate B. Ver `docs/GATE_B_MODEL.md`.
+- **W-100** — qué cuenta como llamada calificada. Vic propone, Kevin confirma.
+
+**Ya cerrados, no los vuelvas a levantar:** W-001 (GoTo a $0.99 por número), W-002 (contenido
+asignado a Pavel, que además escribe español nativo), W-009 (disponibilidad de Pavel confirmada),
+W-094 (la org de GitHub la creamos nosotros, no se le pregunta a Kevin), W-096 (el CRM es
+GoHighLevel con sub-account propia de WICFL, no la instancia de WAGS).
+
+**Reasignados el 26-ago:** W-003 y W-004, los nichos. Pavel ya hace la validación SEO en W-016,
+así que él trae el nicho con evidencia y Kevin solo lo aprueba junto con el dominio en W-007.
 
 ## Referencias vivas
 
