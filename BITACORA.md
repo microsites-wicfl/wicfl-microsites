@@ -5,7 +5,90 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
-## 2026-08-26 · Revisión de arquitectura externa, seis hallazgos
+## 2026-08-26 (tarde) · Revisión de arquitectura y relevo de arquitecto
+
+**Quién:** Vic + cowork (sesión nueva, releva a la sesión que armó el proyecto)
+
+Vic pidió una revisión externa del repo antes de arrancar. Salieron seis hallazgos; la sesión
+anterior aplicó los seis y devolvió dos preguntas abiertas. Esta entrada cubre la respuesta a
+esas dos preguntas y lo que salió al verificar el estado real del repo.
+
+**Limpieza de git ejecutada, no diferida.** El `git init` desde el bridge dejó 43 objetos
+`tmp_obj_*` huérfanos, `.git/_stale/` con nueve locks y un archivo suelto. Se limpió con
+permiso de borrado del usuario: `gc --prune=now`, `fsck` limpio, `.git` de 212K a 156K. El
+Paso 0 que se había agregado al prompt 001 se retiró porque ya no aplicaba, y con él una
+premisa incorrecta: los locks de cero bytes no bloqueaban el commit, git los sobreescribe con
+rename. **Lección:** el bridge del escritorio sí puede borrar, solo hace falta pedir el permiso.
+Diferir higiene de repo a "una terminal local" es diferirla a algo que no existe en este flujo.
+
+**`AGENTS.md` apareció sin versionar como copia casi idéntica de `CLAUDE.md`**, con el nombre
+del ejecutor como única diferencia. Quedó como puntero. Dos copias de las reglas duras se
+desincronizan siempre, y cuando se desincronizan nadie sabe cuál manda. De paso se corrigió la
+contradicción de fondo: `CLAUDE.md` decía que Vic no ejecuta ni comandos de lectura, y al mismo
+tiempo un doc pedía correr git desde su terminal. Ahora dice quién sí toca el filesystem.
+
+**Gate A: el número estaba bien, la unidad estaba mal.** Dos días hábiles de reloj de pared
+miden también la cola de emisión de Universal SSL, que va de quince minutos a 24 horas según el
+SLA publicado de Cloudflare. Pavel podía reprobar por el dominio que le tocó. El criterio ahora
+son cuatro condiciones y las dos que mandan se resuelven con un comando, no con una discusión en
+noviembre: su diff solo toca `sites/<slug>/**`, y regenerar desde config reproduce el sitio
+publicado. Esa segunda es la que de verdad detecta una fábrica rota, porque un parche a mano
+después de generar es invisible para un cronómetro. El tiempo baja a tercer criterio con las
+esperas de vendor excluidas, y el cuarto registra cada pregunta que el handoff no contesta, para
+que el gate alimente la Fase 5 en vez de solo pasar o fallar. Se abrió **W-097**: ensayar el
+reloj completo la semana del 2 de noviembre contra un config de juguete. Gate A debería confirmar
+algo que ya creemos, no descubrirlo.
+
+**Bloque A: la partición era correcta, pero le faltaban dos cosas que no estaban en ningún
+bloque.**
+
+- **W-098, preview deploy por rama.** Pavel escribe markdown tres semanas seguidas del 21 de
+  septiembre al 9 de octubre. Si la única forma de ver una página renderizada es correr el dev
+  server de Astro, le estamos pidiendo `npm install` y una terminal a alguien con tres semanas
+  de rampa técnica. Sin eso escribe a ciegas o depende de Vic para ver su trabajo, que es
+  exactamente la dependencia que el handoff existe para cortar.
+- **W-029 se partió.** La lista de QA es la definición de "listo para publicar" de Pavel y tiene
+  que existir el 21 de septiembre. Si no, escribe tres semanas sin saber contra qué y la lista
+  se acaba escribiendo el 8 de octubre para empatar con lo que ya construyó. Automatizarla es
+  **W-099** y sí es Bloque B.
+
+**El gate de diferenciación tenía el ancla mal en las dos direcciones.** Decía "antes de que se
+publique el primer contenido, principios de octubre". Pero con un solo sitio vivo el gate de CI
+no tiene contra qué comparar: su primera prueba real es el sitio #2, a mediados de octubre. Y al
+revés, el valor del swap test es mientras se escribe. Si Pavel escribe veinte páginas y la
+primera revisión corre el 5 de octubre, una falla significa reescribir tres semanas de trabajo
+cuatro días antes del launch, y la presión de ese momento será aflojar el umbral, no reescribir.
+La auditoría humana por página va en el handoff del 18 de septiembre; el gate de CI a mediados
+de octubre.
+
+**W-005 pasó de "inventar un número" a "aprobar un número".** Se escribió
+`docs/GATE_B_MODEL.md`. El punto de fondo: break-even es el bar equivocado. El costo marginal de
+un sitio es $26 al año, o sea que una sola póliza lo paga por una década y el gate pasaría aunque
+el portafolio fuera un fracaso. Gate B es una prueba de **costo de oportunidad del tiempo de
+Pavel**, no de rentabilidad de la plataforma. El bar se deriva de tres hechos que solo Kevin
+tiene, y el doc trae las dos verificaciones de cordura: si el bar es inalcanzable contra el
+volumen de búsqueda que Pavel encuentre en W-016, está diseñado para fallar; si es tan bajo que
+Kevin no comprometería seis meses de Pavel por ese resultado, Gate B va a pasar hacia un proyecto
+que nadie quería.
+
+**Hueco nuevo, W-100: nadie ha definido qué es una "llamada calificada".** Todo Gate B se mide en
+esa unidad. La definición determina qué tiene que capturar el tracking, y el tracking se cablea
+antes del 9 de octubre, así que no es un detalle de marzo. Incluye disposición de llamadas en
+GoTo y etiquetado semanal: nadie clasifica 120 días de llamadas de memoria.
+
+**La memoria de proyecto estaba vacía.** El handoff de la sesión anterior afirmaba que existía
+`project_wicfl_microsites.md` con el estado completo. `project_memory_read` devolvió cero
+archivos. Se escribió desde cero en esta sesión. **Lección:** un handoff que afirma que algo
+existe no es evidencia de que exista. Verificar antes de confiar, sobre todo cuando lo afirmado
+es el respaldo de todo lo demás.
+
+**Lo que sigue igual y sigue caliente:** Kevin no ha respondido ninguno de los seis bloqueadores.
+Si el lunes 31 llega sin W-092, no hay cuenta de Cloudflare y Pavel arranca su primer día de
+tiempo completo sin accesos. Y el prompt 001 sigue sin ejecutarse.
+
+---
+
+## 2026-08-26 (mediodía) · Revisión de arquitectura externa, seis hallazgos
 
 **Quién:** Vic + arquitecto revisor + cowork
 
