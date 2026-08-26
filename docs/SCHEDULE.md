@@ -173,8 +173,10 @@ measured 120 days after its own launch.
 **Fail:** do not scale. Either niche selection was wrong and we retest, or the microsite model
 does not work for this market.
 
-**Gate B still has no number.** W-005 exists to set it. The bar has to be defined while there is
-no data, because that is the only moment it can be set honestly.
+**Gate B still has no number, but it now has a model.** See `GATE_B_MODEL.md`: the bar is
+derived from three business facts only Kevin can supply, so W-005 becomes an approval rather
+than an invention. The bar has to be set while there is no data, because a bar set after the
+data arrives gets defined by the data, and a gate that cannot fail is not a gate.
 
 ### Why two gates
 

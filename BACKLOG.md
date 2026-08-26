@@ -22,7 +22,8 @@ Formato de id: `W-NNN` · Última actualización: 2026-08-26 (revisión de arqui
 |---|---|---|---|---|
 | W-003 | Nicho y mercado en inglés para sitio #1 | Kevin | 2026-08-28 | W-016 |
 | W-004 | Nicho y mercado en español para sitio #2 | Kevin | 2026-08-28 | W-016 |
-| W-005 | Número concreto para Gate B | Kevin + Vic | 2026-08-28 | Gate B es indecidible sin él |
+| W-005 | Número concreto para Gate B | Kevin **aprueba**, Vic propone | 2026-08-28 | Gate B es indecidible sin él. **El modelo ya está en `docs/GATE_B_MODEL.md`**: Kevin solo llena tres celdas (comisión promedio por póliza, tasa de cierre de llamada a venta, y qué retorno anual por sitio justifica seguir). Un número que hay que aprobar se aprueba; uno que hay que inventar se pospone hasta que los datos lo inventen solos |
+| W-100 | **Definir qué cuenta como "llamada calificada" y cómo se registra** | Kevin + Vic | 2026-09-25 | **Hueco encontrado el 26-ago.** El bar de Gate B se mide en llamadas calificadas y nadie ha dicho qué califica. La definición determina qué tiene que capturar el tracking, y el tracking se cablea antes del launch del 9 de octubre. Incluye disposición de llamadas en GoTo y etiquetado semanal, no trimestral: nadie clasifica 120 días de llamadas de memoria en marzo |
 | W-006 | ¿Los sitios piloto tienen su propio Google Business Profile? | Kevin | 2026-08-28 | Puede cambiar qué nichos son viables |
 | W-007 | Dominios aprobados para sitios #1 y #2 | Kevin | 2026-09-04 | W-011. Se aprueban DESPUÉS de W-016 |
 | W-092 | Correo de empresa que será dueño de la cuenta de Cloudflare, y quién es el segundo Super Administrator | Kevin | 2026-08-28 | W-010. Bloquea la mañana del lunes 31 |

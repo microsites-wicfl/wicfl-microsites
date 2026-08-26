@@ -8,6 +8,7 @@ Referencia del equipo. **Estos archivos están en inglés a propósito**: los le
 | `SITE_CONFIG_SCHEMA.md` | El contrato entre el template y cada sitio. El artefacto más importante |
 | `CONTENT_STANDARDS.md` | El swap test, español nativo, compliance de Florida |
 | `COST_MODEL.md` | Costos verificados con fuente y fecha |
+| `GATE_B_MODEL.md` | La aritmética del número de Gate B. Kevin llena tres celdas, no inventa un número |
 | `ACCOUNTS_AND_ACCESS.md` | Propiedad y seguridad de la cuenta de Cloudflare |
 | `SCHEDULE.md` | Las 10 fases y los dos gates |
 | `master-file-source.html` | Fuente de la página viva del equipo. Editar aquí y republicar |
