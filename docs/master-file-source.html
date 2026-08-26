@@ -1,0 +1,797 @@
+<title>WICFL Microsite Factory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+:root{
+  --bg:#FBFAF7; --surf:#FFFFFF; --surf-2:#F2F1EC; --surf-3:#E7E6DF;
+  --ink:#14262A; --ink-2:#3D5257; --ink-3:#6B7F83;
+  --line:#DCDBD3; --line-strong:#C3C7C3;
+  --teal:#0E5A5F; --teal-soft:#DDEAEA; --teal-ink:#0B4448;
+  --brick:#9E2B25; --brick-soft:#F6E4E1;
+  --amber:#8A6410; --amber-soft:#F6EED9;
+  --green:#2E6B3E; --green-soft:#E2EFE4;
+  --shadow:0 1px 2px rgba(20,38,42,.05), 0 8px 24px -12px rgba(20,38,42,.16);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C1618; --surf:#131F22; --surf-2:#182629; --surf-3:#203034;
+    --ink:#E8EDEC; --ink-2:#AFC0C0; --ink-3:#7D9294;
+    --line:#26363A; --line-strong:#385053;
+    --teal:#5EBEC0; --teal-soft:#12333A; --teal-ink:#8FD8D6;
+    --brick:#E38273; --brick-soft:#39201E;
+    --amber:#D6A63F; --amber-soft:#332813;
+    --green:#77BC86; --green-soft:#16301D;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1618; --surf:#131F22; --surf-2:#182629; --surf-3:#203034;
+  --ink:#E8EDEC; --ink-2:#AFC0C0; --ink-3:#7D9294;
+  --line:#26363A; --line-strong:#385053;
+  --teal:#5EBEC0; --teal-soft:#12333A; --teal-ink:#8FD8D6;
+  --brick:#E38273; --brick-soft:#39201E;
+  --amber:#D6A63F; --amber-soft:#332813;
+  --green:#77BC86; --green-soft:#16301D;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15.5px; line-height:1.62; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:Archivo,"IBM Plex Sans",sans-serif; text-wrap:balance; margin:0; letter-spacing:-.015em}
+code,kbd,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+
+.shell{display:grid; grid-template-columns:246px minmax(0,1fr); gap:0; max-width:1280px; margin:0 auto}
+@media (max-width:940px){ .shell{grid-template-columns:minmax(0,1fr)} }
+
+/* ---------- sidebar ---------- */
+.side{
+  position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto;
+  border-right:1px solid var(--line); padding:28px 20px 40px; background:var(--bg);
+}
+@media (max-width:940px){ .side{position:static; height:auto; border-right:0; border-bottom:1px solid var(--line)} }
+.side .mark{font-family:Archivo; font-weight:700; font-size:14px; letter-spacing:.04em; text-transform:uppercase; color:var(--teal); line-height:1.3}
+.side .mark span{display:block; color:var(--ink-3); font-weight:500; letter-spacing:.12em; font-size:10.5px; margin-top:5px}
+.side nav{margin-top:26px; display:flex; flex-direction:column; gap:1px}
+.side nav a{
+  display:block; padding:6px 10px; border-radius:5px; text-decoration:none;
+  color:var(--ink-2); font-size:13.4px; line-height:1.4; border-left:2px solid transparent;
+}
+.side nav a:hover{background:var(--surf-2); color:var(--ink)}
+.side nav a:focus-visible{outline:2px solid var(--teal); outline-offset:1px}
+.side nav .grp{margin-top:16px; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); padding:0 10px 5px; font-weight:600}
+
+/* ---------- main ---------- */
+main{padding:44px 46px 96px; min-width:0}
+@media (max-width:640px){ main{padding:30px 20px 70px} }
+.prose{max-width:70ch}
+section{padding-top:44px; scroll-margin-top:18px}
+section > h2{
+  font-size:25px; font-weight:700; padding-bottom:10px; border-bottom:2px solid var(--ink);
+  display:inline-block; margin-bottom:22px;
+}
+h3{font-size:16.5px; font-weight:600; margin:30px 0 9px; color:var(--ink)}
+h4{font-size:13px; font-weight:600; margin:22px 0 7px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3)}
+p{margin:0 0 14px; max-width:70ch}
+ul,ol{margin:0 0 15px; padding-left:20px; max-width:70ch}
+li{margin-bottom:6px}
+strong{font-weight:600}
+a{color:var(--teal)}
+
+/* ---------- masthead ---------- */
+.head{border-bottom:1px solid var(--line); padding-bottom:26px}
+.eyebrow{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--teal); font-weight:600; font-family:"IBM Plex Mono"}
+.head h1{font-size:clamp(30px,4.4vw,44px); font-weight:700; line-height:1.06; margin:12px 0 12px}
+.head .lede{font-size:17px; color:var(--ink-2); max-width:62ch; margin:0}
+.meta{display:flex; flex-wrap:wrap; gap:6px 20px; margin-top:20px; font-size:12px; color:var(--ink-3); font-family:"IBM Plex Mono"}
+
+/* ---------- status strip ---------- */
+.strip{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:9px; overflow:hidden; margin-top:30px}
+.tile{background:var(--surf); padding:14px 16px}
+.tile .k{font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); font-weight:600}
+.tile .v{font-family:Archivo; font-weight:600; font-size:19px; margin-top:5px; line-height:1.2; font-variant-numeric:tabular-nums}
+.tile .s{font-size:12px; color:var(--ink-3); margin-top:3px}
+.tile.alert .v{color:var(--brick)}
+.tile.pend .v{color:var(--amber)}
+
+/* ---------- pills ---------- */
+.pill{display:inline-block; font-size:10.5px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; padding:2.5px 8px; border-radius:20px; font-family:"IBM Plex Mono"; white-space:nowrap}
+.p-teal{background:var(--teal-soft); color:var(--teal-ink)}
+.p-brick{background:var(--brick-soft); color:var(--brick)}
+.p-amber{background:var(--amber-soft); color:var(--amber)}
+.p-green{background:var(--green-soft); color:var(--green)}
+.p-grey{background:var(--surf-3); color:var(--ink-2)}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto; margin:16px 0 22px; border:1px solid var(--line); border-radius:9px; background:var(--surf)}
+table{border-collapse:collapse; width:100%; font-size:13.6px; min-width:520px}
+th{
+  text-align:left; font-family:Archivo; font-weight:600; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); padding:11px 14px; border-bottom:1px solid var(--line-strong); white-space:nowrap; background:var(--surf-2);
+}
+td{padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; line-height:1.5}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono"; font-size:13px}
+td.mono{font-family:"IBM Plex Mono"; font-size:12.6px; white-space:nowrap}
+tbody tr:hover{background:var(--surf-2)}
+tr.total td{font-weight:600; background:var(--surf-2); border-top:1px solid var(--line-strong)}
+tr.phase td{background:var(--surf-2); font-family:Archivo; font-weight:600; font-size:12px; letter-spacing:.05em; text-transform:uppercase; color:var(--teal-ink)}
+tr.gate td{background:var(--amber-soft)}
+
+/* ---------- callouts ---------- */
+.note{border:1px solid var(--line); border-left:3px solid var(--teal); background:var(--surf); border-radius:0 8px 8px 0; padding:15px 18px; margin:20px 0; max-width:74ch}
+.note.warn{border-left-color:var(--brick)}
+.note.rule{border-left-color:var(--amber)}
+.note h4{margin:0 0 6px}
+.note p:last-child{margin-bottom:0}
+
+pre{background:var(--surf-2); border:1px solid var(--line); border-radius:9px; padding:16px 18px; overflow-x:auto; font-size:12.7px; line-height:1.62; margin:14px 0 20px}
+pre code{font-family:"IBM Plex Mono"}
+p code, li code, td code{background:var(--surf-2); border:1px solid var(--line); border-radius:4px; padding:.5px 5px; font-size:.88em}
+
+/* ---------- figures ---------- */
+figure{margin:26px 0 30px; padding:22px 20px 14px; border:1px solid var(--line); border-radius:10px; background:var(--surf); overflow-x:auto}
+figure svg{display:block; width:100%; max-width:100%; height:auto; color:var(--ink-2)}
+figcaption{margin-top:14px; font-size:12.6px; color:var(--ink-3); line-height:1.55; max-width:66ch}
+
+/* ---------- roles / cards ---------- */
+.cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin:18px 0 24px}
+.card{border:1px solid var(--line); border-radius:10px; padding:16px 18px; background:var(--surf); box-shadow:var(--shadow)}
+.card h4{margin:0 0 4px; text-transform:none; letter-spacing:0; font-size:15px; color:var(--ink); font-family:Archivo; font-weight:600}
+.card .role{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); font-weight:600; font-family:"IBM Plex Mono"}
+.card ul{margin:9px 0 0; padding-left:17px; font-size:13.4px}
+.card li{margin-bottom:4px}
+
+.dl{display:grid; grid-template-columns:auto 1fr; gap:8px 18px; margin:14px 0 22px; font-size:14px; max-width:74ch}
+.dl dt{font-weight:600; color:var(--ink-2)}
+.dl dd{margin:0}
+
+footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); font-size:12.4px; color:var(--ink-3); font-family:"IBM Plex Mono"; line-height:1.7}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="shell">
+<aside class="side">
+  <div class="mark">WICFL<br>Microsite Factory<span>Master reference &middot; v1.1</span></div>
+  <nav>
+    <div class="grp">Orientation</div>
+    <a href="#objective">Objective</a>
+    <a href="#scope">Scope right now</a>
+    <a href="#decisions">Decisions and why</a>
+    <div class="grp">The build</div>
+    <a href="#architecture">Architecture</a>
+    <a href="#schema">Site config schema</a>
+    <a href="#standards">Content standards</a>
+    <div class="grp">Running it</div>
+    <a href="#roles">Who does what</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#gates">The two gates</a>
+    <a href="#security">Accounts and access</a>
+    <div class="grp">Money and status</div>
+    <a href="#costs">Cost model</a>
+    <a href="#open">Open items</a>
+    <a href="#glossary">Glossary</a>
+  </nav>
+</aside>
+
+<main>
+
+<div class="head">
+  <div class="eyebrow">Walker Insurance / WICFL &middot; Internal</div>
+  <h1>Microsite Factory</h1>
+  <p class="lede">One reference for the whole project. What gets built, who builds it, how long it takes, what it costs, and what has to be true before we scale.</p>
+  <div class="meta">
+    <span>Version 1.1</span><span>25 Aug 2026</span><span>Owner: Victor</span><span>Kevin &middot; Pavel &middot; Victor</span>
+  </div>
+</div>
+
+<div class="strip">
+  <div class="tile"><div class="k">Current phase</div><div class="v">Phase 0</div><div class="s">Alignment and decisions</div></div>
+  <div class="tile pend"><div class="k">Next gate</div><div class="v">13 Nov 2026</div><div class="s">Gate A, repeatability</div></div>
+  <div class="tile alert"><div class="k">Open blockers</div><div class="v">3</div><div class="s">GoTo quote, content owner, brand assets</div></div>
+  <div class="tile pend"><div class="k">Schedule risk</div><div class="v">Phase 3</div><div class="s">Start date unconfirmed</div></div>
+</div>
+
+<!-- ================= OBJECTIVE ================= -->
+<section id="objective">
+  <h2>Objective</h2>
+  <div class="prose">
+    <p>Build a network of highly targeted insurance microsites for WICFL, starting in the Stuart and Treasure Coast market and expanding south through Palm Beach, Broward and Miami. Sites will be lightweight, fast, SEO focused, and built in both English and Spanish.</p>
+    <p>The long term target is 100 or more sites. That target is not what we are building right now.</p>
+  </div>
+
+  <div class="note">
+    <h4>Guiding principle</h4>
+    <p>The objective at the beginning is not to build websites quickly. It is to build the factory that lets us build websites quickly and consistently later. We want to avoid reaching Site #20 and discovering we have twenty individually managed websites.</p>
+  </div>
+
+  <div class="prose">
+    <p>Two things follow from that principle, and they shape everything below. First, the factory gets built before the sites, not extracted from them afterward. Second, we prove the factory works and prove the sites produce business as two separate questions, because they resolve on completely different timelines.</p>
+  </div>
+</section>
+
+<!-- ================= SCOPE ================= -->
+<section id="scope">
+  <h2>Scope right now</h2>
+  <div class="prose">
+    <p>Three sites, then a decision. Nothing beyond Site #3 is committed.</p>
+  </div>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>What</th><th>Purpose</th><th>Target date</th><th>Owner</th></tr></thead>
+    <tbody>
+      <tr><td><strong>The factory</strong><br>Template, schema, generator, deploy pipeline, CI gates, QA checklist</td><td>The reusable system every site is generated from</td><td class="mono">18 Sep 2026</td><td>Victor</td></tr>
+      <tr><td><strong>Site #1, English</strong></td><td>First real site. Validates the framework end to end</td><td class="mono">9 Oct 2026</td><td>Pavel</td></tr>
+      <tr><td><strong>Site #2, Spanish</strong></td><td>Validates bilingual support before it is expensive to add</td><td class="mono">30 Oct 2026</td><td>Pavel</td></tr>
+      <tr><td><strong>Site #3</strong></td><td>Proof the process is genuinely repeatable. Built by Pavel alone</td><td class="mono">13 Nov 2026</td><td>Pavel</td></tr>
+      <tr class="gate"><td><strong>Gate B decision</strong></td><td>Whether the model produces business at all</td><td class="mono">12 Feb 2027</td><td>Kevin</td></tr>
+      <tr><td>Sites #4 through #20</td><td>First real scaling</td><td class="mono">Conditional</td><td>Pavel</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note warn">
+    <h4>The risk this scope exists to manage</h4>
+    <p>Google's published spam policy names our exact pattern under doorway abuse: <em>&ldquo;Having multiple domain names or pages targeted at specific regions or cities that funnel users to one page.&rdquo;</em> Their June 2026 spam update enforced this against local and home services businesses. Separately, 100 new domains means 100 sites with no authority, no backlinks and no reviews, which is what actually decides local rankings.</p>
+    <p>Building three sites and measuring is cheap. Building a hundred and being wrong is a year and a six figure content bill.</p>
+  </div>
+</section>
+
+<!-- ================= DECISIONS ================= -->
+<section id="decisions">
+  <h2>Decisions and why</h2>
+  <div class="prose"><p>Settled decisions with the reasoning attached, so we do not relitigate them in six months without remembering why.</p></div>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Decision</th><th>Choice</th><th>Reasoning</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Hosting</td>
+        <td><strong>Cloudflare Workers</strong> with Static Assets</td>
+        <td>Cloudflare Pages still works but no longer receives new platform features and caps at 100 projects per account, which is a wall at exactly our target scale. Same cost, no ceiling, and it is where Cloudflare is investing.</td>
+      </tr>
+      <tr>
+        <td>Framework</td>
+        <td><strong>Astro</strong></td>
+        <td>At 100 sites averaging 30 pages, plain HTML is 3,000 hand maintained files. Astro gives content collections, native English and Spanish routing, zero JavaScript by default, and a build driven entirely by config files.</td>
+      </tr>
+      <tr>
+        <td>Repositories</td>
+        <td><strong>One monorepo</strong></td>
+        <td>With 100 repos, one template fix becomes 100 pull requests and 100 dependency streams. That is the same trap as 100 WordPress installs.</td>
+      </tr>
+      <tr>
+        <td>Domains</td>
+        <td><strong>Cloudflare Registrar</strong></td>
+        <td>Sold at cost with no markup, free WHOIS redaction, and a registration API so provisioning can be scripted. Keeps domains, DNS, SSL and hosting in one place.</td>
+      </tr>
+      <tr>
+        <td>Grouping at scale</td>
+        <td><strong>Pods of about 25 sites</strong> per Worker</td>
+        <td>One Worker per site caps us at 500 and multiplies deploys. One Worker for everything means a bad deploy takes down the whole portfolio.</td>
+      </tr>
+      <tr>
+        <td>Niche selection</td>
+        <td><strong>SEO validation before any domain is bought</strong></td>
+        <td>Added from Pavel's research. Kevin selecting a niche is not the same as the niche being winnable. If a market is owned by national aggregators with no real local angle, keyword and SERP analysis tells us in days rather than at Gate B four months later.</td>
+      </tr>
+      <tr>
+        <td>Generator timing</td>
+        <td><strong>Minimal generator from Site #1</strong>, heavy automation after Site #3</td>
+        <td>The Phase 2 generator is deliberately crude and gets rewritten during the pilots. If Site #1 is hand assembled there is no config driven path to improve, and Gate A stops meaning anything. Domain and provisioning automation do wait until after Site #3.</td>
+      </tr>
+      <tr>
+        <td>Operator profile</td>
+        <td><strong>Config and markdown only</strong></td>
+        <td>The person launching sites never writes HTML and never edits components to ship one. They diagnose, they do not build. This is a hard framework requirement, not a preference.</td>
+      </tr>
+      <tr>
+        <td>Advancement</td>
+        <td><strong>Two separate gates</strong></td>
+        <td>Technical repeatability and commercial validity are different questions on different clocks. Collapsing them is how a team ships twenty sites that deploy beautifully and generate nothing.</td>
+      </tr>
+      <tr>
+        <td>Site #3</td>
+        <td><strong>Generated, not hand built</strong></td>
+        <td>If all three sites are assembled by hand, #3 is faster because Pavel has done it twice. That measures Pavel's learning curve, not the factory.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ================= ARCHITECTURE ================= -->
+<section id="architecture">
+  <h2>Architecture</h2>
+
+  <h3>How a site comes into existence</h3>
+  <figure>
+    <svg viewBox="0 0 940 292" role="img" aria-label="Provisioning chain: a site config file feeds the scaffold command, which generates an Astro site from the shared template; CI runs the differentiation gate before building static assets, which deploy to a Cloudflare Worker; in parallel the Cloudflare API registers the domain, creates the zone and DNS and issues SSL, and the Search Console API registers the property.">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+        </marker>
+        <marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#9E2B25"/>
+        </marker>
+      </defs>
+
+      <!-- inputs -->
+      <rect x="8" y="86" width="150" height="62" rx="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="83" y="110" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">site.config.json</text>
+      <text x="83" y="128" text-anchor="middle" font-size="11" fill="currentColor" opacity=".75">domain, niche, city, lang</text>
+
+      <rect x="8" y="14" width="150" height="52" rx="7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="4 3"/>
+      <text x="83" y="36" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">packages/template</text>
+      <text x="83" y="53" text-anchor="middle" font-size="11" fill="currentColor" opacity=".75">shared Astro theme</text>
+
+      <rect x="8" y="168" width="150" height="52" rx="7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="4 3"/>
+      <text x="83" y="190" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">content/</text>
+      <text x="83" y="207" text-anchor="middle" font-size="11" fill="currentColor" opacity=".75">markdown, per site</text>
+
+      <line x1="158" y1="40" x2="222" y2="106" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+      <line x1="158" y1="117" x2="222" y2="117" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+      <line x1="158" y1="194" x2="222" y2="130" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+
+      <!-- scaffold -->
+      <rect x="226" y="90" width="132" height="54" rx="7" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <text x="292" y="112" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">new-site</text>
+      <text x="292" y="129" text-anchor="middle" font-size="11" fill="currentColor" opacity=".75">scaffold + build</text>
+
+      <!-- CI gate -->
+      <line x1="358" y1="117" x2="422" y2="117" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+      <rect x="426" y="90" width="150" height="54" rx="7" fill="none" stroke="#9E2B25" stroke-width="1.8"/>
+      <text x="501" y="112" text-anchor="middle" font-size="13" font-weight="600" fill="#9E2B25">differentiation gate</text>
+      <text x="501" y="129" text-anchor="middle" font-size="11" fill="#9E2B25" opacity=".85">blocks deploy on similarity</text>
+
+      <!-- deploy -->
+      <line x1="576" y1="117" x2="644" y2="117" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+      <text x="610" y="109" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".8">passes</text>
+      <rect x="648" y="86" width="160" height="62" rx="7" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <text x="728" y="110" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Cloudflare Worker</text>
+      <text x="728" y="128" text-anchor="middle" font-size="11" fill="currentColor" opacity=".75">pod of ~25 sites</text>
+
+      <line x1="808" y1="117" x2="878" y2="117" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+      <text x="912" y="113" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">live</text>
+      <text x="912" y="130" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">site</text>
+
+      <!-- API track -->
+      <line x1="292" y1="90" x2="292" y2="52" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+      <rect x="366" y="22" width="440" height="46" rx="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="586" y="41" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">Cloudflare API: register domain &rarr; create zone &rarr; DNS &rarr; SSL &rarr; attach custom domain</text>
+      <text x="586" y="58" text-anchor="middle" font-size="11" fill="currentColor" opacity=".75">Registrar API is beta: registration only, no renewals or transfers</text>
+      <line x1="292" y1="45" x2="362" y2="45" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+      <line x1="728" y1="68" x2="728" y2="82" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+
+      <line x1="292" y1="144" x2="292" y2="196" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+      <rect x="366" y="172" width="440" height="46" rx="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="586" y="191" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">Search Console API: create property &rarr; submit sitemap &middot; analytics &middot; tracking number</text>
+      <text x="586" y="208" text-anchor="middle" font-size="11" fill="currentColor" opacity=".75">every site instrumented identically, by construction</text>
+      <line x1="292" y1="196" x2="362" y2="196" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/>
+
+      <!-- fail path -->
+      <path d="M 501 144 L 501 258 L 292 258 L 292 148" fill="none" stroke="#9E2B25" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#ahr)"/>
+      <text x="400" y="274" text-anchor="middle" font-size="11" font-weight="600" fill="#9E2B25">fails: content too similar to another site, rewrite before it ships</text>
+    </svg>
+    <figcaption>One command turns a config file plus content into a live, instrumented site. The red path is the only thing standing between a template and a doorway network: content that could belong to any site never reaches production.</figcaption>
+  </figure>
+
+  <h3>Repository layout</h3>
+  <pre><code>wicfl-microsites/
+├── packages/
+│   ├── template/          shared Astro theme, layouts, components
+│   └── config-schema/     the contract + validation
+├── sites/
+│   ├── stuart-flood/
+│   │   ├── site.config.json      domain, niche, city, lang, phone, SEO
+│   │   └── content/             this site's pages, in markdown
+│   └── seguro-casa-miami/
+│       ├── site.config.json
+│       └── content/
+├── scripts/               new-site, provisioning, differentiation check
+└── .github/workflows/     path filtered builds, only changed sites rebuild</code></pre>
+
+  <div class="prose">
+    <p>Launching a site never means writing HTML. It means running <code>new-site</code>, filling in the config, and writing markdown. Template code is touched only when improving the framework for every site at once. If anyone finds themselves writing HTML for a single site, that is a defect in the framework and it gets fixed there.</p>
+  </div>
+
+  <h3>What the framework provides out of the box</h3>
+  <div class="dl">
+    <dt>Bilingual routing</dt><dd>English and Spanish paths with correct <code>hreflang</code>, built in from Site #2 rather than retrofitted later</dd>
+    <dt>Technical SEO</dt><dd>Sitemap, robots, canonical tags, and schema.org markup for an insurance agency, generated from config</dd>
+    <dt>Analytics</dt><dd>GA4 and GTM wired identically on every site, so cross site reporting works without per site cleanup</dd>
+    <dt>Lead capture</dt><dd>Forms routed into the existing CRM, with the originating site recorded on every lead</dd>
+    <dt>Call tracking</dt><dd>The tracking number is a config field, rendered everywhere it appears, routed into the existing GoTo system</dd>
+    <dt>Performance</dt><dd>Zero JavaScript by default. Core Web Vitals are a build output, not a per site optimization project</dd>
+  </div>
+</section>
+
+<!-- ================= SCHEMA ================= -->
+<section id="schema">
+  <h2>Site config schema</h2>
+  <div class="prose">
+    <p><span class="pill p-grey">Technical</span> &nbsp;This is the contract between the template and each site, and it is the most important artifact in the project. Everything downstream, including all provisioning automation, is built on top of it. Kevin does not need to read this section; the practical version is that these are the inputs required to spin up a new site.</p>
+  </div>
+
+  <pre><code>{
+  "slug": "stuart-flood",
+  "domain": "stuartfloodinsurance.com",
+  "brand": { "name": "Stuart Flood Insurance", "parent": "WICFL" },
+
+  "niche": { "product": "flood", "audience": "homeowner" },
+  "geo": {
+    "city": "Stuart", "county": "Martin", "state": "FL",
+    "serviceArea": ["Stuart", "Palm City", "Jensen Beach", "Hobe Sound"]
+  },
+
+  "locale": { "primary": "en", "alternates": [] },
+
+  "contact": {
+    "trackingPhone": "+1-772-000-0000",
+    "displayPhone": "(772) 000-0000",
+    "email": "...",
+    "address": { "street": "...", "city": "...", "state": "FL", "zip": "..." },
+    "licenseNumber": "..."
+  },
+
+  "products": ["flood", "homeowners", "umbrella"],
+
+  "seo": {
+    "title": "...", "description": "...",
+    "primaryKeyword": "...", "secondaryKeywords": ["..."]
+  },
+
+  "analytics": { "ga4": "G-...", "gtm": "GTM-..." },
+  "crm": { "formId": "...", "leadSource": "stuart-flood" },
+
+  "differentiation": {
+    "localProof": ["..."],
+    "uniqueSections": ["..."]
+  }
+}</code></pre>
+
+  <div class="note rule">
+    <h4>Why <code>differentiation</code> is a required field</h4>
+    <p>It forces every site to declare, in writing, what makes it different from every other site before it can be generated. A site that cannot fill this in is a site that should not be built.</p>
+  </div>
+</section>
+
+<!-- ================= STANDARDS ================= -->
+<section id="standards">
+  <h2>Content standards</h2>
+
+  <div class="note rule">
+    <h4>The swap test</h4>
+    <p>Take any page. Swap the city name for a different city. <strong>What else on the page has to change?</strong> If the answer is nothing, that page is a doorway page by Google's definition and it does not ship, regardless of how well the site is built.</p>
+  </div>
+
+  <div class="prose">
+    <p>This is not a matter of discipline. The CI differentiation gate compares content across every site in the portfolio and blocks the deploy when two pages are too similar. It costs a day to build and it protects the portfolio permanently, including from a future team member who was never in this conversation.</p>
+  </div>
+
+  <h3>Standing rules</h3>
+  <ul>
+    <li><strong>Spanish is written, never translated.</strong> Machine translated insurance copy reads as inauthentic to the Miami and Broward market immediately, and it falls under Google's scaled content policies. Spanish sites need a native writer.</li>
+    <li><strong>Local proof is required, not optional.</strong> Real claims handled, area specific detail, local reviews, genuine knowledge of the market. This is the raw material the swap test is looking for.</li>
+    <li><strong>Florida insurance advertising rules apply on every page.</strong> License number displayed, no misleading coverage claims, correct entity naming. Encoded in the template so it cannot be forgotten per site.</li>
+    <li><strong>NAP consistency.</strong> Name, address and phone must match the Google Business Profile exactly. Inconsistency actively suppresses local rankings.</li>
+    <li><strong>No AI generated content shipped unreviewed.</strong> See below.</li>
+  </ul>
+
+  <h3>How AI may and may not be used</h3>
+  <div class="prose">
+    <p><strong>Allowed:</strong> drafting from a brief, restructuring, tightening, generating outlines, research support, and first passes that a human then edits into something true.</p>
+    <p><strong>Not allowed:</strong> publishing anything without a human editing pass. Generating a site's content from a template brief and shipping it. Producing Spanish content by translating or generating from an English brief.</p>
+    <p><strong>Why the line sits here</strong> and not somewhere more convenient: Google's scaled content abuse policy covers pages generated at volume to rank rather than to help, and it applies explicitly &ldquo;no matter how it's created.&rdquo; Combined with the doorway pattern our portfolio structurally resembles, a hundred sites of brief driven generated copy is the exact profile enforcement looks for. The mechanism is what gets caught, not the intent behind it.</p>
+  </div>
+</section>
+
+<!-- ================= ROLES ================= -->
+<section id="roles">
+  <h2>Who does what</h2>
+
+  <div class="cards">
+    <div class="card">
+      <div class="role">Kevin</div>
+      <h4>Business direction</h4>
+      <ul>
+        <li>Markets, niches and positioning</li>
+        <li>Domain approval and budget</li>
+        <li>Access to Walker knowledge and resources</li>
+        <li>The Gate B go or no-go decision</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="role">Pavel</div>
+      <h4>Microsite project lead</h4>
+      <ul>
+        <li>Owns every site from Phase 3 onward</li>
+        <li>Site generation, SEO, QA, launch</li>
+        <li>Tracking numbers and lead capture</li>
+        <li>Monthly performance reporting</li>
+        <li>Process documentation</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="role">Victor</div>
+      <h4>Technical architecture</h4>
+      <ul>
+        <li>Cloudflare, GitHub, security, deploy setup</li>
+        <li>Template, schema and CI gates</li>
+        <li>Provisioning automation in Phase 7</li>
+        <li>Advisory only after handoff</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="role">Unassigned</div>
+      <h4>Content owner</h4>
+      <ul>
+        <li>15 to 25 pages per site, English</li>
+        <li>A native Spanish writer for Spanish sites</li>
+        <li>The largest cost line in the project</li>
+        <li>Closing this is activity 0.4</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note warn">
+    <h4>The handoff is a deliverable, not an event</h4>
+    <p>Phase 2 ends with a written architecture document and a walkthrough session with Pavel. The point is that the decisions live in a document rather than in Victor's head, which is what keeps Victor off the critical path once WAGS needs his attention again.</p>
+  </div>
+</section>
+
+<!-- ================= SCHEDULE ================= -->
+<section id="schedule">
+  <h2>Schedule</h2>
+  <div class="prose"><p>Ten phases from alignment through conditional scaling. The detailed activity list, with every task, owner and dependency, lives in the accompanying spreadsheet where progress is tracked.</p></div>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Phase</th><th>Dates</th><th>Owner</th><th>What happens</th></tr></thead>
+    <tbody>
+      <tr><td><strong>0 &middot; Alignment</strong></td><td class="mono">24&ndash;28 Aug 26</td><td>Kevin</td><td>Niches selected, content owner named, GoTo quote obtained, Gate B number defined</td></tr>
+      <tr><td><strong>1 &middot; Infrastructure + validation</strong></td><td class="mono">31 Aug&ndash;4 Sep</td><td>Victor + Pavel</td><td>Cloudflare and GitHub accounts, roles and 2FA, deploy pipeline. Pavel validates the niches before any domain is bought</td></tr>
+      <tr><td><strong>1b &middot; Domains</strong></td><td class="mono">7&ndash;8 Sep</td><td>Victor</td><td>Domains approved and registered, only after niche validation passes</td></tr>
+      <tr><td><strong>2 &middot; Framework</strong></td><td class="mono">8&ndash;18 Sep</td><td>Victor</td><td>Config schema, Astro template, bilingual routing, SEO baseline, minimal generator, CI gate, QA checklist, handoff</td></tr>
+      <tr><td><strong>Parallel &middot; Pavel ramp</strong></td><td class="mono">31 Aug&ndash;18 Sep</td><td>Pavel</td><td>HTML and CSS to read and diagnose, Astro concepts, Git, Cloudflare, plus shadowing the framework build</td></tr>
+      <tr><td><strong>3 &middot; Site #1 English</strong></td><td class="mono">21 Sep&ndash;9 Oct</td><td>Pavel</td><td>Generated from config, content written, tracking wired, QA, launch. <span class="pill p-amber">Start date at risk</span></td></tr>
+      <tr><td><strong>4 &middot; Site #2 Spanish</strong></td><td class="mono">12&ndash;30 Oct</td><td>Pavel</td><td>Same flow, validates bilingual support. Content written natively in Spanish</td></tr>
+      <tr><td><strong>5 &middot; Refinement</strong></td><td class="mono">2&ndash;6 Nov</td><td>Victor + Pavel</td><td>Everything that was manual gets folded back into the framework</td></tr>
+      <tr class="gate"><td><strong>Gate A &middot; Site #3</strong></td><td class="mono">9&ndash;13 Nov</td><td>Pavel alone</td><td>Repeatability test. Pass or return to Phase 5</td></tr>
+      <tr><td><strong>7 &middot; Automation</strong></td><td class="mono">16 Nov&ndash;11 Dec</td><td>Victor</td><td>Domain registration, DNS, Search Console and tracking numbers, all through APIs</td></tr>
+      <tr><td><strong>8 &middot; SEO window</strong></td><td class="mono">12 Oct&ndash;5 Feb 27</td><td>Pavel reports</td><td>Runs in parallel. Monthly reporting while sites accumulate organic data</td></tr>
+      <tr class="gate"><td><strong>Gate B &middot; Go or no-go</strong></td><td class="mono">8&ndash;12 Feb 27</td><td>Kevin</td><td>Commercial decision against the criteria set in Phase 0</td></tr>
+      <tr><td><strong>10 &middot; Scale to 20</strong></td><td class="mono">from 16 Feb 27</td><td>Pavel</td><td>Conditional. Nothing here starts unless Gate B passes</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note warn">
+    <h4>Phase 3's start date is not confirmed</h4>
+    <p>Pavel is ramping on HTML, CSS, Astro, Git and Cloudflare in parallel with this schedule. The plan as originally written assumed he would be ready to operate on day one of Phase 3. Open item W-009 asks for his real weekly availability so the date is adjusted deliberately rather than discovered in October.</p>
+    <p>This reaches further than Phase 3. Site #1's launch starts the 120 day clock for Gate B, so moving the launch moves Gate B. If the ramp needs more time, the preferred adjustment is extending the shadowing period during Phase 2 rather than compressing Phase 3, because a rushed first site produces a framework tuned to the wrong assumptions.</p>
+  </div>
+</section>
+
+<!-- ================= GATES ================= -->
+<section id="gates">
+  <h2>The two gates</h2>
+  <div class="prose"><p>The single most important structural decision in this plan. Advancement runs on evidence, not on elapsed time.</p></div>
+
+  <figure>
+    <svg viewBox="0 0 940 250" role="img" aria-label="Two parallel tracks. The technical track runs from framework build through sites one and two to Gate A in November 2026, answering whether the factory works. The SEO track begins when Site 1 launches in October 2026 and runs until Gate B in February 2027, answering whether the sites produce business. Scaling to twenty sites happens only after Gate B.">
+      <defs>
+        <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+        </marker>
+      </defs>
+
+      <!-- timeline axis -->
+      <line x1="40" y1="222" x2="900" y2="222" stroke="currentColor" stroke-width="1" opacity=".35"/>
+      <g font-size="11" fill="currentColor" opacity=".7" text-anchor="middle">
+        <text x="70" y="240">Sep 26</text>
+        <text x="240" y="240">Oct 26</text>
+        <text x="410" y="240">Nov 26</text>
+        <text x="580" y="240">Dec 26</text>
+        <text x="750" y="240">Jan 27</text>
+        <text x="890" y="240">Feb 27</text>
+      </g>
+      <g stroke="currentColor" stroke-width="1" opacity=".2">
+        <line x1="70" y1="30" x2="70" y2="216"/><line x1="240" y1="30" x2="240" y2="216"/>
+        <line x1="410" y1="30" x2="410" y2="216"/><line x1="580" y1="30" x2="580" y2="216"/>
+        <line x1="750" y1="30" x2="750" y2="216"/>
+      </g>
+
+      <!-- technical track -->
+      <text x="40" y="26" font-size="11.5" font-weight="600" fill="currentColor" letter-spacing=".5">TECHNICAL TRACK &mdash; does the factory work?</text>
+      <rect x="40" y="38" width="120" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="100" y="57" text-anchor="middle" font-size="11.5" fill="currentColor">framework</text>
+      <rect x="166" y="38" width="104" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="218" y="57" text-anchor="middle" font-size="11.5" fill="currentColor">site #1</text>
+      <rect x="276" y="38" width="104" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="328" y="57" text-anchor="middle" font-size="11.5" fill="currentColor">site #2</text>
+      <rect x="386" y="38" width="74" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="423" y="57" text-anchor="middle" font-size="11.5" fill="currentColor">site #3</text>
+
+      <line x1="460" y1="53" x2="486" y2="53" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+      <rect x="490" y="34" width="112" height="38" rx="6" fill="none" stroke="#9E2B25" stroke-width="2"/>
+      <text x="546" y="49" text-anchor="middle" font-size="12" font-weight="700" fill="#9E2B25">GATE A</text>
+      <text x="546" y="64" text-anchor="middle" font-size="10.5" fill="#9E2B25">13 Nov 2026</text>
+
+      <line x1="602" y1="53" x2="628" y2="53" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+      <rect x="632" y="38" width="150" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="4 3"/>
+      <text x="707" y="57" text-anchor="middle" font-size="11.5" fill="currentColor">automation build</text>
+
+      <!-- SEO track -->
+      <text x="40" y="120" font-size="11.5" font-weight="600" fill="currentColor" letter-spacing=".5">SEO TRACK &mdash; do the sites produce business?</text>
+      <line x1="218" y1="68" x2="218" y2="128" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#a2)"/>
+      <text x="228" y="146" font-size="10.5" fill="currentColor" opacity=".8">site #1 live, clock starts</text>
+      <rect x="218" y="132" width="664" height="34" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55"/>
+      <text x="640" y="153" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".85">120 days of organic data accumulating &middot; monthly reporting</text>
+
+      <line x1="882" y1="149" x2="882" y2="120" stroke="currentColor" stroke-width="1.4"/>
+      <rect x="812" y="82" width="112" height="38" rx="6" fill="none" stroke="#9E2B25" stroke-width="2"/>
+      <text x="868" y="97" text-anchor="middle" font-size="12" font-weight="700" fill="#9E2B25">GATE B</text>
+      <text x="868" y="112" text-anchor="middle" font-size="10.5" fill="#9E2B25">12 Feb 2027</text>
+
+      <line x1="868" y1="82" x2="868" y2="192" stroke="none"/>
+      <text x="868" y="192" text-anchor="middle" font-size="11" font-weight="600" fill="currentColor">scale to 20</text>
+      <text x="868" y="206" text-anchor="middle" font-size="11" fill="currentColor" opacity=".75">only past here</text>
+      <path d="M 868 120 L 868 178" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+    </svg>
+    <figcaption>The two tracks overlap on purpose. Gate A resolves in weeks and unlocks automation work; Gate B cannot resolve faster than organic search allows. Running them in parallel means the waiting period is productive instead of idle.</figcaption>
+  </figure>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Gate</th><th>Question</th><th>Date</th><th>Pass criterion</th><th>If it fails</th></tr></thead>
+    <tbody>
+      <tr class="gate">
+        <td><strong>Gate A</strong><br><span class="pill p-teal">Technical</span></td>
+        <td>Does the factory work?</td>
+        <td class="mono">13 Nov 26</td>
+        <td>Site #3 is generated from a config file and launches in <strong>5 working days or fewer</strong>, with <strong>zero code written by Victor</strong>.</td>
+        <td>Return to Phase 5. The framework is not repeatable yet, and building more sites would only multiply manual work.</td>
+      </tr>
+      <tr class="gate">
+        <td><strong>Gate B</strong><br><span class="pill p-brick">Commercial</span></td>
+        <td>Do the sites produce business?</td>
+        <td class="mono">12 Feb 27</td>
+        <td>Sites #1 and #2 hit the qualified call target defined in activity 0.7, measured 120 days after each launch.</td>
+        <td>Do not scale. Either the niche selection was wrong and we retest, or the microsite model does not work for this market.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note warn">
+    <h4>Gate B has no number yet</h4>
+    <p>Activity 0.7 exists to set it. The bar has to be defined now, while there is no data, because that is the only moment it can be set honestly. Set afterward, it becomes whatever the results happen to say.</p>
+  </div>
+</section>
+
+<!-- ================= SECURITY ================= -->
+<section id="security">
+  <h2>Accounts and access</h2>
+  <div class="prose">
+    <p>Once domains, DNS, hosting and SSL all live in one Cloudflare account, that account <em>is</em> the business asset. Getting it right on day one takes thirty minutes. Fixing it after twenty domains is a migration.</p>
+  </div>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Rule</th><th>Why it matters</th></tr></thead>
+    <tbody>
+      <tr><td>Account created under a <strong>company email</strong>, never a personal one</td><td>An account created under a contractor's personal email means WICFL's entire digital asset base sits legally with that contractor. Adding admins later does not fix this</td></tr>
+      <tr><td><strong>Two Super Administrators</strong>, Kevin plus one</td><td>A single holder means one lost 2FA device locks out the whole portfolio. Expired domains are the one failure we cannot undo</td></tr>
+      <tr><td>Pavel holds <strong>Administrator</strong>, not Super Administrator</td><td>Full operational access without the ability to move domains or touch billing</td></tr>
+      <tr><td>2FA on, <strong>recovery codes in a shared company vault</strong></td><td>The codes cannot live in one person's drawer</td></tr>
+      <tr><td>Automation uses <strong>scoped API tokens</strong>, never the Global API Key</td><td>A leaked global key is total account compromise. A scoped token is a contained one</td></tr>
+      <tr><td>Company card on file, <strong>auto renew enabled everywhere</strong></td><td>A card expiring mid year with renewal notices going to an unwatched inbox is the most common way portfolios die quietly</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ================= COSTS ================= -->
+<section id="costs">
+  <h2>Cost model</h2>
+  <div class="prose">
+    <p>Verified against official sources on 24 August 2026. The headline: the platform is not a meaningful cost at any scale we are contemplating. The project's financial risk is content and phone numbers.</p>
+  </div>
+
+  <h3>What Cloudflare includes</h3>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Item</th><th>Free</th><th>Paid, $5/mo</th></tr></thead>
+    <tbody>
+      <tr><td>Static asset requests</td><td>Free and unlimited</td><td>Free and unlimited</td></tr>
+      <tr><td>Static asset files per Worker version</td><td class="num">20,000</td><td class="num">100,000</td></tr>
+      <tr><td>Workers per account</td><td class="num">100</td><td class="num">500</td></tr>
+      <tr><td>Routed zones per Worker</td><td class="num">1,000</td><td class="num">1,000</td></tr>
+      <tr><td>DNS, SSL, CDN, DDoS protection</td><td>Included</td><td>Included</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="prose"><p>The $5 is for the whole account, not per site. Free would technically carry this project; we take Paid for the file headroom, the Worker ceiling and the observability tooling.</p></div>
+
+  <h3>Annual cost at three scales</h3>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Line</th><th class="num">3 sites</th><th class="num">25 sites</th><th class="num">100 sites</th></tr></thead>
+    <tbody>
+      <tr><td>Cloudflare Workers Paid</td><td class="num">$60</td><td class="num">$60</td><td class="num">$60</td></tr>
+      <tr><td>DNS, SSL, CDN, DDoS</td><td class="num">$0</td><td class="num">$0</td><td class="num">$0</td></tr>
+      <tr><td>Domains, .com after 1 Nov 2026</td><td class="num">$34</td><td class="num">$279</td><td class="num">$1,115</td></tr>
+      <tr><td>Build pipeline</td><td class="num">$0</td><td class="num">$0</td><td class="num">$0&ndash;300</td></tr>
+      <tr><td>Tracking numbers, forwarding route</td><td class="num">$57</td><td class="num">$470</td><td class="num">$1,900</td></tr>
+      <tr class="total"><td>Platform subtotal</td><td class="num">$151</td><td class="num">$809</td><td class="num">$3,375</td></tr>
+      <tr><td>Tracking numbers, direct DID route <span class="pill p-amber">unconfirmed</span></td><td class="num">$180&ndash;540</td><td class="num">$1,500&ndash;4,500</td><td class="num">$6,000&ndash;18,000</td></tr>
+      <tr><td>Content, one time, at $50 per page</td><td class="num">$3,000</td><td class="num">$25,000</td><td class="num">$100,000</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note warn">
+    <h4>Two numbers that need attention</h4>
+    <p><strong>Tracking numbers are the largest unknown.</strong> GoTo does not publish per number pricing, and the third party range spans $6,000 to $18,000 a year at 100 numbers, five to fifteen times the entire domain budget. A written quote is required before committing to a site count. The forwarding alternative, buying numbers elsewhere and routing them into the existing GoTo system, lands near $1,900 a year at the same scale.</p>
+    <p><strong>Domain prices rise on 1 November 2026.</strong> The .com wholesale fee goes from $10.26 to $10.97, and this is the first of a four year cycle of roughly 7 percent annual increases. Budget approximately $11.90 in 2027, $12.70 in 2028 and $13.60 in 2029 per domain.</p>
+  </div>
+</section>
+
+<!-- ================= OPEN ITEMS ================= -->
+<section id="open">
+  <h2>Open items</h2>
+  <div class="prose"><p>Everything currently blocking or unresolved, with an owner and a date. This section is the one most likely to change week to week.</p></div>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>Item</th><th>Owner</th><th>Needed by</th><th>Status</th><th>What it blocks</th></tr></thead>
+    <tbody>
+      <tr><td>Written per number monthly quote from GoTo</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-brick">Blocker</span></td><td>Activity 2.6, and the whole tracking budget</td></tr>
+      <tr><td>Content owner named, plus a native Spanish writer</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-brick">Blocker</span></td><td>Phases 3 and 4. Largest cost line in the project</td></tr>
+      <tr><td>English niche and target market for Site #1</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Domain selection, Phase 3</td></tr>
+      <tr><td>Spanish niche and target market for Site #2</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Phase 4</td></tr>
+      <tr><td>Numeric target for Gate B</td><td>Kevin + Victor</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>Gate B is undecidable without it</td></tr>
+      <tr><td>Do pilot sites get their own Google Business Profiles</td><td>Kevin</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>May change which niches are viable at all</td></tr>
+      <tr><td>Domain names approved for Sites #1 and #2</td><td>Kevin</td><td class="mono">7 Sep 26</td><td><span class="pill p-amber">Open</span></td><td>Moved after niche validation, so we never buy a domain for a niche we cannot win</td></tr>
+      <tr><td>Walker brand assets: logo, approved contact, disclosures, license numbers</td><td>Kevin</td><td class="mono">4 Sep 26</td><td><span class="pill p-brick">Blocker</span></td><td>Site #1 cannot publish without it</td></tr>
+      <tr><td>Pavel's real weekly availability for the technical ramp</td><td>Pavel</td><td class="mono">28 Aug 26</td><td><span class="pill p-amber">Open</span></td><td>The Phase 3 start date, and therefore Gate B</td></tr>
+      <tr><td>Confirm Cloudflare bulk zone additions at scale</td><td>Victor</td><td class="mono">at 25 domains</td><td><span class="pill p-grey">Watch</span></td><td>Nothing yet. Raise before it becomes urgent</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ================= GLOSSARY ================= -->
+<section id="glossary">
+  <h2>Glossary</h2>
+  <div class="prose"><p>Plain language for the terms that appear throughout this document.</p></div>
+  <div class="dl">
+    <dt>Static site</dt><dd>A website whose pages are pre-built as files rather than assembled on every visit. Faster, cheaper and far harder to break than WordPress</dd>
+    <dt>Astro</dt><dd>The framework that turns our template plus a site's content into those pre-built pages</dd>
+    <dt>Monorepo</dt><dd>One code repository holding the shared template and every site, so a fix applies everywhere at once</dd>
+    <dt>Worker</dt><dd>Cloudflare's unit of hosting. One Worker serves a pod of roughly 25 sites</dd>
+    <dt>Zone</dt><dd>A domain as Cloudflare tracks it, carrying its DNS records and SSL certificate</dd>
+    <dt>CI gate</dt><dd>An automatic check that runs before a site goes live and blocks it if the check fails</dd>
+    <dt>Doorway page</dt><dd>A page that exists to capture a search rather than to help the person who lands on it. Explicitly against Google's policies</dd>
+    <dt>hreflang</dt><dd>The markup that tells Google which pages are the English and Spanish versions of each other</dd>
+    <dt>Core Web Vitals</dt><dd>Google's page speed and stability measurements, which factor into rankings</dd>
+    <dt>DID</dt><dd>A direct phone number. One per microsite, so every call can be traced to the site that produced it</dd>
+  </div>
+</section>
+
+<footer>
+  WICFL Microsite Factory &middot; Master reference v1.1 &middot; 25 Aug 2026<br>v1.1 integrates Pavel's preparation research: niche validation ahead of domain purchase, the QA and launch checklist, Walker brand assets as a dependency, and the parallel ramp track.<br>
+  Maintained by Victor. Living document, updated as decisions land.<br>
+  Pricing verified against Cloudflare Workers pricing and platform limits, Cloudflare Registrar documentation, Verisign's November 2026 .com fee notice, GitHub Actions billing, Twilio US voice pricing and CallRail's published plans. GoTo per number pricing is not published and remains unconfirmed.
+</footer>
+
+</main>
+</div>
