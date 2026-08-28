@@ -5,6 +5,42 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-08-26 (noche) · Se acota lo que se le pide a Kevin
+
+**Quién:** Vic + cowork
+
+Al preparar el mensaje para Kevin, Vic aplicó un criterio que vale conservar como regla:
+**Kevin es owner, no ejecutor. Solo se le pide lo que nadie más puede hacer.** Bajo esa regla,
+la lista de nueve pendientes se cayó a seis, y tres de ellos ni siquiera eran preguntas suyas.
+
+**Lo que salió de su lista:**
+
+- **W-094, la org de GitHub.** La creamos nosotros bajo el correo de empresa. Nunca fue una
+  decisión de negocio, era una pregunta de inventario que resolvimos preguntándonos a nosotros.
+- **W-003 y W-004, los nichos.** Pavel ya hace la validación SEO en W-016 y llega con keywords,
+  SERP y ángulo local. Pedirle a Kevin que *elija* el nicho antes de eso lo pone a decidir sin
+  datos y luego a Pavel a validar la decisión de su jefe, que es el peor orden posible. Ahora
+  Pavel propone con evidencia y Kevin aprueba junto con el dominio en W-007.
+- **W-093, el vault.** Lo monta Vic. De Kevin solo salen los datos de pago.
+
+**Lo que se cerró:**
+
+- **W-096, el CRM: GoHighLevel con una sub-account propia de WICFL**, no la instancia de WAGS.
+  Sub-account y no instancia compartida importa: mantiene separados los leads, los pipelines y
+  los reportes de las dos marcas, que es lo que hace legible el reporte por sitio de W-060.
+  Desbloquea W-025 y abre **W-101**, dar de alta la sub-account y sacar credenciales de API,
+  que es tarea de Vic y no pregunta a Kevin.
+- **W-092 se reformuló.** No es "el correo dueño de la cuenta de Cloudflare", es **el correo
+  desde el que se gestiona todo el proyecto**: Cloudflare, GitHub, GA4, Search Console y GoTo.
+  Un solo correo de empresa, y con él Vic levanta todo.
+
+**Lección:** una lista de pendientes dirigida a la persona equivocada se ve igual de urgente que
+una bien dirigida, y consume la misma atención. Antes de mandar un pedido, la pregunta no es si
+el item es real, sino si es de esa persona. Tres de nueve no lo eran, y dos ya tenían respuesta
+de nuestro lado.
+
+---
+
 ## 2026-08-26 (tarde) · Revisión de arquitectura y relevo de arquitecto
 
 **Quién:** Vic + cowork (sesión nueva, releva a la sesión que armó el proyecto)
@@ -85,42 +121,6 @@ es el respaldo de todo lo demás.
 **Lo que sigue igual y sigue caliente:** Kevin no ha respondido ninguno de los seis bloqueadores.
 Si el lunes 31 llega sin W-092, no hay cuenta de Cloudflare y Pavel arranca su primer día de
 tiempo completo sin accesos. Y el prompt 001 sigue sin ejecutarse.
-
----
-
-## 2026-08-26 (noche) · Se acota lo que se le pide a Kevin
-
-**Quién:** Vic + cowork
-
-Al preparar el mensaje para Kevin, Vic aplicó un criterio que vale conservar como regla:
-**Kevin es owner, no ejecutor. Solo se le pide lo que nadie más puede hacer.** Bajo esa regla,
-la lista de nueve pendientes se cayó a seis, y tres de ellos ni siquiera eran preguntas suyas.
-
-**Lo que salió de su lista:**
-
-- **W-094, la org de GitHub.** La creamos nosotros bajo el correo de empresa. Nunca fue una
-  decisión de negocio, era una pregunta de inventario que resolvimos preguntándonos a nosotros.
-- **W-003 y W-004, los nichos.** Pavel ya hace la validación SEO en W-016 y llega con keywords,
-  SERP y ángulo local. Pedirle a Kevin que *elija* el nicho antes de eso lo pone a decidir sin
-  datos y luego a Pavel a validar la decisión de su jefe, que es el peor orden posible. Ahora
-  Pavel propone con evidencia y Kevin aprueba junto con el dominio en W-007.
-- **W-093, el vault.** Lo monta Vic. De Kevin solo salen los datos de pago.
-
-**Lo que se cerró:**
-
-- **W-096, el CRM: GoHighLevel con una sub-account propia de WICFL**, no la instancia de WAGS.
-  Sub-account y no instancia compartida importa: mantiene separados los leads, los pipelines y
-  los reportes de las dos marcas, que es lo que hace legible el reporte por sitio de W-060.
-  Desbloquea W-025 y abre **W-101**, dar de alta la sub-account y sacar credenciales de API,
-  que es tarea de Vic y no pregunta a Kevin.
-- **W-092 se reformuló.** No es "el correo dueño de la cuenta de Cloudflare", es **el correo
-  desde el que se gestiona todo el proyecto**: Cloudflare, GitHub, GA4, Search Console y GoTo.
-  Un solo correo de empresa, y con él Vic levanta todo.
-
-**Lección:** una lista de pendientes dirigida a la persona equivocada se ve igual de urgente que
-una bien dirigida, y consume la misma atención. Antes de mandar un pedido, la pregunta no es si
-el item es real, sino si es de esa persona. Tres de nueve no lo eran, y dos ya tenían respuesta
-de nuestro lado.
 
 ---
 
