@@ -18,6 +18,12 @@ Todo lo que sale hacia Kevin, Pavel o Rose sigue estas reglas. Sin excepciones.
 5. **Los pendientes llevan dueño y fecha.** "We need the GoTo quote" no sirve.
    "Kevin: written GoTo quote by 28 Aug, it blocks activity 2.6" sí.
 
+6. **Escrito en primera persona. El mensaje lo manda Vic, no un tercero.**
+   Nunca "Victor will set up the accounts". Siempre "I'll set up the accounts".
+   Cuando el pendiente es de Vic, es "I need" o "once I have it". Cuando habla del
+   equipo, "we". Hablar de Vic en tercera persona delata que el copy lo escribió
+   alguien más y le quita autoridad al mensaje.
+
 ## Estructura por defecto
 
 ```
