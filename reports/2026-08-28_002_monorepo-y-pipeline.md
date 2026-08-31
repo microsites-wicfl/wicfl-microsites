@@ -121,3 +121,79 @@ No se modificó ningún archivo fuera del alcance. `package-lock.json` es el ún
 ## Commits
 
 - `1c37278` — `feat(repo): monorepo skeleton, Astro template and CI pipeline`
+
+---
+
+## Revisión de cowork
+
+**Fecha:** 2026-08-31 · **Veredicto: aprobado con hallazgos.** El entregable queda como está;
+salen tres actualizaciones de backlog.
+
+Revisado contra el diff de `1c37278` y `33ce7e5`, leyendo los tres workflows, `package.json`,
+el template, el fixture y `docs/SETUP.md` directamente.
+
+### Qué hizo bien
+
+**Las cuatro secciones nuevas del reporte funcionaron.** "Dónde dudaste" reportó la tensión del
+filtro de path en vez de declarar éxito, y "Qué te sorprendió" sacó a la luz dos cosas que de
+otro modo se habrían perdido: los procesos de `astro check` colgados que bloquearon Rollup, y
+cinco vulnerabilidades transitivas. Ninguna de las dos era visible en el diff. Esa era
+exactamente la apuesta al agregar esas secciones.
+
+**Corrigió el error del prompt anterior.** La entrada de bitácora quedó al inicio del archivo.
+
+**Disciplina de seguridad correcta.** Cero secretos en el repo, `deploy.yml` nombra los secrets
+requeridos sin valores y dice explícitamente que nunca se use el Global API Key, que es la regla
+7 de `CLAUDE.md`. Los jobs quedaron con `if: ${{ false }}` en vez de simular un deploy con
+credenciales personales, que era la salida fácil y la equivocada.
+
+**`example-flood.invalid` como dominio del fixture.** `.invalid` es un TLD reservado por IANA
+que no puede resolver nunca. Un detalle que nadie pidió y que evita que un fixture apunte por
+accidente a un dominio real.
+
+**W-014 y W-098 quedaron como avance y no como cerrados**, que era una instrucción explícita y
+es la clase de cosa que se cierra de más por inercia.
+
+### Hallazgos
+
+**1. El filtro de path todavía no hace lo que el monorepo existe para hacer, y el compromiso de
+arreglarlo vive solo en un comentario de YAML.** Los filtros deciden *si corre el workflow*, no
+*qué sitios se construyen*, y `npm run build` compila el template compartido, no sitios. El
+razonamiento es correcto y honesto: sin el generador de W-026 no existe un build por sitio que
+paralelizar, e inventar una matriz sobre algo inexistente habría sido peor. Pero W-026 en el
+backlog dice "comando `new-site`: genera un sitio desde su config" y no menciona CI. Si W-026 se
+ejecuta desde esa descripción, la matriz nunca se construye y el problema aparece a los veinte
+sitios, no a los tres. **Se agrega a la nota de W-026.**
+
+**2. El fixture va a reprobar W-103.** `sites/_example/site.config.json` lleva a propósito
+`PLACEHOLDER-FL-LICENSE`, `G-PLACEHOLDER` y `PENDING_GHL_FORM_ID`. W-103 es justamente el
+control que rechaza esos patrones antes de publicar. Cuando W-103 aterrice, o el fixture rompe
+CI o alguien afloja el control para que pase, y aflojarlo es el desenlace peligroso: el control
+existe para impedir que se publique un número de licencia falso. Necesita una exención explícita
+por ruta, no una excepción negociada en el momento. **Se agrega a W-103.**
+
+**3. Cinco vulnerabilidades transitivas, cuatro de severidad alta.** El ejecutor hizo bien en no
+correr `npm audit fix --force`, que habría metido cambios de dependencias sin revisar. La
+exposición real es acotada: son dependencias de build y la salida de Astro es estática, así que
+nada de eso se sirve a los visitantes. Pero cuatro altas en la cadena que va a construir cien
+sitios públicos de seguros no se quedan viviendo en un reporte. **Se abre como item de Watch.**
+
+### Observación menor, sin item
+
+`npm run check` quedó reducido a validar configs, porque `astro check` se colgaba en local. En
+CI no importa: `npm run build` corre justo después y una plantilla rota falla ahí. El hueco es
+solo el comando local, que ya no detecta errores de tipo antes de construir. Se anota en W-021,
+que es quien va a tocar el template en serio.
+
+### Lo que se confirma pendiente y es correcto que lo esté
+
+El fixture bilingüe hoy es un JSON que valida, nada más: el template no consume config todavía y
+no hay rutas `en`/`es` que ejercitar. El reporte lo dice con claridad y no pretende lo contrario.
+El compromiso de que ese fixture sea el caso de prueba real aterriza en W-022.
+
+### Actualizaciones de backlog por esta revisión
+
+- **W-026** — la matriz de sitios cambiados en CI pasa a ser parte del alcance, no un comentario
+- **W-103** — el control de placeholders necesita exención explícita para `sites/_*`
+- **W-104** — nuevo item de Watch: cinco vulnerabilidades transitivas en el árbol de build
+- **W-021** — nota: devolver la compilación de Astro al comando `check` local
