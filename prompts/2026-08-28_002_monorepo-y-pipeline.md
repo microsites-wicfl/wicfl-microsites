@@ -76,8 +76,18 @@ renderizado en su navegador, sin cuenta de Cloudflare ni dominio.
 
 4. **Un sitio de ejemplo desechable** en `sites/_example/`, con el guion bajo para que quede
    claro que no es un sitio real. Sirve para que el template tenga algo que renderizar y para
-   que los workflows tengan algo contra qué correr. Documenta que se borra cuando exista el
-   sitio #1.
+   que los workflows tengan algo contra qué correr.
+
+   Su `site.config.json` tiene que validar contra `packages/config-schema/site.config.schema.json`,
+   que ya está cerrado. Toma uno de los dos ejemplos de `packages/config-schema/examples/` como
+   base.
+
+   **Configúralo bilingüe**: `locale.primary` en `en` y `alternates` con `es`. Razón: ninguno de
+   los dos sitios piloto es bilingüe (el #1 es solo inglés, el #2 solo español, y son sitios
+   independientes, no versiones uno del otro), así que sin esto el ruteo bilingüe de W-022 se
+   construye y no se ejercita nunca hasta que exista un sitio real que lo use. Este sitio de
+   ejemplo es el único lugar donde ese camino se prueba de verdad. **No lo borres** cuando
+   exista el sitio #1; se queda como el caso de prueba del template.
 
 5. **Workflows de GitHub Actions:**
    - Build con **filtros de path**, para que un cambio en un sitio no reconstruya los 100.

@@ -13,7 +13,7 @@ dependency lives in `WICFL-microsite-schedule.xlsx`.
 | **2 · Framework** | 8–18 Sep | Victor | **Block A only:** config schema, Astro template, bilingual routing, minimal generator, branch previews, QA list, handoff. See note below |
 | **Parallel · Pavel ramp** | 31 Aug–18 Sep | Pavel | HTML/CSS to read and diagnose, Astro concepts, Git workflow, Cloudflare. Plus shadowing Phase 2 |
 | **3 · Site #1 English** | 21 Sep–9 Oct | Pavel | Generated from config, content written, tracking wired, QA, launch |
-| **4 · Site #2 Spanish** | 12–30 Oct | Pavel | Same flow, validates bilingual support. Content written natively in Spanish |
+| **4 · Site #2 Spanish** | 12–30 Oct | Pavel | Same flow, content written natively in Spanish. It validates the Spanish path, not bilingual routing: see the note below |
 | **5 · Refinement** | 2–6 Nov | Victor + Pavel | Everything that was manual gets folded back into the framework |
 | **Gate A · Site #3** | 9–13 Nov | Pavel alone | Repeatability test, rehearsed in Phase 5. Pass or return to Phase 5 |
 | **7 · Automation** | 16 Nov–11 Dec | Victor | Domain registration, DNS, Search Console and tracking numbers, all through APIs |
@@ -89,6 +89,20 @@ weeks of work four days before launch, and the pressure in that moment will be t
 threshold rather than rewrite. The `differentiation-audit` skill already exists for exactly
 this. Running it per page as he writes goes into the handoff documentation as a standing
 practice, not a launch step.
+
+## Neither pilot is bilingual, and the schedule used to claim otherwise
+
+Corrected 31 August, once the config contract closed and made this explicit. Site #1 is
+English with no alternates and Site #2 is Spanish with no alternates: two independent
+monolingual sites, not two language versions of one site. Site #2 proves that Spanish content
+authored natively works. It does not exercise bilingual routing or `hreflang`, because it has
+nothing to point at.
+
+The routing still gets built in Block A, because it shapes how the template resolves URLs and
+retrofitting that later is expensive. But built and never run is not the same as built. The
+throwaway `sites/_example/` site is configured with both languages precisely so that path has
+one real test case in CI, and it stays in the repo after Site #1 exists rather than being
+deleted.
 
 ## Why niche validation moved ahead of domain purchase
 
