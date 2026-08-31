@@ -18,6 +18,12 @@ Formato de id: `W-NNN` · Última actualización: 2026-08-26 (revisión de arqui
 
 ## Fase 0 — Decisiones de Kevin (24–28 ago 2026)
 
+**Priorizado el 2026-08-28.** No se le manda a Kevin la lista completa: se satura y no
+contesta ninguna. Solo **W-092 y W-093** salen ahora, porque son las dos únicas que bloquean
+la creación de cuentas. El resto se empuja después, en orden: W-006 (afecta la validación de
+nichos que Pavel arranca esta semana), W-008 y W-095 (bloquean publicar, no construir), y
+W-005 con W-100 (se piden juntas, con la propuesta ya escrita).
+
 | id | Item | Dueño | Debido | Bloquea |
 |---|---|---|---|---|
 | W-003 | Nicho y mercado en inglés para sitio #1 | **Pavel propone**, Kevin aprueba | 2026-08-28 | W-016. **Reasignado el 26-ago:** Kevin es owner, no ejecutor. Pavel ya hace la validación SEO en W-016, así que él trae el nicho con evidencia y Kevin lo aprueba junto con el dominio en W-007 |
@@ -26,7 +32,7 @@ Formato de id: `W-NNN` · Última actualización: 2026-08-26 (revisión de arqui
 | W-100 | **Definir qué cuenta como "llamada calificada" y cómo se registra** | Kevin + Vic | 2026-09-25 | **Hueco encontrado el 26-ago.** El bar de Gate B se mide en llamadas calificadas y nadie ha dicho qué califica. La definición determina qué tiene que capturar el tracking, y el tracking se cablea antes del launch del 9 de octubre. Incluye disposición de llamadas en GoTo y etiquetado semanal, no trimestral: nadie clasifica 120 días de llamadas de memoria en marzo |
 | W-006 | ¿Los sitios piloto tienen su propio Google Business Profile? | Kevin | 2026-08-28 | Puede cambiar qué nichos son viables |
 | W-007 | Dominios aprobados para sitios #1 y #2 | Kevin | 2026-09-04 | W-011. Se aprueban DESPUÉS de W-016 |
-| W-092 | **Correo de empresa desde el que se gestiona todo el proyecto.** Se acuerda con Kevin; con ese correo Vic crea todas las cuentas | Kevin + Vic | 2026-08-28 | W-010, W-012. Bloquea la mañana del lunes 31. Un solo correo para Cloudflare, GitHub, GA4, Search Console y GoTo, nunca uno personal |
+| W-092 | **Correo de empresa desde el que se gestiona todo el proyecto, con acceso para Kevin y para Vic** | Kevin + Vic | 2026-08-28 | W-010, W-012. **Prioridad 1, es lo único que bloquea.** Un solo correo para Cloudflare, GitHub, GA4, Search Console y GoTo, nunca uno personal. Tres requisitos que evitan rehacerlo: (1) buzón real, no alias de reenvío, porque ahí llegan recuperación de cuenta, códigos de verificación y recibos; (2) acceso para los dos, para que Kevin capture su medio de pago sin pasárselo a nadie y Vic configure sin pedirle un código cada vez; (3) el 2FA con método alcanzable por ambos o los códigos de respaldo en el vault, o la cuenta queda amarrada a un teléfono |
 | W-093 | **Datos de pago de la empresa** para el billing de Cloudflare y GoTo | Kevin | 2026-08-28 | W-010. **Acotado el 26-ago:** el vault de contraseñas lo monta Vic y ya no es pedido a Kevin. De él solo sale el medio de pago |
 | W-094 | ~~¿Walker ya tiene org de GitHub?~~ **Cerrado el 26-ago: la creamos nosotros.** Vic la levanta bajo el correo de W-092. Ver W-012 | Vic | — | Ya no bloquea nada |
 
@@ -48,6 +54,11 @@ Formato de id: `W-NNN` · Última actualización: 2026-08-26 (revisión de arqui
 ---
 
 ## Track paralelo — Rampa técnica de Pavel (31 ago – 18 sep 2026)
+
+| id | Item | Dueño | Notas |
+|---|---|---|---|
+| W-102 | **Guía del operador + sesión de orientación con Pavel** | Vic | **Abierto el 28-ago.** Pavel se ve confundido y el diagnóstico no es técnico: su propio documento proponía contenido generado desde briefs y sitios construidos a mano, o sea que se imaginaba un trabajo distinto al que el framework asume. Una capacitación de herramientas no arregla eso. Va en dos tiempos: **orientación ahora** (qué es un sitio aquí, qué toca él, qué no toca nunca, cómo se ve una semana suya), sin herramientas y sin depender del schema; y **capacitación técnica después**, cuando existan el schema y el repo, que es material de W-028 adelantado, no trabajo extra |
+
 
 | id | Item | Dueño | Notas |
 |---|---|---|---|
