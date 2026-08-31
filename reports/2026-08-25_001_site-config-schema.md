@@ -92,3 +92,66 @@ También se ejecutó `git diff --check` sin hallazgos. La primera corrida de AJV
 ## Commits
 
 - `ed3d425` — `feat(schema): close site.config.json contract with validation and examples`
+
+---
+
+## Revisión de cowork
+
+**Fecha:** 2026-08-31 · **Veredicto: aprobado con hallazgos.** El entregable queda como está;
+salen dos items nuevos.
+
+Revisado contra el diff de `ed3d425` y `8c5e48e`, leyendo `site.config.schema.json` y los dos
+ejemplos directamente, no el resumen del reporte.
+
+### Qué hizo bien
+
+**`serviceArea` como metadata de elegibilidad, sin generar páginas por ciudad.** Era la decisión
+que podía echar abajo el proyecto entero y está razonada con el argumento correcto. El schema
+además no deja ninguna puerta abierta para derivar rutas desde ese campo.
+
+**El split de `differentiation`.** Estructura obligatoria de 1 a 10 evidencias tipificadas para
+que un humano declare antes de generar, y CI comparando el contenido renderizado en vez de las
+declaraciones. Declarar diferenciación no es serlo, y el schema no confunde las dos cosas.
+
+**`theme` acotado a tres variantes preconstruidas más un acento en hex.** Cumple la regla de que
+el operador solo toca config, sin abrir CSS por sitio.
+
+**La verificación es real.** `ajv-cli` con `--spec=draft2020`, output pegado, y el hallazgo de
+que la distribución no trae el formato `email` en modo estricto se resolvió con un patrón
+explícito en vez de agregar una dependencia. Eso es exactamente el criterio correcto.
+
+### Qué hizo mal
+
+**Mandó al checklist humano algo automatizable, y de compliance.** El reporte detecta bien que
+un config con `"licenseNumber": "PLACEHOLDER-FL-LICENSE"` y `"ga4": "G-PLACEHOLDER"` pasa la
+validación, y lo remite al QA de launch de W-029. Pero `CLAUDE.md` y el propio W-029 establecen
+que todo lo automatizable va a CI y no a criterio humano, y rechazar patrones de placeholder es
+trivialmente automatizable. El riesgo no es cosmético: un sitio publicado mostrando un número de
+licencia falso en todas sus páginas es un incumplimiento de publicidad de seguros en Florida.
+**Abierto como W-103**, un segundo modo de validación que corre antes de cada deploy.
+
+**Puso su entrada de bitácora al final del archivo.** `BITACORA.md` es cronológico inverso y la
+guía global lo dice. Corregido.
+
+### Lo que el reporte no podía ver
+
+**Ningún sitio piloto ejercita el ruteo bilingüe.** Con el contrato cerrado queda explícito que
+el sitio #1 es `en` sin alternates y el #2 es `es` sin alternates: dos sitios monolingües
+independientes, no dos versiones del mismo. `docs/SCHEDULE.md` afirmaba que el sitio #2 valida
+el soporte bilingüe y era falso; valida contenido en español, que es otra cosa. W-022 se
+construye igual porque define el ruteo del template, pero se ejercita con `sites/_example/`
+configurado bilingüe, decisión que ya quedó en el prompt 002. Esto no era visible en el reporte:
+salió de leer los dos ejemplos juntos.
+
+### Items abiertos por esta revisión
+
+- **W-103** — modo de validación de producción que rechaza placeholders antes de publicar
+- **W-022** — nota de alcance: el ruteo bilingüe necesita el sitio de ejemplo como caso de prueba
+
+### Preguntas para Pavel
+
+Las seis del reporte son buenas y se le mandaron traducidas al español el 31 de agosto. La
+primera es la urgente: el enum de diez productos es de lo más caro de cambiar una vez que
+existan sitios.
+
+**Commit de esta revisión:** ver `git log` del 2026-08-31.

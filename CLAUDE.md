@@ -86,7 +86,13 @@ una terminal local que no existe.
     único que crea o reprioriza items. Si el ejecutor los deja mal (orden, ubicación, un item
     que debió abrirse), cowork lo arregla.
 
-11. **El día cierra con un session wrap.** Ver la skill `session-wrap`. Verifica que la
+11. **Ningún reporte del ejecutor se da por bueno sin revisión de cowork, y nada avanza al
+    siguiente prompt sin ella.** La revisión se hace contra el diff, no contra el reporte: un
+    reporte no puede contener lo que el ejecutor hizo y no mencionó, ni lo que no hizo sin
+    notarlo. El veredicto se escribe dentro del mismo reporte, en `## Revisión de cowork`.
+    Procedimiento completo en `prompts/00_GUIA_GLOBAL.md`.
+
+12. **El día cierra con un session wrap.** Ver la skill `session-wrap`. Verifica que la
     bitácora y el backlog reflejen el día, que el repo quede limpio y commiteado, que los
     documentos vivos no se hayan desincronizado, y nombra la siguiente acción. El wrap
     **verifica**, no es el único punto de guardado: si la bitácora solo se escribe ahí, el día
