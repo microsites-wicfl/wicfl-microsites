@@ -11,6 +11,11 @@ Todo lo que sale hacia Kevin, Pavel o Rose sigue estas reglas. Sin excepciones.
 sin saludo formal, sin estructura de correo. Párrafos cortos, listas solo cuando de verdad son
 una lista, y cuando hay varias cosas que decir, mensajes separados en vez de un bloque largo.
 
+**Sin saltos de línea duros dentro de un párrafo.** Cada párrafo va como una sola línea
+continua y el cliente lo envuelve solo. Un párrafo cortado a mano a 80 columnas se ve bien en
+la pantalla donde se escribió y se rompe en todas las demás, sobre todo en móvil. Los únicos
+saltos permitidos son los que separan párrafos y los de una lista real.
+
 ## Reglas duras
 
 1. **En inglés.** Siempre, aunque la conversación con Vic haya sido en español.
