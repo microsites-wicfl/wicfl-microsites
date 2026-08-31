@@ -76,6 +76,22 @@ una terminal local que no existe.
    backlog se cierran con refs a prompt, report y commit. Todavía no hay remoto: el push a
    GitHub llega con W-012.
 
+10. **`BITACORA.md` y `BACKLOG.md` se mantienen solos, sin que Vic los pida.** Es trabajo de
+    cowork, no de Vic. Se actualizan **conforme pasan las cosas**, no al final: al cerrar una
+    decisión, al leer un reporte del ejecutor, al descubrir un hueco, al reasignar un dueño.
+    Vic no debería tener que pedir nunca que se actualicen.
+
+    Reparto con el ejecutor: **el ejecutor agrega su propia entrada** a la bitácora y cierra
+    el item que su prompt cerraba. **Cowork es dueño de la corrección de ambos archivos** y lo
+    único que crea o reprioriza items. Si el ejecutor los deja mal (orden, ubicación, un item
+    que debió abrirse), cowork lo arregla.
+
+11. **El día cierra con un session wrap.** Ver la skill `session-wrap`. Verifica que la
+    bitácora y el backlog reflejen el día, que el repo quede limpio y commiteado, que los
+    documentos vivos no se hayan desincronizado, y nombra la siguiente acción. El wrap
+    **verifica**, no es el único punto de guardado: si la bitácora solo se escribe ahí, el día
+    ya se perdió a medias.
+
 ## Idioma
 
 - **Docs operativos** (CLAUDE.md, BITACORA, BACKLOG, prompts, reports): español

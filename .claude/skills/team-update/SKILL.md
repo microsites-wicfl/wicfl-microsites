@@ -18,7 +18,13 @@ saltos permitidos son los que separan párrafos y los de una lista real.
 
 ## Reglas duras
 
-1. **En inglés.** Siempre, aunque la conversación con Vic haya sido en español.
+1. **El idioma depende de quién lee, no de quién escribe.**
+   - **Inglés** para Kevin, para el grupo, y para cualquier cosa que Kevin pueda ver o
+     reenviar. También para todo `/docs`.
+   - **Español** para Pavel cuando se le habla directo y a solas. Es hispanohablante y
+     escribe español nativo: entiende mejor y responde mejor en su idioma. Escribirle en
+     inglés por consistencia interna es preferir la regla sobre la persona.
+   - Si el mensaje va a los dos a la vez, gana el inglés.
 2. **Sin em dashes.** Vic lo pidió explícitamente. Usa comas, dos puntos, puntos o paréntesis.
 3. **Formato "what we did / what's needed".** Todo update cierra con esas dos secciones,
    aunque el cuerpo sea corto. Nunca entregues solo lo hecho sin lo que falta.

@@ -11,6 +11,12 @@ Léeme antes de ejecutar cualquier prompt de esta carpeta.
 
 Los prompts son self-contained. El ejecutor no tiene memoria de las sesiones de cowork.
 
+**Por qué existen las dos carpetas.** `prompts/` es lo que se pidió; `reports/` es lo que
+realmente pasó, con la verificación pegada. Juntas son el registro de ejecución del proyecto:
+dentro de tres meses, la pregunta "por qué el schema quedó así" se contesta con el reporte, no
+con la memoria de nadie. Por eso **todo prompt genera reporte, sin excepciones**, aunque la
+tarea tome treinta segundos y el reporte sean diez líneas.
+
 ## Reglas para el ejecutor
 
 **Antes de empezar:**
