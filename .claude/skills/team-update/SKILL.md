@@ -7,6 +7,10 @@ description: "Redacta updates y copy para el equipo de Walker/WICFL (Kevin, Pave
 
 Todo lo que sale hacia Kevin, Pavel o Rose sigue estas reglas. Sin excepciones.
 
+**El canal es el chat de Zoom, no el correo.** Eso gobierna el formato: sin línea de asunto,
+sin saludo formal, sin estructura de correo. Párrafos cortos, listas solo cuando de verdad son
+una lista, y cuando hay varias cosas que decir, mensajes separados en vez de un bloque largo.
+
 ## Reglas duras
 
 1. **En inglés.** Siempre, aunque la conversación con Vic haya sido en español.
@@ -26,6 +30,12 @@ Todo lo que sale hacia Kevin, Pavel o Rose sigue estas reglas. Sin excepciones.
 
 ## Estructura por defecto
 
+Como es chat, el caso normal es el corto: **sin encabezados, pero con las dos ideas**. Una o
+dos frases con el resultado, el cuerpo, y cierra diciendo qué hace falta y de quién.
+
+Los encabezados `What we did` / `What's needed` se usan solo cuando el update es largo de
+verdad, por ejemplo un resumen de fin de fase o algo que Kevin va a reenviar. En ese caso:
+
 ```
 <Una o dos frases con el resultado. Nada de preámbulo.>
 
@@ -35,10 +45,8 @@ Todo lo que sale hacia Kevin, Pavel o Rose sigue estas reglas. Sin excepciones.
 - ...
 
 ## What's needed
-- <quién>: <qué>, <para cuándo>, <qué bloquea>
+- <quién>: <qué>, <qué bloquea>
 ```
-
-Para mensajes cortos de chat, omite los encabezados pero conserva las dos ideas.
 
 ## Longitud
 
