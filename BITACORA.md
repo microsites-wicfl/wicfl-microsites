@@ -5,6 +5,21 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-08-31 · W-012/W-014/W-098 — Esqueleto del monorepo y pipeline local
+
+**Quién:** agente ejecutor
+**Qué:** se creó el workspace npm, el template Astro estático mínimo, el fixture bilingüe `sites/_example/`, CI con filtros de path y workflows de deploy/preview desactivados. Se añadió `docs/SETUP.md` con el flujo local y el checklist exacto para conectar Cloudflare cuando exista la cuenta.
+
+**Decisiones:** las herramientas compartidas viven en la raíz para que los comandos de Pavel sean `npm run dev`, `npm run check` y `npm run build`; `_example` es bilingüe para ejercitar el único caso `en`/`es` que ninguno de los pilotos cubre; deploy y preview se escribieron con placeholders y `if: ${{ false }}` para no crear ni simular credenciales personales.
+
+**Verificación:** `npm ci`, validación de los dos ejemplos del schema más `_example`, build estático, servidor local HTTP 200 y parseo de los tres YAML pasaron. El build generó `packages/template/dist/index.html`.
+
+**Lección:** el filtro de paths evita gastar CI en documentación y, mientras no exista W-026, el build compartido no puede convertirse honestamente en una matriz de builds por sitio. Esa matriz debe añadirse con el generador, no anticiparse con un script ficticio.
+
+**Refs:** prompt `prompts/2026-08-28_002_monorepo-y-pipeline.md`; reporte `reports/2026-08-28_002_monorepo-y-pipeline.md`; commit `1c37278` (`feat(repo): monorepo skeleton, Astro template and CI pipeline`). W-012, W-014 y W-098 avanzan; W-014 y W-098 siguen abiertos hasta conectar Cloudflare.
+
+---
+
 ## 2026-08-31 · W-020 — Cierre del contrato site.config.json
 
 **Quién:** agente ejecutor
