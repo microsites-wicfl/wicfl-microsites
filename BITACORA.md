@@ -318,3 +318,18 @@ Dos de ellos son bloqueadores duros (W-001 quote de GoTo, W-002 dueño del conte
 **Lección para el siguiente:** Kevin responde bien a argumentos con datos verificados y
 fuentes citadas. El feedback que más peso tuvo fue el estructural (separar los gates,
 exigir que el sitio #3 se genere), no el de stack.
+
+---
+
+## 2026-08-31 · W-020 — Cierre del contrato site.config.json
+
+**Quién:** agente ejecutor
+**Qué:** se cerró el contrato validable de `site.config.json` en JSON Schema draft 2020-12, con ejemplos completos para Stuart flood en inglés y seguro de casa Miami en español.
+
+**Decisiones:** `serviceArea` quedó como metadata y nunca genera páginas; `products` es un catálogo fijo soportado por template; la variación visual vive en un bloque `theme` acotado; NAP tiene una captura única y se reconcilia contra GBP en QA; differentiation queda estructurado para humanos mientras CI compara el contenido renderizado; license number, tracking phone y differentiation son obligatorios.
+
+**Verificación:** ambos ejemplos validaron mediante `npx --yes ajv-cli validate --spec=draft2020`; también pasó `git diff --check`. AJV no soportó el formato `email` de forma integrada en modo estricto, así que se usó un patrón explícito sin añadir dependencias del proyecto.
+
+**Lección:** el schema puede imponer forma y campos obligatorios, pero no puede afirmar que NAP coincide con una fuente remota ni que el contenido publicado es único. Esas garantías deben vivir respectivamente en QA de launch y en el gate de contenido renderizado.
+
+**Refs:** prompt `prompts/2026-08-25_001_site-config-schema.md`; reporte `reports/2026-08-25_001_site-config-schema.md`; commit `ed3d425` (`feat(schema): close site.config.json contract with validation and examples`).

@@ -80,7 +80,7 @@ Sin esto Pavel no puede empezar el sitio #1 el 21 de septiembre.
 
 | id | Item | Dueño | Notas |
 |---|---|---|---|
-| W-020 | Definir el `site.config.json` schema + validación | Vic + Pavel | **El artefacto más importante del proyecto.** Pavel revisa y rompe antes de cerrarlo |
+| W-020 | ~~Definir el `site.config.json` schema + validación~~ | Vic + Pavel | Cerrado 2026-08-31. Prompt: `prompts/2026-08-25_001_site-config-schema.md`; reporte: `reports/2026-08-25_001_site-config-schema.md`; commit: `ed3d425` (`feat(schema): close site.config.json contract with validation and examples`). Pavel revisa y rompe antes de congelarlo operacionalmente. |
 | W-021 | Template base de Astro: layouts, componentes, design system | Vic | |
 | W-022 | Ruteo bilingüe en/es con `hreflang` | Vic | Se construye ahora, no se retrofitea |
 | W-026 | Comando `new-site`: genera un sitio desde su config | Vic | **Versión mínima y tosca a propósito.** Solo renderiza el template desde config. Se reescribe durante los pilotos. Ver decisión en `docs/ARCHITECTURE.md` |
