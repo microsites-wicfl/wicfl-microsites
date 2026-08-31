@@ -1,0 +1,38 @@
+name: Validate and build
+
+on:
+  pull_request:
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - "packages/template/**"
+      - "packages/config-schema/**"
+      - "sites/**"
+      - ".github/workflows/ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - "packages/template/**"
+      - "packages/config-schema/**"
+      - "sites/**"
+      - ".github/workflows/ci.yml"
+  workflow_dispatch:
+
+jobs:
+  validate-and-build:
+    name: Validate changed factory inputs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+
+# This workflow is triggered only by factory inputs. As sites scale, W-026 will add a
+# changed-site matrix here so a site edit validates and builds only that site rather than all sites.

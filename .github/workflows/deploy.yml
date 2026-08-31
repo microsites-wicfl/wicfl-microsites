@@ -1,0 +1,31 @@
+name: Deploy Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/template/**"
+      - "sites/**"
+      - "scripts/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Disabled until W-092 provisions Cloudflare
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      # Enable only after W-092/W-010. Required repository secrets:
+      # CLOUDFLARE_API_TOKEN: scoped Workers deployment token, never the Global API Key.
+      # CLOUDFLARE_ACCOUNT_ID: WICFL Cloudflare account ID.
+      # The Worker name, route and pod mapping are supplied by the provisioning work.
+      - run: npx wrangler deploy --config wrangler.toml

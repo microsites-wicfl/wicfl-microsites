@@ -1,0 +1,23 @@
+{
+  "name": "wicfl-microsites",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WICFL insurance microsite factory monorepo",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev": "astro dev --root packages/template",
+    "build": "astro build --root packages/template",
+    "check": "npm run validate:configs",
+    "validate:configs": "ajv validate --spec=draft2020 -s packages/config-schema/site.config.schema.json -d packages/config-schema/examples/*.json -d sites/_example/site.config.json"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.0",
+    "ajv-cli": "^5.0.0",
+    "astro": "^5.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=22.12.0",
+    "npm": ">=10.0.0"
+  }
+}

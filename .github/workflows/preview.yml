@@ -1,0 +1,27 @@
+name: Preview deploy
+
+on:
+  pull_request:
+    paths:
+      - "packages/template/**"
+      - "sites/**"
+      - "scripts/**"
+      - ".github/workflows/preview.yml"
+
+jobs:
+  preview:
+    name: Disabled branch preview until Cloudflare exists
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      # Enable after W-092/W-010 and use a scoped CLOUDFLARE_API_TOKEN plus
+      # CLOUDFLARE_ACCOUNT_ID. W-014 will define the Worker preview name and URL output.
+      - run: npx wrangler deploy --config wrangler.toml --env preview

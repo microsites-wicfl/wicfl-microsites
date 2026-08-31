@@ -1,0 +1,29 @@
+{
+  "slug": "example-flood",
+  "domain": "example-flood.invalid",
+  "brand": { "name": "Example Flood Insurance", "parent": "WICFL" },
+  "niche": { "product": "flood", "audience": "homeowner" },
+  "geo": { "city": "Stuart", "county": "Martin", "state": "FL", "serviceArea": ["Stuart"] },
+  "locale": { "primary": "en", "alternates": ["es"] },
+  "contact": {
+    "trackingPhone": "+17720000000",
+    "displayPhone": "(772) 000-0000",
+    "email": "hello@example-flood.invalid",
+    "address": { "street": "123 Placeholder Avenue", "city": "Stuart", "state": "FL", "zip": "34994" },
+    "licenseNumber": "PLACEHOLDER-FL-LICENSE"
+  },
+  "products": ["flood", "homeowners"],
+  "seo": {
+    "title": "Example Flood Insurance for Stuart Homeowners",
+    "description": "Disposable bilingual example configuration used to exercise the shared template and workflow validation without representing a real insurance site.",
+    "primaryKeyword": "example flood insurance Stuart",
+    "secondaryKeywords": ["example homeowners coverage"]
+  },
+  "analytics": { "ga4": "G-PLACEHOLDER", "gtm": "GTM-PLACEHOLDER" },
+  "crm": { "formId": "PENDING_GHL_FORM_ID", "leadSource": "example-flood" },
+  "theme": { "variant": "coastal", "accentColor": "#006D77" },
+  "differentiation": {
+    "localProof": [{ "type": "market-data", "summary": "Disposable test fixture only; no public content or claim will be generated from this configuration." }],
+    "uniqueSections": [{ "title": "Bilingual routing fixture", "rationale": "This fixture keeps the en and es route configuration exercised before a real bilingual site is approved." }]
+  }
+}
