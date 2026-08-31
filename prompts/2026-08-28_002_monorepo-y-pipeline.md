@@ -134,13 +134,25 @@ Escribe `reports/2026-08-28_002_monorepo-y-pipeline.md` con:
   que llegue el correo de empresa
 - **Tensiones que encontraste** — cualquier punto donde la estructura empuje contra una regla
   de `CLAUDE.md`, en especial la de que el operador solo toca config y markdown
+- **Lo que tocaste fuera de lo pedido** — cualquier archivo que cambiaste y que este prompt no
+  te pidió cambiar, con la razón. Si no hubo, dilo explícitamente
+- **Lo que no pudiste verificar** — cosas que construiste pero no lograste comprobar. Distinto
+  de lo que no se hizo
+- **Dónde dudaste** — cada punto donde este prompt fue ambiguo y tuviste que elegir. Eso es un
+  bug del prompt, no tuyo, y es de lo más útil que puedes devolver
+- **Qué te sorprendió del repo** — cualquier cosa que no coincidió con lo que este prompt te
+  llevó a esperar. Ahí es donde aparece la documentación desactualizada
 - **Lo que no se hizo** — y por qué
-- **Próximos pasos sugeridos** — incluidos items de backlog que creas que faltan
+- **Próximos pasos sugeridos** — incluidos items de backlog que creas que faltan. Tú no los
+  creas: los anotas aquí y cowork los evalúa
 - **Commits** — hashes y mensajes
 
-Después del reporte, agrega tu entrada a `BITACORA.md` y marca en `BACKLOG.md` el avance de
-W-012, W-014 y W-098 con refs a prompt, report y commit. **No cierres W-014 ni W-098**: no
-pueden cerrarse sin la cuenta de Cloudflare. No toques nada más de esos dos archivos.
+No escribas la sección `## Revisión de cowork`. Esa la agrega cowork después, contra el diff.
+
+Después del reporte, agrega tu entrada a `BITACORA.md` **al inicio del archivo**, que es
+cronológico inverso, y marca en `BACKLOG.md` el avance de W-012, W-014 y W-098 con refs a
+prompt, report y commit. **No cierres W-014 ni W-098**: no pueden cerrarse sin la cuenta de
+Cloudflare. No toques nada más de esos dos archivos.
 
 ## Commit message
 
