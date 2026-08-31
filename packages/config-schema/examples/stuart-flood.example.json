@@ -1,0 +1,24 @@
+{
+  "slug": "stuart-flood",
+  "domain": "stuartfloodinsurance.com",
+  "brand": { "name": "Stuart Flood Insurance", "parent": "WICFL" },
+  "niche": { "product": "flood", "audience": "homeowner" },
+  "geo": { "city": "Stuart", "county": "Martin", "state": "FL", "serviceArea": ["Stuart", "Palm City", "Jensen Beach", "Hobe Sound"] },
+  "locale": { "primary": "en", "alternates": [] },
+  "contact": {
+    "trackingPhone": "+17720000000",
+    "displayPhone": "(772) 000-0000",
+    "email": "hello@stuartfloodinsurance.com",
+    "address": { "street": "123 Placeholder Avenue", "city": "Stuart", "state": "FL", "zip": "34994" },
+    "licenseNumber": "PLACEHOLDER-FL-LICENSE"
+  },
+  "products": ["flood", "homeowners", "umbrella"],
+  "seo": { "title": "Flood Insurance Guidance for Stuart Homeowners", "description": "Human-reviewed flood insurance guidance for Stuart homeowners, grounded in Martin County flood exposure and local coverage questions.", "primaryKeyword": "flood insurance Stuart FL", "secondaryKeywords": ["Martin County flood insurance", "Stuart flood coverage"] },
+  "analytics": { "ga4": "G-PLACEHOLDER", "gtm": "GTM-PLACEHOLDER" },
+  "crm": { "formId": "PENDING_GHL_FORM_ID", "leadSource": "stuart-flood" },
+  "theme": { "variant": "coastal", "accentColor": "#006D77" },
+  "differentiation": {
+    "localProof": [{ "type": "market-data", "summary": "Verify current Martin County flood-zone and elevation data with an authoritative local source before authoring coverage guidance." }],
+    "uniqueSections": [{ "title": "Martin County flood exposure context", "rationale": "This section will explain a locally verified exposure pattern and therefore cannot be reused for a different county without new research." }]
+  }
+}

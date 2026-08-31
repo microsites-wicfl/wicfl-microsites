@@ -1,0 +1,24 @@
+{
+  "slug": "seguro-casa-miami",
+  "domain": "segurocasamiami.com",
+  "brand": { "name": "Seguro de Casa Miami", "parent": "WICFL" },
+  "niche": { "product": "homeowners", "audience": "homeowner" },
+  "geo": { "city": "Miami", "county": "Miami-Dade", "state": "FL", "serviceArea": ["Miami", "Kendall", "Westchester", "Coral Gables"] },
+  "locale": { "primary": "es", "alternates": [] },
+  "contact": {
+    "trackingPhone": "+13050000000",
+    "displayPhone": "(305) 000-0000",
+    "email": "hola@segurocasamiami.com",
+    "address": { "street": "456 Avenida Placeholder", "city": "Miami", "state": "FL", "zip": "33130" },
+    "licenseNumber": "PLACEHOLDER-FL-LICENSE"
+  },
+  "products": ["homeowners", "windstorm", "flood"],
+  "seo": { "title": "Seguro de Casa para Propietarios en Miami", "description": "Orientación escrita en español para propietarios de Miami que buscan entender el seguro de casa y sus preguntas de cobertura locales.", "primaryKeyword": "seguro de casa Miami", "secondaryKeywords": ["seguro de hogar Miami-Dade", "cobertura de vivienda Miami"] },
+  "analytics": { "ga4": "G-PLACEHOLDER", "gtm": "GTM-PLACEHOLDER" },
+  "crm": { "formId": "PENDING_GHL_FORM_ID", "leadSource": "seguro-casa-miami" },
+  "theme": { "variant": "warm", "accentColor": "#A44A3F" },
+  "differentiation": {
+    "localProof": [{ "type": "local-regulation", "summary": "Confirmar con una fuente autorizada la información regulatoria de Florida pertinente para propietarios de Miami antes de redactar." }],
+    "uniqueSections": [{ "title": "Preguntas de propietarios en Miami-Dade", "rationale": "La sección parte de evidencia local verificada y se escribirá originalmente en español, por lo que no se puede intercambiar por otra ciudad." }]
+  }
+}

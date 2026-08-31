@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wicfl.example/schemas/site.config.schema.json",
+  "title": "WICFL site configuration",
+  "description": "The complete, operator-editable contract for one WICFL microsite. It deliberately contains no component or HTML overrides.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["slug", "domain", "brand", "niche", "geo", "locale", "contact", "products", "seo", "analytics", "crm", "differentiation"],
+  "properties": {
+    "slug": { "type": "string", "description": "Stable lowercase directory and lead-source identifier.", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "minLength": 3, "maxLength": 63 },
+    "domain": { "type": "string", "description": "Apex production domain, without protocol, path, or www.", "pattern": "^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,63}$" },
+    "brand": {
+      "type": "object", "description": "Public identity shown by the template.", "additionalProperties": false,
+      "required": ["name", "parent"],
+      "properties": {
+        "name": { "type": "string", "description": "Approved public business name for this site.", "minLength": 2, "maxLength": 100 },
+        "parent": { "type": "string", "description": "Parent organization that owns the microsite.", "const": "WICFL" }
+      }
+    },
+    "niche": {
+      "type": "object", "description": "The primary insurance need and intended customer for the site.", "additionalProperties": false,
+      "required": ["product", "audience"],
+      "properties": {
+        "product": { "$ref": "#/$defs/product" },
+        "audience": { "type": "string", "description": "Primary audience used for information architecture, not a copy template.", "enum": ["homeowner", "renter", "landlord", "contractor", "business-owner", "condo-owner"] }
+      }
+    },
+    "geo": {
+      "type": "object", "description": "The real primary market. serviceArea supports eligibility and on-site metadata only; it never creates location pages.", "additionalProperties": false,
+      "required": ["city", "county", "state", "serviceArea"],
+      "properties": {
+        "city": { "type": "string", "description": "Primary city represented by the site's original local evidence.", "minLength": 2, "maxLength": 80 },
+        "county": { "type": "string", "description": "Florida county for the primary market.", "minLength": 2, "maxLength": 80 },
+        "state": { "type": "string", "description": "USPS state code; WICFL is restricted to Florida.", "const": "FL" },
+        "serviceArea": { "type": "array", "description": "Places the agency may serve. The generator must not derive pages, routes, or keyword copy from this list.", "minItems": 1, "maxItems": 25, "uniqueItems": true, "items": { "type": "string", "minLength": 2, "maxLength": 80 } }
+      }
+    },
+    "locale": {
+      "type": "object", "description": "Language availability. Spanish content is authored in Spanish, never translated from English.", "additionalProperties": false,
+      "required": ["primary", "alternates"],
+      "properties": {
+        "primary": { "type": "string", "description": "Language of the original site content.", "enum": ["en", "es"] },
+        "alternates": { "type": "array", "description": "Additional independently authored languages available for the same site.", "uniqueItems": true, "maxItems": 1, "items": { "type": "string", "description": "ISO 639-1 language code supported by the template.", "enum": ["en", "es"] } }
+      }
+    },
+    "contact": {
+      "type": "object", "description": "Single site-local NAP capture. It is the template source of truth and must be reconciled with the GBP before launch.", "additionalProperties": false,
+      "required": ["trackingPhone", "displayPhone", "email", "address", "licenseNumber"],
+      "properties": {
+        "trackingPhone": { "type": "string", "description": "Required call-tracking number in E.164 form; rendered and measured by every template contact surface.", "pattern": "^\\+[1-9][0-9]{1,14}$" },
+        "displayPhone": { "type": "string", "description": "Human-readable rendering of the tracking phone; its formatting is presentation-only.", "minLength": 7, "maxLength": 32 },
+        "email": { "type": "string", "description": "Approved public contact email.", "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", "maxLength": 254 },
+        "address": {
+          "type": "object", "description": "Approved street address for local NAP and disclosures.", "additionalProperties": false,
+          "required": ["street", "city", "state", "zip"],
+          "properties": {
+            "street": { "type": "string", "description": "Street address including suite when applicable.", "minLength": 5, "maxLength": 120 },
+            "city": { "type": "string", "description": "USPS city for the approved address.", "minLength": 2, "maxLength": 80 },
+            "state": { "type": "string", "description": "USPS state code for the address.", "const": "FL" },
+            "zip": { "type": "string", "description": "Five-digit or ZIP+4 code.", "pattern": "^[0-9]{5}(?:-[0-9]{4})?$" }
+          }
+        },
+        "licenseNumber": { "type": "string", "description": "Required Florida insurance license number displayed by the template on every required page.", "minLength": 1, "maxLength": 80 },
+        "googleBusinessProfilePlaceId": { "type": "string", "description": "Optional GBP Place ID once a profile exists; used by launch QA for NAP reconciliation, not by schema validation.", "pattern": "^ChI[A-Za-z0-9_-]{10,}$" }
+      }
+    },
+    "products": { "type": "array", "description": "Fixed catalog of coverage pages the template may render. Adding a product requires a schema version change and template support.", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/product" } },
+    "seo": {
+      "type": "object", "description": "Human-authored page-level SEO inputs for the primary site, not a programmatic location-copy source.", "additionalProperties": false,
+      "required": ["title", "description", "primaryKeyword", "secondaryKeywords"],
+      "properties": {
+        "title": { "type": "string", "description": "Human-reviewed default title tag.", "minLength": 10, "maxLength": 60 },
+        "description": { "type": "string", "description": "Human-reviewed default meta description.", "minLength": 50, "maxLength": 160 },
+        "primaryKeyword": { "type": "string", "description": "One researched primary search phrase.", "minLength": 3, "maxLength": 100 },
+        "secondaryKeywords": { "type": "array", "description": "Researched supporting phrases, never a city-name substitution list.", "maxItems": 10, "uniqueItems": true, "items": { "type": "string", "minLength": 3, "maxLength": 100 } }
+      }
+    },
+    "analytics": {
+      "type": "object", "description": "Required measurement identifiers. Clearly marked placeholders are valid before accounts are provisioned.", "additionalProperties": false,
+      "required": ["ga4", "gtm"],
+      "properties": {
+        "ga4": { "type": "string", "description": "GA4 measurement ID.", "pattern": "^G-[A-Z0-9-]{4,}$" },
+        "gtm": { "type": "string", "description": "Google Tag Manager container ID.", "pattern": "^GTM-[A-Z0-9-]{4,}$" }
+      }
+    },
+    "crm": {
+      "type": "object", "description": "Required lead-routing identifiers for the WICFL GoHighLevel sub-account.", "additionalProperties": false,
+      "required": ["formId", "leadSource"],
+      "properties": {
+        "formId": { "type": "string", "description": "CRM form identifier or explicit pending placeholder.", "pattern": "^(?:[A-Za-z0-9_-]{3,}|PENDING_[A-Z0-9_]+)$" },
+        "leadSource": { "type": "string", "description": "Stable source label used in every submitted lead.", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "minLength": 3, "maxLength": 63 }
+      }
+    },
+    "theme": {
+      "type": "object", "description": "Optional, constrained visual variation consumed by shared template tokens. No per-site CSS or component override is permitted.", "additionalProperties": false,
+      "required": ["variant", "accentColor"],
+      "properties": {
+        "variant": { "type": "string", "description": "Prebuilt design-system variant.", "enum": ["coastal", "civic", "warm"] },
+        "accentColor": { "type": "string", "description": "Accessible six-digit accent color reviewed against template contrast tokens.", "pattern": "^#[0-9A-Fa-f]{6}$" }
+      }
+    },
+    "differentiation": {
+      "type": "object", "description": "Required human accountability record of genuine local evidence and non-reusable sections. CI compares rendered content, not these declarations.", "additionalProperties": false,
+      "required": ["localProof", "uniqueSections"],
+      "properties": {
+        "localProof": { "type": "array", "description": "Verifiable local facts or sources the author will substantiate in content.", "minItems": 1, "maxItems": 10, "items": { "type": "object", "additionalProperties": false, "required": ["type", "summary"], "properties": { "type": { "type": "string", "description": "Kind of locally grounded evidence.", "enum": ["case-experience", "market-data", "review", "community-partnership", "local-regulation"] }, "summary": { "type": "string", "description": "Specific evidence to verify before publishing; not reusable boilerplate.", "minLength": 20, "maxLength": 500 } } } },
+        "uniqueSections": { "type": "array", "description": "Planned substantive sections that make this site's information architecture non-interchangeable.", "minItems": 1, "maxItems": 10, "items": { "type": "object", "additionalProperties": false, "required": ["title", "rationale"], "properties": { "title": { "type": "string", "description": "Working title for a site-specific section.", "minLength": 5, "maxLength": 100 }, "rationale": { "type": "string", "description": "Why the section requires evidence unique to this market and cannot be cloned to another site.", "minLength": 20, "maxLength": 500 } } } }
+      }
+    }
+  },
+  "$defs": {
+    "product": { "type": "string", "description": "Coverage product explicitly supported by the shared template.", "enum": ["flood", "homeowners", "renters", "landlord", "umbrella", "contractor", "commercial-property", "general-liability", "windstorm", "condo"] }
+  }
+}
