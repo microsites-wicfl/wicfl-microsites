@@ -10,10 +10,12 @@
 
 ## Barrido de secretos
 
-Comando ejecutado sobre la historia completa:
+Comandos ejecutados sobre la historia completa:
 
 ```sh
-git log -p --all --no-ext-diff | rg -n -i 'ghp_[a-z0-9]{36}|github_pat_[a-z0-9_]{20,}|sk-[a-z0-9_-]{20,}|akia[0-9a-z]{16}|(?:cf|cloudflare)[_-]?(?:api[_-]?)?token["'"'`:= ]+[a-z0-9_-]{20,}|(?:password|passwd|secret|api[_-]?key)["'"'` ]*[:=]["'"'` ]*[^[:space:]"'"'`]{12,}|-----begin (?:rsa |ec |openssh )?private key-----'; git log --all --format= --name-only | rg -n '(^|/)\.env($|\.)'
+git log -p --all --no-ext-diff | rg -n -i 'ghp_[a-z0-9]{36}|github_pat_[a-z0-9_]{20,}|sk-[a-z0-9_-]{20,}|akia[0-9a-z]{16}|-----begin (rsa |ec |openssh )?private key-----'
+git log -p --all --no-ext-diff | rg -n -i '(password|passwd|secret|api[_-]?key|cloudflare[_-]?(api[_-]?)?token)\s*[:=]\s*[^[:space:]]{12,}'
+git log --all --format= --name-only | rg -n '(^|/)\.env($|\.)'
 ```
 
 Output real:
@@ -77,3 +79,4 @@ La cuenta activa de GitHub tiene el scope `repo`, pero GitHub negó acceso de es
 ## Commits
 
 - `756556f` — `docs(prompt): prompt 003, conectar el remoto y subir el proyecto` (HEAD que se intentó subir; los 32 commits siguen solo locales).
+- `4f9445f` — `chore(repo): connect origin and push the factory` (registro local del intento bloqueado; tampoco está en remoto).
