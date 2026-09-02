@@ -2,32 +2,91 @@
 interface Props {
   title: string;
   description?: string;
+  pageType: "home" | "content" | "coverage";
 }
 
 import { site } from "../lib/site-data.mjs";
 
-const { title, description = site.seo.description } = Astro.props;
+const { title, description = site.seo.description, pageType } = Astro.props;
+const address = site.contact.address;
 ---
 
 <!doctype html>
-<html lang={site.locale.primary}>
+<html
+  lang={site.locale.primary}
+  class:list={[`variant-${site.theme.variant}`, `page-${pageType}`]}
+  style={`--site-accent: ${site.theme.accentColor};`}
+>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
   </head>
   <body>
-    <header>
-      <p>{site.brand.name}</p>
-      <p>{site.geo.city}, {site.geo.state}</p>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <div class="shell header-content">
+        <a class="wordmark" href="/">{site.brand.name}</a>
+        <div class="header-contact">
+          <span>{site.geo.city}, {site.geo.state}</span>
+          <a class="phone-link" href={`tel:${site.contact.trackingPhone}`}>{site.contact.displayPhone}</a>
+        </div>
+      </div>
     </header>
-    <main>
-      <slot />
-    </main>
-    <footer>
-      <p>Tracking phone: {site.contact.trackingPhone}</p>
-      <p>License: {site.contact.licenseNumber}</p>
+    <main id="main-content" class="shell"><slot /></main>
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <section>
+          <p class="footer-brand">{site.brand.name}</p>
+          <address>{address.street}<br />{address.city}, {address.state} {address.zip}</address>
+        </section>
+        <section>
+          <p><a href={`tel:${site.contact.trackingPhone}`}>{site.contact.displayPhone}</a></p>
+          <p><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></p>
+          <p>Florida license: {site.contact.licenseNumber}</p>
+        </section>
+      </div>
     </footer>
   </body>
 </html>
+
+<style is:global>
+  :root { --ink: #172235; --muted: #526071; --surface: #fff; --line: #d8dee6; --s1: .5rem; --s2: 1rem; --s3: 1.5rem; --s4: 2.5rem; --s5: 4rem; font-family: Georgia, "Times New Roman", serif; color: var(--ink); background: var(--surface); }
+  * { box-sizing: border-box; }
+  body { margin: 0; line-height: 1.65; }
+  a { color: var(--site-accent); text-underline-offset: .16em; }
+  a:focus-visible { outline: 3px solid var(--site-accent); outline-offset: 3px; }
+  .shell { width: min(100% - 2rem, 70rem); margin-inline: auto; }
+  .skip-link { position: absolute; left: -9999px; }
+  .skip-link:focus { left: 1rem; top: 1rem; z-index: 1; background: #fff; padding: var(--s1); }
+  .site-header { border-top: .35rem solid var(--site-accent); border-bottom: 1px solid var(--line); background: var(--variant-surface); }
+  .header-content { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); padding-block: var(--s2); }
+  .wordmark, .footer-brand { color: var(--ink); font-size: 1.25rem; font-weight: 700; text-decoration: none; }
+  .header-contact { display: flex; align-items: center; gap: var(--s2); color: var(--muted); font-family: Arial, sans-serif; font-size: .9rem; }
+  .phone-link { background: var(--site-accent); border-radius: .15rem; color: #fff; font-weight: 700; padding: .55rem .8rem; text-decoration: none; }
+  main { min-height: 55vh; padding-block: var(--s5); }
+  .page-content { max-width: 48rem; }
+  .page-home .page-content { max-width: 62rem; border-left: .35rem solid var(--site-accent); padding-left: var(--s3); }
+  .page-coverage .page-content { border-top: .2rem solid var(--site-accent); padding-top: var(--s2); }
+  h1, h2, h3 { color: var(--ink); line-height: 1.2; }
+  h1 { font-size: clamp(2rem, 5vw, 3.8rem); margin: 0 0 var(--s3); }
+  h2 { font-size: clamp(1.45rem, 3vw, 2.1rem); margin-top: var(--s4); }
+  h3 { font-size: 1.25rem; margin-top: var(--s3); }
+  p, li, blockquote, td, th { font-size: 1.05rem; }
+  blockquote { border-left: .25rem solid var(--site-accent); color: var(--muted); margin: var(--s3) 0; padding-left: var(--s2); }
+  code { background: #eef2f5; border-radius: .15rem; padding: .1rem .3rem; }
+  pre { overflow-x: auto; padding: var(--s2); background: #172235; color: #fff; }
+  table { border-collapse: collapse; display: block; max-width: 100%; overflow-x: auto; }
+  th, td { border: 1px solid var(--line); padding: .6rem; text-align: left; }
+  th { background: var(--variant-surface); }
+  .site-footer { background: #172235; color: #edf2f5; padding-block: var(--s4); }
+  .site-footer a { color: #fff; }
+  .footer-grid { display: grid; gap: var(--s3); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .site-footer p { margin: 0 0 .5rem; }
+  address { font-style: normal; }
+  .variant-coastal { --variant-surface: #e9f5f5; }
+  .variant-civic { --variant-surface: #edf1f7; }
+  .variant-warm { --variant-surface: #fbf2e7; }
+  @media (max-width: 42rem) { .header-content, .header-contact { align-items: flex-start; flex-direction: column; } .footer-grid { grid-template-columns: 1fr; } main { padding-block: var(--s4); } }
+</style>
