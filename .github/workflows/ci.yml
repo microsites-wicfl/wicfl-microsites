@@ -7,6 +7,7 @@ on:
       - "package-lock.json"
       - "packages/template/**"
       - "packages/config-schema/**"
+      - "scripts/**"
       - "sites/**"
       - ".github/workflows/ci.yml"
   push:
@@ -16,13 +17,14 @@ on:
       - "package-lock.json"
       - "packages/template/**"
       - "packages/config-schema/**"
+      - "scripts/**"
       - "sites/**"
       - ".github/workflows/ci.yml"
   workflow_dispatch:
 
 jobs:
-  validate-and-build:
-    name: Validate changed factory inputs
+  validate:
+    name: Validate all site configurations
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +34,35 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
-      - run: npm run build
 
-# This workflow is triggered only by factory inputs. As sites scale, W-026 will add a
-# changed-site matrix here so a site edit validates and builds only that site rather than all sites.
+  discover-sites:
+    name: Discover sites to build
+    needs: validate
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.changed.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: changed
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: node scripts/changed-sites.mjs "$BASE_SHA" "$HEAD_SHA" >> "$GITHUB_OUTPUT"
+
+  build-sites:
+    name: Build ${{ matrix.site }}
+    needs: discover-sites
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.discover-sites.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:site -- ${{ matrix.site }}

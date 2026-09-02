@@ -11,7 +11,7 @@ This repository is the WICFL microsite factory. The shared Astro template runs l
 5. Open the local address printed by Astro, normally `http://localhost:4321`.
 6. Press `Ctrl+C` in the terminal when you are done.
 
-To check the current contract and template without starting a server, run `npm run check`. To generate the static template output, run `npm run build`; Astro writes it to `packages/template/dist/`.
+To check the current contract, run `npm run check`. To generate the fixture site, run `npm run build`; the generator writes it to `dist/sites/_example/`. To build another site, create only `sites/<site-directory>/site.config.json` and markdown in `sites/<site-directory>/content/`, then run `npm run build:site -- <site-directory>`.
 
 The reusable bilingual fixture is `sites/_example/site.config.json`. It deliberately has English as its primary language and Spanish as an alternate so future bilingual routing can be tested even though the two pilots are independent monolingual sites. Do not treat it as a real site or publish its placeholder details.
 

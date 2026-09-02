@@ -1,9 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { pageByRoute, site } from "../lib/site-data.mjs";
+
+const page = pageByRoute("/");
 ---
 
-<BaseLayout title="WICFL Microsites Template">
-  <h1>WICFL Microsites Template</h1>
-  <p>The shared Astro template is running locally.</p>
-  <p>Site routes, bilingual rendering, and the design system are added by their dedicated backlog items.</p>
+<BaseLayout title={site.seo.title} description={site.seo.description}>
+  <h1>{page.title}</h1>
+  <Fragment set:html={page.html} />
 </BaseLayout>

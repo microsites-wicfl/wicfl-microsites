@@ -5,8 +5,9 @@
   "description": "WICFL insurance microsite factory monorepo",
   "workspaces": ["packages/*"],
   "scripts": {
-    "dev": "astro dev --root packages/template",
-    "build": "astro build --root packages/template",
+    "dev": "node scripts/dev-site.mjs _example",
+    "build": "npm run build:site -- _example",
+    "build:site": "node scripts/build-site.mjs",
     "check": "npm run validate:configs",
     "validate:configs": "ajv validate --spec=draft2020 -s packages/config-schema/site.config.schema.json -d \"packages/config-schema/examples/*.json\" -d sites/_example/site.config.json"
   },

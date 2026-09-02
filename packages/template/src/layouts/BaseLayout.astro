@@ -1,21 +1,33 @@
 ---
 interface Props {
   title: string;
+  description?: string;
 }
 
-const { title } = Astro.props;
+import { site } from "../lib/site-data.mjs";
+
+const { title, description = site.seo.description } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={site.locale.primary}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
+    <meta name="description" content={description} />
   </head>
   <body>
+    <header>
+      <p>{site.brand.name}</p>
+      <p>{site.geo.city}, {site.geo.state}</p>
+    </header>
     <main>
       <slot />
     </main>
+    <footer>
+      <p>Tracking phone: {site.contact.trackingPhone}</p>
+      <p>License: {site.contact.licenseNumber}</p>
+    </footer>
   </body>
 </html>
