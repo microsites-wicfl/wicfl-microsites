@@ -131,3 +131,84 @@ El requisito de confirmar que local y remoto coincidieran no se cumplió: `main`
 ## Commits
 
 - `6fd3635` — `test(ci): trigger pull request workflow` (rama desechable; no se mergeó y la rama fue borrada).
+
+---
+
+## Revisión de cowork
+
+**Fecha:** 2026-09-02 · **Veredicto: aprobado con hallazgos.** El prompt cumplió su objetivo:
+existía para averiguar si el pipeline sirve, y la respuesta resultó ser que no. Eso es un éxito
+del método, no un fracaso del entregable.
+
+### Qué hizo bien
+
+**Midió antes de cambiar, y aguantó la tentación de arreglar.** El error de AJV es de una línea
+y estaba a la vista. El prompt prohibía tocar workflows, y respetó la prohibición proponiendo la
+corrección en próximos pasos en vez de aplicarla. Un fix aplicado en la misma corrida habría
+mezclado la medición con la reparación y habríamos perdido la evidencia de cómo falla.
+
+**Distinguió los tres estados de un workflow con evidencia, no con lenguaje.** Workflow que no
+corrió (deploy en el PR, cero runs), workflow que corrió con su job omitido por el guard
+(preview, run `33660687375`, conclusión `skipped`, sin pasos) y workflow que corrió y falló
+(ci, `33660687277`). Los tres se ven parecidos desde el tablero de Actions y no son lo mismo.
+
+**Se negó a sobreconcluir sobre los cero runs del push inicial.** Dijo que la evidencia descarta
+que Actions o el trigger estén deshabilitados, que la hipótesis del primer push sigue siendo
+consistente, y que GitHub no expone un registro de eventos filtrados que permita confirmarla. Es
+la respuesta correcta: sin evidencia no hay cambio de YAML.
+
+**Limpió detrás de sí.** PR cerrado sin merge, rama borrada local y remota, `main` intacta.
+
+**Aisló la rama de prueba desde `origin/main`** para no arrastrar commits locales ajenos al
+prompt. Eso no se lo pidió nadie.
+
+### Hallazgo 1: el bug que solo aparecía en CI
+
+`npm run check` falla en el runner de Linux con `too many arguments`. La causa está bien
+diagnosticada: el script pasa `-d packages/config-schema/examples/*.json` sin comillas, así que
+**bash expande el glob antes de que AJV lo vea** y AJV recibe un argumento posicional suelto que
+no espera. En Windows nadie lo notó porque la shell no expande ese patrón y el glob llegaba
+intacto a AJV, que sí sabe expandirlo.
+
+Esto valida el prompt 004 entero. El comando de validación diario del proyecto estaba roto en la
+única plataforma donde va a correr siempre, y en la máquina de desarrollo funcionaba. Sin haber
+visto correr CI, lo habríamos descubierto el día que Pavel abriera su primer pull request.
+
+La corrección es entrecomillar el patrón. **No se aplica aquí**: va en el prompt 005, junto con
+la verificación de que CI queda en verde.
+
+### Hallazgo 2: el repo no normaliza finales de línea, y eso rompe nuestra forma de revisar
+
+Al terminar, el árbol quedó sucio con tres archivos modificados: `index.astro`, el prompt 004 y
+el reporte del prompt 003. **El contenido es idéntico**; `git diff --ignore-all-space` sale
+vacío. Lo que cambió son los finales de línea: los tres archivos quedaron reescritos con CRLF.
+
+No hay `.gitattributes` ni `core.autocrlf` configurado, así que cada vez que una herramienta
+reescriba un archivo en Windows, git va a reportar el archivo completo como modificado.
+
+Esto no es cosmético para este proyecto en particular. La regla 11 de `CLAUDE.md` dice que la
+revisión de cowork se hace **contra el diff**, y un diff donde 250 líneas idénticas aparecen
+como borradas y vueltas a agregar no se puede revisar: el cambio real se esconde en el ruido.
+Hoy me tomó una comprobación extra distinguir "reescribió mi prompt" de "cambió los finales de
+línea", y la primera lectura fue la alarmante.
+
+Se corrige con un `.gitattributes` que normalice a LF. Va en el prompt 005, antes de que haya
+más archivos y el ruido se vuelva permanente. Los tres archivos sucios ya se revirtieron.
+
+### Observación, sin item
+
+`gh` no pudo leer la política de Actions de la organización: 404 en la org y 403 en el repo por
+falta del permiso fino de políticas. No bloqueó nada, porque los runs reales demostraron que
+Actions está habilitado. Vale saberlo por si más adelante hace falta auditar esa política desde
+la línea de comandos.
+
+### Estado de W-012
+
+Correctamente abierto. El remoto tiene la historia, `main` es la rama por defecto y el trigger
+del que depende Pavel está demostrado. Falta lo único que importa para cerrarlo: una corrida
+verde. Se cierra en el prompt 005.
+
+### Actualizaciones de backlog por esta revisión
+
+- **W-014** — se agrega el bug del glob, con su causa, como trabajo del prompt 005
+- **W-106** — nuevo: `.gitattributes` que normalice finales de línea a LF
