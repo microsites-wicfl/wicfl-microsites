@@ -5,6 +5,62 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-02 (cierre del día) · Session wrap
+
+**Quién:** Vic + cowork
+
+Día largo y productivo. **28 commits, siete prompts ejecutados, cinco items cerrados.** El
+detalle de cada uno está en su reporte; esto es lo que vale conservar por encima de eso.
+
+**El proyecto pasó de documentación a fábrica funcionando.** En la mañana el repo era markdown y
+un schema. Al cierre existe un monorepo en GitHub con CI verde, un generador que convierte un
+`site.config.json` en un sitio construido, y un template que renderiza markdown completo con
+tres variantes que se eligen desde el config. El camino config → sitio está probado de punta a
+punta contra el fixture.
+
+**Cerrados hoy:** W-012 (org, repo y remoto), W-106 (`.gitattributes`), W-026 (generador y matriz
+de CI) y W-107 (markdown real con content collections). W-092 lo había cerrado Kevin. W-021 queda
+como avance.
+
+**Lo más valioso del día no fue construir, fue medir.** El prompt 004 existía solo para ver correr
+CI por primera vez, y encontró que `npm run check` estaba roto en Linux por un glob sin comillas
+que bash expandía antes de que AJV lo viera. **El comando de validación diario del proyecto
+funcionaba en la máquina de desarrollo y estaba roto en la única plataforma donde siempre va a
+correr.** Sin ese prompt, lo descubría Pavel al abrir su primer pull request en septiembre.
+Lección: un pipeline que nadie ha visto correr es indistinguible de no tener pipeline, y la
+verificación merece su propio prompt aunque no produzca nada.
+
+**La revisión contra el diff se pagó dos veces.** En W-020 encontró que ningún sitio piloto
+ejercita el ruteo bilingüe, algo invisible en un reporte bien escrito. En W-026 encontró que la
+plantilla mostraba el teléfono en E.164, o sea que un visitante habría visto `+17720000000`,
+mientras `displayPhone` existía en el schema sin usarse.
+
+**El incidente del prompt 007.** Se ejecutó, se revirtió con código y reporte, y se reejecutó con
+código distinto sin reporte. Quedó trabajo en `main` sin registro durante un rato. Se detectó en
+la revisión y se cerró pidiendo el reporte de lo que había realmente en el árbol, no restaurando
+el reporte viejo, que describía código que ya no existía. **Regla que sale de esto: después de un
+revert, el reporte se reescribe contra el estado real; no se resucita.**
+
+**Riesgo nuevo que nadie estaba mirando.** Las tres variantes de diseño se diferencian solo en el
+token de superficie, tres tonos claros casi iguales. A tres sitios da igual; a veinte, un
+portafolio que comparte tipografía, retícula y estructura se lee como una red de plantillas, y el
+gate de W-027 mide similitud de **contenido**, así que ese riesgo le pasa por debajo. Anotado en
+W-021 para decidirlo antes de escalar.
+
+**Del lado del equipo:** Kevin creó `microsites@wicfl.com` y con eso se destrabó todo. Vic creó
+la cuenta de Cloudflare. Queda pendiente de Kevin solo el medio de pago.
+
+**Lo que queda a medias, con su estado exacto:** el master file publicado sigue en v1.4 mientras
+la fuente va en v1.5, bloqueado por el allowlist de red del entorno. Y hay dos commits de
+revisión sin subir, porque el bridge del escritorio no tiene credenciales de GitHub y los sube el
+siguiente prompt.
+
+**Siguiente acción, una sola:** Vic monta el vault (W-105) y rota la contraseña del buzón, que es
+el primer paso de W-010 y sigue pendiente desde que llegó por el chat de Zoom. Todo lo de
+Cloudflare cuelga de ahí.
+
+---
+
 ## 2026-09-02 · W-107 cerrado / W-021 avance — Markdown real y design system
 
 **Quién:** agente ejecutor
