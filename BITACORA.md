@@ -5,6 +5,19 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-02 · W-012 — Remoto configurado, push bloqueado por permisos
+
+**Quién:** agente ejecutor
+**Qué:** se barrió la historia completa de 32 commits en busca de credenciales antes de cualquier push; no hubo coincidencias. La rama se renombró de `master` a `main` y se configuró `origin` para `microsites-wicfl/wicfl-microsites`.
+
+**Verificación:** el primer `git push -u origin main` fue rechazado con HTTP 403: GitHub negó acceso a la cuenta autenticada `vitoriomanzarek`. `gh` confirmó que esa es la cuenta activa y que el token tiene scope `repo`, pero no hubo push, CI ni deploy que verificar.
+
+**Lección:** un scope general de token no prueba que una organización otorgue escritura. Ante un rechazo de autorización, la acción correcta es detenerse sin cambiar identidades, permisos ni historia, y pedir que Vic resuelva el acceso.
+
+**Refs:** prompt `prompts/2026-09-01_003_conectar-remoto.md`; reporte `reports/2026-09-01_003_conectar-remoto.md`. W-012 sigue abierto; no hubo force push ni reescritura de historia.
+
+---
+
 ## 2026-08-31 · W-012/W-014/W-098 — Esqueleto del monorepo y pipeline local
 
 **Quién:** agente ejecutor

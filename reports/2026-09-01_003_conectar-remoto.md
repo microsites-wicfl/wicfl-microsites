@@ -1,0 +1,79 @@
+# Reporte — 2026-09-01_003 conectar-remoto
+
+## Qué se hizo
+
+1. Se confirmó que el árbol estaba limpio, la historia local contenía 32 commits y no había remoto configurado.
+2. Se ejecutó el barrido de credenciales sobre todos los diffs de todos los commits antes de conectar el remoto.
+3. Se renombró la rama local de `master` a `main`.
+4. Se configuró `origin` como `https://github.com/microsites-wicfl/wicfl-microsites.git`.
+5. Se intentó el push normal, sin force. GitHub lo rechazó con HTTP 403 para la cuenta autenticada; no se ejecutó ninguna acción adicional contra el remoto.
+
+## Barrido de secretos
+
+Comando ejecutado sobre la historia completa:
+
+```sh
+git log -p --all --no-ext-diff | rg -n -i 'ghp_[a-z0-9]{36}|github_pat_[a-z0-9_]{20,}|sk-[a-z0-9_-]{20,}|akia[0-9a-z]{16}|(?:cf|cloudflare)[_-]?(?:api[_-]?)?token["'"'`:= ]+[a-z0-9_-]{20,}|(?:password|passwd|secret|api[_-]?key)["'"'` ]*[:=]["'"'` ]*[^[:space:]"'"'`]{12,}|-----begin (?:rsa |ec |openssh )?private key-----'; git log --all --format= --name-only | rg -n '(^|/)\.env($|\.)'
+```
+
+Output real:
+
+```text
+```
+
+No hubo coincidencias. El barrido incluyó formatos de tokens Cloudflare/GitHub/OpenAI/AWS, asignaciones de secretos o contraseñas, llaves privadas y archivos `.env` en toda la historia disponible.
+
+## Verificación
+
+Estado posterior al rename y a la configuración del remoto:
+
+```text
+main
+origin  https://github.com/microsites-wicfl/wicfl-microsites.git (fetch)
+origin  https://github.com/microsites-wicfl/wicfl-microsites.git (push)
+32
+```
+
+Output real del push:
+
+```text
+remote: Permission to microsites-wicfl/wicfl-microsites.git denied to vitoriomanzarek.
+fatal: unable to access 'https://github.com/microsites-wicfl/wicfl-microsites.git/': The requested URL returned error: 403
+```
+
+`gh` está disponible y confirmó que la cuenta activa es `vitoriomanzarek` con protocolo HTTPS y scopes `gist`, `read:org`, `repo`. No hubo ninguna corrida de Actions que listar: el push nunca llegó al repositorio remoto. Por la misma razón, no se pudo confirmar remotamente que `deploy.yml` y `preview.yml` permanecieron sin ejecutar.
+
+## Lo que tocaste fuera de lo pedido
+
+No se modificó ningún archivo de producto ni configuración fuera de lo pedido. Los únicos cambios de estado fueron el rename local a `main` y la adición de `origin`; el reporte, la bitácora y el backlog son los artefactos de cierre exigidos por el prompt.
+
+## Lo que no pudiste verificar
+
+- Que `main` sea la rama por defecto en GitHub y que los 32 commits estén en remoto, porque GitHub rechazó el push.
+- La primera corrida real de `ci.yml`.
+- Que `deploy.yml` y `preview.yml` no se ejecutaron en GitHub; no hubo evento de push que consultar.
+
+## Dónde dudaste
+
+El prompt contempla explícitamente un rechazo por historias no relacionadas, pero el rechazo observado fue de autorización HTTP 403. Se aplicó la misma regla de seguridad: detenerse y reportar en lugar de cambiar autenticación, membresías de la organización, URL o permisos por cuenta propia.
+
+## Qué te sorprendió del repo
+
+La cuenta activa de GitHub tiene el scope `repo`, pero GitHub negó acceso de escritura a la organización. Esto apunta a autorización de organización, membresía, SSO o una identidad de GitHub distinta de la que debe operar `microsites-wicfl`; no permite concluir cuál sin intervención del dueño de la org.
+
+## Lo que no se hizo
+
+- No se hizo `push --force`, rebase, amend, squash ni otra reescritura de historia.
+- No se modificaron archivos de Cloudflare ni se configuraron secretos.
+- No se corrigió CI a ciegas porque CI no llegó a ejecutarse.
+- W-012 no se cerró: la organización/remoto no contiene todavía la historia local ni una corrida de CI verde.
+
+## Próximos pasos sugeridos
+
+1. Vic debe conceder a la cuenta GitHub activa `vitoriomanzarek` acceso de escritura a `microsites-wicfl/wicfl-microsites`, o indicar la identidad corporativa que debe autenticarse en esta máquina.
+2. Si la organización exige SSO, autorizar el token HTTPS existente para `microsites-wicfl` o generar un token de la cuenta autorizada con el acceso requerido.
+3. Reintentar exactamente `git push -u origin main` sin force. Solo después del primer push, verificar el run de CI y que deploy/preview no se ejecutaron.
+
+## Commits
+
+- `756556f` — `docs(prompt): prompt 003, conectar el remoto y subir el proyecto` (HEAD que se intentó subir; los 32 commits siguen solo locales).
