@@ -181,3 +181,57 @@ El push inicial de una rama nueva dejó los tres workflows registrados como acti
 ### Estado de W-012
 
 El remoto ya contiene la historia en `main`, sin force push, y `main` es la rama por defecto. W-012 sigue abierto únicamente porque no hay una corrida verde de CI que satisfaga el criterio de cierre.
+
+---
+
+## Revisión de cowork, segunda pasada
+
+**Fecha:** 2026-09-02 · **Veredicto: aprobado con hallazgos.** El push quedó bien hecho. La
+ausencia de runs es un hallazgo real del proyecto, no una falla del ejecutor.
+
+### Qué hizo bien
+
+**No despachó el workflow a mano para "conseguir" un run verde.** Lo escribió explícitamente
+en "dónde dudé": el encargo pedía verificar la corrida disparada por el push, y despachar una
+manualmente habría producido un check verde que no prueba lo que el criterio quería probar.
+Esa distinción es exactamente la correcta y es la clase de cosa que un ejecutor apurado se
+salta para cerrar el item.
+
+**No tocó los filtros de path sin evidencia.** Sin un log de fallo, cambiar el YAML habría sido
+adivinar sobre el mecanismo.
+
+**No cerró W-012**, y dejó dicho con precisión por qué sigue abierto: el remoto tiene la
+historia y `main` es la rama por defecto, pero falta la corrida verde.
+
+### Corrección a su diagnóstico
+
+El reporte propone que el último commit de la rama era de documentación y por eso no coincidió
+con los filtros. **Eso no es cómo funciona el filtro en un evento `push`:** GitHub lo evalúa
+contra el conjunto de commits del push, no contra el último, y este push traía `package.json`,
+`packages/**` y `sites/**`, que sí coinciden. La hipótesis más consistente con lo observado es
+otra: **en el primer push a un repositorio vacío no hay base contra la cual calcular un diff**,
+y sin diff no hay coincidencia de paths que evaluar. Sería un artefacto de una sola vez.
+
+El ejecutor marcó su propia hipótesis como no confirmada, que fue lo correcto. Pero la
+diferencia importa, porque las dos apuntan a acciones distintas: si fuera el último commit,
+habría que cambiar los filtros; si es el push inicial, no hay nada que arreglar y solo hay que
+comprobarlo.
+
+### El hallazgo que importa, y que nadie había mirado
+
+**Nunca hemos visto dispararse el trigger del que depende todo el flujo de Pavel.** Su ciclo es
+rama, push de markdown, pull request, URL de preview, y eso corre sobre `pull_request`, no
+sobre `push`. Se escribió en el prompt 002, se validó como YAML, y sigue sin haberse ejecutado
+ni una vez. Un pipeline que nadie ha visto correr es indistinguible de no tener pipeline, y el
+handoff del 18 de septiembre se lo promete a Pavel.
+
+Tampoco se ha podido comprobar que los guards `if: ${{ false }}` de `deploy.yml` y
+`preview.yml` se comporten como se espera **dentro** de un run. Hoy solo sabemos que no hubo
+runs, que es una forma débil de saberlo.
+
+Ambas cosas se resuelven con el mismo experimento y se atienden en el prompt 004.
+
+### Actualización de backlog
+
+- **W-012** — sigue abierto, y su criterio de cierre se aclara: no basta con que el remoto
+  tenga la historia, hace falta una corrida verde disparada por un evento real
