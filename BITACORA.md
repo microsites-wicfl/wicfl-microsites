@@ -5,6 +5,19 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-02 · W-012/W-014 — Triggers de CI medidos con un PR desechable
+
+**Quién:** agente ejecutor
+**Qué:** se despachó `ci.yml` manualmente y se abrió el PR #1 con un cambio mínimo en una rama creada desde `origin/main`. El PR se cerró sin merge y se borró su rama local y remota.
+
+**Verificación:** Actions ejecutó CI por `workflow_dispatch` y por `pull_request`, confirmando que el trigger de Pavel funciona. Ambos fallaron en `npm run check`: Bash expandió el glob de ejemplos y AJV rechazó los múltiples argumentos. `preview.yml` sí generó un run en el PR, pero su job quedó `skipped` por `if: ${{ false }}`; `deploy.yml` no tuvo run porque su trigger no es `pull_request`.
+
+**Lección:** workflow ausente y job omitido son estados distintos: deploy no tuvo run; preview tuvo run y job omitido. La validación local en Windows no detectó que un glob de npm cambiaría de semántica en Bash.
+
+**Refs:** prompt `prompts/2026-09-02_004_verificar-triggers-ci.md`; reporte `reports/2026-09-02_004_verificar-triggers-ci.md`. W-012 sigue abierto hasta corregir el script portátil y obtener CI verde.
+
+---
+
 ## 2026-09-02 · W-012 — Push exitoso; CI no se disparó
 
 **Quién:** agente ejecutor
