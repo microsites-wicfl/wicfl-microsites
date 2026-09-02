@@ -5,6 +5,19 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-02 · W-107 cerrado / W-021 avance — Markdown real y design system
+
+**Quién:** agente ejecutor
+**Qué:** se reemplazó el renderer manual por una content collection de Astro que lee el markdown externo de cada sitio. Los archivos requieren frontmatter de título y tipo de página. El template ahora incluye tokens compartidos, variantes `coastal`, `civic` y `warm`, acento desde config, layout responsive, NAP completo, teléfono visible con enlace E.164 y licencia en todas las páginas.
+
+**Verificación:** `npm run check` validó los tres configs y `npm run build:site -- _example` generó tres páginas. El HTML contiene marca, dirección, teléfono humano, enlace `tel:+17720000000`, licencia y los elementos de markdown ejercitados. La prueba temporal `civic/#7A3E00` cambió clase y token de salida sin código; el fixture se restauró. No se generaron etiquetas `script`.
+
+**Lección:** el loader `glob` de Astro necesita una URL `file:` para contenido externo en Windows; `pathToFileURL` permite sostener el límite entre template y sitio sin duplicar contenido.
+
+**Refs:** prompt `prompts/2026-09-02_007_template-y-markdown.md`; reporte `reports/2026-09-02_007_template-y-markdown.md`; commit `8e4a277` (`feat(template): real markdown pipeline and design system`). W-107 cerrado; W-021 avanza y queda abierto por la restauración pendiente de `astro check`.
+
+---
+
 ## 2026-09-02 · W-026 — Generador aislado de config a sitio y matriz de CI
 
 **Quién:** agente ejecutor
