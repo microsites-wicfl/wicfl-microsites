@@ -5,6 +5,19 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-02 · W-026 — Generador aislado de config a sitio y matriz de CI
+
+**Quién:** agente ejecutor
+**Qué:** se añadió `npm run build:site -- <site-directory>`, que valida config antes de construir con el template Astro compartido, toma markdown externo y escribe `dist/sites/<site-directory>/`. El template muestra config y compliance en todas las páginas; CI valida configs, descubre los sitios afectados y los construye en matriz.
+
+**Verificación:** `_example` produjo `/` y `/about-fixture/` con marca, ciudad, teléfono de tracking, licencia y SEO provenientes del config. Un config temporal inválido salió antes de Astro con el error de propiedad requerida. Dos builds seguidos dieron hashes idénticos. CI verde en el run `33667480670`: validación, descubrimiento y `Build _example` pasaron.
+
+**Lección:** aislar builds por sitio evita que un config malo bloquee dominios independientes, mientras que cambios al template, schema o scripts sí deben reconstruir todos. Entregar config por variables de entorno evita un archivo generado compartido que podría contaminar otro build.
+
+**Refs:** prompt `prompts/2026-09-02_006_generador-new-site.md`; reporte `reports/2026-09-02_006_generador-new-site.md`; commit `0700bde` (`feat(generator): build a site from its config`). W-026 cerrado.
+
+---
+
 ## 2026-09-02 · W-012/W-106 — CI verde y finales de línea normalizados
 
 **Quién:** agente ejecutor
