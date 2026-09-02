@@ -1,0 +1,15 @@
+# Keep repository text reviewable and platform-independent.
+* text=auto eol=lf
+
+# Make the intent explicit for the formats used by the factory.
+*.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.astro text eol=lf
+*.mjs text eol=lf
+
+# Office workbooks are binary; never normalize their bytes.
+*.xlsx binary
