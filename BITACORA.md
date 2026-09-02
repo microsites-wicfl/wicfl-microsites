@@ -5,6 +5,19 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-02 · W-012/W-106 — CI verde y finales de línea normalizados
+
+**Quién:** agente ejecutor
+**Qué:** se entrecomilló el glob de AJV sin cambiar la herramienta ni la validación, se añadió `.gitattributes` para LF y `*.xlsx binary`, y se subieron los cinco commits locales pendientes junto con el fix.
+
+**Verificación:** los tres configs validaron localmente; `git add --renormalize .` seguido de `git diff --cached --ignore-all-space` no mostró cambios de contenido. El push a `main` disparó CI run `33665589246`, evento `push`, y terminó verde: `npm ci`, `npm run check` y `npm run build` pasaron.
+
+**Lección:** un glob que llega intacto a AJV en PowerShell puede ser expandido por Bash antes de invocar la herramienta. Entrecomillarlo conserva la misma validación y la hace portable. En el mismo push, deploy no tuvo workflow run porque sus filtros no incluyen el root `package.json` ni `.gitattributes`; eso es distinto de un job omitido por guard y se deja para evaluación de cowork.
+
+**Refs:** prompt `prompts/2026-09-02_005_arreglar-ci.md`; reporte `reports/2026-09-02_005_arreglar-ci.md`; commit `de4a5ef` (`fix(ci): quote the ajv glob and normalize line endings`). W-012 y W-106 cerrados; W-014 sigue abierto.
+
+---
+
 ## 2026-09-02 · W-012/W-014 — Triggers de CI medidos con un PR desechable
 
 **Quién:** agente ejecutor
