@@ -80,3 +80,59 @@ La cuenta activa de GitHub tiene el scope `repo`, pero GitHub negó acceso de es
 
 - `756556f` — `docs(prompt): prompt 003, conectar el remoto y subir el proyecto` (HEAD que se intentó subir; los 32 commits siguen solo locales).
 - `4f9445f` — `chore(repo): connect origin and push the factory` (registro local del intento bloqueado; tampoco está en remoto).
+
+---
+
+## Revisión de cowork
+
+**Fecha:** 2026-09-02 · **Veredicto: aprobado con hallazgos.** El prompt no se completó, pero
+el ejecutor hizo exactamente lo correcto. El pendiente es de Vic, no del ejecutor.
+
+Revisado contra el diff de `4f9445f` y `d8bf3ef`, y contra el estado real del repo local.
+
+### Qué hizo bien
+
+**Se detuvo en el punto correcto.** El prompt anticipaba un rechazo por historias no
+relacionadas y lo que llegó fue un 403 de autorización, un caso distinto que el prompt no
+cubría. Aplicó la regla de fondo en vez de la letra: detenerse y reportar en lugar de cambiar
+autenticación, membresías o URL por cuenta propia. Un ejecutor menos disciplinado habría
+"resuelto" esto cambiando el remoto a SSH, creando un token nuevo o forzando, y cualquiera de
+las tres habría dejado el proyecto con una identidad de push que nadie decidió.
+
+**El barrido de secretos es real y está bien construido.** Corrió sobre `--all` y no sobre el
+árbol actual, que era el punto, y cubrió cuatro familias de tokens, asignaciones genéricas de
+`password`/`secret`/`api_key`, llaves privadas y archivos `.env` en toda la historia. Output
+vacío, pegado. **Los 34 commits están limpios**, y eso ya no hay que volver a verificarlo.
+
+**Diagnóstico honesto en "qué te sorprendió".** Notó que la cuenta tiene scope `repo` y aun así
+GitHub negó escritura, y concluyó correctamente que eso apunta a membresía de organización o
+SSO y no a scopes del token, sin pretender saber cuál sin intervención del dueño.
+
+**No cerró W-012.** Lo marcó como avance con el estado exacto, que era la instrucción.
+
+### Hallazgo
+
+**Ninguno atribuible al ejecutor.** El bloqueo es una decisión de identidad que estaba
+implícita y nadie había tomado: con qué cuenta se hace push a este repo.
+
+La respuesta correcta es la misma que ya se acordó para Cloudflare: **el buzón de empresa es
+dueño de la organización, y las personas entran con su propia cuenta.** `vitoriomanzarek` se
+agrega como miembro de `microsites-wicfl` con permiso de escritura, y `microsites@wicfl.com`
+se queda como Owner. La alternativa, autenticar la máquina como el buzón compartido, produce
+un historial donde todos los commits los firma un buzón y nadie sabe quién hizo qué, y además
+pone una credencial compartida en la máquina de trabajo.
+
+Esto mismo aplica a Pavel cuando entre: su propia cuenta como miembro, nunca la del buzón.
+
+### Lo que queda pendiente y por qué no es del ejecutor
+
+El push, la corrida de CI y la confirmación de que `deploy.yml` y `preview.yml` no se
+ejecutaron. Los tres dependen del mismo acto: dar acceso. Ninguno se puede verificar antes.
+
+**Se reintenta con `git push -u origin main`, sin force**, y la verificación de CI se hace en
+ese momento. No hace falta un prompt nuevo: es el paso 4 en adelante de este mismo prompt.
+
+### Actualización de backlog por esta revisión
+
+- **W-012** — se agrega la decisión de identidad: el buzón es Owner de la org, las personas
+  entran con su cuenta propia, y eso incluye a Pavel
