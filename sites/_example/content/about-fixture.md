@@ -1,4 +1,8 @@
-# About this fixture
+---
+title: About this fixture
+description: Disposable content page used to confirm external markdown routing.
+pageType: content
+---
 
 This page exists only to verify that `content/about-fixture.md` maps to `/about-fixture/`.
 
