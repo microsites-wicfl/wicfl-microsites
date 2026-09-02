@@ -5,6 +5,19 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-02 · W-012 — Push exitoso; CI no se disparó
+
+**Quién:** agente ejecutor
+**Qué:** con la membresía de `vitoriomanzarek` ya concedida, se hizo `git push -u origin main` sin force. La historia local llegó a `microsites-wicfl/wicfl-microsites` y GitHub confirmó `main` como rama por defecto.
+
+**Verificación:** los workflows `Validate and build`, `Deploy Cloudflare Workers` y `Preview deploy` aparecen activos, pero GitHub Actions devolvió cero runs y el HEAD remoto no tiene check runs. Por tanto, deploy y preview no se ejecutaron, pero tampoco hubo CI verde que permita cerrar W-012.
+
+**Lección:** que un workflow exista y esté activo no garantiza que el primer push lo dispare; hay que verificar el run real, especialmente cuando los filtros de paths excluyen el último commit de la rama.
+
+**Refs:** prompt `prompts/2026-09-01_003_conectar-remoto.md`; reporte `reports/2026-09-01_003_conectar-remoto.md`. W-012 sigue abierto hasta que exista una corrida verde de CI.
+
+---
+
 ## 2026-09-02 · W-012 — Remoto configurado, push bloqueado por permisos
 
 **Quién:** agente ejecutor

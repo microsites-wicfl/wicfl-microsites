@@ -136,3 +136,48 @@ ese momento. No hace falta un prompt nuevo: es el paso 4 en adelante de este mis
 
 - **W-012** — se agrega la decisión de identidad: el buzón es Owner de la org, las personas
   entran con su cuenta propia, y eso incluye a Pavel
+
+## Continuación 2026-09-02
+
+### Verificación real
+
+El reintento autorizado se ejecutó sin force:
+
+```text
+branch 'main' set up to track 'origin/main'.
+To https://github.com/microsites-wicfl/wicfl-microsites.git
+ * [new branch]      main -> main
+```
+
+GitHub confirma que `main` es la rama por defecto:
+
+```text
+main
+```
+
+La consulta de workflows confirmó que los tres están activos, pero no existe ninguna corrida:
+
+```text
+Validate and build          active
+Deploy Cloudflare Workers   active
+Preview deploy              active
+0
+```
+
+Las consultas de `gh run list` para `ci.yml`, `deploy.yml` y `preview.yml` no devolvieron filas. La consulta de check runs para el HEAD remoto (`1626f402f73bb4dbc86130f09abf18ff2d93766a`) también devolvió `0`.
+
+### Lo que no pude verificar
+
+No hubo corrida de `ci.yml` que inspeccionar ni aprobar. Por la ausencia total de runs, tampoco hay evidencia de ejecución de `deploy.yml` o `preview.yml`; esto confirma que no corrieron, pero impide comprobar el comportamiento de sus guards `if: ${{ false }}` dentro de un run.
+
+### Dónde dudé
+
+El objetivo pide una corrida verde de CI, pero el push creó la rama y GitHub registró cero runs pese a que los workflows están activos. No despaché `ci.yml` manualmente: el encargo pidió verificar la corrida disparada por el push, no iniciar una vía alternativa. Tampoco modifiqué el filtro de paths ni YAML sin un log de fallo de CI que lo justificara.
+
+### Qué me sorprendió
+
+El push inicial de una rama nueva dejó los tres workflows registrados como activos, pero no produjo un run de Actions. El último commit de la rama antes del push era de documentación, que no coincide con los filtros de `ci.yml`; esa es una explicación plausible, pero no se puede confirmar solo con las respuestas de GitHub obtenidas aquí.
+
+### Estado de W-012
+
+El remoto ya contiene la historia en `main`, sin force push, y `main` es la rama por defecto. W-012 sigue abierto únicamente porque no hay una corrida verde de CI que satisfaga el criterio de cierre.
