@@ -92,3 +92,85 @@ No se añadió diseño, CSS elaborado, ruteo bilingüe, `hreflang`, deploy de Wo
 ## Commits
 
 - `0700bde` — `feat(generator): build a site from its config`
+
+---
+
+## Revisión de cowork
+
+**Fecha:** 2026-09-02 · **Veredicto: aprobado con hallazgos.** El entregable queda; salen dos
+cosas para el Bloque A, una de ellas con fecha límite real.
+
+Revisado contra el diff de `0700bde`, leyendo `build-site.mjs`, `site-data.mjs`,
+`changed-sites.mjs`, `BaseLayout.astro`, `[...slug].astro` y `ci.yml`.
+
+### Qué hizo bien
+
+**El template no se copió a ningún lado.** `sites/_example/` contiene tres archivos: el config
+y dos markdown. Cero código. Esa era la trampa principal y la esquivó por diseño, no por suerte:
+el config viaja por variables de entorno al proceso de Astro, así que el template sigue existiendo
+una sola vez en el repo.
+
+**Un build por sitio, con el razonamiento correcto.** La decisión se justificó por aislamiento de
+fallos y no por velocidad: un config malo detiene su propio artefacto y no los otros 99. Y ese
+razonamiento se llevó hasta el YAML, con `fail-fast: false` en la matriz, que es la mitad que se
+suele olvidar.
+
+**Determinismo verificado de verdad, no afirmado.** Dos builds consecutivos, hashes SHA-256
+idénticos por archivo. Y de paso nombró el riesgo futuro correcto: si más adelante hay assets con
+bundling, Astro puede meter hashes y Gate A tendrá que repetir la comprobación sobre el artefacto
+completo. Ese aviso vale más que la comprobación de hoy.
+
+**La matriz de CI quedó hecha**, aunque el prompt daba permiso explícito de posponerla. Y quedó
+bien: cambio en entradas compartidas construye todos los sitios, cambio en un sitio construye solo
+ese, y si no puede calcular el diff cae a construir todo, que es el lado correcto en el que fallar.
+
+**El mapeo de markdown no toca `serviceArea`.** Lo dijo explícitamente. Era la trampa de la
+pregunta 4 y no cayó.
+
+### Hallazgo 1: la plantilla muestra el teléfono en formato de máquina
+
+El pie de página renderiza `site.contact.trackingPhone`, que es E.164: un visitante ve
+`+17720000000`. El schema tiene `displayPhone` justo para esto, con `(772) 000-0000`, y ese campo
+**no se usa en ninguna parte del template**. Lo correcto es mostrar `displayPhone` como texto
+visible y usar `trackingPhone` en el `href="tel:"`.
+
+Tampoco se renderiza `contact.address`, y `docs/CONTENT_STANDARDS.md` tiene la consistencia de NAP
+como regla permanente: nombre, dirección y teléfono deben coincidir exactamente con el Google
+Business Profile, y la inconsistencia suprime rankings locales activamente. Hoy la plantilla
+publica dos de los tres, uno de ellos mal formateado.
+
+No rompe nada hoy porque no hay sitio público. Se arregla en W-021, que es el siguiente item del
+Bloque A y el que toca el template en serio. Queda anotado ahí como corrección obligatoria, no
+como mejora.
+
+### Hallazgo 2: el renderer de markdown es propio, y contradice la razón por la que elegimos Astro
+
+`markdownToHtml` en `site-data.mjs` maneja párrafos, `h2`, `h3` y saltos de línea. **No maneja
+enlaces, listas, negritas, imágenes ni tablas.** Un guion al inicio de una línea sale como texto.
+
+Dos razones por las que esto no se queda:
+
+Primero, `docs/ARCHITECTURE.md` justifica la elección de Astro citando explícitamente sus content
+collections como una de las capacidades que lo hacían mejor que HTML plano. Este renderer las
+esquiva, así que estamos pagando el framework y no usando la parte que lo justificaba.
+
+Segundo, y más concreto: **Pavel escribe contenido de seguros a partir del 21 de septiembre.** Una
+página de coberturas es, en la práctica, una lista con enlaces. Si escribe una lista y sale un
+párrafo con guiones, lo descubre él, escribiendo, y la respuesta va a ser pedirle a Vic que toque
+el template, que es exactamente la dependencia que el handoff existe para cortar.
+
+Es aceptable como versión mínima de hoy y está dentro de lo que el prompt pedía. **No es aceptable
+que llegue al 21 de septiembre.** Se abre como **W-107** con esa fecha límite.
+
+### Observación menor
+
+`localeCompare` para ordenar archivos depende del ICU del entorno. En la práctica con nombres
+ASCII no va a variar entre Windows y el runner de Linux, pero si algún día un slug lleva acentos,
+el orden podría diferir y con él el output. Un `sort()` simple sería inmune. No amerita item; queda
+dicho por si aparece un desorden inexplicable.
+
+### Actualizaciones de backlog por esta revisión
+
+- **W-107** — nuevo: renderer de markdown real, con fecha límite del 18 de septiembre
+- **W-021** — corrección obligatoria: `displayPhone` visible con `tel:` sobre `trackingPhone`, y
+  la dirección en el template por la regla de NAP
