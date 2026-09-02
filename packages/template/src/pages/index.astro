@@ -1,11 +1,11 @@
 ---
-import { getEntry, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { site } from "../lib/site-data.mjs";
-const page = await getEntry("pages", "index");
-if (!page) throw new Error("Missing required content page: index.md");
-const { Content } = await render(page);
+import { pageByRoute, site } from "../lib/site-data.mjs";
+
+const page = pageByRoute("/");
 ---
-<BaseLayout title={site.seo.title} description={page.data.description ?? site.seo.description} pageType={page.data.pageType}>
-  <article class="page-content"><h1>{page.data.title}</h1><Content /></article>
+
+<BaseLayout title={site.seo.title} description={site.seo.description}>
+  <h1>{page.title}</h1>
+  <Fragment set:html={page.html} />
 </BaseLayout>
