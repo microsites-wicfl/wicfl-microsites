@@ -5,6 +5,59 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-03 · W-014/W-098 avance — Cloudflare verificado de punta a punta, bug de secrets corregido
+
+**Quién:** Vic + cowork, en conversación directa (no por el flujo de prompts/reports; ver nota
+de proceso abajo)
+
+**Qué:** Vic creó el API Token de Workers (plantilla "Edit Cloudflare Workers") y confirmó que
+`CLOUDFLARE_API_TOKEN` y `CLOUDFLARE_ACCOUNT_ID` ya estaban en los secrets de GitHub. Al revisar
+el repo antes de dar por bueno ese paso, cowork encontró que `deploy.yml` y `preview.yml` nunca
+iban a autenticar aunque se activaran: al paso `npx wrangler deploy` le faltaba el bloque `env:`
+que pasa esos dos secrets. Se corrigió en ambos workflows sin tocar su `if: ${{ false }}`.
+
+Para probar los secrets de verdad (no solo que existieran) se agregó un workflow desechable de
+solo `workflow_dispatch` (`smoke-test-deploy.yml`) con su propio `wrangler.smoke-test.toml`, que
+despliega el fixture `_example` a un Worker de prueba. El primer intento reveló que la cuenta
+nueva no tenía subdominio `workers.dev` registrado; Vic lo registró desde el dashboard
+(`wicfl-microsites.workers.dev`). El segundo intento falló con `[code: 10007]` ("this Worker
+does not exist"), consistente con un retraso de propagación justo después de crear el Worker por
+primera vez. El tercer intento quedó en verde:
+`https://wicfl-microsites-smoke-test.wicfl-microsites.workers.dev`. Con eso confirmado, se borró
+el workflow desechable, su `.toml` y el Worker de prueba en el dashboard.
+
+**Verificación:** run de GitHub Actions en verde del workflow desechable, con el log de
+`wrangler deploy` mostrando la subida de los 3 assets y la URL del Worker. Log completo del
+intento fallido por el subdominio faltante y del intento fallido por `[code: 10007]` disponibles
+en el historial de Actions del repo (no se pegaron aquí; se resumen porque no quedó reporte
+formal — ver nota de proceso).
+
+**Nota de proceso:** este trabajo se hizo por chat directo entre Vic y cowork, operando el repo
+vía el bridge del escritorio, no por el flujo `prompts/` → ejecutor → `reports/` que define
+`prompts/00_GUIA_GLOBAL.md`. Es trabajo de producto (workflows de CI, `wrangler.toml`) y por
+regla debería haber ido por ahí. No hay `reports/2026-09-03_*.md` con la verificación completa
+pegada; esta entrada de bitácora es el único registro. Se anota como hueco de proceso, no se
+repite: la próxima vez que haga falta iterar contra la cuenta real de Cloudflare (el deploy real
+de W-014, cuando existan dominios), ese si debe ir por un prompt con reporte, aunque implique
+más ida y vuelta con Vic para pegar logs de la consola de GitHub.
+
+**Otro detalle del bridge:** el commit se hizo vía el bridge del escritorio, pero el bridge corre
+en una VM Linux separada de Windows y no tiene las credenciales de git de Vic, así que
+`git push` falló pidiendo usuario/contraseña. Vic ejecutó el push desde su propia terminal en
+ambos commits. Confirma la limitación ya anotada en `CLAUDE.md` sobre lo que el bridge no puede
+hacer solo.
+
+**Lección:** un workflow con `if: ${{ false }}` puede ocultar un bug real indefinidamente —
+`deploy.yml` llevaba desde el 31 de agosto sin el `env:` de los secrets y nadie lo iba a notar
+hasta activarlo en producción, porque un job que nunca corre nunca falla. Vale la pena revisar el
+contenido de un job desactivado, no solo su condición, antes de darlo por listo para activarse.
+
+**Refs:** commits `997ae7a` (`feat(deploy): add disposable Cloudflare smoke test + fix missing
+wrangler env secrets`) y `8cfe5ac` (`chore(deploy): remove disposable Cloudflare smoke test after
+successful verification`). Sin prompt ni reporte formal — ver nota de proceso arriba.
+
+---
+
 ## 2026-09-02 (cierre del día) · Session wrap
 
 **Quién:** Vic + cowork
