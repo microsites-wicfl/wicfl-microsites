@@ -24,4 +24,8 @@ jobs:
       - run: npm run build
       # Enable after W-092/W-010 and use a scoped CLOUDFLARE_API_TOKEN plus
       # CLOUDFLARE_ACCOUNT_ID. W-014 will define the Worker preview name and URL output.
-      - run: npx wrangler deploy --config wrangler.toml --env preview
+      - name: Deploy preview to Cloudflare Workers
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy --config wrangler.toml --env preview
