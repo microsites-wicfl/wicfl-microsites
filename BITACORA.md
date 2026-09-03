@@ -5,6 +5,58 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-03 · W-095 decidido / W-021 avance — Autorrevisión de Pavel y rediseño del template
+
+**Quién:** Vic + cowork, en conversación directa (mismo hueco de proceso anotado en la entrada
+anterior de hoy: sin prompt ni reporte formal)
+
+**Qué:** Vic decidió W-095 directamente en vez de esperar a Kevin: no hay más gente disponible,
+así que Pavel se autorrevisa contra un checklist antes de publicar cada página, y puede pedirle
+opinión informal a Kevin cuando algo sea ambiguo, sin que eso sea un gate oficial. Se agregó ese
+checklist a `docs/CONTENT_STANDARDS.md` (licencia visible, NAP consistente, sin claims de
+cobertura absolutos, naming de entidad correcto, sin precios firmes sin aprobar, swap test, y
+sin interpretaciones legales que solo un agente licenciado debería afirmar). W-095 sale de los
+bloqueadores de Kevin y pasa a Done con esa resolución.
+
+Por separado, Vic pidió mejorar la estética del template compartido, que hasta hoy era serif
+completo, plano, sin profundidad, y con las tres variantes diferenciadas solo por un tono de
+fondo casi idéntico (el riesgo que W-021 ya había anotado el 2 de septiembre). Se rediseñó
+`BaseLayout.astro`: tipografía sans para cuerpo y serif solo en encabezados, header sticky con
+ícono y CTA de teléfono en píldora, footer a tres columnas, tabla y blockquote con más
+jerarquía, y las tres variantes ahora difieren en forma y profundidad además de color (radios de
+esquina, sombra, grosor de borde), no solo en el tinte de `--variant-surface`. Se verificó con un
+build real: se clonó el repo público en un entorno Linux limpio (para no tocar el `node_modules`
+de Windows de Vic, que no es compatible con este bridge), se instaló y se construyó el fixture
+`_example`, y se capturaron pantallas de home, coverage y las tres variantes con Playwright antes
+de aplicar el archivo al repo real. Las capturas se mandaron a Vic para su visto bueno.
+
+**Verificación:** `npm run build` corrió limpio en el clon temporal; capturas de las tres
+variantes muestran diferenciación real de forma (pill+sombra en coastal, esquinas cuadradas sin
+sombra en civic, radio medio cálido en warm), no solo de color. No se corrió build en el árbol
+real de Vic porque el bridge corre en una VM Linux separada de Windows y su `node_modules` tiene
+binarios nativos de la plataforma equivocada (`@rollup/rollup-linux-x64-gnu` faltante); Vic
+necesita correr `npm run build` o `npm run dev` en su propia máquina para regenerar `dist/` con
+el nuevo diseño.
+
+**Nota de proceso:** igual que la entrada anterior de hoy, este es trabajo de producto
+(`packages/template`, `docs/CONTENT_STANDARDS.md`) hecho por chat directo vía el bridge, no por
+el flujo `prompts/` → ejecutor → `reports/`. Se repite el hueco ya anotado hoy; no hay reporte
+formal de este trabajo, esta entrada de bitácora es el único registro.
+
+**Lección:** verificar un cambio de CSS/build en una copia limpia del repo, en vez de confiar en
+que se ve bien solo por leer el código, encontró un problema real de inmediato: el CSS del
+template pasó el umbral donde Astro deja de inlinearlo y empieza a servirlo como archivo externo
+(`/_astro/*.css`), así que cualquier copia de las páginas construidas que no incluya esa carpeta
+sale sin estilos. No afecta el build real (que sirve todo desde su propia raíz), pero sí explica
+por qué copiar HTML suelto para comparar variantes falló en el primer intento.
+
+**Refs:** sin commit ni prompt/reporte formal todavía; los tres archivos modificados
+(`BACKLOG.md`, `docs/CONTENT_STANDARDS.md`, `packages/template/src/layouts/BaseLayout.astro`)
+quedan comprometidos localmente al cierre de esta entrada, pendientes del commit de cowork y el
+push de Vic.
+
+---
+
 ## 2026-09-03 · W-014/W-098 avance — Cloudflare verificado de punta a punta, bug de secrets corregido
 
 **Quién:** Vic + cowork, en conversación directa (no por el flujo de prompts/reports; ver nota

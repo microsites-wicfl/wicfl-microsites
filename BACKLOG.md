@@ -12,7 +12,6 @@ Formato de id: `W-NNN` · Última actualización: 2026-08-26 (revisión de arqui
 | id | Item | Dueño | Debido | Bloquea |
 |---|---|---|---|---|
 | W-008 | **Assets de marca de Walker**: logo, contacto aprobado, disclosures requeridos, license numbers | Kevin | 2026-09-04 | Sitio #1 no puede publicar sin esto. *(aporte de Pavel)* |
-| W-095 | **Quién revisa el contenido de Pavel antes de publicar** | Kevin | 2026-09-04 | Pavel es escritor, SEO lead y project lead. Sin segundo par de ojos, nadie valida claims de cobertura ni compliance de Florida. Una revisión por sitio, no un cuello de botella |
 
 ---
 
@@ -153,3 +152,4 @@ dentro de octubre sin tocar el handoff ni el 21 de septiembre.
 | W-092 | Correo de empresa que gestiona el proyecto | 2026-09-01 | **`microsites@wicfl.com`**, creado por Kevin. Desbloquea W-010, W-012, W-101 y toda la Fase 1. La credencial llegó por el chat de Zoom, así que **se rota en el primer login y la nueva vive solo en el vault**; ver W-010 |
 | W-096 | Qué CRM usa WICFL | 2026-08-26 | **GoHighLevel con sub-account propia**, no la instancia de WAGS. Desbloquea W-025. Queda como tarea de Vic dar de alta la sub-account y sacar credenciales, no como pregunta a Kevin |
 | W-001 | Quote escrito de GoTo por número mensual | 2026-08-25 | **$0.99 por número.** $1,188/año a 100 números, por debajo de la ruta de forwarding. Se compran directo en GoTo, se descarta Twilio. Ver `docs/COST_MODEL.md` |
+| W-095 | Quién revisa el contenido de Pavel antes de publicar | 2026-09-03 | **Decidido por Vic, no por Kevin: no hay más gente disponible.** Pavel se autorrevisa contra el checklist de cumplimiento de `docs/CONTENT_STANDARDS.md` antes de publicar cada página. Puede pedirle una segunda opinión a Kevin de manera informal cuando algo sea ambiguo, pero no es un paso oficial ni bloquea el publish. Se retira de los bloqueadores de Kevin; se revisita si el portafolio crece más allá de los tres sitios piloto, porque a veinte sitios la misma persona escribiendo, optimizando y aprobando compliance deja de ser sano |

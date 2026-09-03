@@ -1,6 +1,6 @@
 # Content standards
 
-**Version 1.1 · 26 Aug 2026. The differentiation check now has two anchors: by hand while writing, by CI before deploy.**
+**Version 1.2 · 3 Sep 2026. Added a self-review checklist for Pavel to run before every publish, since there is no dedicated second reviewer yet.**
 
 ## The swap test
 
@@ -74,6 +74,43 @@ looks for. The mechanism is what gets caught, not the intent behind it.
 **Spanish specifically:** written in Spanish from scratch by a fluent writer. Not translated,
 not generated from an English brief. In the Miami and Broward market the difference is obvious
 to a reader in one paragraph, and credibility is the entire product for an insurance site.
+
+## Self-review checklist, since there is no second reviewer yet
+
+Decided 2026-09-03. Pavel is writer, SEO lead and project lead at once, and there is no one
+else on the team to add as a dedicated content reviewer right now. Rather than leave that gap
+open, Pavel reviews his own content against this checklist before every page publishes. He can
+ask Kevin for an informal second opinion when something feels ambiguous, but that is his call
+to make, not a required approval step, and it does not block a publish.
+
+**This is a floor, not a substitute for licensed compliance review.** If the portfolio grows
+past the three pilot sites, one person writing, optimizing and self-approving Florida insurance
+copy stops being workable and needs a real second reviewer. See the resolution on backlog item
+W-095.
+
+Before a page goes live, check:
+
+1. **License number is correct and visible.** The template renders it automatically from
+   `site.config.json` on every page, so this is really a check that the config has the right
+   number, not something to add by hand.
+2. **NAP matches exactly.** Name, address and phone as written on the page match the Google
+   Business Profile character for character. A mismatch actively suppresses local rankings, not
+   just a compliance nitpick.
+3. **No guaranteed or absolute coverage claims.** Phrases like "guaranteed approval," "always
+   covered," or "lowest rate guaranteed" are the kind of claim Florida advertising rules and
+   Google both treat as misleading. Prefer qualified language: what the policy generally covers,
+   what affects eligibility, what to confirm with an agent.
+4. **Entity naming is correct.** The page names the actual licensed entity selling the policy,
+   using the approved naming from Walker's brand assets (W-008), not an invented or informal name.
+5. **No specific price or quote stated as a firm offer** unless it was explicitly approved for
+   that page. General cost ranges and "get your quote" framing are fine; a number presented as a
+   binding offer is not.
+6. **Ran the swap test.** See above and the `differentiation-audit` skill. This is unrelated to
+   compliance but belongs in the same pre-publish pass since it also happens page by page.
+7. **Nothing reads like a legal or policy interpretation only a licensed agent should assert.**
+   Specific exclusions, edge cases, or legal interpretation get softened to general, educational
+   framing rather than stated as settled fact. When in doubt, that is exactly the kind of thing
+   worth a quick message to Kevin, informally, before publishing rather than after.
 
 ## Page count guidance
 
