@@ -5,6 +5,41 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-03 · Kevin destraba pago y dominio del sitio #1 (con un hueco de proceso)
+
+**Quién:** Kevin, por el chat de Zoom; registrado por cowork
+
+**Qué:** Kevin confirmó el método de pago capturado (W-093, cerrado) y anunció que
+**StuartHomeownersInsurance.com ya está comprado** ("we own it"), con el nicho asignado
+directo por él a Pavel: homeowners insurance en Stuart, enfocado en propiedades de alto valor,
+frente al agua y costeras. Dijo que el número de teléfono único llega después (toca a W-024
+cuando exista).
+
+**El hueco:** `docs/ARCHITECTURE.md` fija el orden a propósito: W-016, la validación SEO de
+Pavel, corre **antes** de comprar cualquier dominio, precisamente para no gastar en un mercado
+dominado por agregadores sin ángulo local. No hay evidencia de que corriera antes de esta
+aprobación; Kevin fue directo de decisión a compra. El nicho que llegó ya es específico
+("alto valor, frente al agua, costero"), lo que baja el riesgo respecto al escenario que
+`ARCHITECTURE.md` describe, pero no lo reemplaza. No es motivo para frenar nada, sí para que
+Pavel corra W-016 en retroactivo esta semana: cuesta días hacerlo ahora, cuesta el Gate B
+completo descubrirlo en marzo.
+
+**Lo que esto desbloquea:** con dominio real existente, ya se puede avanzar la parte técnica de
+W-011/W-013/W-014 que hasta hoy no tenía nada contra qué apuntar: agregar la zona en Cloudflare,
+confirmar o cambiar nameservers, y escribir el `wrangler.toml` real con el nombre de Worker y la
+ruta de este dominio. Es también lo que hace cobrable la promesa que se le hizo a Kevin en el
+update de hoy: demo en vivo dentro de un día una vez que exista el primer dominio.
+
+**Lo que falta confirmar:** con qué registrador se compró el dominio (determina si el siguiente
+paso es solo apuntar nameservers a Cloudflare o algo más), y si Pavel ya está al tanto del nicho
+asignado para empezar a escribir cuando arranque el 21 de septiembre.
+
+**Refs:** W-093 cerrado; W-007 y W-003 avanzan con la nota de riesgo arriba; W-011 anota el
+dominio pero sigue abierto hasta confirmar el registrador. Sin prompt/reporte formal, mismo
+hueco de proceso ya anotado en las dos entradas anteriores de hoy.
+
+---
+
 ## 2026-09-03 · W-095 decidido / W-021 avance — Autorrevisión de Pavel y rediseño del template
 
 **Quién:** Vic + cowork, en conversación directa (mismo hueco de proceso anotado en la entrada
