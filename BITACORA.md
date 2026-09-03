@@ -5,6 +5,29 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-03 · Zona de Cloudflare creada para StuartHomeownersInsurance.com
+
+**Quién:** Vic, en vivo por el dashboard de Cloudflare; registrado por cowork
+
+**Qué:** Con el dominio ya comprado por Kevin en GoDaddy (ver entrada anterior), Vic corrió
+"Add a Site" en Cloudflare en vez de pedir acceso a la cuenta de GoDaddy, específicamente para
+generar los nameservers propios del dominio sin tocar credenciales de Kevin. Se dejaron los
+valores por defecto de política de bots de IA (Search=Allow, Agent=Allow, Training=Block en
+páginas con ads, Block training en robots.txt=ON) y la importación automática de DNS. Cloudflare
+detectó GoDaddy como registrador y asignó `ashley.ns.cloudflare.com` y `ram.ns.cloudflare.com`
+para reemplazar `ns77.domaincontrol.com` / `ns78.domaincontrol.com`.
+
+**Qué falta:** Mandar esos dos nameservers a Kevin para que los cambie él mismo en GoDaddy (ver
+BACKLOG.md W-011). Solo después de que Kevin confirme el cambio, Vic da clic en "I updated my
+nameservers" del lado de Cloudflare. Una vez propague, reemplazar los 2 registros A que hoy
+apuntan al parking de GoDaddy por el Worker real, y borrar el CNAME `_domainconnect` que ya no
+sirve para nada.
+
+**El hueco:** igual que la entrada anterior, esto se está ejecutando por chat en vivo, sin
+prompt/reporte formal en `prompts/`/`reports/`. Se documenta aquí para no perder el rastro.
+
+---
+
 ## 2026-09-03 · Kevin destraba pago y dominio del sitio #1 (con un hueco de proceso)
 
 **Quién:** Kevin, por el chat de Zoom; registrado por cowork
