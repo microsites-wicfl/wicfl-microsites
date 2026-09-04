@@ -28,6 +28,45 @@ hasta que Vic lo monte; no se cierra por escribir la guía.
 
 ---
 
+## 2026-09-04 · `docs/OPERATOR_GUIDE.md`: la guía de Pavel, avance de W-102
+
+**Quién:** cowork, a pedido de Vic
+
+**Qué:** W-102 llevaba abierto desde el 28 de agosto con un diagnóstico ya escrito: la confusión
+de Pavel no era técnica. Su propio documento de planeación proponía contenido generado desde
+briefs de IA y sitios construidos a mano, o sea que se imaginaba un trabajo distinto al que este
+framework asume. El ítem se separó en dos tiempos — orientación primero, capacitación técnica
+después — porque la segunda parte dependía de que el schema y el repo existieran. Ya existen los
+dos, así que hoy se escribieron ambas partes juntas en `docs/OPERATOR_GUIDE.md`:
+
+- **La orientación** nombra directo las dos señas del documento de Pavel que chocan con la
+  realidad del framework — contenido desde briefs, sitios armados a mano — y explica por qué
+  ninguna de las dos era un error suyo: nadie se lo había dicho antes de que lo escribiera. Deja
+  claro qué toca (`sites/<slug>/site.config.json` y su `content/`) y qué nunca toca (el template
+  compartido, el schema, los scripts, los workflows, y el `sites/` de cualquier otro).
+- **La guía técnica** describe los cinco pasos de una semana real durante el sitio #1 (brief →
+  escribir markdown corriendo `differentiation-audit` por página → push de rama → preview
+  automático → checklist de QA → merge), con una tabla de qué documento de referencia abrir para
+  qué, en vez de repetir el contenido de `docs/SITE_CONFIG_SCHEMA.md`, `docs/CONTENT_STANDARDS.md`
+  o `docs/QA_CHECKLIST.md` y arriesgar que se desincronicen.
+
+**De paso, un hallazgo:** `docs/SETUP.md`, al que la nueva guía apunta para el pipeline de
+deploy, seguía diciendo que los preview deploys estaban "intencionalmente desactivados" — cierto
+hasta ayer, falso desde que W-098 los activó hoy mismo. Se actualizó para describir la realidad
+actual: preview deploys en vivo, producción construida pero apagada a propósito
+(`deploy.yml` en `if: false`) hasta que un sitio real no tenga datos de placeholder. Se agregaron
+`OPERATOR_GUIDE.md`, `SETUP.md` y `QA_CHECKLIST.md` al índice de `docs/README.md`, que no los
+tenía listados.
+
+Commit pendiente de este mismo movimiento.
+
+**El hueco:** esto no cierra W-102. El criterio real de cierre es si la guía responde las
+preguntas de Pavel sin que Vic tenga que volver a explicarlo — y eso no se sabe hasta que Pavel
+la lea, lo cual todavía no pasó. W-028 (la sesión de orientación en vivo, 17-sep) sigue abierta
+también. Y de nuevo, ejecución por chat en vivo sin prompt/reporte formal.
+
+---
+
 ## 2026-09-04 · Revisión contra el plan maestro: dónde estamos y qué falta
 
 **Quién:** cowork, a pedido de Vic. Releyó el documento original del 24 de agosto (la respuesta

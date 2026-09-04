@@ -1,6 +1,7 @@
 # Local setup and deployment handoff
 
-This repository is the WICFL microsite factory. The shared Astro template runs locally without a Cloudflare account or a real domain.
+**Updated 4 Sep 2026.** This repository is the WICFL microsite factory. The shared Astro
+template runs locally without a Cloudflare account or a real domain.
 
 ## Run the template locally
 
@@ -13,24 +14,51 @@ This repository is the WICFL microsite factory. The shared Astro template runs l
 
 To check the current contract, run `npm run check`. To generate the fixture site, run `npm run build`; the generator writes it to `dist/sites/_example/`. To build another site, create only `sites/<site-directory>/site.config.json` and markdown in `sites/<site-directory>/content/`, then run `npm run build:site -- <site-directory>`.
 
-The reusable bilingual fixture is `sites/_example/site.config.json`. It deliberately has English as its primary language and Spanish as an alternate so future bilingual routing can be tested even though the two pilots are independent monolingual sites. Do not treat it as a real site or publish its placeholder details.
+The reusable bilingual fixture is `sites/_example/site.config.json`. It deliberately has English as its primary language and Spanish as an alternate so bilingual routing has a real exercised test case, even though the two pilots are independent monolingual sites. Do not treat it as a real site or publish its placeholder details.
 
-## How preview deploys will work for Pavel
+## How preview deploys work for Pavel
 
-After Cloudflare is connected, Pavel changes only a site's `site.config.json` or markdown, creates a branch, and pushes it. GitHub Actions validates the configuration and builds the changed site. A successful run posts a temporary preview URL on the pull request; Pavel opens that URL to review the rendered site before merging. The branch is merged only after review, then the production workflow deploys the approved site.
+**Live as of 4 Sep 2026 (W-098).** Push a branch, open a pull request, and GitHub Actions
+discovers which sites changed, validates the configuration, and builds each one. A successful
+run deploys the site to its own ephemeral Worker and posts the URL as a comment on the pull
+request, updating that same comment on every later push instead of adding a new one. Open the
+URL to review the rendered site before merging. When the pull request closes, the preview Worker
+is deleted automatically, so nothing accumulates against the account's Worker limit.
 
-Today, the preview workflow is intentionally disabled. It is a documented connection point, not a working deployment.
+No local dev server is required for this. `npm run dev` above still works and is useful for fast
+iteration, but the pull request preview is the reviewable, shareable link.
 
-## Pending until the Cloudflare account exists
+This has been verified to build and deploy correctly, but not yet exercised end to end with a
+real pull request. If something about it doesn't work as described, that is exactly the kind of
+gap Gate A's question-logging (`docs/SCHEDULE.md`) exists to catch — flag it rather than working
+around it silently.
 
-Complete these steps only after W-092 supplies the company mailbox and W-010 creates the WICFL account:
+## How production deploys work
 
-1. Create the WICFL Cloudflare account with the company mailbox, required administrators, 2FA, and recovery-code handling defined in W-010.
-2. Create a scoped API token limited to the Workers resources required for deployment. Never use a Global API Key.
-3. Add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` as GitHub repository secrets; do not place them in files or workflow YAML.
-4. Create the Workers Static Assets configuration (`wrangler.toml`), choose Worker names and pod-to-route mapping, and configure production routes/custom domains after domain work is approved.
-5. Enable `.github/workflows/deploy.yml`, replacing its placeholder Worker configuration with the approved production configuration.
-6. Enable `.github/workflows/preview.yml`, define unique branch preview Worker names and the URL that GitHub Actions reports to the pull request.
-7. Run one preview deploy and one production deploy with a non-production fixture before relying on the flow for Pavel's content work.
+**Built (W-014), not yet turned on for a real site.** Sites are grouped into pods of up to ~25
+per Cloudflare Worker (`docs/ARCHITECTURE.md`, "Grouping" decision) instead of one Worker per
+site. `pods/pod-1.json` lists which site slugs belong to that pod; `wrangler.pod-1.toml` is its
+real deploy configuration, including the custom domain routes for each site in it.
+`.github/workflows/deploy.yml` builds the pod and deploys it to Cloudflare on every push to
+`main`, but the job is currently disabled (`if: false`). It stays off until a real site's config
+has no placeholder data left (license number, analytics IDs, tracking phone) — the
+production-readiness gate below would reject it anyway if it didn't.
 
-GitHub Actions cannot perform a Cloudflare deploy until those secrets and Worker configuration exist.
+Before it deploys, `deploy.yml` runs `scripts/check-production-config.mjs` against every site
+actually listed in the pod being deployed. This rejects known placeholder patterns
+(`PLACEHOLDER`, `PENDING_`, an unconfigured tracking phone) so a site cannot go live showing a
+fake license number or an unset GA4 ID. It does not run in the preview pipeline, on purpose:
+legitimately iterating with pending fields while writing is fine, shipping them to production
+is not.
+
+**Adding a site to production:** add its slug to the relevant pod's JSON file, add its domain as
+a `[[routes]]` pair in that pod's `wrangler.*.toml`, and make sure its config has no placeholder
+data left before `deploy.yml` is enabled for it.
+
+## Cloudflare account status
+
+The account used for the deploys above exists and is verified working end to end (DNS, zone,
+Worker deploys). It is not yet the fully governed account W-010 describes: two Super
+Administrators, Pavel as Administrator, 2FA, and recovery codes in a shared vault rather than in
+chat history. See `BACKLOG.md` items W-010 and W-105, and `docs/VAULT_SETUP_CHECKLIST.md`, for
+where that stands.
