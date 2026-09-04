@@ -5,6 +5,36 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-04 · W-022 y W-103 cerrados, avanzando en Bloque A sin convocar al equipo todavía
+
+**Quién:** cowork, trabajando en pendientes de infraestructura mientras Vic decide cuándo mostrar
+avance al equipo
+
+**Qué:** Vic pidió seguir sacando pendientes del Bloque A (lo que Pavel necesita para el handoff
+del 18 de septiembre) antes de convocar a nadie, y mostrar todo junto con instrucciones
+específicas cuando esté listo. Se cerraron dos items:
+
+**W-022, ruteo bilingüe.** Solo los locales no-primarios llevan prefijo de URL; ningún sitio
+piloto real cambia de ruta porque ambos tienen `alternates: []`. Se ejercitó dándole a
+`sites/_example` (ya configurado bilingüe desde antes) contenido real en español. Se encontró un
+bug real en el camino: el glob loader de Astro colapsa `content/es/index.md` al id `"es"`, no
+`"es/index"` como asumía la primera versión, lo que rompía tanto la ruta (quedaba `/es//`, con
+doble slash) como el cruce de `hreflang` entre idiomas. Corregido y verificado con capturas del
+HTML generado para las 5 páginas del fixture (home y about en ambos idiomas, coverage solo en
+inglés a propósito, para probar también el caso sin contraparte).
+
+**W-103, gate de validación de producción.** `scripts/check-production-config.mjs` rechaza
+patrones de placeholder conocidos en el config de un sitio real antes de que llegue a un deploy
+de producción; exento para `sites/_*`. Conectado en `deploy.yml`, no en `preview.yml`, porque
+Pavel itera legítimamente con campos pendientes durante Fase 3. Probado contra el demo de
+`stuart-homeowners` (falla, correctamente) y un config limpio de prueba (pasa).
+
+Commit `b46f972`, sin prompt/reporte formal.
+
+**El hueco:** sigue siendo ejecución por chat en vivo, sin prompt/reporte formal.
+
+---
+
 ## 2026-09-04 · Demo de Stuart homeowners para Kevin, en preview
 
 **Quién:** cowork, con aprobación de Vic en cada paso
