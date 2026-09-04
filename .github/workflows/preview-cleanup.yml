@@ -1,0 +1,49 @@
+name: Preview cleanup
+
+# Companion to preview.yml (W-098): deletes the preview Worker(s) a PR created once it closes
+# (merged or not), so abandoned preview Workers don't quietly accumulate against the account's
+# Worker limit (100 on the free plan, see docs/ARCHITECTURE.md).
+
+on:
+  pull_request:
+    types: [closed]
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - "packages/template/**"
+      - "packages/config-schema/**"
+      - "scripts/**"
+      - "sites/**"
+      - ".github/workflows/preview.yml"
+
+jobs:
+  discover-sites:
+    name: Discover sites this PR touched
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.changed.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: changed
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/changed-sites.mjs "$BASE_SHA" "$HEAD_SHA" >> "$GITHUB_OUTPUT"
+
+  cleanup:
+    name: Delete preview Worker for ${{ matrix.site }}
+    needs: discover-sites
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.discover-sites.outputs.matrix) }}
+    steps:
+      - name: Delete preview Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        # A PR that never touched this site's build never got a preview Worker deployed for it,
+        # so "not found" here is expected, not an error: swallow it rather than fail the job.
+        run: npx wrangler delete "wicfl-pr${{ github.event.pull_request.number }}-${{ matrix.site }}" --force || true
