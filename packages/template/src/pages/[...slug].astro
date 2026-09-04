@@ -1,20 +1,29 @@
 ---
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { routeFromId, site } from "../lib/site-data.mjs";
+import { routeForPageId, localeOfPageId, hreflangAlternatesFor, site } from "../lib/site-data.mjs";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages");
   return pages
     .filter((page) => page.id !== "index")
-    .map((page) => ({ params: { slug: routeFromId(page.id).slice(1, -1) }, props: { page } }));
+    .map((page) => ({
+      params: { slug: routeForPageId(page.id).slice(1, -1) },
+      props: { page, hreflangAlternates: hreflangAlternatesFor(page.id, pages) }
+    }));
 }
 
-const { page } = Astro.props;
+const { page, hreflangAlternates } = Astro.props;
 const { Content } = await render(page);
 ---
 
-<BaseLayout title={`${page.data.title} | ${site.brand.name}`} description={page.data.description ?? site.seo.description} pageType={page.data.pageType}>
+<BaseLayout
+  title={`${page.data.title} | ${site.brand.name}`}
+  description={page.data.description ?? site.seo.description}
+  pageType={page.data.pageType}
+  lang={localeOfPageId(page.id)}
+  hreflangAlternates={hreflangAlternates}
+>
   <article class="page-content">
     <h1>{page.data.title}</h1>
     <Content />

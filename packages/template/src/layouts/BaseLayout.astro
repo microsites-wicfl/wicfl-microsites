@@ -1,20 +1,27 @@
 ---
+interface HreflangAlternate {
+  hreflang: string;
+  href: string;
+}
+
 interface Props {
   title: string;
   description?: string;
   pageType: "home" | "content" | "coverage";
+  lang?: string;
+  hreflangAlternates?: HreflangAlternate[];
 }
 
 import { site } from "../lib/site-data.mjs";
 
-const { title, description = site.seo.description, pageType } = Astro.props;
+const { title, description = site.seo.description, pageType, lang = site.locale.primary, hreflangAlternates = [] } = Astro.props;
 const address = site.contact.address;
 const kicker = [site.niche?.audience, site.niche?.product].filter(Boolean).join(" ");
 ---
 
 <!doctype html>
 <html
-  lang={site.locale.primary}
+  lang={lang}
   class:list={[`variant-${site.theme.variant}`, `page-${pageType}`]}
   style={`--site-accent: ${site.theme.accentColor};`}
 >
@@ -24,6 +31,9 @@ const kicker = [site.niche?.audience, site.niche?.product].filter(Boolean).join(
     <meta name="theme-color" content={site.theme.accentColor} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {hreflangAlternates.map((alternate) => (
+      <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />
+    ))}
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
