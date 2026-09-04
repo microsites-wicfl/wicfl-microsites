@@ -1,6 +1,8 @@
 # Architecture
 
-**Version 1.1 · 25 Aug 2026 · Owner: Victor**
+**Version 1.2 · 4 Sep 2026 · Owner: Victor.** Closed toward its handoff version: notes reality
+where it has diverged from the original decision (domain #1's registrar), and updates the
+framework-provides list to describe what is actually built today rather than what was planned.
 
 Settled decisions with the reasoning attached, so we do not relitigate them in six months
 without remembering why.
@@ -12,7 +14,7 @@ without remembering why.
 | Hosting | **Cloudflare Workers** with Static Assets | Pages still works but no longer receives new platform features and caps at 100 projects per account, a wall at exactly our target scale. Same cost, no ceiling. |
 | Framework | **Astro** | At 100 sites averaging 30 pages, plain HTML is 3,000 hand maintained files. Astro gives content collections, native en/es routing, zero JS by default, and a config driven build. |
 | Repositories | **One monorepo** | With 100 repos, one template fix becomes 100 pull requests. Same trap as 100 WordPress installs. |
-| Domains | **Cloudflare Registrar** | At cost with no markup, free WHOIS redaction, registration API. Keeps domains, DNS, SSL and hosting in one place. |
+| Domains | **Cloudflare Registrar** | At cost with no markup, free WHOIS redaction, registration API. Keeps domains, DNS, SSL and hosting in one place. **Exception, 3 Sep 2026:** Kevin bought Site #1's domain directly at GoDaddy, outside this plan. It was connected to Cloudflare by changing nameservers rather than transferring the registration, so DNS/SSL/hosting still live in one place; only the registration itself sits elsewhere. Future domains still go through Cloudflare Registrar to avoid this extra step. |
 | Grouping | **Pods of ~25 sites** per Worker | One Worker per site caps at 500 and multiplies deploys. One Worker for everything means a bad deploy takes down the portfolio. |
 | Advancement | **Two separate gates** | Technical repeatability and commercial validity are different questions on different clocks. |
 | Generator timing | **Minimal generator from Site #1**, heavy automation after Site #3 | Pavel argued for building sites #1 and #2 first and extracting the pattern afterward. Middle ground: the Phase 2 generator is deliberately crude, it only renders the template from config, and it gets rewritten during the pilots. If Site #1 is hand assembled there is no config driven path to improve, and Gate A stops meaning anything. Domain registration and provisioning automation do wait until after Site #3. |
@@ -35,6 +37,18 @@ Launching a site never means writing HTML. It means running `new-site`, filling 
 config, and writing markdown. Template code is touched only when improving the framework
 for every site at once.
 
+**What this diagram shows is the target end-state, not where things stand on 4 September.**
+The generator, config schema and template exist and work today: `npm run build:site -- <slug>`
+turns a config plus markdown into a built site (that part of the diagram is real now). The
+domain registration, DNS, SSL and Search Console automation on the right side of the diagram is
+Phase 7 work (Backlog W-050 through W-054), scheduled after Site #3 in November. Until then,
+Vic does those steps by hand through the Cloudflare dashboard, the same way Site #1's zone and
+nameservers were set up on 4 September. The differentiation gate (W-027) also does not exist
+yet; until Site #2 has content to compare against, protection is the human `differentiation-audit`
+skill Pavel runs per page, not a CI check. None of this changes what Pavel does: config and
+markdown in, a site out. It changes what happens after he hands off a config, which is Vic's
+problem to solve, not his.
+
 ## Repository layout
 
 ```
@@ -52,10 +66,11 @@ wicfl-microsites/
 
 ## What the framework provides out of the box
 
-- **Bilingual routing** with correct `hreflang`, built in from Site #2 rather than retrofitted
+- **Bilingual routing** with correct `hreflang`. Built and exercised in CI (the `sites/_example` fixture carries real content in both languages), but neither real pilot site uses it: Site #1 is English-only and Site #2 is Spanish-only, each with zero `locale.alternates`. Site #2 validates that natively-written Spanish content works, not bilingual routing; see `docs/SCHEDULE.md` for why those are different claims
 - **Technical SEO**: sitemap, robots, canonical, schema.org InsuranceAgency markup, all from config
 - **Analytics**: GA4 and GTM wired identically on every site, so cross site reporting works
 - **Lead capture**: forms routed into the CRM with the originating site recorded on every lead
+- **Production-readiness gate**: a site's built config is scanned for known placeholder patterns (a fake license number, an unprovisioned GA4 ID) and the deploy fails closed if any are found, so a config that is schema-valid but not launch-ready cannot reach a real domain. Fixture sites are exempt by name
 - **Call tracking**: the number is a config field, rendered everywhere, routed into GoTo
 - **Performance**: zero JavaScript by default. Core Web Vitals are a build output, not a project
 
