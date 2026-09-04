@@ -5,6 +5,60 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-04 · W-014 cerrado: `wrangler.toml` real con arquitectura de pods
+
+**Quién:** cowork, siguiendo con los pendientes que se pueden avanzar sin depender de Kevin ni
+Pavel, con confirmación de Vic sobre el alcance (arquitectura de pod desde ya, no un Worker
+simple a migrar después)
+
+**Qué:** `docs/ARCHITECTURE.md` ya tenía decidido "pods de ~25 sitios por Worker" (no un Worker
+por sitio, para no multiplicar deploys al escalar; no un Worker para todo, para que un mal deploy
+no tumbe el portafolio completo). Faltaba construirlo. Se le preguntó a Vic si montarlo completo
+desde ahora (con un solo sitio real todavía) o algo simple para Site #1 y migrar después; eligió
+montarlo completo desde ahora.
+
+Un binding de Workers Static Assets solo sirve un árbol de directorios, así que servir varios
+sitios desde un mismo Worker necesita un script que decida cuál sitio responde en cada request.
+Quedó así:
+
+- `pods/pod-1.json` — qué slugs entran en cada pod. Hoy solo `stuart-homeowners`; sumar Site #2
+  es agregar su slug acá.
+- `scripts/build-pod.mjs` — construye cada sitio del pod y arma `dist/pods/<pod>/`.
+- `scripts/pod-worker-template.mjs` — el Worker de enrutamiento: lee el header `Host`, lo mapea a
+  un slug, reescribe la ruta y se la pasa a `env.ASSETS.fetch()`. Se verificó con un test
+  standalone (mockeando `ASSETS.fetch`) que enruta bien por dominio raíz, `www` y mayúsculas del
+  host, y devuelve 404 en un host no configurado.
+- `wrangler.pod-1.toml` — el config real: nombre del Worker, el `worker.mjs` generado como
+  `main`, el directorio de assets del pod, y un par de `[[routes]]` (raíz + `www`,
+  `custom_domain = true`) por sitio del pod.
+- `deploy.yml` — ahora construye y despliega el pod real en vez del placeholder `_example` que
+  tenía desde antes de que existiera este pipeline; el gate de W-103 ahora revisa cada sitio que
+  de verdad está en `pods/pod-1.json`. De paso se corrigió un bug pendiente desde el 2 de
+  septiembre: los filtros de ruta de `deploy.yml` no coincidían con los de `ci.yml`
+  (`package.json`, `package-lock.json`, `packages/config-schema/**` faltaban), lo que iba a
+  permitir que un cambio de dependencias pasara CI en verde y se saltara la validación antes de
+  un deploy real.
+
+Se probó armando el pod de verdad (`npm run build:pod -- pod-1`) y corriendo el gate de W-103
+contra `stuart-homeowners`: rechaza el sitio correctamente, porque todavía tiene licencia,
+contacto y analytics de mentira mientras es el demo de Kevin. `deploy.yml` sigue en `if: false`
+por esa misma razón — se activa cuando esos datos sean reales y Vic decida lanzar.
+
+Un bug real se encontró y corrigió en el camino: la primera versión de
+`scripts/pod-worker-template.mjs` repetía el marcador `__WICFL_POD_ROUTES__` dentro de un
+comentario explicativo, y `String.replace()` solo reemplaza la primera coincidencia — el mapa de
+rutas terminó inyectado en el comentario en vez de en el código, dejando el archivo generado con
+sintaxis inválida. Se encontró al inspeccionar el `worker.mjs` generado, no al confiar en que el
+build "pasó".
+
+Commit `6298138` (código) + el de este cierre de bitácora/backlog, sin prompt/reporte formal.
+
+**El hueco:** de nuevo, ejecución por chat en vivo sin prompt/reporte formal. Distinto de W-098:
+acá lo que falta no es una prueba externa, es que Site #1 tenga datos reales — el pipeline técnico
+ya está completo y verificado.
+
+---
+
 ## 2026-09-04 · W-098: preview deploys por rama construidos y activados (falta probar con PR real)
 
 **Quién:** cowork, siguiendo la instrucción de Vic de seguir con los pendientes que se pueden

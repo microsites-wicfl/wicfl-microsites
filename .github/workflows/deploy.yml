@@ -4,7 +4,10 @@ on:
   push:
     branches: [main]
     paths:
+      - "package.json"
+      - "package-lock.json"
       - "packages/template/**"
+      - "packages/config-schema/**"
       - "sites/**"
       - "scripts/**"
       - "pods/**"
