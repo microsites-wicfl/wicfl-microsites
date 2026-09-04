@@ -5,6 +5,38 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-04 · W-098: preview deploys por rama construidos y activados (falta probar con PR real)
+
+**Quién:** cowork, siguiendo la instrucción de Vic de seguir con los pendientes que se pueden
+avanzar sin depender de Kevin ni Pavel
+
+**Qué:** Se reescribió `preview.yml` completo y se agregó `preview-cleanup.yml` nuevo. Con esto,
+cuando Pavel abra un pull request con cambios de contenido, el workflow descubre qué sitios
+cambiaron (mismo mecanismo que ya usa `ci.yml`), los construye, y despliega cada uno a su propio
+Worker efímero (`wicfl-pr<N>-<slug>.wicfl-microsites.workers.dev`) usando el flag `--assets` de
+wrangler, sin necesitar un `wrangler.toml` por sitio. La URL se comenta en el pull request y se
+actualiza en el mismo comentario en cada push nuevo, no se repite. `preview-cleanup.yml` borra ese
+Worker cuando el PR se cierra, para que no se acumulen contra el límite de 100 Workers de la
+cuenta gratuita.
+
+No lleva el gate de W-103 (validación de producción) a propósito: Pavel va a iterar
+legítimamente con campos pendientes (analytics, teléfono, licencia) mientras escribe, y ese gate
+solo debe bloquear el deploy real a producción.
+
+Queda **activado** (no en `if: false`) porque Cloudflare ya está verificado funcionando de punta
+a punta con el demo de Stuart, y la única forma real de confirmar que este flujo funciona
+(descubrir → construir → desplegar → comentar → limpiar al cerrar) es con un pull request real —
+la misma lección del smoke test del demo, que solo reveló los problemas reales (registro del
+subdominio workers.dev, error 10007 de consistencia eventual) al correrlo de verdad y no antes.
+
+Commit `cef4b6f`, sin prompt/reporte formal.
+
+**El hueco:** falta probar con un pull request real para confirmar que el flujo completo funciona
+de punta a punta; no se está dando por cerrado en BACKLOG.md todavía. Sigue además, como en cada
+entrada de esta sesión, la ejecución por chat en vivo sin prompt/reporte formal.
+
+---
+
 ## 2026-09-04 · W-022 y W-103 cerrados, avanzando en Bloque A sin convocar al equipo todavía
 
 **Quién:** cowork, trabajando en pendientes de infraestructura mientras Vic decide cuándo mostrar
