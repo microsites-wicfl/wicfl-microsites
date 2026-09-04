@@ -5,6 +5,29 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-04 · W-105: checklist del vault, no se pudo montar (correcto — no es tarea de cowork)
+
+**Quién:** cowork, siguiendo con W-105 tras cerrar W-014
+
+**Qué:** Vic pidió seguir con W-105 (montar el vault compartido, urgente desde el 1 de
+septiembre, bloqueando W-010). Al revisar el repo se confirmó que sigue sin existir: no hay
+ninguna nota de cierre en `BACKLOG.md` ni en entradas anteriores de esta bitácora, todas dicen
+"lo monta Vic" sin confirmar que se haya hecho.
+
+Cowork no puede montarlo: crear la cuenta del vault (Bitwarden o 1Password) y mover contraseñas
+ahí dentro son dos acciones que tiene prohibidas siempre, incluso pedidas explícitamente. En vez
+de intentarlo, se escribió `docs/VAULT_SETUP_CHECKLIST.md` — qué vault elegir, qué entradas crear
+y cómo nombrarlas (buzón rotado primero, después las credenciales de Cloudflare que trae W-010),
+y a quién compartir la colección (Kevin como segundo Super Admin, por la regla de
+`docs/ACCOUNTS_AND_ACCESS.md`) — para que el montaje real sea ejecución mecánica para Vic, no una
+decisión más que tomar bajo presión.
+
+**El hueco:** este es distinto a los anteriores de la sesión — no es que falte una prueba externa
+o el juicio de Pavel, es que la acción en sí no le corresponde a cowork ejecutarla. Sigue abierto
+hasta que Vic lo monte; no se cierra por escribir la guía.
+
+---
+
 ## 2026-09-04 · W-014 cerrado: `wrangler.toml` real con arquitectura de pods
 
 **Quién:** cowork, siguiendo con los pendientes que se pueden avanzar sin depender de Kevin ni
