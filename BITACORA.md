@@ -5,6 +5,39 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-04 · Demo de Stuart homeowners para Kevin, en preview
+
+**Quién:** cowork, con aprobación de Vic en cada paso
+
+**Qué:** con el dominio ya activo en Cloudflare, se armó `sites/stuart-homeowners/` para cumplir la
+promesa hecha a Kevin de mostrarle una demo en cuanto el dominio estuviera listo, sin esperar a
+W-008 (assets de marca reales) ni a la validación retroactiva de W-016. `site.config.json` usa el
+nicho real que Kevin asignó (homeowners, alto valor, frente al agua, costero, Stuart FL) con marca,
+teléfono, email y license number todos marcados sin ambigüedad como placeholder (`(Demo)` en el
+nombre de marca, `PLACEHOLDER-FL-LICENSE-PENDING-W-008` en la licencia), siguiendo el mismo patrón
+que ya usaba el fixture `_example`. El contenido de las 3 páginas explica en texto que es una demo
+interna, no marketing publicado.
+
+**Por qué no se sirve en el dominio real:** el checklist de `CONTENT_STANDARDS.md` pone el número de
+licencia como punto #1, y W-008 bloquea explícitamente publicar el sitio #1 sin esos datos reales.
+Publicar un license number inventado en el dominio público real, aunque sea "solo una demo", es
+riesgo de publicidad engañosa. Se resolvió desplegando solo al subdominio de preview de Cloudflare
+Workers (`*.workers.dev`, vía un `wrangler.stuart-homeowners.toml` sin rutas ni dominio custom) en
+vez de apuntarlo a `stuarthomeownersinsurance.com`.
+
+**De paso:** se encontró que `validate:configs` en `package.json` solo validaba
+`sites/_example/site.config.json` a mano, así que CI nunca había validado ningún otro sitio,
+incluyendo este nuevo. Se corrigió a un glob (`sites/*/site.config.json`) que cubre cualquier sitio
+que exista.
+
+**Qué falta:** Vic hace `git push`, luego dispara manualmente el workflow
+`deploy-stuart-homeowners-demo.yml` desde GitHub Actions (workflow_dispatch, mismo patrón que el
+smoke test), y comparte el link `*.workers.dev` resultante con Kevin.
+
+**El hueco:** sigue siendo ejecución por chat en vivo, sin prompt/reporte formal.
+
+---
+
 ## 2026-09-04 · StuartHomeownersInsurance.com activo en Cloudflare
 
 **Quién:** Vic, con Kevin ejecutando el lado de GoDaddy; registrado por cowork
