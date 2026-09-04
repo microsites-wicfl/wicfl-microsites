@@ -7,12 +7,20 @@ on:
       - "packages/template/**"
       - "sites/**"
       - "scripts/**"
+      - "pods/**"
+      - "wrangler.pod-1.toml"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 jobs:
   deploy:
-    name: Disabled until W-092 provisions Cloudflare
+    name: Deploy pod-1
+    # W-014 built the real pod/Worker config (this workflow, wrangler.pod-1.toml,
+    # scripts/build-pod.mjs, pods/pod-1.json) on 4 Sep 2026. Still disabled: Site #1
+    # (sites/stuart-homeowners) still carries placeholder license, contact and analytics data
+    # while it's a demo for Kevin, and the W-103 gate below would fail it on purpose. Flip this
+    # to true only once that data is real and Vic decides to actually launch — see
+    # docs/QA_CHECKLIST.md section 7 ("Deploy") for what to check first.
     if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
@@ -23,21 +31,22 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
-      - run: npm run build
-      # W-103: schema validation checks shape, not readiness. This second gate rejects known
-      # placeholder patterns (fake license number, unprovisioned analytics IDs, a tracking phone
-      # nobody set up) in the built config before it can reach a real production deploy. It is
-      # exempt for sites/_* fixtures by the script itself, which is all "_example" is right now.
-      # TODO(W-014): once the real site/Worker matrix exists, this needs to check the actual
-      # site being deployed instead of the hardcoded "_example" placeholder below.
+      - run: npm run build:pod -- pod-1
+      # W-103: schema validation checks shape, not readiness. This gate rejects known placeholder
+      # patterns (fake license number, unprovisioned analytics IDs, an unset tracking phone) in
+      # every site this pod is about to ship — one check per slug actually listed in
+      # pods/pod-1.json, not a hardcoded fixture name.
       - name: Check production readiness (W-103)
-        run: node scripts/check-production-config.mjs _example
-      # Enable only after W-092/W-010. Required repository secrets:
+        run: |
+          for site in $(node scripts/pod-sites.mjs pod-1); do
+            node scripts/check-production-config.mjs "$site"
+          done
+      # Required repository secrets (already set — verified working 2026-09-03 by the Stuart
+      # Homeowners demo deploy and W-098's preview deploys, which use these same two secrets):
       # CLOUDFLARE_API_TOKEN: scoped Workers deployment token, never the Global API Key.
       # CLOUDFLARE_ACCOUNT_ID: WICFL Cloudflare account ID.
-      # The Worker name, route and pod mapping are supplied by the provisioning work.
       - name: Deploy to Cloudflare Workers
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx wrangler deploy --config wrangler.toml
+        run: npx wrangler deploy --config wrangler.pod-1.toml

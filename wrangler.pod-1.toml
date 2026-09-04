@@ -1,0 +1,23 @@
+# W-014: real production config for pod-1. See docs/ARCHITECTURE.md ("Grouping" decision) for why
+# sites are grouped into pods instead of one Worker per site, and scripts/build-pod.mjs /
+# pods/pod-1.json for how dist/pods/pod-1/ (the "directory" below) gets assembled.
+#
+# Adding a site to this pod: add its slug to pods/pod-1.json, then add its apex + www domain as
+# a [[routes]] pair below (custom_domain = true asks Cloudflare to manage the DNS record). Both
+# steps are on you — build-pod.mjs only knows the site list, not which domains the deployed
+# Worker should actually answer for.
+name = "wicfl-pod-1"
+main = "dist/pods/pod-1/worker.mjs"
+compatibility_date = "2026-09-04"
+
+[assets]
+directory = "dist/pods/pod-1/sites"
+binding = "ASSETS"
+
+[[routes]]
+pattern = "stuarthomeownersinsurance.com/*"
+custom_domain = true
+
+[[routes]]
+pattern = "www.stuarthomeownersinsurance.com/*"
+custom_domain = true
