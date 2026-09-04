@@ -1,0 +1,33 @@
+{
+  "slug": "stuart-homeowners",
+  "domain": "stuarthomeownersinsurance.com",
+  "brand": { "name": "Stuart Homeowners Insurance (Demo)", "parent": "WICFL" },
+  "niche": { "product": "homeowners", "audience": "homeowner" },
+  "geo": { "city": "Stuart", "county": "Martin", "state": "FL", "serviceArea": ["Stuart", "Port Salerno", "Palm City"] },
+  "locale": { "primary": "en", "alternates": [] },
+  "contact": {
+    "trackingPhone": "+17725550100",
+    "displayPhone": "(772) 555-0100",
+    "email": "demo-placeholder@stuarthomeownersinsurance.com",
+    "address": { "street": "123 Placeholder Avenue", "city": "Stuart", "state": "FL", "zip": "34994" },
+    "licenseNumber": "PLACEHOLDER-FL-LICENSE-PENDING-W-008"
+  },
+  "products": ["homeowners"],
+  "seo": {
+    "title": "Stuart Homeowners Insurance | Internal Demo",
+    "description": "Internal preview of the Stuart, Florida homeowners insurance microsite template. Not published content and not insurance advice or an offer of coverage.",
+    "primaryKeyword": "Stuart homeowners insurance demo",
+    "secondaryKeywords": ["waterfront homeowners insurance Stuart FL", "Martin County high value home insurance demo"]
+  },
+  "analytics": { "ga4": "G-PLACEHOLDER", "gtm": "GTM-PLACEHOLDER" },
+  "crm": { "formId": "PENDING_GHL_FORM_ID", "leadSource": "stuart-homeowners" },
+  "theme": { "variant": "coastal", "accentColor": "#0F6B75" },
+  "differentiation": {
+    "localProof": [
+      { "type": "market-data", "summary": "Demo built ahead of Pavel's retroactive SEO/niche validation (W-016) and Kevin's approved brand assets (W-008); serves only as an internal template preview, not a publishable page." }
+    ],
+    "uniqueSections": [
+      { "title": "Waterfront and high-value home coverage explainer", "rationale": "Kevin assigned this niche directly (high-value, waterfront, coastal homes in Stuart); a real version of this section needs Pavel's local evidence and cannot be cloned from another site." }
+    ]
+  }
+}

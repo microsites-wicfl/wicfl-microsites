@@ -9,7 +9,7 @@
     "build": "npm run build:site -- _example",
     "build:site": "node scripts/build-site.mjs",
     "check": "npm run validate:configs",
-    "validate:configs": "ajv validate --spec=draft2020 -s packages/config-schema/site.config.schema.json -d \"packages/config-schema/examples/*.json\" -d sites/_example/site.config.json"
+    "validate:configs": "ajv validate --spec=draft2020 -s packages/config-schema/site.config.schema.json -d \"packages/config-schema/examples/*.json\" -d \"sites/*/site.config.json\""
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.0",
