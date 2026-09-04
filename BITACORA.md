@@ -28,6 +28,111 @@ hasta que Vic lo monte; no se cierra por escribir la guía.
 
 ---
 
+## 2026-09-04 · Revisión contra el plan maestro: dónde estamos y qué falta
+
+**Quién:** cowork, a pedido de Vic. Releyó el documento original del 24 de agosto (la respuesta
+completa a Kevin sobre arquitectura, riesgo y costos) y lo cruzó contra el estado real del repo
+hoy, no contra la memoria de la sesión — `BACKLOG.md`, `docs/ARCHITECTURE.md`,
+`docs/SCHEDULE.md`, `docs/GATE_B_MODEL.md`, `docs/COST_MODEL.md` y `docs/master-file-source.html`
+de punta a punta.
+
+**Veredicto general: en camino, y en varios puntos más riguroso que el plan original.** Los siete
+puntos técnicos del documento del 24 de agosto están construidos o deliberadamente diferidos con
+una razón escrita. El modelo de costos se verificó y mejoró (GoTo salió cinco veces más barato de
+lo que el rango de comparables temía). La secuencia de riesgo (fábrica + pilotos con gate, en vez
+de ir directo a 100) no solo se mantuvo, se volvió más estricta: dos gates separados (A técnico,
+B comercial) en vez de uno, con un modelo explícito para que el número de Gate B no se invente
+después de ver los datos. Eso es exactamente lo que el documento original pedía y algo más.
+
+### Los siete puntos, uno por uno
+
+1. **Cloudflare Workers con Static Assets, no Pages.** Construido. Coincide.
+2. **Astro sobre HTML plano.** Construido: content collections, i18n nativo, cero JS por
+   defecto, build dirigido por config.
+3. **Un monorepo, no 100 repos.** Construido. El schema de `site.config.json` es exactamente lo
+   que el documento pedía que fuera: "el artefacto más importante del proyecto," congelado desde
+   el 31 de agosto (W-020).
+4. **Deploys y dominios automatizados vía API.** Diferido a propósito a la Fase 7
+   (16 nov–11 dic), no construido todavía (W-050 a W-054). Esto es fiel a la decisión ya escrita
+   en `docs/ARCHITECTURE.md` ("Generator timing": automatización pesada espera a después del
+   sitio #3), no un hueco. Lo que sí construimos hoy fue la agrupación en pods de ~25 sitios por
+   Worker que el documento original recomendaba (W-014, cerrado hoy). **Desviación real, ya
+   documentada:** el dominio del sitio #1 se compró directo en GoDaddy, no vía Cloudflare
+   Registrar como fijaba el plan; se conectó por nameservers, así que DNS/SSL/hosting siguen
+   centralizados en Cloudflare, solo el registro en sí quedó afuera.
+5. **Swap test como gate de CI.** Diferido a propósito a mediados de octubre (W-027), cuando
+   exista contenido del sitio #2 contra el cual comparar. Mientras tanto, protección humana: la
+   skill `differentiation-audit`, que corre por página mientras se escribe, no al final. Coincide
+   con la razón que el propio documento da para el riesgo de doorway pages.
+6. **Techo de automatización (~95% infraestructura, ~0% contenido).** Completamente asimilado:
+   `docs/SCHEDULE.md` ya nombra que Pavel sostiene tres roles a la vez y que el contenido es el
+   cuello de botella real, no la fábrica, y que eso se revisita en Gate B en vez de ser una
+   sorpresa.
+7. **Costos verificados.** El modelo de agosto tenía la pieza más grande del presupuesto sin
+   confirmar (GoTo, con un rango de $6,000 a $18,000/año según comparables). Se resolvió el
+   25 de agosto con cotización escrita de GoTo: **$0.99/número**, $1,188/año a 100 números, la
+   quinta parte del piso del rango temido. `docs/COST_MODEL.md` está verificado y con fuente y
+   fecha en cada línea, como pide el documento original. Sí conviene una re-verificación antes de
+   cualquier compra real de dominios en volumen: el alza de Verisign de $10.97 a como tal ya
+   está confirmada para el 1 de noviembre, faltan ocho semanas.
+
+### División del trabajo: Opción A, en marcha
+
+El documento proponía elegir entre Opción A (construimos la fábrica, Pavel la opera después) y
+Opción B (asesoría, Pavel construye). Nunca hay una respuesta escrita de Kevin eligiendo una,
+pero la ejecución real desde el 25 de agosto es Opción A sin ambigüedad: cowork construyó el
+template, el schema, el generador, el pipeline de CI/CD, los gates de validación y ahora el
+Worker de producción. Lo que el documento descartaba explícitamente (que nosotros seamos dueños
+del contenido o de la operación diaria) también se respetó: W-095 decidió que Pavel se
+autorrevisa, no que Vic o cowork revisen su contenido.
+
+### Riesgos reales encontrados al cruzar contra el plan, no resueltos con solo mirar
+
+**1. El riesgo central del documento (doorway pages) tiene un cabo suelto vivo.** El plan es
+explícito: Pavel valida el nicho por SEO (W-016) *antes* de que se compre un dominio. En los
+hechos, el nicho y el dominio del sitio #1 llegaron directo de Kevin por el chat de Zoom el
+3 de septiembre y se aprobaron (W-007) sin que conste que W-016 haya corrido. Esto ya estaba
+anotado como riesgo en la nota de W-007, pero W-016 mismo seguía sin ninguna nota de estado,
+así que no era visible al mirar solo ese ítem. Se le agregó una nota hoy (ver abajo) para que no
+dependa de leer W-007 para encontrarlo. Sigue siendo barato de arreglar ahora, corriendo la
+validación en retroactivo antes de que Pavel escriba contenido real; se vuelve caro si se
+descubre en Gate B con contenido ya publicado.
+
+**2. W-006 (Google Business Profile para los pilotos) lleva 7 días vencido.** Debía resolverse
+el 28 de agosto. El propio documento marca esta decisión como la que "puede cambiar qué nichos
+son viables en absoluto," y ya se aprobó un nicho y un dominio sin que esté resuelta. No bloquea
+nada hoy porque Pavel no escribe contenido hasta el 21 de septiembre, pero cuanto más tarde,
+menos margen para elegir un nicho distinto si la respuesta cambia algo.
+
+**3. W-010/W-105 (cuenta real de Cloudflare con gobierno) vence hoy y sigue bloqueada.** Fase 1
+cierra hoy, 4 de septiembre, y la cuenta con dos Super Admins, 2FA y recovery codes en vault
+compartido —la pieza que el propio `docs/ACCOUNTS_AND_ACCESS.md` llama "el activo del
+negocio"— no está montada. No es una desviación nueva, ya estaba anotada, pero cruzarla contra
+la fecha del plan la hace más urgente de lo que se veía item por item.
+
+**4. `docs/master-file-source.html` (la página que de verdad leen Kevin y Pavel) está
+desactualizada frente al `BACKLOG.md` real.** Su tabla de "Open items" todavía marca como
+abiertos varios puntos que `BACKLOG.md` ya tiene cerrados: quién revisa el contenido (W-095,
+cerrado 3-sep), si existe org de GitHub (W-094, cerrado 26-ago) y qué CRM usa WICFL (W-096,
+cerrado 26-ago). Si Kevin abre esa página hoy, ve tres bloqueadores que ya no existen. Se agregó
+**W-108** al backlog para refrescar esa tabla contra la realidad y republicar, en vez de dejarlo
+como una desviación silenciosa entre "lo que dice la página" y "lo que dice el repo."
+
+### Lo que se actualizó en el backlog a partir de esta revisión
+
+- **W-016**: nota nueva, cruzando el hallazgo de arriba para que sea visible desde el ítem mismo.
+- **W-006**: nota nueva, marcando el vencimiento y por qué importa cada día que pasa sin
+  respuesta.
+- **W-108** (nuevo): refrescar `docs/master-file-source.html` contra `BACKLOG.md` y republicar.
+- Encabezado de `BACKLOG.md` actualizado a esta revisión.
+
+**El hueco:** de nuevo, análisis y decisiones ejecutadas por chat en vivo sin prompt/reporte
+formal — pero esta vez el propósito explícito de Vic era exactamente parar esa dependencia:
+todo lo de arriba queda escrito acá y en `BACKLOG.md`, no solo en el contexto de esta
+conversación.
+
+---
+
 ## 2026-09-04 · W-014 cerrado: `wrangler.toml` real con arquitectura de pods
 
 **Quién:** cowork, siguiendo con los pendientes que se pueden avanzar sin depender de Kevin ni
