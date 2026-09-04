@@ -5,6 +5,27 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-04 · StuartHomeownersInsurance.com activo en Cloudflare
+
+**Quién:** Vic, con Kevin ejecutando el lado de GoDaddy; registrado por cowork
+
+**Qué:** Kevin le dio a Vic acceso de delegado a su cuenta de GoDaddy (Delegate Access, sin
+compartir contraseña). Con ese acceso, Vic cambió los nameservers del dominio de los de
+GoDaddy (`ns77`/`ns78.domaincontrol.com`) a los que Cloudflare había asignado
+(`ashley.ns.cloudflare.com` / `ram.ns.cloudflare.com`), desde Dominios → DNS → Servidores de
+nombres → Cambiar servidores de nombres → Usaré mi propio servidor de nombres. La propagación
+fue casi inmediata: el dashboard de Cloudflare ya muestra "Your domain is now protected by
+Cloudflare" con SSL/TLS y proxy activos.
+
+**Qué falta:** el dominio sigue registrado en GoDaddy, solo se movió el DNS. Los 2 registros A
+todavía apuntan al parking de GoDaddy, hay que reemplazarlos cuando exista un Worker real para
+este dominio (W-013/W-014), y borrar el CNAME `_domainconnect` que ya no sirve. También queda
+revisar el modo de encriptación SSL/TLS antes de apuntar el dominio al Worker.
+
+**El hueco:** sigue siendo ejecución por chat en vivo, sin prompt/reporte formal.
+
+---
+
 ## 2026-09-03 · Zona de Cloudflare creada para StuartHomeownersInsurance.com
 
 **Quién:** Vic, en vivo por el dashboard de Cloudflare; registrado por cowork
