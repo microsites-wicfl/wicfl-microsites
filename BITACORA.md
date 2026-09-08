@@ -1,5 +1,25 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-08 · GoHighLevel: se reutiliza la sub-account existente de Walker Insurance, no una nueva
+
+**Quién:** Vic, por chat de Zoom con Kevin, con cowork redactando el copy en tiempo real.
+
+**Qué:** Vic le pidió a Kevin crear una sub-account nueva y separada en GoHighLevel para los
+microsites (per W-096). Kevin respondió que ya existe una sub-account "Walker Insurance Agency"
+(distinta de "(WAGS) World-Class Assistants", confirmado por captura del Agency Dashboard) y
+preguntó si conectar ahí en vez de crear una nueva, ya que al final esos leads son para Walker
+Insurance de todas formas. Vic aceptó: se usa esa sub-account existente, y el tageo por sitio
+para poder reportar leads por separado lo hace Vic desde el formulario de cada microsite, no es
+nada que Kevin tenga que configurar de su lado.
+
+**Decisión:** W-101 actualizado para reflejar esto. Vic ya puede ver "Walker Insurance Agency"
+listada en el switcher de sub-accounts del Agency Dashboard, lo que confirma que existe, pero
+eso no confirma todavía que tenga permisos de trabajo dentro de ella (crear formularios, campos
+personalizados, sacar API keys). **El hueco:** falta que Kevin confirme el acceso de Vic a esa
+sub-account (o que Vic verifique entrando), y que Vic defina el esquema de tags/campos por sitio
+y saque las credenciales de API y el `formId` real de cada sitio antes de que W-025 pueda
+avanzar del lado técnico.
+
 ## 2026-09-08 · Checklist de contenido por sitio, y actualización de W-008/W-016
 
 **Quién:** cowork, respondiendo varias preguntas de Vic en la misma conversación: confirmó que
