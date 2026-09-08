@@ -65,3 +65,24 @@ No se ejecutó el prompt 008 ni se repitió la prueba real del PR de W-098. Ambo
 
 - `03f2ff2` — `docs: write prompt 009 — let Codex push the pending 17 commits` fue la punta sincronizada a GitHub.
 - `24f0db8` — `docs: close W-110 after syncing main` registra este reporte y el cierre documental en `BACKLOG.md`/`BITACORA.md`.
+
+## Revisión de cowork
+
+**2026-09-08 · Aprobado con hallazgo menor.**
+
+Verificado contra el diff, no contra el reporte: `git rev-parse main`/`origin/main` confirmados
+en `f55f088` de forma independiente tras un `git fetch` propio; los tres commits del prompt
+(`03f2ff2` ya existía, `24f0db8` y `f55f088` son los nuevos) solo tocan `BACKLOG.md`,
+`BITACORA.md` y `reports/`, ningún archivo de código, config, template o workflow. Sin force,
+sin rebase, sin reescritura — confirmado por el log lineal. La corrida de CI citada
+(`34252815726`) se verificó directamente en GitHub: `Success`, sobre `03f2ff2`, construyó
+`_example` y `stuart-homeowners`. La entrada de `BITACORA.md` quedó al inicio del archivo, sin
+tocar entradas anteriores. El cierre de W-110 en `BACKLOG.md` sigue el formato de tachado
+correcto.
+
+**Hallazgo menor, no atribuible a este prompt:** el texto de W-098 que traía el hallazgo del
+8-sep tenía un doble espacio entre dos oraciones en negrita, arrastrado de una edición anterior
+de cowork. Corregido en este mismo momento de revisión, sin generar un commit aparte.
+
+W-110 queda cerrado. Sigue W-098: repetir la prueba real del PR ahora que `preview.yml` real ya
+está en GitHub.
