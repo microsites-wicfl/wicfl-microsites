@@ -15,10 +15,10 @@ nada que Kevin tenga que configurar de su lado.
 **Decisión:** W-101 actualizado para reflejar esto. Vic ya puede ver "Walker Insurance Agency"
 listada en el switcher de sub-accounts del Agency Dashboard, lo que confirma que existe, pero
 eso no confirma todavía que tenga permisos de trabajo dentro de ella (crear formularios, campos
-personalizados, sacar API keys). **El hueco:** falta que Kevin confirme el acceso de Vic a esa
-sub-account (o que Vic verifique entrando), y que Vic defina el esquema de tags/campos por sitio
-y saque las credenciales de API y el `formId` real de cada sitio antes de que W-025 pueda
-avanzar del lado técnico.
+personalizados, sacar API keys). **El hueco:** Vic confirmó que ya tiene acceso de trabajo a esa
+sub-account (ya ha creado formularios ahí antes), así que el acceso no es el bloqueador. Falta
+que Vic defina el esquema de tags/campos por sitio y saque las credenciales de API y el
+`formId` real de cada sitio antes de que W-025 pueda avanzar del lado técnico.
 
 ## 2026-09-08 · Checklist de contenido por sitio, y actualización de W-008/W-016
 
