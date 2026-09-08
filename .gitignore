@@ -8,3 +8,7 @@ dist/
 .DS_Store
 *.log
 .vercel/
+
+# Local-only content drafts, working docs Pavel/Kevin send before they're formatted as real markdown pages.
+# Never meant to reach GitHub.
+_drafts/
