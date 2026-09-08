@@ -1,5 +1,36 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-08 · Agregado un ejemplo completo de markdown (data demo) para Pavel
+
+**Quién:** cowork, a partir de otro pedido directo de Vic: "ocupamos poner ahi data demo para
+que tenga contexto de como armar el file."
+
+**Qué:** el contrato de frontmatter que ya estaba en la guía (título/descripción/pageType) es
+correcto pero son solo tres líneas, no muestra cómo se ve una página terminada. Se agregó una
+nueva subsección, "A worked example: what a finished page's markdown actually looks like", con
+un archivo de ejemplo completo (frontmatter + intro + dos listas con viñetas + un link interno)
+sobre cobertura de viento para Stuart, FL, seguido de un desglose que conecta cada parte del
+ejemplo con una regla concreta de `docs/CONTENT_STANDARDS.md`: el detalle local real (lo que
+busca el swap test), el lenguaje calificado en vez de absoluto (checklist item 3), el hecho de
+que el número de licencia nunca se escribe a mano en el contenido (lo renderiza el template
+desde `site.config.json`), y el link interno como ejemplo de cómo una página se enlaza desde
+otra. Se agregó una advertencia explícita de que el texto es ilustrativo, no copy investigado o
+aprobado, y que una página real tiene que ser escrita por Pavel, específica a ese mercado, tal
+como exige Content Standards.
+
+Se actualizaron ambos documentos: `docs/OPERATOR_GUIDE.md` y el artifact "Microsite Field Guide"
+(misma URL), con el mismo ejemplo y el mismo desglose, adaptado al sistema visual existente
+(bloque de código con sintaxis resaltada + cuatro tarjetas "why it's written this way").
+
+**Pendiente, en curso:** Vic también pidió correr de nuevo el proceso real de Pavel tomando
+screenshots de cada paso para insertarlos en la guía. Se intentó conectar con el Chrome real de
+Vic (`mcp__claude-in-chrome__*`) y la extensión reportó "not connected" en tres intentos
+seguidos. No se siguió reintentando indefinidamente. Queda bloqueado hasta que la extensión de
+Chrome esté corriendo y conectada; en cuanto lo esté, se repite el flujo completo (crear una
+página nueva en el sitio de prueba `_example`, capturar cada paso, insertar las imágenes en
+ambos documentos, y limpiar el PR y el archivo de prueba al final, igual que en las pruebas
+anteriores de W-098).
+
 ## 2026-09-08 · Republicado el artifact "Microsite Field Guide" con la mecánica de GitHub
 
 **Quién:** cowork.
