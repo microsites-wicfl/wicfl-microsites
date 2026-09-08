@@ -5,6 +5,33 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-08 · W-098 cerrado: la prueba real se repitió y esta vez sí funcionó de punta a punta
+
+**Quién:** cowork, con el navegador de Vic (ya autenticado en GitHub) tras confirmar que W-110
+sincronizó `main`.
+
+**Qué:** exactamente la misma prueba de la mañana — editar `sites/_example/content/index.md`
+directo en github.com, sin terminal, y abrir PR (#3) contra el repo real — pero esta vez con el
+`preview.yml` real ya en GitHub. Resultado: `Preview deploy` **no se saltó**. Corrió sus dos
+jobs, desplegó a `wicfl-pr3-_example.wicfl-microsites.workers.dev`, y comentó la URL en el PR con
+el formato exacto que describe el workflow. Se visitó la URL directamente: el sitio renderizaba
+el texto de prueba insertado, verbatim. Se cerró el PR y se confirmó que `preview-cleanup.yml`
+corrió y borró el Worker — la misma URL devolvió 404 de Cloudflare segundos después. Rama
+borrada.
+
+**Decisión:** W-098 queda cerrado. Las cinco piezas que prometía (descubrir sitios cambiados,
+validar, construir, desplegar a un Worker efímero, comentar la URL, limpiar al cerrar) están
+verificadas contra el repo real, no contra una copia local — que era exactamente el hueco que
+esta misma prueba encontró en la mañana. El camino de respaldo para Pavel (editar en
+github.com, sin terminal, sin git instalado) queda confirmado funcional de punta a punta.
+
+**El hueco:** ninguno nuevo. Es el cierre del ciclo abierto hoy: duda de Vic → prueba real →
+hallazgo (W-110) → sincronización (Codex, prompt 009) → repetición de la prueba → confirmado.
+Con esto, ya no hay reserva técnica pendiente para mandarle `docs/OPERATOR_GUIDE.md` (o su
+versión en artifact) a Pavel.
+
+---
+
 ## 2026-09-08 · W-110 cerrado: `main` sincronizado con GitHub (Prompt 009)
 
 **Quién:** agente ejecutor (Codex), siguiendo `prompts/2026-09-08_009_sincronizar-main-con-origin.md`.
