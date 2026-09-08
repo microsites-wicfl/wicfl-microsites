@@ -48,6 +48,7 @@ that document. They're written down now so they don't have to be re-explained pe
 **Yours, every time:**
 - `sites/<slug>/site.config.json` — the one site you're working on
 - `sites/<slug>/content/*.md` — its pages
+- `sites/<slug>/public/` — its logo and any other brand image, once one exists (see below)
 
 **Never, under any circumstance:**
 - `packages/template/` — the shared Astro template, layouts, components
@@ -101,6 +102,7 @@ you open when the situation in front of you calls for it.
 |---|---|
 | `docs/ARCHITECTURE.md` | You want the decisions and the reasoning behind them, once, before the handoff |
 | `docs/SITE_CONFIG_SCHEMA.md` | You're filling in or debugging a `site.config.json` |
+| `docs/SITE_CONFIG_SCHEMA.md`, design decision 7 | You're adding a logo — drop the file in `sites/<slug>/public/` and point `brand.logo` at it |
 | `docs/CONTENT_STANDARDS.md` | You're writing a page, always — the swap test, the AI-use rules, the self-review checklist all live here |
 | `docs/QA_CHECKLIST.md` | You think a page or a site is ready to publish |
 | `docs/SETUP.md` | You want a local dev server running, or you're troubleshooting the deploy pipeline itself |

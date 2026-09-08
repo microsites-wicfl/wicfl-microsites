@@ -1,6 +1,6 @@
 # Site config schema
 
-**Version 1.0 · 31 Aug 2026 · Closed by W-020**
+**Version 1.1 · 31 Aug 2026, updated 4 Sep 2026 · Closed by W-020.** Backward-compatible addition on 4 Sep: optional `brand.logo` (see design decision 7). Existing configs without it are still valid; the field was added as optional specifically so nothing else had to change
 
 `packages/config-schema/site.config.schema.json` is the machine-validatable contract between the shared Astro template and each WICFL microsite. An operator creates a site by editing this configuration and markdown only; the schema intentionally provides no HTML, component, CSS, route, or arbitrary override field.
 
@@ -16,7 +16,7 @@ npx --yes ajv-cli validate --spec=draft2020 -s packages/config-schema/site.confi
 {
   "slug": "stuart-flood",
   "domain": "stuartfloodinsurance.com",
-  "brand": { "name": "Stuart Flood Insurance", "parent": "WICFL" },
+  "brand": { "name": "Stuart Flood Insurance", "parent": "WICFL", "logo": "/logo.svg" },
   "niche": { "product": "flood", "audience": "homeowner" },
   "geo": { "city": "Stuart", "county": "Martin", "state": "FL", "serviceArea": ["Stuart", "Palm City"] },
   "locale": { "primary": "en", "alternates": [] },
@@ -57,6 +57,17 @@ The config is the template's single NAP source: it has exactly one name, address
 ### 6. Required fields protect legal operation and measurement
 
 The root schema requires contact, analytics, CRM, SEO, products, locale, geography, and differentiation. `contact.licenseNumber`, `contact.trackingPhone`, and both differentiation arrays are required. This prevents a site from validating without the minimum legal disclosure, call attribution, lead routing, and human differentiation record. Clearly marked placeholders are allowed for systems that have not yet been provisioned, but they remain explicit work to close before launch QA.
+
+### 7. Logo is optional, root-relative, and lives beside the site's own content
+
+`brand.logo` is an optional path such as `/logo.svg`. Without it, the template renders the
+brand name as text, exactly as every site did before this field existed — adding it never
+breaks an existing site. The image file itself is not a config value: it lives at
+`sites/<slug>/public/<file>`, inside the operator's own site directory, and the generator
+copies that folder over the built output the same way Astro's own `public/` convention works.
+This keeps the operator boundary intact (a logo is still something Pavel can add without
+touching the shared template) while keeping brand assets out of the JSON config, where a binary
+file has no business being.
 
 ## Adding a field without breaking existing sites
 

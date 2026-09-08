@@ -28,6 +28,55 @@ hasta que Vic lo monte; no se cierra por escribir la guía.
 
 ---
 
+## 2026-09-04 · Pavel preguntó por el logo, y no existía manera de agregarlo (W-109)
+
+**Quién:** cowork, a partir de una pregunta real de Pavel en el chat del equipo
+
+**Qué:** Kevin le pasó el link del demo de Stuart Homeowners a Pavel. Su primera pregunta,
+mirando el sitio: "How can we add the logo and the graphic elements?" Al revisar el template
+para responder, la respuesta honesta era que no había manera: `BaseLayout.astro` renderizaba
+`site.brand.name` como texto plano en el header y no existía ningún campo de logo en el schema,
+ni ningún mecanismo para meter un archivo de imagen por sitio. No era un descuido raro — el
+schema documenta a propósito que el theme se queda en tokens acotados (variante + color de
+acento) para no abrir la puerta a CSS o componentes por sitio, y un logo nunca se había puesto
+sobre la mesa hasta que Pavel lo preguntó viendo el resultado real.
+
+Se cerró la parte técnica en el momento, en vez de dejarlo como "no se puede todavía":
+
+- `brand.logo` opcional en el schema, ruta relativa (`/logo.svg`). Opcional a propósito: ningún
+  config existente se rompe por no tenerlo.
+- `BaseLayout.astro` renderiza `<img>` si existe, el wordmark de texto de siempre si no.
+- `build-site.mjs` ahora copia `sites/<slug>/public/` sobre el output del build, así que el
+  archivo del logo vive en el propio directorio del sitio del operador — no en el config (un
+  JSON no es lugar para un binario) ni en el template compartido (seguiría siendo de un solo
+  sitio si viviera ahí).
+
+Probado de punta a punta: un SVG de prueba en `sites/_example/public/logo.svg` (queda ahí
+permanente, mismo patrón que el fixture bilingüe), build limpio, el `<img>` aparece con el `src`
+y `alt` correctos en el HTML generado. Se verificó también que `stuart-homeowners`, que no tiene
+el campo, sigue renderizando exactamente el mismo wordmark de texto que antes — sin regresión.
+`npm run check` y el build completo del pod, verdes.
+
+**Bug de entorno encontrado en el camino, no de código:** el primer intento de build falló con
+`EPERM: operation not permitted, unlink` sobre un archivo de una build anterior — el bridge del
+escritorio no puede borrar sin permiso explícito del usuario, y `dist/` tenía residuos de builds
+de sesiones previas. Se pidió permiso de borrado, se limpió `dist/` y el build corrió limpio.
+Ya está anotado en `CLAUDE.md` como limitación conocida; se repitió acá.
+
+**Lo que sigue bloqueado, y de quién:** el mecanismo ya existe; lo único que falta es que Kevin
+entregue el archivo real del logo (W-008, vencido hoy). Se anotó la conexión en W-008 mismo para
+que no se lea como dos problemas separados.
+
+Commit pendiente de este mismo movimiento.
+
+**El hueco:** de nuevo, ejecución por chat en vivo sin prompt/reporte formal — pero en este caso
+particular vale la pena decirlo distinto: la pregunta llegó de Pavel, no de Vic, y la respuesta
+completa (no solo la explicación, el código que la resuelve) salió antes de que Vic tuviera que
+contestarle nada. Es exactamente el tipo de dependencia que el handoff busca cortar, aplicado
+antes de que Pavel siquiera tenga acceso al repo.
+
+---
+
 ## 2026-09-04 · `docs/OPERATOR_GUIDE.md`: la guía de Pavel, avance de W-102
 
 **Quién:** cowork, a pedido de Vic

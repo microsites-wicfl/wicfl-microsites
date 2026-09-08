@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, cpSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -40,4 +40,17 @@ const build = spawnSync(process.execPath, [resolve(repositoryRoot, "node_modules
 });
 process.stdout.write(build.stdout ?? "");
 process.stderr.write(build.stderr ?? build.error?.message ?? "");
-process.exit(build.status ?? 1);
+if (build.status !== 0) {
+  process.exit(build.status ?? 1);
+}
+
+// Per-site static assets (a logo, other brand images) live in sites/<slug>/public/ and are not
+// part of the shared template, so Astro's own build never sees them. Copy them over the built
+// output afterward, same as Astro's own publicDir convention: a file at public/logo.svg is
+// served from "/logo.svg". Optional: most sites have no public/ directory yet.
+const sitePublicDir = resolve(siteRoot, "public");
+if (existsSync(sitePublicDir)) {
+  cpSync(sitePublicDir, resolve(repositoryRoot, "dist/sites", siteDirectory), { recursive: true });
+}
+
+process.exit(0);

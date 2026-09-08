@@ -14,7 +14,8 @@
       "required": ["name", "parent"],
       "properties": {
         "name": { "type": "string", "description": "Approved public business name for this site.", "minLength": 2, "maxLength": 100 },
-        "parent": { "type": "string", "description": "Parent organization that owns the microsite.", "const": "WICFL" }
+        "parent": { "type": "string", "description": "Parent organization that owns the microsite.", "const": "WICFL" },
+        "logo": { "type": "string", "description": "Root-relative path to the site's logo image, served from sites/<slug>/public/ (e.g. \"/logo.svg\"). Optional: without it the template renders the brand name as text, exactly as it does today.", "pattern": "^/[^\\s]+$" }
       }
     },
     "niche": {

@@ -1,7 +1,7 @@
 {
   "slug": "example-flood",
   "domain": "example-flood.invalid",
-  "brand": { "name": "Example Flood Insurance", "parent": "WICFL" },
+  "brand": { "name": "Example Flood Insurance", "parent": "WICFL", "logo": "/logo.svg" },
   "niche": { "product": "flood", "audience": "homeowner" },
   "geo": { "city": "Stuart", "county": "Martin", "state": "FL", "serviceArea": ["Stuart"] },
   "locale": { "primary": "en", "alternates": ["es"] },
