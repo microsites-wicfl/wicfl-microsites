@@ -5,6 +5,35 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-08 · Prompt 008 para el ejecutor: formulario mínimo de carga de contenido (W-111)
+
+**Quién:** cowork, siguiendo la conversación con Vic sobre si construir una interfaz de gestión
+amigable.
+
+**Qué:** Vic preguntó directamente qué opinaba cowork de construir una interfaz sobre el modelo
+actual, dado que el flujo de git/PR — aunque probado y funcional (ver la entrada de arriba) — le
+sigue pareciendo poco amigable para Pavel, y él mismo dijo no terminar de entenderlo del todo.
+Respuesta de cowork: no un CMS completo ahora — es literalmente la Fase 7 que ya describe el
+diagrama de `docs/ARCHITECTURE.md`, adelantarla completa cuesta semanas que compiten contra el
+17-sep y el 9-oct. Sí vale la pena una versión mínima: una sola página donde Pavel llena los
+campos del config y pega markdown, sin ningún concepto de git, que por detrás abre el mismo pull
+request que hoy se abriría a mano. Vic estuvo de acuerdo ("lo del form creo que es buena idea").
+
+Se abrió **W-111** y se escribió `prompts/2026-09-08_008_formulario-carga-contenido.md` para el
+agente ejecutor, con las restricciones duras de siempre (el schema es el contrato, no toca el
+template ni los workflows existentes, no automergea, token con alcance acotado) y una
+dependencia explícita: no puede ejecutarse hasta que **W-110** esté cerrado, porque el prompt le
+pide al ejecutor confirmar `main` sincronizado con `origin/main` como primer paso, y detenerse si
+no lo está — exactamente el hueco que encontró la prueba de hoy.
+
+**El hueco:** ninguno nuevo — este ítem es la respuesta directa a la fricción real que ya se
+había documentado (Vic sin entender bien el flujo, la duda de si Pavel puede operar vía
+terminal). Queda explícito en el backlog que **no bloquea el 21-sep**: el camino de respaldo
+(editar en github.com sin terminal) ya está probado y sigue siendo válido mientras este
+formulario no exista.
+
+---
+
 ## 2026-09-08 · Prueba real de W-098 con un PR de verdad: el mecanismo funciona, pero GitHub corre código viejo (W-098, W-110)
 
 **Quién:** cowork, a petición explícita de Vic — "hagamos el test antes de mandarle la guía a Pavel".
