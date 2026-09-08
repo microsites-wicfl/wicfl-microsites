@@ -1,5 +1,46 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-08 · Corrida en vivo del proceso de Pavel, con screenshots reales en la guía
+
+**Quién:** cowork, en el Chrome real de Vic (`mcp__claude-in-chrome__*`), a pedido directo: "haz
+nuevamente el proceso que debe hacer pavel, toma screenshots de los pasos para agregarlos en la
+guia y sea mas facil entender el proceso."
+
+**Qué:** con la extensión de Chrome conectada, se repitió de punta a punta el flujo de crear una
+página nueva en el sitio de prueba `_example` (nunca en `stuart-homeowners`), capturando una
+screenshot real en cada paso:
+
+1. Listado de `sites/_example/content/` con el botón "Add file"
+2. El dropdown abierto ("Create new file" / "Upload files")
+3. La página de archivo nuevo con el campo "Name your file..." vacío
+4. El nombre del archivo escrito: `windstorm-coverage-demo.md`
+5. El editor real con el frontmatter y el contenido completo escrito (el mismo ejemplo de
+   cobertura de viento que ya estaba en la guía como "worked example")
+6. El diálogo "Commit changes" con las dos opciones de radio
+7. La segunda opción (nueva rama) seleccionada, con el botón "Propose changes"
+8. La página de comparación con el botón "Create pull request"
+9. El PR con los checks corriendo (algunos en progreso, algunos ya en verde)
+10. El PR con los 5 checks en verde y el comentario del bot con el link de preview
+11. La página real, en vivo, en su URL, `/windstorm-coverage-demo/`, confirmando otra vez que el
+    nombre del archivo se vuelve la URL sin tocar código
+12. El PR cerrado con el botón "Delete branch" visible
+
+El PR (#4) se cerró sin mergear y se borró la rama, exactamente como en las pruebas anteriores
+de W-098, así que `main` queda intacto, sin el archivo de prueba. Las 12 imágenes se guardaron en
+`docs/images/operator-guide/` y se insertaron en `docs/OPERATOR_GUIDE.md` junto a cada paso
+correspondiente, tanto en "Editing a page that already exists" como en "Creating a brand-new
+page", más una junto al worked example ya existente. El artifact "Microsite Field Guide" (misma
+URL) se republicó con las mismas 12 imágenes incrustadas como data URIs en los mismos puntos del
+trail visual.
+
+**Nota:** el primer intento de conectar con el Chrome de Vic falló tres veces seguidas
+("extension not connected"); Vic confirmó que había vuelto a abrir Chrome y en el siguiente
+intento sí conectó. Documentado en caso de que vuelva a pasar: no hay nada que cowork pueda
+hacer del lado del repo, solo esperar a que la extensión esté activa del lado de Vic.
+
+**Decisión:** sigue sin cerrarse W-102. El criterio de cierre real sigue siendo que Pavel use la
+guía en el handoff del 17-sep sin que Vic tenga que explicarle nada que ya debería estar ahí.
+
 ## 2026-09-08 · Agregado un ejemplo completo de markdown (data demo) para Pavel
 
 **Quién:** cowork, a partir de otro pedido directo de Vic: "ocupamos poner ahi data demo para
