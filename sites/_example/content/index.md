@@ -4,7 +4,7 @@ description: Disposable fixture homepage used to exercise the shared design syst
 pageType: home
 ---
 
-This is disposable fixture content for generator verification only. It is not insurance advice, a product promise, or public marketing copy.
+This is disposable fixture content for generator verification only. It is not insurance advice, a product promise, or public marketing copy. Repetición de la prueba end-to-end (cowork, 8-sep-2026, tras sincronizar main con origin — PR de prueba, revertir tras verificar).
 
 ## Config-to-template check
 
