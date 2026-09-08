@@ -1,5 +1,31 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-08 · Republicado el artifact "Microsite Field Guide" con la mecánica de GitHub
+
+**Quién:** cowork.
+
+**Qué:** se republicó el artifact "Microsite Field Guide" (misma URL de siempre,
+`https://claude.ai/code/artifact/3670bbad-9e8c-4683-9097-86b3ab4fac20`) reflejando el mismo
+contenido agregado a `docs/OPERATOR_GUIDE.md` v1.1: un nuevo capítulo 02 ("Doing it: GitHub,
+click by click, assuming nothing") con el glosario en lenguaje llano, el trail de pasos para
+editar una página existente, el trail de pasos para crear una página nueva (con el bloque de
+frontmatter de ejemplo y la advertencia de que ninguna página se enlaza sola), y la nota de qué
+hacer si un check falla. Se preservó el sistema visual existente (Fraunces/Public Sans/IBM Plex
+Mono, acento teal, theming claro/oscuro) reutilizando los componentes ya definidos (`.trail`,
+`.note`) y agregando tres nuevos (`.glossary`/`.term`, `.codeblock`, `.note-warn`) en el mismo
+lenguaje visual. Se renumeraron los capítulos 02→03 (Reference docs), 03→04 (Rules), 04→05
+(Who to ask) y la barra de navegación superior.
+
+**Decisión:** no se cierra W-102 con esto. El criterio de cierre sigue siendo que Pavel use la
+guía en el handoff del 17-sep sin que Vic tenga que explicarle nada que la guía debería haber
+cubierto.
+
+**Nota pendiente, no bloqueante:** siguen sin subirse a `origin/main` dos commits locales de
+antes de esta sesión de trabajo (`fec9c53`, `76539fb`, ambos solo documentación), más los tres
+nuevos de esta sesión (`046a133`, `94185f6`, y este mismo si genera commit). Cowork no tiene
+credenciales de git para hacer push desde este entorno (ver W-110 y la restricción confirmada
+repetidamente). Se suben en cuanto Vic o Codex hagan el próximo push.
+
 ## 2026-09-08 · Guía de operación: agregada la mecánica de GitHub paso a paso
 
 **Quién:** cowork, a partir de retroalimentación directa de Vic leyendo la guía publicada.
