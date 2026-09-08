@@ -5,6 +5,30 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-08 · Prompt 009 para el ejecutor: empujar los 17 commits pendientes (W-110)
+
+**Quién:** cowork, a petición de Vic — quiere que sea Codex quien haga el push, no él a mano,
+porque Codex corre con sus credenciales reales y deja rastro en `reports/`.
+
+**Qué:** primer intento de correr `prompts/2026-09-08_008_formulario-carga-contenido.md`
+confirmó exactamente el hallazgo de la prueba del PR: Codex se detuvo en el paso 1 porque
+`main` local (`dc76626`) no coincidía con `origin/main` (`09732ab`), tal como el prompt le pedía
+hacer. Comportamiento correcto, no un error — el candado funcionó.
+
+Se escribió `prompts/2026-09-08_009_sincronizar-main-con-origin.md`, exclusivamente para esa
+sincronización: `git fetch`, verificar que es un fast-forward limpio (`git status` ya confirmaba
+"ahead by 17 commits" sin mensaje de divergencia), `git push origin main` sin force, y cerrar
+W-110. Restricciones explícitas de no usar `--force`, no hacer rebase/merge/amend, y no tocar
+ningún archivo de código — es una operación de git pura. Si al correrlo el fast-forward ya no es
+limpio (alguien más escribió a `origin/main` mientras tanto), el prompt le pide a Codex detenerse
+y reportarlo, no resolverlo por su cuenta.
+
+**El hueco:** ninguno nuevo. Es la ejecución directa de lo que W-110 ya pedía, ahora con el
+ejecutor correcto (Codex, con credenciales) en vez de intentarlo desde el bridge de Cowork, que
+no las tiene.
+
+---
+
 ## 2026-09-08 · Prompt 008 para el ejecutor: formulario mínimo de carga de contenido (W-111)
 
 **Quién:** cowork, siguiendo la conversación con Vic sobre si construir una interfaz de gestión
