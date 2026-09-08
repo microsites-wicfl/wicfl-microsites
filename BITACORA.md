@@ -1,5 +1,46 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-08 · Revisión de qué le falta a Pavel para arrancar de verdad, en serio esta vez
+
+**Quién:** cowork, respondiendo una batería de preguntas directas de Vic: "¿ya tiene Pavel todo
+para comenzar a trabajar?", "¿necesito su usuario de GitHub?, ¿qué otro acceso necesita?",
+"¿qué hay con GA4, ads, etc, eso ya lo puede hacer Pavel?", "dame una lista de los pendientes
+que faltan de nuestro lado."
+
+**Qué:** antes de responder, se releyó `BACKLOG.md` completo (bloqueadores, Fase 0 y Fase 1),
+`docs/QA_CHECKLIST.md` (secciones de tracking y conversión) y `docs/SITE_CONFIG_SCHEMA.md`
+(campos `analytics.ga4`/`analytics.gtm`), y se verificó en vivo, en el Chrome real de Vic, el
+estado real de acceso a GitHub.
+
+**Hallazgo nuevo:** `microsites-wicfl` es una **cuenta personal de GitHub**, no una
+organización — `github.com/orgs/microsites-wicfl/people` devuelve 404. Esto contradice
+directamente la nota de cierre de W-012 ("la organización usa microsites@wicfl.com como Owner y
+personas con sus propias cuentas"). No se pudo confirmar si Pavel ya está invitado como
+colaborador del repo porque GitHub pidió verificación de identidad (sudo mode) para abrir esa
+pantalla de configuración, y completar esa verificación le corresponde a Vic, no a cowork. Se
+abrió **W-113** para dejarlo explícito: falta invitar a Pavel como Collaborator (Write) con su
+usuario de GitHub, y falta decidir si vale la pena convertir la cuenta en organización antes de
+sumar más gente al repo.
+
+**Otros hechos confirmados para la respuesta:**
+
+- Para escribir contenido y abrir PRs (el flujo ya documentado y probado), Pavel solo necesita
+  acceso de **Write** al repo. No necesita Cloudflare, GoTo ni GA4 para eso.
+- `site.config.json` ya tiene los campos `analytics.ga4` y `analytics.gtm`: son texto plano que
+  Pavel puede editar en el mismo archivo que ya toca, una vez existan IDs reales que pegar ahí.
+  Pero **crear** la propiedad de GA4, el contenedor de GTM, o dar de alta la sub-cuenta de
+  GoHighLevel (CRM) no es algo que Pavel pueda hacer solo hoy: son cuentas de Kevin (GA4, GoTo)
+  o trabajo de desarrollo todavía abierto y de Vic (W-023 SEO técnico, W-024 número de tracking
+  en GoTo, W-025 GA4+GTM+CRM), ninguno construido ni cableado todavía.
+- W-008 (assets de marca reales de Kevin) sigue vencido desde el 4-sep y bloquea **publicar**
+  en producción, aunque no bloquea escribir y probar contenido vía preview.
+- W-016 (validación SEO retroactiva del nicho) sigue señalado como riesgo elevado sin cerrar,
+  justo antes de que Vic quiera que Pavel invierta tiempo en contenido "oficial" real.
+
+Se dio la lista completa de pendientes a Vic en el chat, sin escribirla aparte en ningún
+documento nuevo, porque ya vive completa en `BACKLOG.md`; esta entrada es el registro de que se
+compiló y se revisó contra el estado real, no una lista nueva y paralela.
+
 ## 2026-09-08 · Hueco encontrado: comprar y conectar un dominio no está en la guía, y no debería estar todavía
 
 **Quién:** cowork, respondiendo tres preguntas directas de Vic después de ver la guía con
