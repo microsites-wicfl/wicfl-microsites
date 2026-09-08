@@ -7,6 +7,7 @@ Referencia del equipo. **Estos archivos están en inglés a propósito**: los le
 | `ARCHITECTURE.md` | Decisiones técnicas con su razonamiento. No reabrir sin razón nueva |
 | `OPERATOR_GUIDE.md` | La guía de Pavel: qué toca, qué nunca toca, cómo se ve su semana. Leer antes que todo lo demás |
 | `SITE_CONFIG_SCHEMA.md` | El contrato entre el template y cada sitio. El artefacto más importante |
+| `SITE_CONTENT_CHECKLIST.md` | Qué necesita cualquier sitio para existir: cada campo del config y cuántas páginas, antes de llegar a QA |
 | `CONTENT_STANDARDS.md` | El swap test, español nativo, compliance de Florida |
 | `COST_MODEL.md` | Costos verificados con fuente y fecha |
 | `GATE_B_MODEL.md` | La aritmética del número de Gate B. Kevin llena tres celdas, no inventa un número |

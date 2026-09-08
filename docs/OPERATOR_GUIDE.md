@@ -325,6 +325,7 @@ you open when the situation in front of you calls for it.
 | `docs/ARCHITECTURE.md` | You want the decisions and the reasoning behind them, once, before the handoff |
 | `docs/SITE_CONFIG_SCHEMA.md` | You're filling in or debugging a `site.config.json` |
 | `docs/SITE_CONFIG_SCHEMA.md`, design decision 7 | You're adding a logo — drop the file in `sites/<slug>/public/` and point `brand.logo` at it |
+| `docs/SITE_CONTENT_CHECKLIST.md` | You're starting a new site, or checking how close an existing one is to being real instead of a placeholder — every config field and how many pages a site needs, in one place |
 | `docs/CONTENT_STANDARDS.md` | You're writing a page, always — the swap test, the AI-use rules, the self-review checklist all live here |
 | `docs/QA_CHECKLIST.md` | You think a page or a site is ready to publish |
 | `docs/SETUP.md` | You want a local dev server running, or you're troubleshooting the deploy pipeline itself |

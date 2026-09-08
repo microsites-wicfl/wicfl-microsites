@@ -1,5 +1,40 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-08 · Checklist de contenido por sitio, y actualización de W-008/W-016
+
+**Quién:** cowork, respondiendo varias preguntas de Vic en la misma conversación: confirmó que
+ya le pidió su usuario de GitHub a Pavel, dijo que Kevin ya dio luz verde de marca y que Pavel
+ya tiene listo el contenido/logo (cree que eso libera W-008), preguntó qué es W-016, pidió un
+checklist de "qué necesita cualquier sitio siempre" para que Pavel lo tenga presente, preguntó
+si la guía actual le da a Pavel el 100% considerando los pendientes, y pidió qué puede avanzar
+cowork/Vic mientras Kevin y Pavel hacen su parte.
+
+**Qué se hizo:**
+
+- Se creó `docs/SITE_CONTENT_CHECKLIST.md`: cada campo de `site.config.json` (con su
+  `packages/config-schema/site.config.schema.json` real, no de memoria), quién lo provee,
+  cuántas páginas necesita un sitio (15-25 para arrancar, por `docs/CONTENT_STANDARDS.md`), y
+  los tres assets (logo, license number, contacto real). Referenciado desde la tabla de
+  `docs/OPERATOR_GUIDE.md` Part 3 y desde el índice de `docs/README.md`.
+- **W-008 no se cerró.** Vic reportó que Kevin ya aprobó y que Pavel tiene el contenido de
+  marca listo, pero cowork no ha recibido ni verificado los archivos/datos reales (logo,
+  license number, dirección, email). Se dejó una nota de avance pidiéndolos explícitamente,
+  contra la disciplina del proyecto de no cerrar nada sobre la palabra sola, sino contra
+  evidencia verificable — el propio `sites/stuart-homeowners/site.config.json` sigue con
+  `brand.name` diciendo "(Demo)" y todos los campos de contacto en placeholder al momento de
+  escribir esto.
+- Se explicó W-016 en la conversación (no en un documento nuevo, ya vive en `BACKLOG.md` y
+  `docs/ARCHITECTURE.md`): es la validación de que el nicho/mercado elegido (homeowners en
+  Stuart, alto valor, frente al agua) es un mercado real donde se puede rankear, no uno
+  dominado por agregadores nacionales sin ángulo local — investigación de keywords, intención
+  de búsqueda y competencia en SERP, dueño Pavel, corrida en retroactivo porque el dominio ya
+  se compró sin ella.
+- Se dio una lista honesta de qué cubre y qué no cubre la guía hoy, y una lista concreta de qué
+  puede avanzar del lado de Vic/cowork en paralelo sin depender de Kevin o Pavel: dar de alta
+  la sub-cuenta de GoHighLevel (W-025, ya desbloqueada desde el 26-ago), montar el vault
+  compartido (W-105), refrescar `docs/master-file-source.html` (W-108), y decidir si
+  `microsites-wicfl` pasa a ser una organización de GitHub antes de sumar a Pavel (W-113).
+
 ## 2026-09-08 · Revisión de qué le falta a Pavel para arrancar de verdad, en serio esta vez
 
 **Quién:** cowork, respondiendo una batería de preguntas directas de Vic: "¿ya tiene Pavel todo
