@@ -64,4 +64,4 @@ No se ejecutó el prompt 008 ni se repitió la prueba real del PR de W-098. Ambo
 ## Commits
 
 - `03f2ff2` — `docs: write prompt 009 — let Codex push the pending 17 commits` fue la punta sincronizada a GitHub.
-- El cierre documental de W-110 se registrará en el commit de este reporte, `BACKLOG.md` y `BITACORA.md`.
+- `24f0db8` — `docs: close W-110 after syncing main` registra este reporte y el cierre documental en `BACKLOG.md`/`BITACORA.md`.
