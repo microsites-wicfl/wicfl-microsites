@@ -208,6 +208,63 @@ is the usual choice) and add a plain markdown link to it, for example
 `[Flood coverage in Miami-Dade](/flood-coverage/)` — as part of the same pull request or a
 follow-up one. A page nothing links to is a page Google and every real visitor will never find.
 
+### A worked example: what a finished page's markdown actually looks like
+
+The frontmatter contract above is only three lines. Here's a full example of what a real page
+looks like once you write it, structure and all, so you have something to pattern-match against
+instead of a blank editor. **Don't copy this text into a real page** — the sentences below are
+illustrative, not researched or approved copy, and `docs/CONTENT_STANDARDS.md` requires every
+real page to be your own writing, specific to that market:
+
+```
+---
+title: "Windstorm Coverage for Stuart, FL Homeowners"
+description: "What windstorm coverage typically includes for waterfront homes in Martin
+  County, and what to confirm with your agent."
+pageType: coverage
+---
+
+Homes along the St. Lucie River and the Intracoastal in Stuart carry windstorm exposure that
+most inland Florida homes don't face the same way. Here's what a windstorm endorsement
+generally covers, and where the specifics come down to your policy and your agent.
+
+## What's typically included
+
+- Wind and hail damage to the structure of your home
+- Damage from wind-driven rain that enters through a wind-created opening
+- Detached structures on your property, like a dock or a screened lanai, when your policy
+  lists them
+
+## What's usually excluded, or needs a separate policy
+
+- Flood damage from storm surge, even during the same storm, always requires a separate flood
+  policy
+- Damage from lack of maintenance rather than the storm itself
+
+Coverage limits, deductibles, and exact terms vary by policy. Confirm your specific windstorm
+deductible with your Walker Insurance Company of Florida agent before hurricane season.
+
+See also our [flood coverage page](/flood-coverage/) for how storm surge is handled separately.
+```
+
+Notice what each part is doing, and why it's there:
+
+- **Real, local detail** ("St. Lucie River," "Martin County," "dock," "screened lanai") — this
+  is exactly what the swap test in `docs/CONTENT_STANDARDS.md` is looking for. Swap the city and
+  most of this paragraph stops being true, which is the point.
+- **Qualified language** ("generally," "typically," "usually," "confirm with your agent") —
+  never a guaranteed or absolute claim ("always covered," "guaranteed approval"). That's
+  self-review checklist item 3.
+- **No license number, no entity disclaimer typed by hand** — the template renders those
+  automatically from `site.config.json` on every page. If you find yourself typing a license
+  number into a content file, stop, that's a sign something's wrong.
+- **An internal link** (`[flood coverage page](/flood-coverage/)`) — plain markdown link syntax,
+  pointing at another page's slug. This is also how a page gets linked to, not just from — see
+  the warning above about pages that aren't reachable from anywhere.
+- **`pageType: coverage`** — because this page is specifically about what one coverage type does
+  and doesn't cover. A general page (an About page, a service-area page) would use `content`
+  instead.
+
 ### If a check fails
 
 A red X next to `Validate and build` or `Preview deploy` on your pull request means something's
