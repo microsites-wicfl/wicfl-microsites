@@ -1,5 +1,60 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-08 · Guía de operación: agregada la mecánica de GitHub paso a paso
+
+**Quién:** cowork, a partir de retroalimentación directa de Vic leyendo la guía publicada.
+
+**Qué:** Vic señaló, correctamente, que `docs/OPERATOR_GUIDE.md` (y su versión publicada, la
+"Microsite Field Guide") asumía que Pavel ya sabía usar GitHub: no explicaba el mecanismo dentro
+de GitHub para editar una página ni para crear una nueva, y por lo tanto no era una guía
+autosuficiente. Su objetivo explícito: "cualquier humano" debería poder ejecutar la misión de
+Pavel usando solo la guía, sin que Vic tenga que explicarlo de nuevo.
+
+Antes de escribir una sola palabra, se verificaron en vivo (no se inventó ningún detalle de UI)
+los tres hechos técnicos que la guía necesitaba para ser precisa:
+
+- El contrato exacto de frontmatter de una página (`packages/template/src/content.config.ts`):
+  `title` requerido, `description` opcional, `pageType` requerido y limitado a
+  `"home" | "content" | "coverage"`.
+- La regla de enrutamiento (`packages/template/src/lib/site-data.mjs`,
+  `routeFromId`): el nombre del archivo markdown (sin `.md`) se convierte automáticamente en la
+  URL de la página — `flood-coverage.md` → `/flood-coverage/`. `index.md` es especial y sirve
+  `/`.
+- La ausencia total de un menú de navegación en `packages/template/src/layouts/BaseLayout.astro`:
+  no existe ningún `<nav>` ni listado dinámico de páginas. Una página nueva es invisible salvo
+  que otra página la enlace manualmente con markdown.
+- Además, qué diferencia realmente `pageType: content` de `pageType: coverage` (una clase CSS,
+  `.page-coverage` agrega un borde superior — no cambia el schema ni el build): para poder
+  explicárselo a Pavel sin adivinar.
+
+También se verificó en vivo, en el Chrome real de Vic ya autenticado en GitHub (sin crear ni
+commitear nada), el flujo exacto de "Add file ▾" → "Create new file" y el campo "Name your
+file...", para no describir botones que no existen.
+
+Con esos hechos confirmados, se expandió `docs/OPERATOR_GUIDE.md` agregando un nuevo **Part 2**
+("Doing it: GitHub, click by click, assuming nothing") entre el modelo mental (Part 1) y los
+documentos de referencia (renumerados de Part 2/3/4 a Part 3/4/5). Part 2 incluye: un glosario
+en lenguaje llano (repo, `main`, branch, commit, pull request, checks, merge); los pasos
+exactos, botón por botón, para editar una página existente (pencil icon → editor → "Commit
+changes..." → "Create a new branch for this commit and start a pull request" → "Propose
+changes" → "Create pull request" → esperar los checks → abrir la URL de preview del comentario
+del bot → autorevisión → "Merge pull request" → "Delete branch"); los pasos exactos para crear
+una página nueva (el dropdown "Add file ▾" → "Create new file", el campo de nombre de archivo,
+el bloque de frontmatter con ejemplo real, y la advertencia explícita de que ninguna página
+nueva aparece en ningún menú — hay que enlazarla a mano desde otra página); y qué hacer si un
+check sale en rojo (no adivinar, no tocar archivos fuera de `sites/<slug>/`, avisar a Vic con el
+link del PR).
+
+**El hueco:** exactamente el que Vic señaló — la guía v1.0 explicaba el modelo mental y las
+reglas, pero no el mecanismo. Un operador sin experiencia previa en GitHub no podía, solo con
+esa guía, completar el flujo real de principio a fin. Cerrado con la v1.1: cada paso de UI
+citado fue verificado en vivo contra el repo real, no inventado.
+
+**Próximo paso:** actualizar y republicar el artifact "Microsite Field Guide" (misma URL) para
+reflejar este mismo contenido expandido, preservando su sistema visual existente. Sigue abierto
+W-102 hasta que Pavel confirme, en el handoff del 17-sep, que la guía efectivamente le resolvió
+estas dudas sin que Vic tuviera que explicarlo de nuevo — ese es su criterio real de cierre.
+
 Log histórico de decisiones, sesiones y ejecuciones. Orden cronológico inverso.
 El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita entradas anteriores.
 

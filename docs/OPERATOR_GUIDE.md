@@ -1,9 +1,14 @@
 # Operator guide
 
-**Version 1.0 · 4 Sep 2026 · Written for Pavel ahead of the 17 Sep handoff, closes backlog item
+**Version 1.1 · 8 Sep 2026 · Written for Pavel ahead of the 17 Sep handoff, closes backlog item
 W-102.** Read this before the handoff session, not during it. Bring questions the session
 doesn't answer; each one gets logged, because a gap this guide misses is a defect in the guide,
 not in you.
+
+*Updated 8 Sep 2026: added Part 2 below, the exact click-by-click GitHub steps. The first draft
+assumed you already knew git and GitHub; that assumption was wrong, and this version doesn't
+make it. Everything in Part 2 was clicked through for real on this repository before being
+written down — see `BITACORA.md`, 8 Sep 2026.*
 
 This is the guide, not the reference material. It tells you what this repo is, what you touch,
 what you never touch, and how a week actually goes. When you need the exact schema fields, the
@@ -92,7 +97,128 @@ substitute for licensed review, and it gets revisited if the portfolio grows pas
 pilot sites. You're not being asked to carry more risk quietly; it's written down as a known gap
 on purpose.
 
-## Part 2 — The reference documents, and when to open each
+## Part 2 — Doing it: GitHub, click by click, assuming nothing
+
+Part 1 told you what you touch and why. This part is what was missing: exactly what to click,
+in order, to make a change and get it live, assuming you've never used git or GitHub before.
+Every step below was clicked through for real on this repository, twice, on 8 Sep 2026 (see
+`BITACORA.md`), not written from memory of how GitHub usually works.
+
+### A short glossary
+
+You'll see these words on GitHub itself and in the rest of this guide. You don't need to
+understand git as a system, just what these particular words mean here.
+
+- **Repo (repository)** — the project's files and their entire history, all together. This one
+  lives at `github.com/microsites-wicfl/wicfl-microsites`.
+- **`main`** — the one copy of the repo that's "real." Whatever's live, or about to go live,
+  always traces back to `main`.
+- **Branch** — a separate, parallel copy of the files where you can make changes without
+  touching `main` yet. When you edit a file on GitHub's website, GitHub creates one of these for
+  you automatically. You'll see a checkbox for it, but you never have to name it or manage it
+  yourself.
+- **Commit** — a saved snapshot of the exact lines you changed, labeled with a short message.
+  GitHub creates this when you click "Commit changes."
+- **Pull request (PR)** — a request to bring your branch's changes into `main`. It's a page
+  where you (and, if something fails, Vic) can see exactly what changed, and where automated
+  checks run before anything merges.
+- **Checks** — automated jobs that run on every pull request. `Validate and build` checks your
+  config and content are well-formed and builds the site to make sure nothing is broken.
+  `Preview deploy` publishes a temporary, live copy of your exact changes so you can look at the
+  real rendered page before it goes anywhere near production. Green check means it passed; red X
+  means something's wrong — see "If a check fails" below.
+- **Merge** — folding your branch's changes into `main`. This is the one step that feels
+  permanent; everything before it can be abandoned without a trace.
+
+### Editing a page that already exists
+
+1. Go to `github.com/microsites-wicfl/wicfl-microsites` and sign in.
+2. Click into `sites/<your-site>/content/`, then click the `.md` file you want to change (for
+   example `flood-coverage.md`).
+3. Click the pencil icon in the top-right of the file view ("Edit this file").
+4. Edit the text. It's plain markdown: `## Heading` for a heading, a blank line between
+   paragraphs, `[link text](/some-slug/)` for a link. If you're unsure what a piece of markdown
+   will look like once rendered, that's exactly what the preview step below is for.
+5. Scroll to the bottom. Under "Commit changes," write a short message describing what changed
+   (for example "Update flood deductible figures").
+6. Make sure the second option is selected: **"Create a new branch for this commit and start a
+   pull request."** Not the first one — that tries to save straight to `main`.
+7. Click **"Propose changes."**
+8. You land on a "comparing changes" page. The title box is pre-filled from your commit message
+   — edit it if you want something clearer. Click **"Create pull request."**
+9. You're now on the pull request page. Wait a minute or two, refreshing if needed, while the
+   two automated checks run.
+10. Once `Preview deploy` finishes, a comment appears on the PR from GitHub Actions with a link
+    that looks like `https://wicfl-prNN-<slug>.wicfl-microsites.workers.dev`. Click it: this is
+    your exact change, live, before anyone else sees it.
+11. Look at the real page. Then run the self-review checklist in `docs/CONTENT_STANDARDS.md`,
+    and `docs/QA_CHECKLIST.md` if this is a launch-readiness pass.
+12. If both checks are green and the preview looks right, click the green **"Merge pull
+    request"** button, then the confirm button that appears under it. Afterward, GitHub offers a
+    **"Delete branch"** button — click it; the branch was only scaffolding for the PR.
+13. `main` now has your change. The temporary preview Worker deletes itself automatically a few
+    minutes after the PR closes, merged or not — that's expected, and separate from the real,
+    permanent site.
+
+### Creating a brand-new page
+
+A page is one markdown file. Here's the exact recipe.
+
+1. Go to `sites/<your-site>/content/` in the repo.
+2. Click the **"Add file"** dropdown near the top-right of the file listing, then **"Create new
+   file."**
+3. In the **"Name your file..."** field, type a filename ending in `.md`: lowercase words
+   separated by hyphens, no spaces — for example `flood-coverage.md`. **This filename becomes
+   the page's web address automatically once it's live**: `flood-coverage.md` becomes the page
+   at `/flood-coverage/`. There's no separate "URL" field anywhere; the filename is the address,
+   so get it right the first time (renaming the file later changes the page's URL).
+4. In the editor, the very first thing in the file has to be a frontmatter block: three dashes,
+   some fields, three dashes, before any of your actual content.
+
+   ```
+   ---
+   title: "Flood Coverage in Miami-Dade"
+   description: "What flood insurance covers and doesn't, explained plainly."
+   pageType: content
+   ---
+
+   Your page content starts here, as normal markdown.
+   ```
+
+   - `title` — required. The page's headline and browser-tab title.
+   - `description` — optional, but write one anyway; it's what shows up in search results and
+     social previews.
+   - `pageType` — required, and must be exactly one of three words: `home`, `content`, or
+     `coverage`. Every site has exactly one `home` page (`index.md`, its front page — don't
+     create a second one). For everything else use `content`, unless the page is specifically
+     about what a coverage type does or doesn't cover, in which case `coverage` gives it a small
+     visual treatment (a divider under the header) built for that. If you're genuinely unsure
+     which of `content`/`coverage` fits, use `content` and ask Vic — it's a styling choice, not
+     something that can break the build.
+   - Nothing else goes in that block. A field name that doesn't exist here will fail the
+     `Validate and build` check — that's the schema doing its job, not a bug.
+5. Scroll down and commit exactly as in steps 5–13 above: new branch, pull request, wait for
+   checks, preview, review, merge.
+
+**The one thing that will bite you if you skip it:** this site has no navigation menu anywhere —
+no header links, no footer sitemap, nothing that lists pages automatically. A page you publish
+this way is live at its URL, but unreachable by anyone clicking around the site unless another
+page links to it. So before you merge a new page, edit at least one existing page (the home page
+is the usual choice) and add a plain markdown link to it, for example
+`[Flood coverage in Miami-Dade](/flood-coverage/)` — as part of the same pull request or a
+follow-up one. A page nothing links to is a page Google and every real visitor will never find.
+
+### If a check fails
+
+A red X next to `Validate and build` or `Preview deploy` on your pull request means something's
+wrong, usually a frontmatter typo (a missing `title`, a `pageType` that isn't one of the three
+allowed words) or a markdown syntax slip. Click the red X, then "Details," to read what failed.
+If the message doesn't make it obvious what to fix, don't guess and don't start editing files
+outside `sites/<your-slug>/` to work around it: copy the error and message Vic with a link to
+the pull request. A confusing error message is itself something worth reporting, not something
+to route around.
+
+## Part 3 — The reference documents, and when to open each
 
 Don't read all of these cover to cover before the handoff. Skim this guide fully, skim
 `docs/ARCHITECTURE.md` for the decisions and why they were made, and treat the rest as reference
@@ -116,7 +242,7 @@ And two skills you'll run yourself, not just read about:
 - **`differentiation-audit`** — the swap test, run as a skill instead of a mental exercise. Run
   it per page, while writing.
 
-## Part 3 — The rules that don't bend
+## Part 4 — The rules that don't bend
 
 A short list, pulled from `CLAUDE.md`, that applies to your work specifically:
 
@@ -131,7 +257,7 @@ A short list, pulled from `CLAUDE.md`, that applies to your work specifically:
 5. **License numbers, NAP, and Florida advertising rules apply on every page**, every time,
    checked against the self-review checklist before publish.
 
-## Part 4 — Who to ask, and about what
+## Part 5 — Who to ask, and about what
 
 - **Vic** — anything about the template, the schema, the pipeline, the generator, or a question
   this guide didn't answer. Log the question; it goes into fixing the guide or the framework,
