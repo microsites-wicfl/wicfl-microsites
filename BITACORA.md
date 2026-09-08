@@ -5,6 +5,18 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-08 · W-110 cerrado: `main` sincronizado con GitHub (Prompt 009)
+
+**Quién:** agente ejecutor (Codex), siguiendo `prompts/2026-09-08_009_sincronizar-main-con-origin.md`.
+
+**Qué:** se verificó el árbol limpio, se hizo `git fetch origin` y se confirmó un fast-forward limpio: `origin/main` (`09732ab`) era ancestro de `main` (`03f2ff2`). Se ejecutó `git push origin main` sin force, rebase, merge ni reescritura. Tras un segundo fetch, ambos refs quedaron en `03f2ff2537e704c1696905439e28d831bb756a8e`.
+
+**Verificación:** la corrida [Validate and build #34252815726](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/34252815726) terminó verde para ese SHA; validó los configs y construyó `_example` y `stuart-homeowners`. No se modificaron código, configuración, template ni workflows. Reporte: `reports/2026-09-08_009_sincronizar-main-con-origin.md`.
+
+**Decisión y siguiente paso:** W-110 queda cerrado. Ya puede correr el prompt 008; W-098 permanece abierto hasta repetir su PR real y confirmar que el workflow de preview ahora sí despliega y comenta la URL en GitHub.
+
+---
+
 ## 2026-09-08 · Prompt 009 para el ejecutor: empujar los 17 commits pendientes (W-110)
 
 **Quién:** cowork, a petición de Vic — quiere que sea Codex quien haga el push, no él a mano,
