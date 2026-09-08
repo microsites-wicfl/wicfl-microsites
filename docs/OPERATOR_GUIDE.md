@@ -141,21 +141,39 @@ understand git as a system, just what these particular words mean here.
    will look like once rendered, that's exactly what the preview step below is for.
 5. Scroll to the bottom. Under "Commit changes," write a short message describing what changed
    (for example "Update flood deductible figures").
+
+   ![The "Commit changes" dialog, showing the commit message field and the two radio options: commit directly to main, or create a new branch and start a pull request.](images/operator-guide/06-commit-dialog-options.jpg)
+
 6. Make sure the second option is selected: **"Create a new branch for this commit and start a
    pull request."** Not the first one — that tries to save straight to `main`.
+
+   ![The second radio option selected, showing the auto-generated branch name and the green "Propose changes" button.](images/operator-guide/07-new-branch-selected.jpg)
+
 7. Click **"Propose changes."**
 8. You land on a "comparing changes" page. The title box is pre-filled from your commit message
    — edit it if you want something clearer. Click **"Create pull request."**
+
+   ![The "Open a pull request" comparing page, with the title field pre-filled and the green "Create pull request" button.](images/operator-guide/08-create-pull-request-page.jpg)
+
 9. You're now on the pull request page. Wait a minute or two, refreshing if needed, while the
    two automated checks run.
+
+    ![The pull request page while checks are still running, some in progress, some already green.](images/operator-guide/09-checks-running.jpg)
+
 10. Once `Preview deploy` finishes, a comment appears on the PR from GitHub Actions with a link
     that looks like `https://wicfl-prNN-<slug>.wicfl-microsites.workers.dev`. Click it: this is
     your exact change, live, before anyone else sees it.
+
+    ![The pull request page once both checks have passed, with the GitHub Actions bot comment posting the live preview link.](images/operator-guide/10-checks-passed-preview-link.jpg)
+
 11. Look at the real page. Then run the self-review checklist in `docs/CONTENT_STANDARDS.md`,
     and `docs/QA_CHECKLIST.md` if this is a launch-readiness pass.
 12. If both checks are green and the preview looks right, click the green **"Merge pull
     request"** button, then the confirm button that appears under it. Afterward, GitHub offers a
     **"Delete branch"** button — click it; the branch was only scaffolding for the PR.
+
+    ![A closed pull request offering the "Delete branch" button. This screenshot is from a test PR that was closed without merging, a merged PR shows a purple "Merged" badge instead of red "Closed," but the "Delete branch" button looks and works the same either way.](images/operator-guide/12-closed-delete-branch.jpg)
+
 13. `main` now has your change. The temporary preview Worker deletes itself automatically a few
     minutes after the PR closes, merged or not — that's expected, and separate from the real,
     permanent site.
@@ -165,13 +183,23 @@ understand git as a system, just what these particular words mean here.
 A page is one markdown file. Here's the exact recipe.
 
 1. Go to `sites/<your-site>/content/` in the repo.
+
+   ![The content folder's file listing, with the "Add file" dropdown button near the top-right.](images/operator-guide/01-content-folder-add-file.jpg)
+
 2. Click the **"Add file"** dropdown near the top-right of the file listing, then **"Create new
    file."**
+
+   ![The "Add file" dropdown open, showing its two options: "Create new file" and "Upload files."](images/operator-guide/02-add-file-dropdown.jpg)
+
 3. In the **"Name your file..."** field, type a filename ending in `.md`: lowercase words
    separated by hyphens, no spaces — for example `flood-coverage.md`. **This filename becomes
    the page's web address automatically once it's live**: `flood-coverage.md` becomes the page
    at `/flood-coverage/`. There's no separate "URL" field anywhere; the filename is the address,
    so get it right the first time (renaming the file later changes the page's URL).
+
+   ![The new-file page with the empty "Name your file..." field and blank editor.](images/operator-guide/03-new-file-name-field.jpg)
+   ![The filename typed in: windstorm-coverage-demo.md.](images/operator-guide/04-filename-typed.jpg)
+
 4. In the editor, the very first thing in the file has to be a frontmatter block: three dashes,
    some fields, three dashes, before any of your actual content.
 
@@ -184,6 +212,11 @@ A page is one markdown file. Here's the exact recipe.
 
    Your page content starts here, as normal markdown.
    ```
+
+   Here's what that looks like actually typed into the real editor, using the worked example
+   from below:
+
+   ![The editor filled in with a real frontmatter block and page content.](images/operator-guide/05-frontmatter-and-content.jpg)
 
    - `title` — required. The page's headline and browser-tab title.
    - `description` — optional, but write one anyway; it's what shows up in search results and
@@ -246,6 +279,12 @@ deductible with your Walker Insurance Company of Florida agent before hurricane 
 
 See also our [flood coverage page](/flood-coverage/) for how storm surge is handled separately.
 ```
+
+This exact file was actually created and previewed live on 8 Sep 2026, to confirm the whole
+recipe works end to end before writing it down here — the filename alone produced this page, at
+its own URL, with no code changes anywhere:
+
+![The live preview of the page above, rendered at its own URL exactly as the filename predicted, no template or code changes needed.](images/operator-guide/11-live-preview-page.jpg)
 
 Notice what each part is doing, and why it's there:
 
