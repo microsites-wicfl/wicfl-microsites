@@ -5,6 +5,44 @@ El agente ejecutor solo agrega su propia entrada al cerrar un prompt; no edita e
 
 ---
 
+## 2026-09-08 · Prueba real de W-098 con un PR de verdad: el mecanismo funciona, pero GitHub corre código viejo (W-098, W-110)
+
+**Quién:** cowork, a petición explícita de Vic — "hagamos el test antes de mandarle la guía a Pavel".
+
+**Qué:** en vez de opinar sobre qué tan amigable es el flujo de Pavel, se corrió de verdad. Con el bridge conectado
+al navegador de Vic (ya con sesión iniciada en GitHub), se editó `sites/_example/content/index.md` directo en
+github.com — sin terminal, sin clonar nada, solo el editor web — y se usó el flujo "Create a new branch and start
+a pull request" para abrir el PR #2 contra el repo real.
+
+Resultado, con evidencia:
+- **`Validate and build` corrió y pasó de punta a punta:** valida las configs de todos los sitios, descubre cuáles
+  cambiaron, construye `_example`. Esta mitad del pipeline sí está viva en GitHub, tal como está documentada.
+- **`Preview deploy` se saltó ("skipped").** El motivo no es un bug del workflow: el `preview.yml` que corre en
+  GitHub hoy es una versión vieja, un stub que literalmente dice "Disabled branch preview until Cloudflare exists".
+  La versión real — la que describe `BACKLOG.md` en W-098 como "Activado, no en `if: false`", con Worker efímero,
+  comentario con URL y limpieza automática — existe solo en el `main` local de Vic. Nunca se subió.
+
+Se confirmó por qué: `git log` muestra el local 15 commits adelante de `origin/main` (el último commit en GitHub
+tiene 4 días). Ahí adentro va W-014 completo (pods, `wrangler.pod-1.toml`), la reescritura de W-098, W-109 (logo)
+y la documentación actualizada de hoy (`OPERATOR_GUIDE.md`, `SETUP.md`). Todo eso es real y está bien construido —
+ya se había verificado localmente — pero **invisible para GitHub, para Kevin, y para Pavel**, porque vive solo en
+una laptop. Cowork intentó `git push` dos veces desde el bridge (antes y después de que Vic iniciara sesión en
+Chrome) y ambas fallaron igual: `fatal: could not read Username for 'https://github.com'` — el bridge no tiene
+credenciales de git, y eso es independiente de que Chrome tenga sesión iniciada. Hace falta que Vic lo empuje él
+mismo, como ya ha hecho antes.
+
+**El hueco:** `BACKLOG.md` describía W-098 y W-014 como si ya funcionaran en producción, y en el sentido que
+importa — lo que corre cuando alguien más que Vic abre un PR — no era cierto todavía. Sin esta prueba, la primera
+vez que eso se hubiera notado habría sido con Pavel operando solo el 21 de septiembre, viendo un mensaje de
+"Disabled" en su primer pull request. Se abrió **W-110** para cerrar la sincronización, y se anotó en W-098 que no
+se manda la guía ni se agenda el handoff del 17 hasta que el PR de prueba se repita en verde con el código real ya
+en GitHub. El PR #2 se cerró y su rama se borró en cuanto se confirmó el hallazgo — no llegó a desplegar nada.
+
+De paso, la prueba también contestó la duda de Vic sobre si Pavel necesita terminal: no. Todo el edit-branch-PR se
+hizo desde el navegador, sin instalar nada. Eso sigue siendo cierto independientemente de W-110.
+
+---
+
 ## 2026-09-04 · W-105: checklist del vault, no se pudo montar (correcto — no es tarea de cowork)
 
 **Quién:** cowork, siguiendo con W-105 tras cerrar W-014
