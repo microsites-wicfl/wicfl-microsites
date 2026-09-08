@@ -1,5 +1,40 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-08 · Hueco encontrado: comprar y conectar un dominio no está en la guía, y no debería estar todavía
+
+**Quién:** cowork, respondiendo tres preguntas directas de Vic después de ver la guía con
+screenshots: "¿cómo le hace Pavel para crear un nuevo dominio y conectarlo con este nuevo
+sitio?, eso viene en la guía?", "¿con esta información ya puede trabajar Pavel autónomamente?",
+"¿también hay que agregar la parte de Cloudflare y GoDaddy?"
+
+**Qué:** antes de responder o de escribir nada, se releyeron `docs/ACCOUNTS_AND_ACCESS.md`,
+`docs/ARCHITECTURE.md`, `docs/SCHEDULE.md` y las filas relevantes de `BACKLOG.md` (W-010, W-011,
+W-013, W-017, W-050, W-051, W-093, W-105) para no inventar una respuesta. Los hechos:
+
+- El dominio del Sitio #1 (`StuartHomeownersInsurance.com`) ya está comprado (Kevin, en GoDaddy,
+  como excepción puntual al plan) y conectado a Cloudflare (Vic, cambiando nameservers, W-011).
+  El trabajo de Pavel para el 17-sep y el 9-oct sigue siendo exclusivamente contenido, así que
+  para ESO la guía ya es autosuficiente.
+- Pero `docs/SCHEDULE.md` define el propio Gate A (13-nov, Sitio #3) exigiendo que ahí **Pavel
+  elija el nicho y compre el dominio, sin ayuda**: "if Pavel picks the niche, Pavel buys the
+  domain." Eso es un compromiso ya escrito en el plan del proyecto, no una idea nueva de Vic.
+- Hoy eso no es posible: Pavel todavía no tiene su acceso de Administrator en Cloudflare (W-017,
+  abierto, no urgente hasta el 21-sep), y nadie ha ejecutado en vivo el flujo de comprar un
+  dominio por Cloudflare Registrar.
+- `docs/ARCHITECTURE.md` ya decidió que los dominios futuros van por **Cloudflare Registrar**,
+  no GoDaddy: GoDaddy fue una excepción de una sola vez porque Kevin ya había comprado el
+  dominio #1 ahí antes de que existiera el plan. Documentar un flujo de GoDaddy para Pavel
+  estaría documentando el camino que el proyecto ya decidió no repetir.
+
+**Respuesta dada a Vic:** la guía no necesita esto todavía para el 17-sep, y no se debe escribir
+un paso a paso todavía porque significaría inventar botones de una pantalla (Cloudflare
+Registrar) que nadie en el proyecto ha usado en vivo — la misma regla que se siguió con GitHub.
+Se abrió **W-112** para no perder el hueco de vista, sin bloquear nada del camino actual.
+
+**Decisión pendiente de Vic:** qué registrador documentar de cara a Gate A (Cloudflare Registrar
+per el plan, o replicar GoDaddy) y cuándo priorizar esta prueba en vivo, dado que no urge antes
+del 21-sep pero sí antes del 13-nov.
+
 ## 2026-09-08 · Corrida en vivo del proceso de Pavel, con screenshots reales en la guía
 
 **Quién:** cowork, en el Chrome real de Vic (`mcp__claude-in-chrome__*`), a pedido directo: "haz
