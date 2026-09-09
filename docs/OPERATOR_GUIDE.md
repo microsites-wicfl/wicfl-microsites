@@ -1,6 +1,6 @@
 # Operator guide
 
-**Version 1.1 · 8 Sep 2026 · Written for Pavel ahead of the 17 Sep handoff, closes backlog item
+**Version 1.2 · 9 Sep 2026 · Written for Pavel ahead of the 17 Sep handoff, closes backlog item
 W-102.** Read this before the handoff session, not during it. Bring questions the session
 doesn't answer; each one gets logged, because a gap this guide misses is a defect in the guide,
 not in you.
@@ -9,6 +9,10 @@ not in you.
 assumed you already knew git and GitHub; that assumption was wrong, and this version doesn't
 make it. Everything in Part 2 was clicked through for real on this repository before being
 written down — see `BITACORA.md`, 8 Sep 2026.*
+
+*Updated 9 Sep 2026: added a new subsection to Part 2, "Publishing a full batch of pages at
+once," for launching a whole site's real content in one pull request instead of one page at a
+time. Clicked through for real on Site #1's actual content, see `BITACORA.md`, 9 Sep 2026.*
 
 This is the guide, not the reference material. It tells you what this repo is, what you touch,
 what you never touch, and how a week actually goes. When you need the exact schema fields, the
@@ -303,6 +307,64 @@ Notice what each part is doing, and why it's there:
 - **`pageType: coverage`** — because this page is specifically about what one coverage type does
   and doesn't cover. A general page (an About page, a service-area page) would use `content`
   instead.
+
+### Publishing a full batch of pages at once (what a new site's first real content looks like)
+
+Everything above walks through one page at a time. When you're launching a whole site's real
+content at once, like Site #1 on 9 Sep 2026, you're doing the same recipe seven or eight times
+before opening a single pull request, so the checks and preview only have to run once for the
+whole batch instead of once per page. Here's the exact sequence, clicked through for real on
+`stuart-homeowners` — see `BITACORA.md`, 9 Sep 2026.
+
+1. **Write every page's frontmatter and content somewhere else first** — a text editor, a doc,
+   anywhere off GitHub — before you touch the browser. You're about to paste seven or eight
+   files in a row; composing them live in the editor is how a stray character or a missed
+   frontmatter field slips in unnoticed.
+2. Go to `sites/<your-site>/content/`, click **"Add file" → "Create new file,"** same as steps
+   1-2 in "Creating a brand-new page" above, but only for your **first** page.
+3. Name the file, paste its frontmatter and content, same as steps 3-4 above.
+4. Scroll to **"Commit changes..."**. This time, select **"Create a new branch for this commit
+   and start a pull request,"** and before clicking through, replace the auto-generated branch
+   name (something like `<you>-patch-2`) with something short and readable, for example
+   `site1-real-content`. Click the button that creates the branch.
+5. You land on the same "Open a pull request" page as before. **Don't create the pull request
+   yet.** Every other page still needs to go onto this same branch first.
+6. For each remaining page, go directly to this address, with your branch's name and your
+   site's slug in place of the placeholders:
+
+   `github.com/microsites-wicfl/wicfl-microsites/new/<your-branch-name>/sites/<your-site>/content`
+
+   This is the exact same "new file" screen as step 2, just already pointed at your branch
+   instead of `main` — check the small label next to the filename field, it should say
+   **"in \<your-branch-name>,"** not "in main."
+7. Name the file, paste its content, scroll to **"Commit changes..."**. Because the branch
+   already exists, GitHub now defaults to **"Commit directly to the \<your-branch-name>
+   branch."** That's what you want this time — leave it as is, don't touch the radio buttons,
+   just click **"Commit changes."**
+8. Repeat steps 6-7 for every remaining page.
+9. Once every page is committed, go to:
+
+   `github.com/microsites-wicfl/wicfl-microsites/compare/main...<your-branch-name>?quick_pull=1`
+
+   Give the pull request one title that describes the whole batch (for example "Site 1: real
+   content, 8 pages"), and a description listing every page it includes. Click **"Create pull
+   request."**
+10. Wait for checks, same as step 9 in "Editing a page that already exists" above — there will
+    be more of them this time (5, not 2), because building and previewing a whole site with new
+    pages takes a few more jobs than a one-line edit, but they're the same kind of checks and
+    they behave the same way.
+11. Click through to the preview link the bot comments. **Click around, don't just look at one
+    page** — open the home page and at least two or three of the new pages. A batch this size
+    can have one broken internal link even when every page passes validation on its own.
+12. Run the self-review checklist from `docs/CONTENT_STANDARDS.md` on every page, not once for
+    the whole batch.
+13. If everything checks out, merge, confirm, and delete the branch, same as steps 12-13 above.
+
+**One thing that's different from a single-page PR:** the temporary preview link disappears
+within a few minutes of merging, same as always, but there's no other live link to point at
+afterward until the site is actually deployed to production (still gated behind W-103 until
+launch). To see what shipped after merging, the durable link is the pull request itself, not a
+live URL — it stays on GitHub forever and shows exactly what changed, page by page.
 
 ### If a check fails
 
