@@ -1,5 +1,44 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-09 · Contenido real del sitio #1, prueba completa end-to-end en el sitio real
+
+**Quién:** Pavel envió por Zoom el contenido estructurado del sitio #1 (Google Drive, carpeta
+"MICROSITE 1 STRUCTURE"): 7 páginas ya separadas por tema (`_flood-insurance`,
+`_waterfront-home-insurance`, `_coastal-home-insurance`, `_high-value-home-insurance`,
+`__difficult-to-insure-homes`, `_home-insurance-after-nonrenewal`, `_contact`) más el logo en
+jpg y png. cowork descargó todo desde Drive (vía navegador, el conector de Drive no indexó la
+carpeta a tiempo) y lo guardó en el repo, en `_drafts/microsite-1-structure/` (ignorado por
+git, nunca sube a GitHub).
+
+**Qué:** Pavel ya adoptó la estructura de varias páginas que se había acordado, en vez de una
+sola landing. Cada página trae su propio título, meta description y `pageType` sugerido, y usan
+lenguaje calificado ("may", "generally", "can be considered") consistente con
+`docs/CONTENT_STANDARDS.md`. Cada página también nombra lugares reales de Martin County
+(Sewall's Point, Sailfish Point, Hutchinson Island, Palm City, Rocky Point) y cuerpos de agua
+reales (St. Lucie River, Intracoastal), una mejora real sobre el borrador de la Home del 8-sep,
+que era casi todo genérico.
+
+**El hueco:** Los links internos entre páginas ("Learn more about...") apuntan a
+`https://chatgpt.com/<slug>` en vez de rutas relativas del sitio (`/slug/`), un artefacto de
+haber redactado con IA. Hay que corregirlos globalmente antes de publicar cualquier página real.
+La Home original (`Home Microsite1 (1).docx`) todavía no se actualizó para la nueva estructura,
+sigue teniendo las secciones que ahora son páginas propias, duplicando contenido. No llegó una
+página `/homeowners-insurance` general que Pavel mencionó en el chat, falta confirmar si fue
+intencional. El número de licencia y el dominio del correo de contacto (`info@mysfia.com`)
+siguen sin confirmar con Kevin, mismo pendiente que el 8-sep.
+
+**Decisión:** Con ese contenido, cowork corrió la prueba completa acordada: tomó
+`_flood-insurance.docx`, corrigió sus links y armó el frontmatter real (`pageType: coverage`),
+y repitió el proceso exacto de Pavel en GitHub (Parte 2 de `docs/OPERATOR_GUIDE.md`), esta vez
+sobre el sitio real `stuart-homeowners`, no sobre el fixture `_example` de la prueba anterior.
+PR #5, rama `microsites-wicfl-patch-2`: los 5 checks pasaron (`Validate all site
+configurations`, `Discover sites to build`, `Build stuart-homeowners`, `Preview deploy` x2), el
+preview en `https://wicfl-pr5-stuart-homeowners.wicfl-microsites.workers.dev/flood-insurance/`
+renderizó correctamente con el contenido real de Pavel. Confirmado que el proceso completo
+funciona con contenido real en el sitio piloto real. Como se acordó, el PR se cerró sin mergear
+y la rama se borró, `main` queda intacto. Pavel repetirá este mismo proceso él mismo como su
+primera práctica real, una vez resueltos los links y la Home revisada.
+
 ## 2026-09-08 · GoHighLevel: se reutiliza la sub-account existente de Walker Insurance, no una nueva
 
 **Quién:** Vic, por chat de Zoom con Kevin, con cowork redactando el copy en tiempo real.
