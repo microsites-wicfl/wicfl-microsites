@@ -116,7 +116,7 @@ dentro de octubre sin tocar el handoff ni el 21 de septiembre.
 
 | id | Item | Notas |
 |---|---|---|
-| W-030 | Sitio #1 en inglés, generado desde config, launch 9 oct | Arranca el reloj de 120 días de Gate B. **Fecha confirmada el 25-ago** |
+| W-030 | Sitio #1 en inglés, generado desde config, launch 9 oct | Arranca el reloj de 120 días de Gate B. **Fecha confirmada el 25-ago** **Avance 2026-09-09:** las 8 páginas de contenido real de Pavel (Home recortada, flood, waterfront, coastal, high-value, difficult-to-insure, after-nonrenewal, contact) ya están mergeadas a `main`, PR #6, checks verdes, verificado en preview antes de mergear. Ver `BITACORA.md` 2026-09-09. **No se cierra todavía:** falta el logo/license/contacto reales de Kevin (W-008), el formulario real de `/contact/` (W-025), y que Pavel repita el proceso él mismo. |
 | W-031 | Sitio #2 en español, launch 30 oct | **Pavel escribe el español nativo.** Nunca traducido ni generado desde brief en inglés |
 | W-032 | Registrar horas de ambos como línea base de Gate A | Separar desde ya **tiempo de fábrica** de **tiempo de contenido** y de **esperas de vendor**. Si la línea base mezcla los tres, no es comparable contra Gate A |
 

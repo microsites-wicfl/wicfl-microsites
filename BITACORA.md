@@ -1,5 +1,41 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-09 · Sitio #1 (Stuart Homeowners): contenido real de Pavel mergeado a main, las 8 páginas
+
+**Quién:** Vic pidió correr la prueba completa del proceso de Pavel con el contenido real ya
+descargado ("haz un test del proceso que haria Pavel para que con este contenido montemos un
+micro site"). Al preguntarle qué hacer con el resultado, Vic eligió explícitamente dejarlo
+publicado en vez de revertirlo: "Ya es contenido real y completo, no un placeholder. Mergear
+esto de una vez avanza de verdad hacia el lanzamiento del 9-oct, en vez de descartar el trabajo."
+
+**Qué:** cowork adaptó las 7 páginas de Pavel (`_flood-insurance`, `_waterfront-home-insurance`,
+`_coastal-home-insurance`, `_high-value-home-insurance`, `__difficult-to-insure-homes`,
+`_home-insurance-after-nonrenewal`, `_contact`) más un recorte de la Home, corrigiendo en el
+camino los links internos que apuntaban a `chatgpt.com` en vez de a `/slug/` (el hueco anotado
+en la entrada anterior). Se subieron las 8 páginas vía GitHub web UI a una sola rama
+(`site1-real-content`), un PR consolidado (#6), con frontmatter validado contra el schema de
+`content.config.ts`. Los 5 checks pasaron (`Validate all site configurations`, `Discover sites
+to build`, `Build stuart-homeowners`, `Discover sites to preview`, `Preview stuart-homeowners`).
+Se verificó el preview en `https://wicfl-pr6-stuart-homeowners.wicfl-microsites.workers.dev/`
+(home, `/flood-insurance/`, `/contact/`) antes de mergear: título, contenido y footer con
+NAP/licencia automático, todo correcto. El PR #6 se mergeó a `main` (commit `70a7967`), esta vez
+sí, no se revirtió.
+
+**Páginas en `main` ahora:** `index.md` (Home recortada, con nueva sección "Explore coverage for
+your specific property" enlazando a cada página de cobertura en vez de duplicar el contenido),
+`flood-insurance.md`, `waterfront-home-insurance.md`, `coastal-home-insurance.md`,
+`high-value-home-insurance.md`, `difficult-to-insure-homes.md`,
+`home-insurance-after-nonrenewal.md`, `contact.md`.
+
+**Lo que queda pendiente:** No se agregó una página `/homeowners-insurance` separada (Pavel la
+mencionó en el chat), ese contenido quedó integrado en la Home en vez de una página propia, hay
+que confirmar con Pavel si eso es intencional. `about-demo.md` y `coverage-demo.md` siguen como
+placeholders de W-008, sin tocar. El número de licencia y el dominio del correo de contacto
+siguen sin confirmar con Kevin. El formulario de `/contact/` sigue siendo solo informativo (lista
+de campos a preparar), todavía no existe el componente de formulario real (W-025). Pavel todavía
+no ha repetido este proceso él mismo; con el contenido ya corregido y publicado, hay que decidir
+si su primera práctica será sobre este mismo sitio (ediciones) o sobre el sitio #2 desde cero.
+
 ## 2026-09-09 · Research: marcas de agua de IA y su impacto real en el proyecto
 
 **Quién:** Vic preguntó si el watermarking de contenido de IA (para que buscadores identifiquen
