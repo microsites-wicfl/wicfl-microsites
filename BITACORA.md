@@ -1,5 +1,15 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-09 · Pavel ya tiene acceso al repo de GitHub (W-113)
+
+**Quién:** Vic confirmó que Pavel ya tiene acceso al repositorio de GitHub.
+
+**Qué:** Cierra la primera mitad de W-113, invitar a Pavel como colaborador en `github.com/microsites-wicfl/wicfl-microsites`. Con esto, Pavel ya puede seguir el flujo real que documenta `docs/OPERATOR_GUIDE.md` (editar en github.com, commit, pull request) directamente sobre el repo, ya no depende del camino sin cuenta para operar ahí.
+
+**Qué sigue abierto:** la segunda mitad de W-113 no cambia con este avance, decidir si `microsites-wicfl` sigue siendo cuenta personal de GitHub o se migra a organización antes de sumar más gente. No es urgente mientras el equipo siga siendo pequeño.
+
+Ver `BACKLOG.md`, W-113.
+
 ## 2026-09-09 · Sitio #1 (Stuart Homeowners): contenido real de Pavel mergeado a main, las 8 páginas
 
 **Quién:** Vic pidió correr la prueba completa del proceso de Pavel con el contenido real ya
