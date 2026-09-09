@@ -1,5 +1,16 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-09 · Revisión del GPT de Vic para formatear contenido, antes de conectarlo al formulario (W-111)
+
+**Quién:** Vic armó un GPT propio para tomar el contenido crudo que mandan Pavel/Kevin y devolverlo ya formateado (markdown + frontmatter) listo para cargar. Mostró la pantalla de configuración (Name, Description, Instructions, Conversation starters, Knowledge, Capabilities) y preguntó qué opinaba cowork, en el mismo momento en que preguntaba si conectar esa salida a un formulario mínimo para que Pavel nunca toque GitHub directo (ver W-111).
+
+**Qué:** cowork revisó la configuración tal como estaba armada y dio cuatro observaciones puntuales: quitar las capacidades de Web Search e Image Generation porque son scope-creep innecesario para una herramienta que solo debe formatear texto, no buscar ni generar imágenes; agregar Conversation starters para que Pavel no tenga que adivinar cómo arrancar cada vez; subir `docs/CONTENT_STANDARDS.md` como Knowledge para que el formato de salida respete las mismas reglas que ya rigen el contenido del repo; y probarlo de punta a punta con contenido real de Pavel antes de confiar en él para producción, no solo con texto de prueba. Sobre la idea de conectarlo a un formulario: la opinión fue que sí vale la pena construir el formulario ya, porque W-111 ya no tiene ningún bloqueador (W-110 cerró) y ya existe un prompt listo para el ejecutor.
+
+**Qué sigue abierto:** no quedó confirmado si Vic ya aplicó los cuatro ajustes a la config del GPT, ni se corrió la prueba de punta a punta con contenido real que se recomendó. El formulario de W-111 en sí **no se construyó hoy**, sigue en el mismo estado: 0% construido, solo con el prompt listo (`prompts/2026-08-25_008_formulario-carga-contenido.md`) esperando que alguien lo corra. Esta entrada se agrega tarde porque la revisión pasó por el chat y no quedó registrada en su momento, hueco que se corrige aquí.
+
+Ver `BACKLOG.md`, W-111.
+
+
 ## 2026-09-09 · Logo real de marca instalado y mergeado a main (W-008)
 
 **Quién:** Vic recibió el archivo del logo (`logo stuart.svg`) de manos de Pavel, ya descargado en su equipo. A partir de ahí se hizo el trabajo técnico de instalarlo.
