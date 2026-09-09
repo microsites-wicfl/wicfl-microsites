@@ -1,7 +1,7 @@
 {
   "slug": "stuart-homeowners",
   "domain": "stuarthomeownersinsurance.com",
-  "brand": { "name": "Stuart Homeowners Insurance (Demo)", "parent": "WICFL" },
+  "brand": { "name": "Stuart Homeowners Insurance (Demo)", "parent": "WICFL", "logo": "/logo.svg" },
   "niche": { "product": "homeowners", "audience": "homeowner" },
   "geo": { "city": "Stuart", "county": "Martin", "state": "FL", "serviceArea": ["Stuart", "Port Salerno", "Palm City"] },
   "locale": { "primary": "en", "alternates": [] },
