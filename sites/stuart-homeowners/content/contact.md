@@ -41,3 +41,4 @@ Having trouble finding coverage? Learn more about [difficult-to-insure homes](/d
 If you're concerned about flooding, explore [flood insurance in Stuart](/flood-insurance/) and understand how flood coverage differs from standard homeowners insurance.
 
 *Coverage, eligibility, limits, deductibles and availability vary by insurance carrier and individual circumstances.*
+
