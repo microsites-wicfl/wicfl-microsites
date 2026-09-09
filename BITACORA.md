@@ -1,5 +1,18 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-09 · Logo real de marca instalado y mergeado a main (W-008)
+
+**Quién:** Vic recibió el archivo del logo (`logo stuart.svg`) de manos de Pavel, ya descargado en su equipo. A partir de ahí se hizo el trabajo técnico de instalarlo.
+
+**Qué:** se copió el archivo a `sites/stuart-homeowners/public/logo.svg` y se agregó `"logo": "/logo.svg"` al objeto `brand` de `sites/stuart-homeowners/site.config.json`, usando el soporte que ya existía en el schema y el template desde W-109. Se abrió la rama `site1-logo`, PR #7 "Site 1: add brand logo", los 5 checks (validación de config, build, discover/preview) pasaron en verde, se revisó el preview deploy (`wicfl-pr7-stuart-homeowners.wicfl-microsites.workers.dev`) confirmando que el logo se ve correctamente en el header en vez del wordmark de texto, y se mergeó a `main`. La rama se borró después del merge.
+
+**Qué sigue abierto:** la parte del logo de W-008 queda resuelta del todo. Sigue faltando de Kevin: el license number del sitio, y el teléfono, email y dirección aprobados. Vic ya se lo pidió por el chat de Zoom el 2026-09-09.
+
+**Nota técnica:** al sincronizar el repo local de Vic con `origin/main` después de este merge, se encontró que 23 commits de documentación (actualizaciones de `BACKLOG.md`, `BITACORA.md`, `docs/OPERATOR_GUIDE.md` y las capturas del walkthrough) llevaban tiempo hechos localmente pero nunca se habían subido a GitHub. Se reconstruyó el merge a mano (el índice de git local quedó trabado por un lock viejo) preservando ambos lados sin perder nada, y quedó listo para subir. Falta que Vic corra `git push origin main` desde su propia terminal, porque este puente no tiene sus credenciales de GitHub. También quedaron dos archivos de lock viejos (`.git/index.lock`, `.git/HEAD.lock`) y un archivo de prueba (`_scratch_permission_test.txt`) en la raíz del repo que Vic puede borrar manualmente cuando pueda, no bloquean nada mientras tanto salvo comandos de git nuevos que toquen el índice principal.
+
+Ver `BACKLOG.md`, W-008.
+
+
 ## 2026-09-09 · Pavel ya tiene acceso al repo de GitHub (W-113)
 
 **Quién:** Vic confirmó que Pavel ya tiene acceso al repositorio de GitHub.
