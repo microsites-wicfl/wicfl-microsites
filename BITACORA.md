@@ -1,5 +1,29 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-09 · Research: marcas de agua de IA y su impacto real en el proyecto
+
+**Quién:** Vic preguntó si el watermarking de contenido de IA (para que buscadores identifiquen
+contenido hecho con IA) representa un riesgo para el plan, después de ver los links rotos hacia
+chatgpt.com en el contenido de Pavel.
+
+**Qué:** cowork investigó (SynthID de Google, C2PA/content credentials, política de Google sobre
+contenido generado por IA, EU AI Act artículo 50, reglas de la FTC, y ley de Florida). Conclusión:
+ninguno de estos mecanismos es una señal de ranking en Google hoy. Google dice directamente que
+el uso apropiado de IA no viola sus lineamientos, y que penaliza contenido de bajo valor "sin
+importar cómo se creó" (scaled content abuse), no el uso de IA en sí. Un watermark tampoco
+sobrevive una edición real, así que una página con verdadero pase humano no lo conservaría de
+todas formas. Del lado legal, ninguna ley obliga a divulgar uso de IA en este contenido: el AI
+Act de la UE solo aplica a quien opera bajo jurisdicción de la UE, la FTC regula anuncios pagados
+y testimonios, no páginas informativas, y Florida no tiene ley amplia al respecto todavía.
+
+**Decisión:** No cambia nada de la política ya escrita en `docs/CONTENT_STANDARDS.md` ("How AI
+may and may not be used"), esa política ya cubre el riesgo real (contenido genérico sin pase
+humano), que es justo lo que el buscador sí detecta. Se agregó una nota corta a
+`CONTENT_STANDARDS.md` documentando esta investigación, y un ítem 8 al self-review checklist:
+nunca dejar artefactos de herramientas de IA en el texto (como los links a chatgpt.com que
+mandó Pavel), no porque sea un riesgo de watermarking, sino porque es la señal más simple de que
+la página no recibió un segundo pase humano real.
+
 ## 2026-09-09 · Contenido real del sitio #1, prueba completa end-to-end en el sitio real
 
 **Quién:** Pavel envió por Zoom el contenido estructurado del sitio #1 (Google Drive, carpeta

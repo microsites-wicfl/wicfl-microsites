@@ -75,6 +75,19 @@ looks for. The mechanism is what gets caught, not the intent behind it.
 not generated from an English brief. In the Miami and Broward market the difference is obvious
 to a reader in one paragraph, and credibility is the entire product for an insurance site.
 
+**On AI watermarking and detection (researched 9-sep-2026):** tools like Google's SynthID and
+the C2PA content-credentials standard exist, but as of now neither is used by Google as a search
+ranking signal, and Google says directly that appropriate AI use is not against its guidelines,
+the thing it penalizes is low-value content at volume, "no matter how it's created." A
+watermark also does not reliably survive real editing, so a page that actually gets the human
+pass this policy requires would not carry one either way. Separately, no disclosure law
+currently applies to this site's own content: the EU AI Act's labeling rule only reaches
+providers/deployers under EU jurisdiction, and the FTC's AI-disclosure rules target paid
+ads and endorsements, not informational or coverage pages. None of this changes anything in
+this policy, it is exactly why the policy is already written the way it is: it was cheaper to
+have Google's actual policy right the first time than to chase a rumor about watermarks.
+Revisit if a primary source (not an SEO blog) says otherwise.
+
 ## Self-review checklist, since there is no second reviewer yet
 
 Decided 2026-09-03. Pavel is writer, SEO lead and project lead at once, and there is no one
@@ -111,6 +124,12 @@ Before a page goes live, check:
    Specific exclusions, edge cases, or legal interpretation get softened to general, educational
    framing rather than stated as settled fact. When in doubt, that is exactly the kind of thing
    worth a quick message to Kevin, informally, before publishing rather than after.
+8. **No leftover AI-tool artifacts.** Broken links pointing at the AI tool's own domain instead
+   of a real page (seen for real on 9-sep-2026: internal links drafted as
+   `https://chatgpt.com/<slug>` instead of `/<slug>/`), meta-commentary ("as an AI...", "I cannot
+   browse the internet"), or placeholder brackets left in from a prompt. These are not a
+   watermarking or detection risk (see the note below), they are just a sign the page did not
+   get a real second read before it was called done.
 
 ## Page count guidance
 
