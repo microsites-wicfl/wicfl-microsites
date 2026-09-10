@@ -23,7 +23,16 @@ plano, sin JS, generado desde la content collection con un `navLabel` opcional p
 vez de una lista hardcodeada por sitio — diseño propuesto por cowork, sin objeción de Vic).
 Ninguno de los dos se ha corrido todavía.
 
-Ver `BACKLOG.md`, W-115, W-108, W-023, W-021, W-116.
+**Segunda actualización, mismo día:** al revisar qué más se podía empujar sin depender de Kevin
+o Pavel, se encontró que W-100 (definir qué es una "llamada calificada") ya tenía casi todo el
+trabajo hecho: la definición de partida llevaba desde el 26 de agosto escrita dentro de
+`docs/GATE_B_MODEL.md`, sin que nadie la hubiera separado para mandarla a aprobar por su cuenta.
+Se extrajo a `docs/QUALIFIED_CALL_DEFINITION.md`, mismo patrón que W-005: Kevin aprueba o edita
+una definición ya escrita, no la inventa desde cero. Queda pendiente que Vic se la mande a
+Kevin (copy en inglés ya redactado en el chat) y que se nombre quién hace el etiquetado semanal
+de llamadas una vez exista W-024.
+
+Ver `BACKLOG.md`, W-115, W-108, W-023, W-021, W-116, W-100.
 
 ## 2026-09-10 · Bug encontrado y diagnosticado: páginas de contenido se ven cortadas a la mitad (W-115), y falta de navegación (W-116)
 
