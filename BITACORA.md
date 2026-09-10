@@ -1,5 +1,21 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-10 (2) · W-115 corregido y verificado en vivo; master file republicado (W-108); prompt de SEO técnico listo (W-023)
+
+**Quién:** Vic pidió el estado de pendientes en orden de prioridad y pidió avanzar todo lo posible sin esperar a Kevin/Pavel. A partir de ahí, cowork trabajó en paralelo mientras ambos bridges (device_bash y la extensión de Chrome) seguían caídos.
+
+**Regla nueva, a pedido de Vic:** cuando cowork necesita hacer `git push` y ningún bridge responde, en vez de esperar le da a Vic un bloque de comandos git listo para copiar y pegar en Codex. Quedó guardada en la memoria de proyecto (`project_wicfl_microsites.md`).
+
+**W-115, cerrado:** con esa regla nueva, Vic pegó en Codex el bloque que subía la documentación de W-115/W-116 y el fix de una línea en `BaseLayout.astro` (`.page-content` → `main .page-content`), primero a `main` y después a la rama del PR #8. Codex reportó: doc en `517cbf2`, fix en `main` en `277d7e6`, mismo fix en la rama del PR #8 en `cc703d2`, sin pérdida de datos en el merge remoto que se integró de paso (un conflicto de formato en `site.config.json`). Cowork verificó en vivo, vía el Browser pane (que sí llegaba a la liga pública aunque el bridge a Chrome de Vic seguía caído): en `https://wicfl-pr8-stuart-homeowners.wicfl-microsites.workers.dev/high-value-home-insurance/` el `<article>` mantiene su ancho de lectura de 46rem, y el resto de la página ya ocupa el ancho completo del navegador. La liga que Vic ya tiene para enseñarle al equipo queda segura para compartir.
+
+**W-108, cerrado:** al revisar qué más se podía avanzar sin nadie más, se encontró que el bloqueo de red que antes impedía leer el master file publicado ya no estaba. Se comparó la fuente local (`docs/master-file-source.html`, ya en v1.5) contra la página pública (todavía en v1.4) y se confirmó el hueco que W-108 había señalado: la tabla de Open Items seguía marcando como abiertos tres puntos ya cerrados (revisor de contenido, cuenta de GitHub, CRM). Se subió a v1.6: se cerraron esos tres, se sumó el nicho/dominio de inglés como resuelto, se actualizó el estado de los assets de marca de Kevin (logo entregado y en vivo; license/contacto todavía pendientes), se corrigió una inconsistencia de fecha de Gate B entre el cuerpo (5-mar) y el pie de página (todavía 12-feb), y se refrescó la franja de estado del encabezado (fase actual, conteo de pendientes de Kevin). Publicado en `https://claude.ai/code/artifact/b1c34949-479b-48f6-a269-8522d4b2aa82`. **Pendiente:** el `docs/master-file-source.html` actualizado vive en el disco de Vic pero no se ha commiteado a git todavía.
+
+**W-023, prompt listo, no ejecutado:** se revisó el repo (schema, `build-site.mjs`, `site-data.mjs`, `astro.config.mjs`) y se confirmó que hoy no existe ningún SEO técnico: sin canonical, sin `robots.txt`, sin `sitemap.xml`, sin structured data. El campo `domain` ya existe en el schema (`site.config.json`), así que no hace falta nada nuevo del lado de Kevin/Pavel para construirlo. Se escribió `prompts/2026-09-10_010_seo-tecnico.md`, siguiendo el ciclo normal de la guía global, listo para que Vic lo pegue en Codex cuando quiera.
+
+**Qué sigue abierto:** commitear a git el `docs/master-file-source.html` (v1.6) y los cierres de W-115/W-108/W-023 en `BACKLOG.md` y esta entrada de `BITACORA.md`, todo junto en el mismo push. Correr el prompt de W-023 cuando Vic lo pegue en Codex, y revisar el reporte contra el diff cuando vuelva.
+
+Ver `BACKLOG.md`, W-115, W-108, W-023.
+
 ## 2026-09-10 · Bug encontrado y diagnosticado: páginas de contenido se ven cortadas a la mitad (W-115), y falta de navegación (W-116)
 
 **Quién:** Vic revisó la liga de preview del PR #8 (armada para enseñarle el sitio al equipo) y reportó dos cosas: cualquier página que no sea la Home sale "cortada", y preguntó si no debería haber un menú de navegación.
