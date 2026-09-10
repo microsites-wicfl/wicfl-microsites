@@ -34,6 +34,23 @@ de llamadas una vez exista W-024.
 
 Ver `BACKLOG.md`, W-115, W-108, W-023, W-021, W-116, W-100.
 
+## 2026-09-10 (3) · Kevin respondió sobre los campos del formulario de contacto, sin contenido todavía (W-025)
+
+**Quién:** Vic le había preguntado a Kevin por el chat de Zoom, el 9-sep, qué campos debía
+capturar el formulario de `/contact/` del sitio 1 para que el lead llegue útil a GoHighLevel:
+¿nombre/teléfono/email alcanza, o también dirección de la propiedad, estatus de seguro actual,
+u otra cosa que su equipo suele preguntar en la primera llamada?
+
+**Qué:** Kevin contestó el 10-sep, pero solo "I will have this to you soon - Sorry for the
+delay", citando la pregunta original sin responderla todavía. No hay campos definidos.
+
+**Qué sigue abierto:** el formulario real de `/contact/` (lo único que le falta a W-030 para
+Site #1, además del license/contacto de W-008) sigue sin poder construirse hasta que Kevin
+conteste con contenido real. Se anotó como bloqueador puntual dentro de W-025, no como item
+nuevo.
+
+Ver `BACKLOG.md`, W-025.
+
 ## 2026-09-10 · Bug encontrado y diagnosticado: páginas de contenido se ven cortadas a la mitad (W-115), y falta de navegación (W-116)
 
 **Quién:** Vic revisó la liga de preview del PR #8 (armada para enseñarle el sitio al equipo) y reportó dos cosas: cualquier página que no sea la Home sale "cortada", y preguntó si no debería haber un menú de navegación.
