@@ -14,7 +14,16 @@
 
 **Qué sigue abierto:** commitear a git el `docs/master-file-source.html` (v1.6) y los cierres de W-115/W-108/W-023 en `BACKLOG.md` y esta entrada de `BITACORA.md`, todo junto en el mismo push. Correr el prompt de W-023 cuando Vic lo pegue en Codex, y revisar el reporte contra el diff cuando vuelva.
 
-Ver `BACKLOG.md`, W-115, W-108, W-023.
+**Actualización, mismo día:** ese commit ya se hizo (Vic lo pegó en Codex, quedó en `0c57c83`,
+`main`/`origin/main` coinciden). A partir de ahí se investigó y se escribieron dos prompts más,
+siguiendo la misma prioridad que se le compartió a Vic: `prompts/2026-09-10_011_cerrar-astro-check.md`
+para W-021 (conectar `astro check` a `npm run check`, revisando primero si de verdad cuelga o
+solo tarda, en vez de asumirlo) y `prompts/2026-09-10_012_menu-navegacion.md` para W-116 (nav
+plano, sin JS, generado desde la content collection con un `navLabel` opcional por página en
+vez de una lista hardcodeada por sitio — diseño propuesto por cowork, sin objeción de Vic).
+Ninguno de los dos se ha corrido todavía.
+
+Ver `BACKLOG.md`, W-115, W-108, W-023, W-021, W-116.
 
 ## 2026-09-10 · Bug encontrado y diagnosticado: páginas de contenido se ven cortadas a la mitad (W-115), y falta de navegación (W-116)
 
