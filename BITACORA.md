@@ -1,5 +1,17 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-10 · Bug encontrado y diagnosticado: páginas de contenido se ven cortadas a la mitad (W-115), y falta de navegación (W-116)
+
+**Quién:** Vic revisó la liga de preview del PR #8 (armada para enseñarle el sitio al equipo) y reportó dos cosas: cualquier página que no sea la Home sale "cortada", y preguntó si no debería haber un menú de navegación.
+
+**Qué, W-116 (navegación):** confirmado en `BaseLayout.astro`, el `<header>` de cada sitio solo tiene el logo/wordmark (enlazado a `/`) y el teléfono, cero lista de links a las páginas de cobertura. No es una decisión documentada en ningún lado, es un hueco real. Se abrió como ítem de backlog, no bloquea el 9-oct de forma dura pero es una ausencia notoria para un sitio real.
+
+**Qué, W-115 (el corte de página):** diagnosticado en vivo, inyectando JavaScript contra la página real (`/high-value-home-insurance/`) para leer las clases y el `computed style` del `<html>`. Resultado: `<html class="variant-coastal page-content">` con `max-width: 736px` (46rem) aplicado a la etiqueta raíz completa, no solo al texto. Causa: `BaseLayout.astro` le pone a `<html>` la clase `page-${pageType}`, y como 7 de las 8 páginas reales del sitio son `pageType: content`, esa clase resulta ser literalmente `page-content`, la misma que ya existía (sin relación) para limitar el ancho del `<article>` de contenido (`.page-content { max-width: 46rem; }`, un selector sin ámbito). El choque de nombres hace que ese límite de ancho, pensado solo para el bloque de texto, se le aplique también a la página entera. Por eso solo pasa en páginas `content` y no en la Home (`pageType: home`, produce la clase `page-home`, que no colisiona con ningún selector suelto).
+
+**El arreglo, ya identificado, no aplicado todavía:** cambiar en el `<style>` de `packages/template/src/layouts/BaseLayout.astro` la línea `.page-content { max-width: 46rem; }` por `main .page-content { max-width: 46rem; }`, para que el selector solo alcance al `<article>` real dentro de `<main>`, no a `<html>`. Justo al terminar el diagnóstico, tanto el bridge a la máquina de Vic como la conexión al navegador se cayeron a la vez, así que el fix quedó listo pero sin aplicar. Se retoma en cuanto alguno de los dos vuelva a conectar.
+
+Ver `BACKLOG.md`, W-115 y W-116.
+
 ## 2026-09-09 · Revisión del GPT de Vic para formatear contenido, antes de conectarlo al formulario (W-111)
 
 **Quién:** Vic armó un GPT propio para tomar el contenido crudo que mandan Pavel/Kevin y devolverlo ya formateado (markdown + frontmatter) listo para cargar. Mostró la pantalla de configuración (Name, Description, Instructions, Conversation starters, Knowledge, Capabilities) y preguntó qué opinaba cowork, en el mismo momento en que preguntaba si conectar esa salida a un formulario mínimo para que Pavel nunca toque GitHub directo (ver W-111).
