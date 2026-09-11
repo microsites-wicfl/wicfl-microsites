@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "wicfl-content-form-w111",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-11",
+  "observability": { "enabled": true, "head_sampling_rate": 1 },
+  "vars": {
+    "GITHUB_OWNER": "microsites-wicfl",
+    "GITHUB_REPO": "wicfl-microsites",
+    "GITHUB_BASE_BRANCH": "main"
+  }
+}

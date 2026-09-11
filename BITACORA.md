@@ -1,5 +1,13 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-11 · W-111 implementado localmente, pendiente prueba real de secretos
+
+**Qué:** se construyó `apps/content-form/`, un Worker aislado para que Pavel publique un borrador sin conceptos de git. Descubre los sitios reales desde GitHub, carga Markdown existente, limita el config editable a marca/SEO, crea una rama y abre un PR; no puede mergear. La autenticación inicial es una contraseña compartida en secreto, intercambiada por cookie HttpOnly firmada. `GITHUB_TOKEN` está diseñado como secreto fine-grained mínimo por repositorio, nunca en el código.
+
+**Verificación:** `node --check`, `npm run check` y `wrangler deploy --dry-run` pasaron. No se desplegó ni se abrió el PR de `_example`: faltan el token limitado de Cloudflare y los secretos de runtime. W-111 permanece abierto hasta comprobar CI, Preview deploy y comentario de URL con un PR real. Ver `reports/2026-09-08_008_formulario-carga-contenido.md`.
+
+---
+
 ## 2026-09-10 (2) · W-115 corregido y verificado en vivo; master file republicado (W-108); prompt de SEO técnico listo (W-023)
 
 **Quién:** Vic pidió el estado de pendientes en orden de prioridad y pidió avanzar todo lo posible sin esperar a Kevin/Pavel. A partir de ahí, cowork trabajó en paralelo mientras ambos bridges (device_bash y la extensión de Chrome) seguían caídos.
