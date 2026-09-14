@@ -13,7 +13,8 @@ function json(value, status = 200, headers = {}) {
 function fail(message, status = 400) { return json({ error: message }, status); }
 
 function html() {
-  return new Response(PAGE, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
+  const safePage = PAGE.replaceAll("join('\n')", "join('\\n')").replaceAll("split('\n')", "split('\\n')").replaceAll("filter(Boolean)}})", "filter(Boolean)}}})");
+  return new Response(safePage, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
 }
 
 function base64ToText(value) {
