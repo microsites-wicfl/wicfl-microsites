@@ -1,5 +1,60 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-15 · W-111 desplegado y probado en login; queda la prueba real de PR; reporte y README quedaron desactualizados
+
+**Quién:** Vic trabajó varios días directo con Codex sin cowork en el medio (el bridge al
+escritorio estuvo intermitente) y pegó dos resúmenes de Codex al retomar. Esta entrada
+reconstruye esos días para que `BITACORA.md` no tenga un hueco entre el 11 y el 15 de
+septiembre.
+
+**Qué pasó:** Codex configuró los secretos del Worker y lo desplegó, pero **no con el mecanismo
+que el propio README documentaba**. En vez de `wrangler deploy` por CLI con el token de
+Cloudflare que se había preparado, se usó la integración nativa de Cloudflare con GitHub
+(auto-deploy al pushear a `main`), y los secretos (`GITHUB_TOKEN`, `OPERATOR_PASSWORD`) se
+cargaron desde el dashboard de Cloudflare en vez de con `wrangler secret put`. El token
+limitado de Cloudflare que se armó la sesión anterior **no se usó y sigue activo**, sin
+propósito ahora mismo.
+
+Probando de punta a punta con login real aparecieron tres bugs reales, los tres ya corregidos:
+
+1. El botón de login no reaccionaba — el Worker servía JavaScript inválido por escapes de
+   salto de línea mal formados en el HTML embebido. Fix: `06ef3a1`.
+2. Después de loguear, error genérico — los logs de Cloudflare mostraron que GitHub devolvía
+   `403: Request forbidden by administrative rules` por falta del header `User-Agent` en las
+   llamadas del Worker a la API de GitHub (no era problema de permisos ni de secreto, el token
+   sí leía el repo). Fix: se agregó `user-agent: wicfl-content-form/1.0`, commit `68a7c5c`.
+3. El selector de sitios no mostraba `_example` — la validación rechazaba el guion bajo inicial
+   del nombre del fixture. Fix: `bf5a3d0`.
+
+**Por qué importa haber probado de punta a punta en vez de confiar en el dry-run:** los tres
+bugs son invisibles en `node --check`, `npm run check` y `wrangler deploy --dry-run`, que es
+exactamente lo único que se había corrido el 11-sep. Mismo patrón que W-098 el 8-sep: un test
+real encuentra lo que la revisión de código no puede.
+
+**El hueco que se encontró al revisar (no contra el reporte, contra los archivos reales):** ni
+`reports/2026-09-08_008_formulario-carga-contenido.md` ni esta bitácora ni `BACKLOG.md`
+mencionaban nada de lo de arriba hasta ahora — quedaron congelados en el estado del 11-sep
+mientras el trabajo real siguió cuatro días más. El reporte sigue diciendo "no se pudo ejecutar
+el paso 6 real" y lista como próximo paso desplegar con el token de Cloudflare por CLI, que ya
+no es lo que pasó. `apps/content-form/README.md` tampoco se actualizó: sigue documentando
+`wrangler secret put`/`wrangler deploy` como si fuera el mecanismo real, y ya no lo es. Alguien
+que abra el README hoy para mantener esto va a seguir instrucciones que no corresponden a cómo
+funciona de verdad.
+
+**Qué sigue abierto:**
+- Confirmar la prueba real de punta a punta contra `sites/_example`: publicar un borrador,
+  confirmar que se creó el PR, que `ci.yml` y `preview.yml` corrieron, que el comentario con la
+  URL de preview apareció, cerrar ese PR de prueba y borrar su rama. Sin esto W-111 no cierra.
+- Corregir `apps/content-form/README.md` y el reporte de W-111 para que documenten el
+  mecanismo de deploy real (integración Git de Cloudflare, secretos por dashboard), no el
+  flujo por CLI que se planeó y no se usó.
+- Vic tiene que revocar el token de Cloudflare que quedó sin usar (alcance de cuenta completa
+  sobre Workers Scripts, no vale la pena dejarlo activo sin propósito).
+
+Ver `BACKLOG.md`, W-111.
+
+---
+
 ## 2026-09-11 · W-111 implementado localmente, pendiente prueba real de secretos
 
 **Qué:** se construyó `apps/content-form/`, un Worker aislado para que Pavel publique un borrador sin conceptos de git. Descubre los sitios reales desde GitHub, carga Markdown existente, limita el config editable a marca/SEO, crea una rama y abre un PR; no puede mergear. La autenticación inicial es una contraseña compartida en secreto, intercambiada por cookie HttpOnly firmada. `GITHUB_TOKEN` está diseñado como secreto fine-grained mínimo por repositorio, nunca en el código.
