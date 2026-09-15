@@ -63,6 +63,7 @@ async function github(env, path, init = {}) {
     headers: {
       accept: "application/vnd.github+json",
       authorization: `Bearer ${env.GITHUB_TOKEN}`,
+      "user-agent": "wicfl-content-form/1.0",
       "x-github-api-version": "2022-11-28",
       ...(init.headers || {})
     }
