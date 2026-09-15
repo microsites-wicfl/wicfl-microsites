@@ -27,7 +27,7 @@ function textToBase64(value) {
   return btoa(binary);
 }
 
-function safeSlug(value) { return typeof value === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value); }
+function safeSlug(value) { return value === "_example" || (typeof value === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)); }
 function safePage(value) { return typeof value === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*\.md$/.test(value); }
 
 async function hmac(value, secret) {
