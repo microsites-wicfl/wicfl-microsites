@@ -5,6 +5,10 @@ W-102.** Read this before the handoff session, not during it. Bring questions th
 doesn't answer; each one gets logged, because a gap this guide misses is a defect in the guide,
 not in you.
 
+*A Spanish translation of this guide, updated for the 17 Sep handoff and including the
+new content-form section (Part 2a), lives at `docs/OPERATOR_GUIDE.es.md`. That is the
+version handed to Pavel; keep both in sync when either changes.*
+
 *Updated 8 Sep 2026: added Part 2 below, the exact click-by-click GitHub steps. The first draft
 assumed you already knew git and GitHub; that assumption was wrong, and this version doesn't
 make it. Everything in Part 2 was clicked through for real on this repository before being
