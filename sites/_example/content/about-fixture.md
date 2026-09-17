@@ -7,3 +7,8 @@ pageType: content
 This page exists only to verify that `content/about-fixture.md` maps to `/about-fixture/`.
 
 It is deliberately not a city page and does not come from `geo.serviceArea`.
+
+
+## W-111 test — safe to discard
+
+Draft submitted through the new content form to verify branch, PR, CI, and preview. Close without merging.
