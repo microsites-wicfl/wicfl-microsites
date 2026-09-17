@@ -186,7 +186,7 @@ como sistema, solo qué significan estas palabras puntuales acá.
   esta por ti, automáticamente. Vas a ver un checkbox para esto, pero nunca tienes que
   nombrarla ni administrarla tú mismo.
 - **Commit** — una foto guardada de las líneas exactas que cambiaste, con un mensaje corto. GitHub
-  lo crea cuando hazs clic en "Commit changes."
+  lo crea cuando haces clic en "Commit changes."
 - **Pull request (PR)** — un pedido para traer los cambios de tu rama a `main`. Es una página
   donde tú (y, si algo falla, Vic) pueden ver exactamente qué cambió, y donde corren checks
   automáticos antes de que nada se mergee.
@@ -517,6 +517,6 @@ están construidos pero todavía no activados para un sitio real (esperan que da
 marca y analytics reemplacen los placeholders actuales), el gate de CI de diferenciación no
 existe hasta que el Sitio #2 tenga contenido contra el cual comparar, y el menú de navegación
 (W-116) todavía no está construido — ver la nota en "Crear una página nueva" arriba. Nada de eso
-cambia lo que hazs; cambia qué es automático versus qué sigue siendo tuyo mientras tanto.
+cambia lo que haces; cambia qué es automático versus qué sigue siendo tuyo mientras tanto.
 `BACKLOG.md` es la fuente de verdad de qué está construido versus pendiente — si esta guía y la
 realidad alguna vez no coinciden, créele al backlog.
