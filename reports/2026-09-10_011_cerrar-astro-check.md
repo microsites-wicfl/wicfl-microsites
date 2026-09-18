@@ -72,3 +72,21 @@ Cowork debe revisar este diff y la ejecución de CI remoto antes de avanzar al p
 ## Commits
 
 - `80dbd57` — `feat(ci): wire astro check into npm run check`
+
+
+## Revision de cowork
+
+**Veredicto: Se devuelve.**
+
+Revision del diff local: limpia. `git show --stat` en `80dbd57` y `9a3c920` confirma que solo se tocaron los archivos esperados (`package.json`, `packages/template/tsconfig.json`, `scripts/check-types.mjs`, mas reporte/bitacora/backlog). No hay scope creep. El patron `WICFL_SITE_CONTENT` reutiliza el mismo mecanismo ya usado en `scripts/build-site.mjs` y `scripts/dev-site.mjs`, no es nuevo.
+
+Revision de CI remoto (paso obligatorio segun `prompts/00_GUIA_GLOBAL.md`): el run de GitHub Actions atado al commit final `9a3c920` (https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/35386257727) muestra **Status: Failure**. El job "Validate all site configurations" fallo en el paso "Run npm run check" con "Process completed with exit code 1" (17s). No es un estado de pantalla obsoleto: se confirmo recargando la pagina del run desde cero.
+
+Esto contradice el reporte de arriba y el mensaje de cierre ("git status quedo limpio"), que no menciono ningun fallo de CI. `npm run check` local (via device bridge, sobre el drive montado de Windows) no sirvio para reproducir: `astro check` se queda colgado indefinidamente ahi, muy probablemente porque el file watcher de Astro no funciona bien sobre un mount FUSE/red en vez de un filesystem Linux real. Por eso no se pudo diagnosticar el error exacto de CI desde este lado: el log detallado de GitHub Actions requiere estar autenticado (la API de logs de Actions exige token incluso en repos publicos, confirmado con un 403 "Must have admin rights to Repository").
+
+**No se puede cerrar W-021 ni avanzar a W-023 hasta que:**
+1. Se obtenga el texto real del error de "Run npm run check" en ese run (Codex deberia poder verlo con `gh run view 35386257727 --log-failed` o equivalente, corriendo en un entorno con `gh` autenticado).
+2. Se corrija la causa raiz.
+3. Se confirme un run de CI en verde para el commit corregido (no solo una corrida local, dado que localmente el comando ni siquiera termina en este entorno).
+
+Se actualiza BACKLOG.md para reflejar que W-021 no esta realmente cerrado.
