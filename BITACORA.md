@@ -1,5 +1,83 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-17/18 · W-111 cerrado en la práctica, guía de Pavel traducida y publicada, PSL confirmado, W-117 abierto, y Kevin respondió el formulario de contacto (W-025)
+
+**Quién:** cowork, en sesión directa con Vic los días 17 y 18 de septiembre.
+
+**17-sep — W-111: prueba real de punta a punta confirmada.** Sobre el despliegue ya confirmado
+el 15-sep, se corrió la prueba que quedaba pendiente: se publicó un borrador de prueba contra
+`sites/_example` desde el formulario real, se creó el PR, `Validate and build` y
+`Preview deploy` corrieron en verde, y apareció el comentario del bot con el link de preview —
+confirmado por navegador contra el repo real, sin necesidad de credenciales de escritura en
+GitHub. **Sigue sin cerrarse del todo:** falta que Vic cierre ese PR de prueba y borre su rama
+(cowork no tiene permiso de escritura en GitHub desde el bridge), y
+`apps/content-form/README.md` + `reports/2026-09-08_008_formulario-carga-contenido.md` siguen
+sin actualizarse — el README todavía documenta `wrangler secret put`/`wrangler deploy` como si
+fuera el mecanismo real de despliegue, y el reporte todavía lista la prueba real como pendiente
+y dice que W-111 permanece abierto. Ese hueco de documentación, señalado ya el 15-sep, sigue sin
+cerrarse.
+
+**17-sep — Guía del operador: traducida y publicada para el handoff de Pavel.** Se actualizó
+`docs/OPERATOR_GUIDE.md` (v1.3) documentando el formulario de W-111 como Part 2a (camino
+simple) y dejando el flujo de GitHub como Part 2b (camino completo, necesario para páginas
+nuevas). Se tradujo completa a español — el primer borrador salió en español argentino (voseo)
+por error, detectado y corregido antes de que Vic lo revisara, convertido a español mexicano
+(tú) en varias pasadas de grep verificadas, más una segunda corrección menor el 18-sep (dos
+"hazs" sueltos → "haces"). Publicada además como página interactiva (Artifact) con pestañas para
+separar 2a/2b y acordeones para los procedimientos largos de GitHub, con las 12 capturas de
+pantalla incrustadas, para que se sienta menos pesada que el markdown plano. Commits locales:
+`041e9d7`, `baf75a5`, `2cd0fce` — **sin pushear todavía**, el bridge de dispositivo no tiene
+credenciales de git guardadas (`git push` falla con "could not read Username for
+'https://github.com'"); Vic tiene que pushear desde su propia terminal.
+
+**17-sep — Kevin confirmó Port St. Lucie como el Sitio #2.** Por Slack, en respuesta a que
+Pavel compartiera la estructura/SEO/contenido que ya armó usando PSL como ejemplo: "Let's do
+PSL."
+
+**18-sep — W-117 abierto: el formulario no puede crear un sitio nuevo, y ahora hace falta.**
+Con PSL confirmado, Vic preguntó cómo haría Pavel para crear ese sitio si el formulario (Part
+2a) y la guía de GitHub (Part 2b) solo cubren editar/agregar páginas dentro de un sitio que ya
+existe. Confirmado como hueco real revisando `apps/content-form/src/index.js` completo, el
+schema, y `docs/SITE_CONTENT_CHECKLIST.md`: nunca hubo un camino documentado ni scripteado para
+que Pavel cree `sites/<slug>/site.config.json` desde cero — cuando se creó `stuart-homeowners`,
+lo hizo Vic a mano. **Diseño propuesto por cowork, sin objeción de Vic:** el formulario gana un
+modo "Crear sitio nuevo" apoyado en los dos mecanismos de seguridad que ya existen (nunca
+mergea, y `check-production-config.mjs` ya bloquea placeholders en producción), con un hallazgo
+importante para el prompt: el placeholder de `contact.email` que usa hoy `sites/_example`
+(`hello@...invalid`) no dispara ningún patrón del gate, así que el prompt exige corregir eso
+para un sitio real. Prompt escrito: `prompts/2026-09-18_013_crear-sitio-nuevo.md`. Commit
+`95de6a5` — también sin pushear.
+
+**18-sep — Kevin respondió la pregunta de campos del formulario de contacto (W-025), y más.**
+Se le había preguntado el 9-sep "¿qué campos capturar del lead?"; contestó "I will have this to
+you soon" el 10-sep y no había contenido hasta hoy. La respuesta que mandó no es solo una lista
+de campos: es un diseño completo del funnel — formulario progresivo de 3 pasos (código postal →
+razón de compra + dirección de la propiedad → nombre/teléfono/email/timing/aseguradora
+actual/prima anual opcional), guardado progresivo del lead en el CRM antes del submit final
+(para no perder leads que abandonan a mitad de camino), autocompletado de dirección, copy de
+landing page y de la pantalla de confirmación, y una carga opcional de la declaración de póliza
+actual después del submit. **Resuelve la pregunta original de campos** (son exactamente los 9-10
+puntos que se habían pedido), **pero abre alcance nuevo**: el guardado progresivo depende de que
+la integración de GoHighLevel (W-101) soporte crear/actualizar un lead a medias, el
+autocompletado de dirección es una dependencia externa nueva, y la carga de documentos necesita
+diseño de almacenamiento/seguridad. Construir el formulario real tal como lo describió Kevin es
+más grande de lo que W-025 asumía originalmente — se abrió W-118 para esto, sin prompt todavía
+porque faltan esas tres decisiones de diseño.
+
+**Qué sigue abierto:**
+- Push pendiente: commits locales sin subir a GitHub (`041e9d7`, `baf75a5`, `2cd0fce`,
+  `95de6a5`, más el de esta misma entrada de bitácora/backlog).
+- Cerrar el PR de prueba de W-111 y borrar su rama (Vic, en GitHub).
+- Actualizar `apps/content-form/README.md` y `reports/2026-09-08_008_formulario-carga-contenido.md`
+  al mecanismo real de deploy.
+- Resolver las tres preguntas de diseño de W-118 y escribir su prompt.
+- De Kevin, sin resolver: license number/teléfono/email/dirección real de Stuart (W-008),
+  dominio de Port St. Lucie (W-007), definición de llamada calificada (W-100).
+
+Ver `BACKLOG.md`, W-111, W-025, W-117, W-118.
+
+---
+
 ## 2026-09-15 · W-111 desplegado y probado en login; queda la prueba real de PR; reporte y README quedaron desactualizados
 
 **Quién:** Vic trabajó varios días directo con Codex sin cowork en el medio (el bridge al
