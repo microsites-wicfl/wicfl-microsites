@@ -18,8 +18,8 @@ un `pageType="invalid"` temporal: el check falló con `ts(2322)` y señaló la p
 agregaron dependencias, no se relajaron reglas TypeScript y no se tocaron scripts de build.
 
 Prompt: `prompts/2026-09-10_011_cerrar-astro-check.md`. Reporte:
-`reports/2026-09-10_011_cerrar-astro-check.md`. Commit: pendiente de crear al escribir esta
-entrada.
+`reports/2026-09-10_011_cerrar-astro-check.md`. Commit: `80dbd57`
+(`feat(ci): wire astro check into npm run check`).
 
 ---
 

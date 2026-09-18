@@ -71,4 +71,4 @@ Cowork debe revisar este diff y la ejecución de CI remoto antes de avanzar al p
 
 ## Commits
 
-- Pendiente al redactar este reporte: `feat(ci): wire astro check into npm run check`.
+- `80dbd57` — `feat(ci): wire astro check into npm run check`
