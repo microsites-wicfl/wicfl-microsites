@@ -90,3 +90,18 @@ Esto contradice el reporte de arriba y el mensaje de cierre ("git status quedo l
 3. Se confirme un run de CI en verde para el commit corregido (no solo una corrida local, dado que localmente el comando ni siquiera termina en este entorno).
 
 Se actualiza BACKLOG.md para reflejar que W-021 no esta realmente cerrado.
+
+## Seguimiento posterior a la revisión de cowork
+
+**Causa raíz confirmada:** el runner limpio de GitHub Actions no instala `@types/node`. Al
+ejecutar `astro check`, `packages/template/src/content.config.ts` produjo `ts(2580)` para
+`process` y `ts(2307)` para `node:url`. La configuración estricta hizo visible ese hueco de
+tipos que la corrida local anterior no había detectado.
+
+**Fix:** `8de5a04` (`fix(ci): resolve npm run check failure in GitHub Actions`) agregó
+`packages/template/src/env.d.ts` con declaraciones mínimas y exactas para `process.env` y
+`pathToFileURL`; no se añadieron dependencias ni se relajó TypeScript.
+
+**Verificación remota:** [Validate and build, run 35391044422](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/35391044422)
+terminó verde de punta a punta. `Validate all site configurations` pasó `npm run check` en 18
+segundos, y los builds de `_example` y `stuart-homeowners` también pasaron.
