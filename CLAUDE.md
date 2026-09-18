@@ -104,6 +104,8 @@ una terminal local que no existe.
 - **Docs de referencia del equipo** (`/docs`, cualquier cosa que vea Kevin o Pavel): inglés
 - **Todo output para el equipo**: inglés, tono ejecutivo, con formato
   "what we did / what's needed"
+- **Nunca uses guiones largos (—) en los copys para el equipo (Kevin, Pavel).** Punto,
+  coma o dos puntos en su lugar. Regla de Vic, ya avisada una vez e incumplida: no se repite.
 - **Conversación con Vic**: español mexicano. NO voseo.
 
 ## Bloqueadores activos al 2026-08-26
