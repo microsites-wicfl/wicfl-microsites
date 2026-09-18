@@ -1,5 +1,28 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-18 · W-021 cerrado: chequeo de tipos de Astro conectado a `npm run check`
+
+**Quién:** agente ejecutor, siguiendo `prompts/2026-09-10_011_cerrar-astro-check.md`.
+
+Se investigó el supuesto cuelgue de `astro check`. Sin `WICFL_SITE_CONTENT`, fallaba tras
+11.857 segundos porque las content collections requieren el directorio de contenido del sitio.
+Con el contenido de `_example`, pero sin `tsconfig.json`, alcanzaba los diagnósticos y no
+terminaba después de más de un minuto. El template no tenía configuración TypeScript explícita.
+
+Se añadió `packages/template/tsconfig.json` que extiende `astro/tsconfigs/strict`, más
+`scripts/check-types.mjs` para ejecutar `astro check` con el fixture `_example`. `npm run check`
+ahora valida configs y después tipos. Con la configuración explícita, Astro terminó limpio en
+8.827 segundos; la corrida final de `npm run check` tomó 9.109 segundos. Se introdujo y revirtió
+un `pageType="invalid"` temporal: el check falló con `ts(2322)` y señaló la prop requerida por
+`BaseLayout`. `npm run build:site -- _example` también pasó y construyó cinco páginas. No se
+agregaron dependencias, no se relajaron reglas TypeScript y no se tocaron scripts de build.
+
+Prompt: `prompts/2026-09-10_011_cerrar-astro-check.md`. Reporte:
+`reports/2026-09-10_011_cerrar-astro-check.md`. Commit: pendiente de crear al escribir esta
+entrada.
+
+---
+
 ## 2026-09-17/18 · W-111 cerrado en la práctica, guía de Pavel traducida y publicada, PSL confirmado, W-117 abierto, y Kevin respondió el formulario de contacto (W-025)
 
 **Quién:** cowork, en sesión directa con Vic los días 17 y 18 de septiembre.

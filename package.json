@@ -9,7 +9,8 @@
     "build": "npm run build:site -- _example",
     "build:site": "node scripts/build-site.mjs",
     "build:pod": "node scripts/build-pod.mjs",
-    "check": "npm run validate:configs",
+    "check": "npm run validate:configs && npm run check:types",
+    "check:types": "node scripts/check-types.mjs",
     "check:production": "node scripts/check-production-config.mjs",
     "validate:configs": "ajv validate --spec=draft2020 -s packages/config-schema/site.config.schema.json -d \"packages/config-schema/examples/*.json\" -d \"sites/*/site.config.json\""
   },
