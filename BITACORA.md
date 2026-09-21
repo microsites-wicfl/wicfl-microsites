@@ -1,3 +1,75 @@
+## 2026-09-21 · Revisión general del plan: diez propuestas, escritas para Kevin y su ChatGPT
+
+**Quién:** cowork, a pedido de Vic.
+
+Vic pidió reanalizar el planteamiento completo con ojos frescos y proponer mejoras. Se releyó
+el master file v1.6, `docs/ARCHITECTURE.md`, `docs/GATE_B_MODEL.md`,
+`docs/QUALIFIED_CALL_DEFINITION.md`, `docs/CONTENT_STANDARDS.md`, `BACKLOG.md` y esta bitácora,
+y el estado real de `apps/content-form` y `apps/lead-api`.
+
+**Antes de eso, la pregunta de Vic sobre un panel de control para Pavel.** Vic sentía el flujo de
+ramas raro y poco amigable, y preguntó si un panel para usuario no técnico debía reemplazarlo.
+Respuesta de cowork: falsa disyuntiva. El formulario (`apps/content-form`, W-111/W-117) ya *es*
+el panel al 70%; git se queda abajo como almacén y auditoría porque los dos criterios que
+deciden Gate A se verifican con comandos de git, y el preview por rama y el gate de
+diferenciación cuelgan del PR. Lo que Pavel nunca debe ver es GitHub, no git. Los seis huecos
+concretos del formulario hoy: no crea páginas nuevas dentro de un sitio existente, no publica
+(no hay merge), no muestra estado ni preview del borrador, no sube imágenes, el editor es un
+`<textarea>`, y usa contraseña compartida. Alternativa a evaluar antes de escribir un panel
+propio: CMS git-backed (Sveltia/Decap/Pages CMS) para contenido y medios, en híbrido con el
+Worker propio para crear sitios y tocar config. Timing acordado: no antes del 9-oct; el Sitio #2
+con Pavel operando solo es el instrumento (registrar cada vez que tiene que abrir GitHub o
+preguntar), y el panel completo va en Fase 7 como la cara del provisioning automatizado.
+
+**Las diez propuestas**, en orden de impacto (detalle en `docs/PLAN_REVIEW_2026-09-21.md`):
+
+1. **Partir Gate B** en prueba de conversión (campaña pagada pequeña sobre el Sitio #1) más
+   indicadores adelantados orgánicos, y hacerlo de dos etapas (B1 marzo → "seguir a 5", B2
+   septiembre 2027 → "20"). Razón: un dominio nuevo no rankea en 120 días; medido solo en
+   llamadas orgánicas, Gate B fallaría por prematuro, no por equivocado.
+2. **Cerrar W-006 (GBP) por política**, no por Kevin: las guías de GBP permiten un perfil por
+   ubicación física; los microsites no tienen GBP propio y compiten solo en orgánico.
+3. **Fábrica agnóstica al dominio** (`deploy.mode: domain | subpath`) y usar el Sitio #3 para
+   probar subdirectorios del dominio principal. Razón: la huella de entidad (mismo
+   teléfono/dirección/licencia en 100 dominios) es señal de red aunque el contenido pase el
+   swap test; y si la respuesta resulta ser subdirectorios, la automatización de dominios de
+   Fase 7 sería trabajo tirado.
+4. **Sitio mínimo viable de 6–8 páginas** en vez de 15–25. Baja ~60% el costo de contenido,
+   alivia el triple rol de Pavel y reduce la superficie de doorway.
+5. **Etiquetar llamadas calificadas con script** (webhook de GoTo → `lead-api` → transcripción
+   y clasificación), spot-check humano del 10%.
+6. **Reporte mensual generado**, no escrito: cron + dashboard por sitio desde GA4, Search
+   Console, GHL y GoTo. Es la mitad "ver" del panel de Pavel.
+7. **Presupuesto escrito del tiempo de Vic** post-handoff (p. ej. 4 h/semana hasta Gate A);
+   lo que no quepa es ítem de Fase 7 con fecha. Observación: el Bloque B completo sigue a
+   nombre de Vic con fecha 9-oct; el handoff entregó el flujo de Pavel, no la carga de Vic.
+8. **Defaults que quedan si Kevin no responde**, generalizando el patrón que sí funcionó con
+   el modelo de Gate B.
+9. **Compliance del funnel nuevo (W-118)**: página de privacidad, consentimiento TCPA en el
+   formulario (GHL manda SMS), y regla de retención para las declaraciones en R2. Antes del
+   primer lead real.
+10. **W-027 (gate de diferenciación) no está empezado** y es la tesis entera. Versión barata
+    (shingling/MinHash sobre los markdown, umbral en config) es un día; tiene que existir para
+    el contenido del Sitio #2 a mediados de octubre.
+
+Si solo se adoptan tres: 1, 3 y 4.
+
+**Por qué el documento va en inglés y con instrucciones para una IA:** Kevin creó el plan
+original con ChatGPT y ese contexto quedó congelado en agosto. Vic le va a pedir a Kevin que
+cargue `docs/PLAN_REVIEW_2026-09-21.md` ahí para que actualice su modelo del proyecto, evalúe
+cada propuesta y le devuelva a Kevin una lista ordenada de decisiones. El documento por eso
+lleva Parte 1 (estado real al 21-sep, que reemplaza lo que ChatGPT cree) y Parte 2 (las diez
+propuestas con qué le pide cada una a Kevin), más cinco preguntas para el revisor.
+
+**Hallazgo colateral al escribir la Parte 1:** Kevin confirmó Port St. Lucie como Sitio #2 el
+17-sep, pero en ningún lado está escrito si el Sitio #2 sigue siendo el sitio en español como
+decía el plan original. Se dejó señalado en el documento como pregunta abierta explícita.
+
+**Nada de esto entra a `BACKLOG.md` todavía.** Son propuestas; se convierten en ítems cuando
+Vic (y Kevin, donde aplica) digan cuáles compran.
+
+---
+
 ## 2026-09-21 · Tres decisiones de diseño de W-118 resueltas, prompt escrito
 
 **Quién:** cowork, con aprobación de Vic.
