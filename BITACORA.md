@@ -21,6 +21,16 @@ Prompt: `prompts/2026-09-10_011_cerrar-astro-check.md`. Reporte:
 `reports/2026-09-10_011_cerrar-astro-check.md`. Commit: `80dbd57`
 (`feat(ci): wire astro check into npm run check`).
 
+**Correccion:** este cierre fue prematuro. La revision de cowork contra el CI remoto (no
+contra el reporte) encontro que el run de GitHub Actions del commit final (`9a3c920`) estaba
+en rojo: `Validate all site configurations` fallaba en `Run npm run check`. Causa: el runner
+limpio no tiene `@types/node`, asi que `content.config.ts` no podia tipar `process` ni
+`node:url`. No se detecto en la corrida local previa. Fix real en `8de5a04`
+(`packages/template/src/env.d.ts` con declaraciones minimas, sin dependencias nuevas), CI
+verde confirmado en run `35391044422`. Documentado en BACKLOG.md y en la seccion
+"Revision de cowork" de `reports/2026-09-10_011_cerrar-astro-check.md`. W-021 cerrado de
+verdad recien el 2026-09-18 por la tarde, no en el primer intento.
+
 ---
 
 ## 2026-09-17/18 · W-111 cerrado en la práctica, guía de Pavel traducida y publicada, PSL confirmado, W-117 abierto, y Kevin respondió el formulario de contacto (W-025)

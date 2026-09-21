@@ -105,3 +105,24 @@ tipos que la corrida local anterior no había detectado.
 **Verificación remota:** [Validate and build, run 35391044422](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/35391044422)
 terminó verde de punta a punta. `Validate all site configurations` pasó `npm run check` en 18
 segundos, y los builds de `_example` y `stuart-homeowners` también pasaron.
+
+
+## Revision de cowork (seguimiento)
+
+**Veredicto: Aprobado.**
+
+Confirmado independientemente, no solo contra el reporte de arriba:
+
+- `git show --stat` en `8de5a04` y `70622b6` confirma que el fix toca exactamente
+  `packages/template/src/env.d.ts` (archivo nuevo, 7 lineas) y la documentacion. Sin
+  dependencias nuevas, sin tocar `tsconfig.json` ni relajar reglas de TypeScript.
+- Las dos declaraciones ambient (`process.env` y `pathToFileURL`) coinciden exactamente con
+  el uso real en `packages/template/src/content.config.ts` (linea 3 y 5), sin alcance de mas.
+- El run https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/35391044422 se
+  verifico directamente en GitHub (no solo por el reporte): **Status: Success**, `Validate
+  all site configurations` paso en 18s, los dos jobs de matriz (`_example`,
+  `stuart-homeowners`) completaron. Las unicas anotaciones son avisos de infraestructura sin
+  relacion (deprecacion de Node 20 en runners, migracion futura de `ubuntu-latest`), no
+  bloquean nada.
+
+W-021 queda cerrado de verdad. Listo para avanzar a W-023 (`prompts/2026-09-10_010_seo-tecnico.md`).
