@@ -1,0 +1,145 @@
+---
+const { siteSlug, leadSource, formId } = Astro.props;
+const leadApiUrl = "https://wicfl-lead-api.wicfl-microsites.workers.dev";
+---
+
+<section class="contact-form" data-contact-form data-api={leadApiUrl} data-site={siteSlug} data-source={leadSource} data-form-id={formId} aria-labelledby="quote-form-title">
+  <h2 id="quote-form-title">Start your home insurance quote</h2>
+  <p class="contact-form-intro">Tell us a little about the property. We will use these details to help prepare your options.</p>
+  <p class="contact-form-progress" aria-live="polite">Step <span data-step-number>1</span> of 3</p>
+  <p class="contact-form-status" data-status role="status"></p>
+
+  <form novalidate>
+    <fieldset data-step="1">
+      <legend>Where is the property located?</legend>
+      <label>Property ZIP code<input name="zip" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{5}(?:-[0-9]{4})?" required /></label>
+      <button type="submit">Continue</button>
+    </fieldset>
+
+    <fieldset data-step="2" hidden>
+      <legend>Tell us about the property</legend>
+      <label>What brings you here?
+        <select name="purchaseReason" required>
+          <option value="">Choose one</option><option>Buying a home</option><option>Reviewing current coverage</option><option>Changing insurers</option><option>Other</option>
+        </select>
+      </label>
+      <label>Property address<input name="address" autocomplete="street-address" required aria-describedby="google-attribution" /></label>
+      <ul class="address-suggestions" data-suggestions hidden aria-label="Address suggestions"></ul>
+      <p id="google-attribution" class="google-attribution">Powered by Google</p>
+      <div class="contact-form-actions"><button type="button" data-back>Back</button><button type="submit">Continue</button></div>
+    </fieldset>
+
+    <fieldset data-step="3" hidden>
+      <legend>How can we reach you?</legend>
+      <div class="contact-form-grid"><label>First name<input name="firstName" autocomplete="given-name" required /></label><label>Last name<input name="lastName" autocomplete="family-name" required /></label></div>
+      <div class="contact-form-grid"><label>Phone<input name="phone" type="tel" autocomplete="tel" required /></label><label>Email<input name="email" type="email" autocomplete="email" required /></label></div>
+      <label>When do you need coverage?
+        <select name="timing" required><option value="">Choose one</option><option>As soon as possible</option><option>Within 30 days</option><option>More than 30 days from now</option></select>
+      </label>
+      <label>Current insurer<input name="currentInsurer" autocomplete="organization" required /></label>
+      <label>Current annual premium <span>(optional)</span><input name="annualPremium" inputmode="decimal" /></label>
+      <div class="contact-form-actions"><button type="button" data-back>Back</button><button type="submit">Request my quote</button></div>
+    </fieldset>
+  </form>
+
+  <section data-confirmation hidden aria-live="polite">
+    <h3>Thank you. We received your request.</h3>
+    <p>A Walker Insurance Agency team member will review your property details and follow up with you.</p>
+    <label>Upload your current policy declaration <span>(optional, PDF or image up to 10 MB)</span><input data-policy type="file" accept="application/pdf,image/jpeg,image/png,image/webp" /></label>
+    <button type="button" data-upload>Upload declaration</button>
+    <p data-upload-status role="status"></p>
+  </section>
+</section>
+
+<script is:inline>
+  (() => {
+    const root = document.querySelector("[data-contact-form]");
+    if (!root) return;
+    const form = root.querySelector("form");
+    const status = root.querySelector("[data-status]");
+    const steps = [...root.querySelectorAll("fieldset[data-step]")];
+    const state = { step: 1, contactId: null, addressSession: crypto.randomUUID() };
+    const read = () => Object.fromEntries(new FormData(form).entries());
+    const api = async (path, body) => {
+      const response = await fetch(`${root.dataset.api}${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ siteSlug: root.dataset.site, leadSource: root.dataset.source, formId: root.dataset.formId, contactId: state.contactId, ...body }) });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw Error(data.error || "We could not save your progress right now. Please try again shortly.");
+      return data;
+    };
+    const showStep = (step) => {
+      state.step = step;
+      steps.forEach((fieldSet) => { fieldSet.hidden = Number(fieldSet.dataset.step) !== step; });
+      root.querySelector("[data-step-number]").textContent = String(step);
+      status.textContent = "";
+    };
+    const currentFields = () => [...steps[state.step - 1].querySelectorAll("input, select")];
+    const valid = () => {
+      const firstInvalid = currentFields().find((field) => !field.checkValidity());
+      if (!firstInvalid) return true;
+      firstInvalid.reportValidity();
+      return false;
+    };
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!valid()) return;
+      const button = event.submitter;
+      button.disabled = true;
+      status.textContent = "Saving your progress…";
+      try {
+        const result = await api("/v1/leads", read());
+        state.contactId = result.contactId;
+        if (state.step < 3) showStep(state.step + 1);
+        else { form.hidden = true; root.querySelector("[data-confirmation]").hidden = false; status.textContent = ""; }
+      } catch (error) {
+        if (state.step < 3) {
+          status.textContent = `${error.message} You can continue while we retry after the next step.`;
+          showStep(state.step + 1);
+          status.textContent = `${error.message} You can continue while we retry after the next step.`;
+        } else {
+          status.textContent = `${error.message} Your request has not been sent. Please try again shortly.`;
+        }
+      } finally { button.disabled = false; }
+    });
+    root.querySelectorAll("[data-back]").forEach((button) => button.addEventListener("click", () => showStep(state.step - 1)));
+    const address = form.elements.address;
+    const suggestions = root.querySelector("[data-suggestions]");
+    let addressTimer;
+    address.addEventListener("input", () => {
+      clearTimeout(addressTimer);
+      if (address.value.trim().length < 3) { suggestions.hidden = true; return; }
+      addressTimer = setTimeout(async () => {
+        try {
+          const result = await api("/v1/addresses", { input: address.value, sessionToken: state.addressSession });
+          suggestions.replaceChildren(...result.suggestions.map((suggestion) => {
+            const item = document.createElement("li"); const button = document.createElement("button");
+            button.type = "button"; button.textContent = suggestion.text;
+            button.onclick = () => { address.value = suggestion.text; suggestions.hidden = true; };
+            item.append(button); return item;
+          }));
+          suggestions.hidden = suggestions.childElementCount === 0;
+        } catch (error) { status.textContent = error.message; suggestions.hidden = true; }
+      }, 300);
+    });
+    root.querySelector("[data-upload]").addEventListener("click", async () => {
+      const file = root.querySelector("[data-policy]").files[0];
+      const uploadStatus = root.querySelector("[data-upload-status]");
+      if (!file) { uploadStatus.textContent = "Choose a declaration file first."; return; }
+      try {
+        uploadStatus.textContent = "Preparing secure upload…";
+        const signed = await api("/v1/uploads", { contentType: file.type, size: file.size });
+        const response = await fetch(signed.url, { method: "PUT", headers: { "content-type": file.type }, body: file });
+        if (!response.ok) throw Error("Your declaration could not be uploaded. Please try again.");
+        uploadStatus.textContent = "Your declaration was uploaded securely.";
+      } catch (error) { uploadStatus.textContent = error.message; }
+    });
+  })();
+</script>
+
+<style>
+  .contact-form { margin-top: 2.5rem; padding: 1.5rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--variant-surface); box-shadow: var(--shadow); }
+  .contact-form h2 { margin-top: 0; }.contact-form-intro { margin-top: 0; }.contact-form-progress { color: var(--muted); font-weight: 700; }.contact-form-status, [data-upload-status] { min-height: 1.7em; color: #8b2f23; font-weight: 700; }
+  .contact-form fieldset { border: 0; padding: 0; margin: 0; }.contact-form legend { font: 700 1.25rem Georgia, serif; margin-bottom: 1rem; }.contact-form label { display: grid; gap: .35rem; margin-top: 1rem; font-weight: 700; color: var(--ink-soft); }.contact-form label span { font-weight: 400; color: var(--muted); }
+  .contact-form input, .contact-form select, .contact-form button { font: inherit; }.contact-form input, .contact-form select { width: 100%; padding: .65rem .75rem; border: 1px solid #aeb8c6; border-radius: var(--radius-sm); background: #fff; }.contact-form button { padding: .7rem 1rem; margin-top: 1.25rem; border: 0; border-radius: var(--radius-sm); background: var(--site-accent); color: #fff; font-weight: 700; cursor: pointer; }.contact-form button[data-back] { background: #536273; }.contact-form button:disabled { opacity: .65; cursor: wait; }
+  .contact-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }.contact-form-actions { display: flex; gap: .75rem; flex-wrap: wrap; }.address-suggestions { list-style: none; padding: 0; margin: .25rem 0; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); }.address-suggestions button { width: 100%; text-align: left; margin: 0; background: #fff; color: var(--ink); border-radius: 0; }.google-attribution { margin: .5rem 0; color: var(--muted); font-size: .85rem; }
+  @media (max-width: 32rem) { .contact-form-grid { grid-template-columns: 1fr; } }
+</style>

@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ContactForm from "../components/ContactForm.astro";
 import { routeForPageId, localeOfPageId, hreflangAlternatesFor, site } from "../lib/site-data.mjs";
 
 export async function getStaticPaths() {
@@ -28,5 +29,6 @@ const { Content } = await render(page);
   <article class="page-content">
     <h1>{page.data.title}</h1>
     <Content />
+    {page.id === "contact" && <ContactForm siteSlug={site.slug} leadSource={site.crm.leadSource} formId={site.crm.formId} />}
   </article>
 </BaseLayout>
