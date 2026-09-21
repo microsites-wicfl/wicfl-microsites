@@ -1,3 +1,53 @@
+## 2026-09-21 · Tres decisiones de diseño de W-118 resueltas, prompt escrito
+
+**Quién:** cowork, con aprobación de Vic.
+
+Con el copy de equipo ya mandado a Kevin y Rose, se retomaron los pendientes que quedaron en
+pausa mientras se actualizaba la guía del operador. Vic priorizó W-118 (el formulario real de
+`/contact/` que pidió Kevin el 17/18-sep) sobre W-112 (camino de compra de dominio) y sobre
+sincronizar `docs/OPERATOR_GUIDE.es.md`.
+
+W-118 tenía tres decisiones de diseño bloqueando el prompt, desde el 18-sep. Cowork las
+investigó con fuentes reales, no memoria:
+
+1. **Guardado progresivo del lead → GoHighLevel `POST /contacts/upsert` (API v3).** Confirmado
+   contra la documentación oficial: solo exige `locationId`, todo lo demás es opcional, así que
+   acepta datos parciales sin duplicar el contacto si el teléfono/email hacen match en envíos
+   posteriores.
+2. **Autocompletado de dirección → Google Places API.** Cobra por sesión pero regala 5,000
+   sesiones/mes; con 3 sitios piloto no hay forma de acercarse a ese límite, así que sale gratis
+   en la práctica. Contrapartida: obliga a mostrar "Powered by Google" en la UI. Se evaluó
+   Smarty como alternativa (de paga desde el día uno, pero valida direcciones reales/entregables
+   en vez de solo autocompletar texto) y se descartó por ahora dado el volumen y que esto
+   alimenta una cotización, no un envío físico.
+3. **Carga de la declaración de póliza → Cloudflare R2, bucket privado + URLs firmadas de corta
+   duración.** Patrón estándar: el navegador sube el archivo directo a R2 sin que el Worker
+   maneje los bytes; el Worker solo autentica y firma la URL.
+
+Vic aprobó las tres. Prompt escrito: `prompts/2026-09-21_014_formulario-contacto-real.md`, con
+cinco preguntas de diseño adicionales que le tocan al ejecutor resolver (dónde vive el backend
+dado que `scripts/pod-worker-template.mjs` hoy es un router de assets estático sin secrets ni
+rutas dinámicas; cómo evitar duplicar el lead cuando el paso 1 del formulario no tiene ni
+teléfono ni email para que GoHighLevel haga *match*; cómo convive un formulario con estado y
+JavaScript con el "zero JS by default" de `docs/ARCHITECTURE.md`; quién provisiona el bucket de
+R2 real; y cómo se prueba todo esto sin que exista ninguna de las tres credenciales reales
+todavía). Commit local (sin pushear, mismo criterio que siempre): ver más abajo.
+
+**Qué sigue abierto:**
+- Ninguna credencial real existe: GoHighLevel depende de que se cierre W-101 (Vic saca API
+  key + `formId`), Google Places necesita una API key nueva, R2 necesita un bucket nuevo. El
+  prompt de W-118 puede ejecutarse y verificarse con mocks, pero no de punta a punta en vivo
+  hasta que esas tres cosas existan.
+- El compromiso que Vic dejó en el copy que le mandó a Kevin y Rose (mandarle por separado
+  `docs/QUALIFIED_CALL_DEFINITION.md` para su aprobación, y nombrar quién hace el etiquetado
+  semanal de W-100) sigue pendiente de que Vic lo ejecute.
+- W-112 (camino de compra de dominio) y sincronizar `docs/OPERATOR_GUIDE.es.md` con el
+  artifact siguen en la cola, deprioritizados hoy frente a W-118.
+
+Ver `BACKLOG.md`, W-118.
+
+---
+
 # BITÁCORA — WICFL Microsites
 
 ## 2026-09-21 · W-117 cerrado: el formulario crea sitios nuevos por PR
