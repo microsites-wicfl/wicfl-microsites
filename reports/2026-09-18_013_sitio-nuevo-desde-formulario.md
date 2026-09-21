@@ -91,8 +91,10 @@ SEO de prueba, porque el texto desechable la contenía; no es un valor que gener
 
 PR #10 y PR #11 terminaron `CLOSED`; ambas ramas se eliminaron. No se hizo merge de ninguna.
 
-La validación remota de GitHub Actions para el commit final queda pendiente del push de la
-documentación. Se agregará su URL y estado comprobado antes del cierre final.
+La validación remota de GitHub Actions se comprobó directamente después del push: [Validate and
+build, run 35606787036](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/35606787036)
+terminó con **Status: Success**. Pasaron `Validate all site configurations`, descubrimiento y
+los builds de `stuart-homeowners` y `_example`.
 
 ## Lo que tocaste fuera de lo pedido
 
@@ -101,8 +103,7 @@ requeridos.
 
 ## Lo que no pudiste verificar
 
-La corrida de Actions del commit final todavía no existía durante la prueba del formulario. Se
-verificará directamente después del push.
+Nada. La corrida remota de GitHub Actions se verificó verde después del push.
 
 ## Dónde dudaste
 
@@ -131,3 +132,4 @@ el sitio a un pod y provisionar dominio, contacto, licencia, analítica, CRM y n
 ## Commits
 
 - `f503692` — `feat(content-form): let Pavel create a new site, not just edit one`
+- `b45ae44` — `docs: record W-117 live workflow verification`

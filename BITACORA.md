@@ -17,8 +17,9 @@ los placeholders. El primer intento usó un directorio `_` y se cerró porque es
 el gate se salte el sitio; se repitió con el PR #11 normal para probar el gate, sin mergearlo.
 Ambos PRs y ramas de prueba se cerraron y borraron. El API de edición de `stuart-homeowners`
 siguió respondiendo. Prompt: `prompts/2026-09-18_013_crear-sitio-nuevo.md`. Reporte:
-`reports/2026-09-18_013_sitio-nuevo-desde-formulario.md`. Commit y CI final: pendientes de
-registrar tras el push.
+`reports/2026-09-18_013_sitio-nuevo-desde-formulario.md`. Commit: `f503692`
+(`feat(content-form): let Pavel create a new site, not just edit one`). CI verde confirmado en
+[run 35606787036](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/35606787036): validación, descubrimiento y builds de `stuart-homeowners` y `_example`.
 
 ---
 
