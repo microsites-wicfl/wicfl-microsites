@@ -95,3 +95,42 @@ las páginas demo pueden evaluarse para reemplazo o retiro como trabajo separado
 ## Commits
 
 - `82c35ff` — `feat(nav): add a config-driven navigation menu to the shared header`
+
+
+## Revision de cowork
+
+**Veredicto: Aprobado.**
+
+Diff revisado contra el prompt, no contra el reporte:
+
+- `git show --stat` en `82c35ff` confirma alcance ajustado: `content.config.ts`,
+  `BaseLayout.astro`, un `navLabel`/`showInNav` de una linea en cada uno de los 9 markdown de
+  `sites/stuart-homeowners/content/` (todo `index.md` sin tocar, correcto: es `pageType: home`),
+  mas reporte/bitacora/backlog. Nada fuera de eso.
+- El campo `showInNav` (default `true`, via zod) no estaba pedido literalmente en el prompt,
+  pero resuelve una contradiccion real que el prompt mismo genera: filtrar solo por
+  `pageType !== "home"` habria mostrado las dos paginas demo (`about-demo.md`,
+  `coverage-demo.md`) en un nav publico, cuando el prompt pide exactamente 7 enlaces reales y
+  a la vez prohibe borrar esas demos sin mas. El reporte lo declara explicitamente en
+  "Decisiones tomadas" y "Donde dudaste" en vez de esconderlo, y el default `true` preserva el
+  criterio de aceptacion de que una pagina nueva sin frontmatter extra siga apareciendo sola.
+  Es la extension minima, no scope creep disfrazado.
+- Verificado contra el repo real: las 7 paginas reales tienen `navLabel` corto tal como lista
+  el reporte, las dos demos tienen `showInNav: false` y no `navLabel`, e `index.md` sigue
+  siendo `pageType: home` sin campos nuevos. `routeForPageId` se reutiliza para el `href`, no
+  se recalculan rutas a mano.
+- La linea de W-115 sigue intacta; el nav nuevo entra en su propio bloque de estilos
+  (`.site-nav`), sin tocar el resto del `<style is:global>` fuera de la media query mobile ya
+  existente. Cero `<script>` nuevo (el unico script generado sigue siendo el JSON-LD de W-023).
+  Sin dependencias nuevas.
+- Los dos runs de CI se verificaron directamente en GitHub: run `35603809180` (push del commit
+  funcional) y run `35604049058` (workflow_dispatch sobre el commit de documentacion), ambos
+  **Status: Success**, con validacion y los dos builds de matriz completos. Solo los mismos
+  avisos de infraestructura de siempre, sin relacion.
+- No se intento reconstruir localmente desde este lado por la misma limitacion de entorno ya
+  documentada (build/check se cuelgan via el drive montado de Windows); no afecta el veredicto
+  porque el CI real ya construyo y valido de punta a punta.
+
+W-116 queda cerrado. De los dos pendientes que quedaban en paralelo, W-117 (que Pavel pueda
+crear sitios nuevos) sigue con su prompt listo y sin correr; puede ir ahora que ya no hay
+choque de archivos con W-021/W-023/W-116, todos sobre `BaseLayout.astro`.
