@@ -55,8 +55,10 @@ siendo el JSON-LD de W-023.
 El fixture `_example`, cuyas páginas no tienen `navLabel`, construyó correctamente y su nav
 mostró los títulos completos, por ejemplo `Coverage page fixture`.
 
-La validación remota de GitHub Actions queda pendiente del push de este commit. Se añadirá aquí
-la URL y el estado comprobado antes del cierre final.
+La validación remota de GitHub Actions se comprobó directamente después del push: [Validate and
+build, run 35603809180](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/35603809180)
+terminó con **Status: Success**. Pasaron `Validate all site configurations`, descubrimiento y
+los builds de `stuart-homeowners` y `_example`.
 
 ## Lo que tocaste fuera de lo pedido
 
@@ -66,8 +68,7 @@ páginas nuevas sin `navLabel`.
 
 ## Lo que no pudiste verificar
 
-La corrida de GitHub Actions aún no existía durante la comprobación local. Se verificará
-directamente después del push, antes del cierre final.
+Nada. La corrida remota de GitHub Actions se verificó verde después del push.
 
 ## Dónde dudaste
 
@@ -93,4 +94,4 @@ las páginas demo pueden evaluarse para reemplazo o retiro como trabajo separado
 
 ## Commits
 
-- Pendiente de crear y verificar en GitHub Actions.
+- `82c35ff` — `feat(nav): add a config-driven navigation menu to the shared header`

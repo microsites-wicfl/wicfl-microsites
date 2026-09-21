@@ -17,8 +17,9 @@ interior: siete enlaces correctos, sin `/` redundante y con el estado activo cor
 sin `navLabel` construyó y mostró sus títulos como fallback. `npm run check` terminó con 0
 errores, warnings y hints; los builds de Stuart y `_example` pasaron. Prompt:
 `prompts/2026-09-10_012_menu-navegacion.md`. Reporte:
-`reports/2026-09-10_012_menu-navegacion.md`. Commit y CI remoto: pendientes de registrar tras
-el push.
+`reports/2026-09-10_012_menu-navegacion.md`. Commit: `82c35ff`
+(`feat(nav): add a config-driven navigation menu to the shared header`). CI verde confirmado en
+[run 35603809180](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/35603809180): validación, descubrimiento y builds de `stuart-homeowners` y `_example`.
 
 ---
 
