@@ -85,3 +85,67 @@ una prueba de punta a punta con un lead de prueba autorizado.
 
 - `7814680` `feat(contact): real 3-step contact form with progressive CRM save`
 - `24e0371` merge de PR #12 a `main`
+
+## Revisión de cowork
+
+**Veredicto: Aprobado con hallazgos.**
+
+Revisión del diff real (`7814680`, `+385/-1`, 10 archivos): coincide con el alcance pedido.
+`apps/lead-api/` nuevo (Worker separado, decisión 1 tal como se planteaba como inclinación de
+cowork, con razonamiento propio del ejecutor en el reporte), `packages/template/src/components/ContactForm.astro`
+nuevo, y un cambio de 2 líneas en `[...slug].astro` que solo inyecta el formulario cuando
+`page.id === "contact"`. `apps/content-form/` y `pods/*.json` no se tocaron, como exigía el
+prompt. Se agregó la dependencia `aws4fetch` (para firmar URLs de R2) — decisión razonable, pero
+debió declararse en "Lo que tocaste fuera de lo pedido" en vez de responder "Nada" ahí; agregar
+una dependencia nueva es justo el tipo de cosa que esa sección existe para capturar.
+
+Las cinco decisiones de diseño están resueltas con razonamiento real, no solo la decisión:
+
+1. Worker separado (`apps/lead-api/`) en vez de rutas en el pod, con la misma lógica que ya
+   usa `apps/content-form/`. Correcto.
+2. Evita duplicados guardando el `contactId` que devuelve el primer `POST /contacts/upsert` y
+   usando `PUT /contacts/:contactId` en los pasos siguientes en vez de depender del *match* por
+   teléfono/email — confirmado en el código (`core.js`, función `saveLead`) y probado (test
+   "later save updates the returned contact id").
+3. El JS queda contenido a `/contact/` vía el gate `page.id === "contact"` en `[...slug].astro`,
+   con `is:inline` dentro del propio componente. Verificado en el diff: ninguna otra página
+   recibe el script.
+4. Provisionamiento de R2/GHL/Google Places: el ejecutor documentó explícitamente que no tiene
+   credenciales para crearlo, y dejó la lista exacta de lo que le toca a Vic — mismo criterio
+   que W-105.
+5. Pruebas con `fetcher` inyectable: las 6 pruebas en `apps/lead-api/test/lead-api.test.mjs`
+   usan credenciales claramente falsas (`"test-token"`, `"test-key"`) y verifican el payload
+   real armado hacia GHL, el manejo de fallas de Google, y una URL de R2 firmada
+   (`X-Amz-Signature=`) sin secretos reales — corridas y confirmadas (`node --test`, 6/6).
+
+Verificación independiente de cowork, no solo el reporte:
+
+- CI real en `main` tras el merge: [run 35638750950](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/35638750950)
+  contra el commit final `9649a72` — **Success**, 58s, solo warnings de deprecación de Node 20
+  (no bloqueante, no relacionado con este trabajo).
+- PR #12: mergeado a `main`, 7 checks pasados, rama `codex/w118-contact-form` borrada — limpio.
+- `core.js` leído completo: ninguna clave hardcodeada, todos los secrets vía `env.*`, con
+  mensajes de error controlados y distintos por servicio (`CRM_SERVICE_UNAVAILABLE`,
+  `ADDRESS_SERVICE_UNAVAILABLE`, `UPLOAD_SERVICE_UNAVAILABLE`) que el cliente muestra sin
+  romper el resto del formulario, tal como pedía el criterio de aceptación.
+- `ContactForm.astro` leído completo: mantiene "Powered by Google" junto al campo de dirección
+  (requisito de la licencia de Google Places), guarda el progreso entre pasos, y ofrece la
+  carga opcional de declaración de póliza después del submit final vía PUT directo a la URL
+  firmada.
+- Host de la API de GoHighLevel (`services.leadconnectorhq.com`, header `version: 2021-07-28`)
+  coincide con la API real de GHL, no es un endpoint inventado.
+
+**Hallazgo real (corregido por cowork, no por el ejecutor):** el commit `9649a72` **sobrescribió
+por completo** la fila de W-118 en `BACKLOG.md` en vez de agregarle al final. Se perdió el texto
+original de "Abierto el 2026-09-18..." y la nota "Avance 2026-09-21" que cowork había dejado esa
+misma mañana explicando el porqué de las tres decisiones de diseño. Esto es exactamente lo que
+`00_GUIA_GLOBAL.md` pide vigilar en la revisión ("que la entrada quedó al inicio del archivo",
+en este caso aplicado a no perder el historial de una fila existente). `BITACORA.md` sí se
+manejó bien (entrada nueva al inicio del archivo, sin tocar entradas anteriores). Cowork restauró
+el historial perdido de `BACKLOG.md` y le agregó el avance del ejecutor al final, en vez de
+reemplazarlo.
+
+**No se cierra W-118**, correctamente: falta que Vic provisione GoHighLevel (token, location,
+`formId` real y los IDs de los cuatro custom fields), Google Places (API key restringida), y R2
+(bucket privado, credenciales de acceso limitadas al bucket, CORS para los orígenes piloto), y
+que se despliegue `wicfl-lead-api` con esos secretos antes de una prueba real de punta a punta.
