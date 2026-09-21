@@ -1,5 +1,27 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-21 · W-117 cerrado: el formulario crea sitios nuevos por PR
+
+**Quién:** agente ejecutor, siguiendo `prompts/2026-09-18_013_crear-sitio-nuevo.md`.
+
+El Worker ahora tiene dos modos en una sola página: editar un sitio existente y crear uno nuevo.
+El modo nuevo valida los controles básicos, arma `site.config.json` completo con los datos que
+Pavel conoce, crea `content/index.md` con frontmatter de home y abre un PR. Nunca puede hacer
+merge. El helper de GitHub distingue un 404 legítimo de un slug inexistente de un error real de
+API, y el flujo borra la rama si una escritura falla a mitad de camino.
+
+Se eligieron placeholders válidos contra el schema que el gate detecta: dominio, teléfono,
+email, dirección, licencia, GA4, GTM y CRM. La prueba real creó el PR #11 con los dos archivos,
+CI y preview verdes y URL de preview HTTP 200. El gate de producción falló como corresponde con
+los placeholders. El primer intento usó un directorio `_` y se cerró porque ese prefijo hace que
+el gate se salte el sitio; se repitió con el PR #11 normal para probar el gate, sin mergearlo.
+Ambos PRs y ramas de prueba se cerraron y borraron. El API de edición de `stuart-homeowners`
+siguió respondiendo. Prompt: `prompts/2026-09-18_013_crear-sitio-nuevo.md`. Reporte:
+`reports/2026-09-18_013_sitio-nuevo-desde-formulario.md`. Commit y CI final: pendientes de
+registrar tras el push.
+
+---
+
 ## 2026-09-21 · W-116 cerrado: navegación automática y sin JavaScript
 
 **Quién:** agente ejecutor, siguiendo `prompts/2026-09-10_012_menu-navegacion.md`.
