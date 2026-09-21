@@ -11,6 +11,23 @@ Léeme antes de ejecutar cualquier prompt de esta carpeta.
    mismo reporte** y luego actualiza `BITACORA.md` y `BACKLOG.md`
 5. **Nada avanza al siguiente prompt sin ese paso 4.**
 
+## Cómo se entrega el prompt a Codex
+
+El prompt completo vive en `prompts/`, ya commiteado por cowork antes de este paso. Lo que
+cowork le da a Vic para pegar en el ejecutor es una instrucción corta que referencia el
+archivo, **nunca el contenido del prompt pegado en el chat**:
+
+```
+Ejecuta el prompt prompts/YYYY-MM-DD_NNN_slug.md
+```
+
+El ejecutor tiene acceso al repo completo y lee el archivo directo desde ahí. Pegar el prompt
+entero en el chat es trabajo redundante para Vic, y además una fuente de error real: si cowork
+edita el prompt después de haberlo pegado, la versión pegada queda desincronizada del archivo
+commiteado sin que nadie lo note. Si el prompt tiene un requisito que el ejecutor debe confirmar
+antes de arrancar (por ejemplo, que el repo local esté sincronizado con `origin`), eso ya vive
+dentro del prompt mismo, en su sección de "Pasos" — no hace falta repetirlo en el copy-paste.
+
 ## La revisión
 
 **Por qué contra el diff y no contra el reporte.** Un reporte es la versión que el ejecutor
