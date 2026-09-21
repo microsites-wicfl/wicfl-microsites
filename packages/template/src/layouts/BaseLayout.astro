@@ -8,15 +8,32 @@ interface Props {
   title: string;
   description?: string;
   pageType: "home" | "content" | "coverage";
+  path: string;
   lang?: string;
   hreflangAlternates?: HreflangAlternate[];
 }
 
 import { site } from "../lib/site-data.mjs";
 
-const { title, description = site.seo.description, pageType, lang = site.locale.primary, hreflangAlternates = [] } = Astro.props;
+const { title, description = site.seo.description, pageType, path, lang = site.locale.primary, hreflangAlternates = [] } = Astro.props;
 const address = site.contact.address;
 const kicker = [site.niche?.audience, site.niche?.product].filter(Boolean).join(" ");
+const canonicalUrl = `https://${site.domain}${path}`;
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "InsuranceAgency",
+  name: site.brand.name,
+  telephone: site.contact.trackingPhone,
+  email: site.contact.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: address.street,
+    addressLocality: address.city,
+    addressRegion: address.state,
+    postalCode: address.zip
+  },
+  ...(site.geo.serviceArea ? { areaServed: site.geo.serviceArea } : {})
+}).replace(/</g, "\\u003c");
 ---
 
 <!doctype html>
@@ -31,9 +48,11 @@ const kicker = [site.niche?.audience, site.niche?.product].filter(Boolean).join(
     <meta name="theme-color" content={site.theme.accentColor} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
     {hreflangAlternates.map((alternate) => (
       <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />
     ))}
+    <script is:inline type="application/ld+json" set:html={structuredData}></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>

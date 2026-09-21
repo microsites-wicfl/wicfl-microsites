@@ -21,6 +21,7 @@ const { Content } = await render(page);
   title={`${page.data.title} | ${site.brand.name}`}
   description={page.data.description ?? site.seo.description}
   pageType={page.data.pageType}
+  path={routeForPageId(page.id)}
   lang={localeOfPageId(page.id)}
   hreflangAlternates={hreflangAlternates}
 >

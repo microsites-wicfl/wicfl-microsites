@@ -17,6 +17,7 @@ const hreflangAlternates = hreflangAlternatesFor(page.id, allPages);
   title={site.seo.title}
   description={page.data.description ?? site.seo.description}
   pageType={page.data.pageType}
+  path="/"
   lang={localeOfPageId(page.id)}
   hreflangAlternates={hreflangAlternates}
 >

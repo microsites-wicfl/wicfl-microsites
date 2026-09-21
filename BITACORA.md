@@ -1,5 +1,25 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-21 · W-023 cerrado: SEO técnico generado por el template
+
+**Quién:** agente ejecutor, siguiendo `prompts/2026-09-10_010_seo-tecnico.md`.
+
+Se agregó al template compartido el canonical calculado desde `site.domain` y la ruta real de
+cada página, `robots.txt` y `sitemap.xml` como endpoints estáticos de Astro, y JSON-LD
+`InsuranceAgency` en todas las páginas con nombre, teléfono, email, dirección y área de servicio
+del config. Las rutas usan `routeForPageId`, por lo que también preservan el prefijo de idioma.
+
+Se verificó `npm run check` con 0 errores, warnings y hints. Los builds de
+`stuart-homeowners` y del fixture bilingüe `_example` pasaron. Stuart produjo canónicos
+correctos para home e interior, `robots.txt` con su dominio real, y un sitemap XML válido de 10
+entradas, igual a sus 10 archivos Markdown. El JSON-LD de la home se parseó y confirmó como
+`InsuranceAgency` con el NAP configurado. No se tocó el selector protegido de W-115 ni el gate
+de W-103. Prompt: `prompts/2026-09-10_010_seo-tecnico.md`. Reporte:
+`reports/2026-09-10_010_seo-tecnico.md`. Commit y corrida remota de CI: pendientes de registrar
+después del push.
+
+---
+
 ## 2026-09-18 · W-021 cerrado: chequeo de tipos de Astro conectado a `npm run check`
 
 **Quién:** agente ejecutor, siguiendo `prompts/2026-09-10_011_cerrar-astro-check.md`.
