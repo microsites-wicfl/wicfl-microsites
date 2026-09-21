@@ -2,6 +2,7 @@
 title: "Difficult-to-Insure Homes in Stuart, FL"
 description: "Having trouble insuring your Stuart, FL home? Explore home insurance options for older roofs, unique properties, coastal exposure and other challenging risks."
 pageType: content
+navLabel: "Difficult to Insure"
 ---
 
 Finding homeowners insurance can be more complicated when a property has an older roof, previous claims, unusual construction, coastal exposure or other characteristics that may limit available options.

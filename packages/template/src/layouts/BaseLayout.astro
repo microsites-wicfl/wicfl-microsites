@@ -13,12 +13,16 @@ interface Props {
   hreflangAlternates?: HreflangAlternate[];
 }
 
-import { site } from "../lib/site-data.mjs";
+import { getCollection } from "astro:content";
+import { routeForPageId, site } from "../lib/site-data.mjs";
 
 const { title, description = site.seo.description, pageType, path, lang = site.locale.primary, hreflangAlternates = [] } = Astro.props;
 const address = site.contact.address;
 const kicker = [site.niche?.audience, site.niche?.product].filter(Boolean).join(" ");
 const canonicalUrl = `https://${site.domain}${path}`;
+const navPages = (await getCollection("pages"))
+  .filter((page) => page.data.pageType !== "home" && page.data.showInNav)
+  .sort((a, b) => a.id.localeCompare(b.id));
 const structuredData = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "InsuranceAgency",
@@ -75,6 +79,17 @@ const structuredData = JSON.stringify({
           </a>
         </div>
       </div>
+      <nav class="shell site-nav" aria-label="Primary navigation">
+        {navPages.map((page) => {
+          const pagePath = routeForPageId(page.id);
+          const isCurrentPage = Astro.url.pathname === pagePath;
+          return (
+            <a href={pagePath} aria-current={isCurrentPage ? "page" : undefined}>
+              {page.data.navLabel ?? page.data.title}
+            </a>
+          );
+        })}
+      </nav>
     </header>
     <main id="main-content" class="shell"><slot /></main>
     <footer class="site-footer">
@@ -140,6 +155,10 @@ const structuredData = JSON.stringify({
   .header-location { display: inline-flex; align-items: center; }
   .phone-link { display: inline-flex; align-items: center; background: var(--site-accent); border-radius: 999px; color: #fff; font-weight: 700; padding: .6rem 1.1rem; text-decoration: none; box-shadow: 0 10px 22px -14px rgba(0,0,0,.35); transition: transform .15s ease, box-shadow .15s ease; }
   .phone-link:hover { transform: translateY(-1px); box-shadow: 0 14px 26px -14px rgba(0,0,0,.4); }
+  .site-nav { display: flex; flex-wrap: wrap; gap: .35rem var(--s2); padding-bottom: var(--s2); }
+  .site-nav a { border-radius: 999px; color: var(--ink-soft); font-size: .88rem; font-weight: 700; line-height: 1.25; padding: .35rem .65rem; text-decoration: none; }
+  .site-nav a:hover { background: rgba(15, 23, 33, .08); }
+  .site-nav a[aria-current="page"] { background: var(--site-accent); color: #fff; }
 
   main { min-height: 55vh; padding-block: var(--s6) var(--s5); }
   /* W-115: scoped to main, not a bare .page-content selector — pageType "content" produces
@@ -193,6 +212,7 @@ const structuredData = JSON.stringify({
   @media (max-width: 42rem) {
     .header-content { flex-direction: column; align-items: flex-start; }
     .header-contact { width: 100%; justify-content: space-between; }
+    .site-nav { width: 100%; gap: .25rem .5rem; }
     .footer-grid { grid-template-columns: 1fr; gap: var(--s3); }
     main { padding-block: var(--s4); }
     .page-home .page-content { padding-left: var(--s3); }

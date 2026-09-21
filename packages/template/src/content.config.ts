@@ -12,7 +12,9 @@ const pages = defineCollection({
   schema: z.object({
     title: z.string().min(1),
     description: z.string().min(1).optional(),
-    pageType: z.enum(["home", "content", "coverage"])
+    pageType: z.enum(["home", "content", "coverage"]),
+    navLabel: z.string().min(1).optional(),
+    showInNav: z.boolean().default(true)
   })
 });
 

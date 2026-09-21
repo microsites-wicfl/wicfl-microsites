@@ -2,6 +2,7 @@
 title: "Waterfront Home Insurance in Stuart, FL"
 description: "Explore waterfront home insurance in Stuart, FL for riverfront, canal-front and coastal properties. Find coverage options based on your home's location and needs."
 pageType: content
+navLabel: "Waterfront"
 ---
 
 Owning a waterfront home in Stuart means enjoying direct access to rivers, canals, the Intracoastal Waterway and Florida's coast. It also means your property may have insurance considerations that are different from those of an inland home.

@@ -2,6 +2,7 @@
 title: "High-Value Home Insurance in Stuart, FL"
 description: "Explore high-value home insurance in Stuart, FL for luxury, custom and waterfront homes. Find coverage options based on your property's value and needs."
 pageType: content
+navLabel: "High-Value Homes"
 ---
 
 High-value homes require more than simply increasing the limits on a standard homeowners policy. Luxury residences, custom-built homes, waterfront properties and homes with high-end features may require a different approach to evaluating coverage.

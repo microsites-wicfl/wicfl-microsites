@@ -2,6 +2,7 @@
 title: Homeowners coverage — demo layout
 description: Placeholder coverage-page layout for the homeowners product, with no real coverage claims.
 pageType: coverage
+showInNav: false
 ---
 
 This placeholder page exercises the shared coverage layout for the homeowners product. It is not an

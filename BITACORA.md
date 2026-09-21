@@ -1,5 +1,27 @@
 # BITÁCORA — WICFL Microsites
 
+## 2026-09-21 · W-116 cerrado: navegación automática y sin JavaScript
+
+**Quién:** agente ejecutor, siguiendo `prompts/2026-09-10_012_menu-navegacion.md`.
+
+Se agregó al frontmatter `navLabel` opcional y `showInNav`, que por defecto es verdadero. El
+header compartido obtiene la content collection, excluye la home y las páginas marcadas para
+ocultarse, ordena por id y construye enlaces con la ruta real. El enlace actual recibe
+`aria-current="page"`. El CSS usa flex con wrap y conserva el patrón móvil existente, sin
+agregar JavaScript.
+
+Las siete páginas reales de Stuart recibieron etiquetas cortas. `about-demo.md` y
+`coverage-demo.md` se conservaron porque son placeholders de W-008, pero se marcaron
+`showInNav: false` para que no se presenten como páginas públicas. Se verificó el HTML de home e
+interior: siete enlaces correctos, sin `/` redundante y con el estado activo correcto. El fixture
+sin `navLabel` construyó y mostró sus títulos como fallback. `npm run check` terminó con 0
+errores, warnings y hints; los builds de Stuart y `_example` pasaron. Prompt:
+`prompts/2026-09-10_012_menu-navegacion.md`. Reporte:
+`reports/2026-09-10_012_menu-navegacion.md`. Commit y CI remoto: pendientes de registrar tras
+el push.
+
+---
+
 ## 2026-09-21 · W-023 cerrado: SEO técnico generado por el template
 
 **Quién:** agente ejecutor, siguiendo `prompts/2026-09-10_010_seo-tecnico.md`.

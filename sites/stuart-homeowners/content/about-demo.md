@@ -2,6 +2,7 @@
 title: About this demo
 description: Explains what this internal preview site is and is not.
 pageType: content
+showInNav: false
 ---
 
 This page exists to confirm that a second content page routes correctly for this site, at `/about-demo/`.

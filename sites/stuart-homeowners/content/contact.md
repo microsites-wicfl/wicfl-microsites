@@ -2,6 +2,7 @@
 title: "Get a Home Insurance Quote in Stuart, FL"
 description: "Request a home insurance quote in Stuart, FL from Walker Insurance Agency. Explore coverage options for homeowners, coastal and high-value properties."
 pageType: content
+navLabel: "Contact"
 ---
 
 Whether you own a traditional home, waterfront property, coastal residence or high-value home, your insurance should reflect the property you actually own.
