@@ -15,8 +15,9 @@ correctos para home e interior, `robots.txt` con su dominio real, y un sitemap X
 entradas, igual a sus 10 archivos Markdown. El JSON-LD de la home se parseó y confirmó como
 `InsuranceAgency` con el NAP configurado. No se tocó el selector protegido de W-115 ni el gate
 de W-103. Prompt: `prompts/2026-09-10_010_seo-tecnico.md`. Reporte:
-`reports/2026-09-10_010_seo-tecnico.md`. Commit y corrida remota de CI: pendientes de registrar
-después del push.
+`reports/2026-09-10_010_seo-tecnico.md`. Commit: `b1b3133`
+(`feat(seo): canonical links, robots.txt, sitemap.xml, InsuranceAgency structured data`). CI
+verde confirmado en [run 35601811392](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/35601811392): validación, descubrimiento y builds de `stuart-homeowners` y `_example`.
 
 ---
 
