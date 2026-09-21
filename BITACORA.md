@@ -1932,3 +1932,15 @@ Dos de ellos son bloqueadores duros (W-001 quote de GoTo, W-002 dueño del conte
 **Lección para el siguiente:** Kevin responde bien a argumentos con datos verificados y
 fuentes citadas. El feedback que más peso tuvo fue el estructural (separar los gates,
 exigir que el sitio #3 se genere), no el de stack.
+## 2026-09-21 · W-118 avanza: formulario real y Worker aislado
+
+**Quién:** agente ejecutor, siguiendo `prompts/2026-09-21_014_formulario-contacto-real.md`.
+
+`/contact/` ya contiene el funnel de Kevin: ZIP, razón y dirección, y datos de contacto con
+timing, aseguradora y prima opcional. El JS queda contenido en esa página. `apps/lead-api/`
+centraliza GHL, Google Places y R2 para no meter secretos en los pods. Se probaron seis casos
+mockeados, Wrangler en dry-run, `npm run check`, el build del pod y un preview real de Stuart.
+No se cerró W-118: faltan credenciales de GHL/Google/R2, bucket, CORS y la prueba autorizada
+contra servicios reales. Reporte: `reports/2026-09-21_014_formulario-contacto-real.md`.
+
+---
