@@ -1,0 +1,73 @@
+{
+  "slug": "w117-form-test-0921",
+  "domain": "placeholder-w117-form-test-0921.example",
+  "brand": {
+    "name": "W-117 Form Test Insurance",
+    "parent": "WICFL"
+  },
+  "niche": {
+    "product": "flood",
+    "audience": "homeowner"
+  },
+  "geo": {
+    "city": "Testville",
+    "county": "Test County",
+    "state": "FL",
+    "serviceArea": [
+      "Testville"
+    ]
+  },
+  "locale": {
+    "primary": "en",
+    "alternates": []
+  },
+  "contact": {
+    "trackingPhone": "+10000000000",
+    "displayPhone": "PLACEHOLDER PHONE",
+    "email": "placeholder-w117-form-test-0921@example.invalid",
+    "address": {
+      "street": "PLACEHOLDER ADDRESS",
+      "city": "PLACEHOLDER CITY",
+      "state": "FL",
+      "zip": "00000"
+    },
+    "licenseNumber": "PLACEHOLDER-FL-LICENSE"
+  },
+  "products": [
+    "flood"
+  ],
+  "seo": {
+    "title": "Testville Flood Insurance Guidance",
+    "description": "Test-only content used to verify the W-117 new-site workflow and its production placeholder safeguards.",
+    "primaryKeyword": "flood insurance Testville FL",
+    "secondaryKeywords": [
+      "Testville flood coverage"
+    ]
+  },
+  "analytics": {
+    "ga4": "G-PLACEHOLDER",
+    "gtm": "GTM-PLACEHOLDER"
+  },
+  "crm": {
+    "formId": "PENDING_GHL_FORM_ID",
+    "leadSource": "w117-form-test-0921"
+  },
+  "theme": {
+    "variant": "coastal",
+    "accentColor": "#006D77"
+  },
+  "differentiation": {
+    "localProof": [
+      {
+        "type": "market-data",
+        "summary": "Test-only local evidence recorded to exercise the required differentiation field."
+      }
+    ],
+    "uniqueSections": [
+      {
+        "title": "Testville flood preparation",
+        "rationale": "Test-only section rationale that exercises the required site-specific information architecture field."
+      }
+    ]
+  }
+}
