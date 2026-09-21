@@ -133,3 +133,49 @@ el sitio a un pod y provisionar dominio, contacto, licencia, analítica, CRM y n
 
 - `f503692` — `feat(content-form): let Pavel create a new site, not just edit one`
 - `b45ae44` — `docs: record W-117 live workflow verification`
+
+
+## Revision de cowork
+
+**Veredicto: Aprobado.**
+
+Esta era la pieza mas sensible de las cuatro (toca el unico camino por el que Pavel escribe al
+repo), asi que se reviso con mas detalle:
+
+- Alcance: `git show --stat` en `f503692` confirma que solo se toco
+  `apps/content-form/src/index.js` (+92/-2). Nada de template, generador, `pods/*.json`,
+  Wrangler, ni sitios existentes, tal como exigia el prompt.
+- **Autenticacion:** `/api/create-site` esta debajo del mismo `isAuthenticated()` que protege
+  `/api/publish` y el resto de la API, no hay bypass. Sigue exigiendo password + cookie de
+  sesion.
+- **Nunca mergea:** `createSite()` solo crea rama, hace `PUT` de dos archivos y abre PR, mismo
+  patron que `publish()`. No hay ninguna llamada a merge en todo el archivo.
+- **Pregunta de diseno 1 (slug duplicado):** el chequeo de existencia usa un solo `getFile()`
+  sobre el path exacto del slug, no reimplementa `sites(env)`. `github()` ahora guarda
+  `error.status`, y `createSite` distingue 404 (libre, continua) de cualquier otro error (lo
+  propaga) exactamente como pedia el prompt.
+- **Pregunta 2 (placeholders detectables):** revise cada valor generado contra las tres regex
+  reales de `scripts/check-production-config.mjs` (`/placeholder/i`, `/^pending_/i`,
+  `/0000000$/`) y los nueve campos disparan al menos una: dominio, telefono (`+10000000000`
+  termina en `0000000`), email, direccion, licencia, GA4, GTM y `crm.formId`
+  (`PENDING_GHL_FORM_ID` cae en `/^pending_/i`). Ademas corrigieron el bug concreto que se
+  habia detectado en `_example` (su email no disparaba ninguna regex); el nuevo email si lo
+  hace.
+- **Pregunta 3 (campos y catalogo):** los selects de producto/audiencia/idioma/variante
+  coinciden exactamente con los catalogos fijos que pedia el prompt.
+- **Pregunta 5 (convivencia de modos):** en vez de reescribir el string `PAGE` gigante,
+  agregaron un `CREATE_MODE_SCRIPT` separado que inyecta el modo nuevo en runtime via
+  `MutationObserver` + `insertAdjacentHTML`, sin tocar una sola linea del HTML/JS de edicion
+  existente. Reduce el riesgo de romper W-111 a casi cero, buena decision.
+- **Prueba real, verificada en GitHub, no solo en el reporte:** confirme que los PR #10 y #11
+  (`New site draft: w117-form-test-0921`) estan **Closed**, no mergeados, en la lista de PRs
+  del repo. No queda ningun directorio `sites/w117-form-test-*` ni rama local. El reporte
+  ademas atrapo una sutileza real por su cuenta: su primer intento de prueba uso un directorio
+  con prefijo `_`, que el propio gate de produccion excluye por convencion, asi que no probaba
+  nada; lo notaron y repitieron la prueba con un nombre normal para obtener una senal real de
+  fallo del gate. Buen nivel de rigor.
+- Los dos runs de CI se verificaron directamente: run `35606787036` (commit funcional) y run
+  `35607035329` (commit de documentacion), ambos **Status: Success**.
+
+W-117 queda cerrado. Con esto, los cuatro prompts pendientes de esta ronda (W-021, W-023,
+W-116, W-117) estan cerrados y verificados de punta a punta, no solo reportados.
