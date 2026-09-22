@@ -1,3 +1,24 @@
+## 2026-09-22 · El 018 no avanza; se parte en tres prompts chicos (019, 020, 021)
+
+**Quién:** cowork.
+
+La continuación del 018 duró 19 segundos y no tocó nada: el parche del ejecutor no aplicó
+porque `apps/studio/public/app.js` es una sola línea de 2,251 caracteres. Causa raíz clara: el
+código minificado a mano en el 017 no solo es ilegible para una persona, **le impide al propio
+ejecutor editarlo** con diffs por contexto. Insistir con el mismo prompt grande no tiene sentido.
+
+Se aplica el plan que se había anunciado para este caso: el 018 queda como especificación de
+referencia (marcado "no ejecutar") y se parte en tres prompts acotados, uno a la vez:
+
+1. **019** — reescribir `apps/studio/` legible (archivos completos, no parches; ninguna línea
+   de más de 120), arreglar la regresión de la vista de sitio, primeros tests del handler. Sin
+   funcionalidad nueva.
+2. **020** — vista previa real (checks + comentario de `preview.yml`), sitios de prueba, tests.
+3. **021** — tests restantes (guardado, descarte, conflicto), menores del review, reporte,
+   despliegue y prueba real.
+
+---
+
 ## 2026-09-22 · Prompt 018, primer intento parcial; se continúa el mismo prompt
 
 **Quién:** cowork.

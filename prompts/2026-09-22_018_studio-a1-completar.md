@@ -1,3 +1,7 @@
+> **Reemplazado el 2026-09-22 por tres prompts chicos:** `019_studio-legible` (este es el
+> siguiente), `020` (vista previa real) y `021` (tests restantes, menores, reporte y despliegue).
+> No ejecutar este archivo. Se conserva como especificación de referencia.
+
 # 2026-09-22_018 — WICFL Studio A1: completar lo que el 017 dejó a medias
 
 **Backlog:** W-120
