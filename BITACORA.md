@@ -1,3 +1,20 @@
+## 2026-09-22 · Studio desplegado (prompt 021); faltan dos pasos de navegador de Vic
+
+**Quién:** cowork, revisando el trabajo del ejecutor.
+
+Studio está en línea en `https://wicfl-studio.wicfl-microsites.workers.dev`, desplegado por el
+workflow nuevo `deploy-studio.yml` (run 35786548805). Sin login responde 401 a todo el API, que
+es el estado seguro. El ejecutor otra vez no escribió reporte ni bitácora; revisión de cowork en
+`reports/2026-09-22_021_studio-despliegue.md`, aprobado con dos hallazgos menores del workflow.
+
+Detalle que salió al preparar los pasos de Vic: el repo es de la **cuenta personal**
+`microsites-wicfl`, no de una organización. Un token fine-grained solo puede dar acceso a repos
+de la cuenta dueña, y en un repo personal solo el dueño administra los secretos. Así que los
+dos pasos se hacen entrando como `microsites-wicfl` (`microsites@wicfl.com`), no con la cuenta
+de Vic. Otro argumento para W-113 (convertir a organización).
+
+---
+
 ## 2026-09-22 · Corrección de Vic: cowork le pidió ejecutar un push y configurar el despliegue a mano
 
 **Quién:** cowork, a partir de una corrección de Vic.
