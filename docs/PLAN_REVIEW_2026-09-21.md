@@ -1,12 +1,12 @@
 # WICFL Microsite Factory — Plan Review
 
-**v1.1 · 22 Sep 2026 · Prepared by Victor · For Kevin, and for the AI assistant that helped build the plan in August**
+**v1.2 · 22 Sep 2026 · Prepared by Victor · For Kevin, and for the AI assistant that helped build the plan in August**
 
 ---
 
 ## How to use this document
 
-This is a status update on the WICFL Microsite Factory plan, plus ten proposals for Kevin to consider. It was written four weeks after the plan was agreed (24–25 Aug 2026) and three days after the framework handoff to Pavel (18 Sep 2026).
+This is a status update on the WICFL Microsite Factory plan, plus nine proposals for Kevin to consider. It was written four weeks after the plan was agreed (24–25 Aug 2026) and three days after the framework handoff to Pavel (18 Sep 2026).
 
 **The plan as agreed in August is the plan. It stays in force as written.** Nothing in Part 2 is adopted; each item is a proposal that changes nothing until Kevin decides. Work continues under the current plan in the meantime.
 
@@ -26,7 +26,7 @@ Build a factory that generates niche insurance microsites for WICFL from a confi
 
 - **The factory core.** Config schema with validation, shared Astro template, generator (`build:site`), monorepo, CI on every change, deploy pipeline to Cloudflare Workers with pod routing (one Worker serves ~25 sites, routed by hostname).
 - **Preview per branch.** Every draft gets its own URL before it publishes. Verified end to end with real pull requests.
-- **Production gate.** A site whose config still contains placeholders (a fake license number, an unprovisioned analytics ID) cannot deploy to a real domain. Fails closed. Verified.
+- **Production gate.** A site whose config still contains placeholders (an unset tracking phone, an unprovisioned analytics ID) cannot deploy to a real domain. Fails closed. Verified.
 - **Bilingual routing** with `hreflang`. Built and exercised in CI. Neither pilot uses it yet (Site #1 is English-only; Site #2 was planned as Spanish-only).
 - **Technical SEO** generated from config: canonical URLs, `robots.txt`, `sitemap.xml`, schema.org `InsuranceAgency` markup with the site's NAP. Closed 21 Sep.
 - **Navigation menu** generated automatically from the site's pages, zero JavaScript. Closed 21 Sep.
@@ -36,7 +36,7 @@ Build a factory that generates niche insurance microsites for WICFL from a confi
 
 ### Site status
 
-- **Site #1 — Stuart homeowners, English.** `StuartHomeownersInsurance.com`, domain owned by Kevin (registered at GoDaddy, DNS on Cloudflare). Eight real content pages written by Pavel are merged and visible on the preview. **Launch is 9 Oct 2026.** Still blocked on: the real Florida license number, approved phone, email and address from Kevin; and the credentials for the lead funnel above.
+- **Site #1 — Stuart homeowners, English.** `StuartHomeownersInsurance.com`, domain owned by Kevin (registered at GoDaddy, DNS on Cloudflare). Eight real content pages written by Pavel are merged and visible on the preview. **Launch is 9 Oct 2026.** Still blocked on: the approved phone, email and mailing address from Kevin (the license number is no longer needed on the sites, see Proposal 3); and the credentials for the lead funnel above.
 - **Site #2 — Port St. Lucie.** Kevin confirmed "Let's do PSL" on 17 Sep. Pavel has a structure, SEO and content outline. **Launch is 30 Oct 2026.** Open: the domain is not chosen or bought, and whether Site #2 is still the Spanish-language site as originally planned is not written down anywhere. This needs an explicit answer.
 - **Site #3 — Gate A repeatability test.** 9–13 Nov, Pavel alone, niche of his choosing. Not started, by design.
 
@@ -49,16 +49,16 @@ Build a factory that generates niche insurance microsites for WICFL from a confi
 - **Content review before publish:** no one at Walker is available as a dedicated reviewer, so Pavel self-reviews against the compliance checklist, with Kevin available informally. Decided by Victor, not Kevin.
 - **Gate A criteria** were tightened twice: the "five working days" stopwatch was replaced by two conditions a command can verify (Pavel's changes touch only his site's folder; rebuilding from config reproduces exactly what shipped), plus two days or less of hands-on time and zero code written by Victor.
 - **Gate B moved** from 12 Feb to the week of 1 Mar 2027 so Site #2 gets its full 120 days.
-- **Qualified call definition.** Kevin answered the two open questions by chat on 11 Sep: calls from outside the service area are not rejected, and repeat calls are deduplicated across the full 120-day window. Final agreed text, not yet written into the docs:
+- **Qualified call definition.** Kevin answered the two open questions by chat on 11 Sep: calls from outside the service area are not rejected, and repeat calls are deduplicated across the full 120-day window. Final agreed text, now written into `docs/QUALIFIED_CALL_DEFINITION.md` and `docs/GATE_B_MODEL.md` (v1.1, 21 Sep):
 
   > A call from a person about a product the site sells, lasting longer than 60 seconds, that was not a wrong number, a solicitation, an existing client calling about an existing policy, or a repeat call (within the 120-day measurement window) from someone already counted.
 
 ### Still open on Kevin
 
-1. Real license number, phone, email and mailing address for Site #1 (blocks the 9 Oct launch).
+1. Approved phone, email and mailing address for Site #1 (blocks the 9 Oct launch). Kevin has said the license number does not need to appear on the sites; Florida's Department of Financial Services guidance agrees (the license number is required on policy applications, not in advertising), so that field is being made optional.
 2. The three business figures that produce the Gate B number: average first-year commission per policy, share of qualified calls that become a sale, and the annual return per site that would make him say yes to twenty more. The model is written; Kevin fills three cells.
 3. Whether Site #2 (Port St. Lucie) is the Spanish site, and its domain.
-4. Whether pilot sites get their own Google Business Profile (open since 28 Aug; see Proposal 2, which argues this is not actually his decision).
+4. Whether pilot sites get their own Google Business Profile (open since 28 Aug; see Proposal 2, which argues Google's rules already answer it).
 
 ### Key dates
 
@@ -73,33 +73,36 @@ Build a factory that generates niche insurance microsites for WICFL from a confi
 
 ---
 
-## Part 2 — Ten proposals for Kevin to consider
+## Part 2 — Nine proposals for Kevin to consider
 
 Ordered by impact. Each one states what the current plan says, what we think the problem is, what we are proposing instead, and what it asks of Kevin. The current plan stays as written until he decides on each.
 
-### Proposal 1 — Split Gate B into a conversion test and a ranking test
+### Proposal 1 — Gate B cannot be answered organically in 120 days; add a paid test and leading indicators
 
 **What the current plan says.** Gate B passes if Sites #1 and #2 hit a qualified-call target, each measured over the 120 days after its own launch, on organic traffic.
 
-**The problem.** A brand-new domain with no authority, no backlinks and no reviews typically takes six to twelve months to rank for anything competitive. Site #1 will have five months of life on 5 March. Measured on organic calls alone, Gate B will very likely fail, not because the model is wrong but because it is too early. A "no" in March would kill a project that may well have worked. The plan half-acknowledges this ("Gate B cannot resolve faster than organic search allows") but does not confront it.
+**The problem.** A brand-new domain does not rank in 120 days. With no authority, no backlinks and no reviews, six months is the realistic floor for a new site to hold positions on competitive insurance terms, and twelve is common. Site #1 will have five months of life on 5 March; Site #2 will have four. Measured on organic calls alone, the most probable outcome of Gate B is a miss, not because the model is wrong but because the clock is too short for the thing it is measuring. A "no" in March would close a project that may well have worked. The plan half-acknowledges this ("Gate B cannot resolve faster than organic search allows") but does not confront it.
 
-Gate B currently bundles two different questions: *can we rank?* and *does the page convert?* The second one can be answered in weeks.
+Gate B currently bundles two different questions: *can we rank?* and *does the page convert?* The second one can be answered in weeks. The first one cannot be answered by March at all.
 
 **Proposal.**
 
-- **Add a paid conversion test.** A small Google Ads or Local Services Ads campaign on Site #1, roughly $500–1,000, sends real buying-intent traffic and measures whether the page produces qualified calls. This answers "do the sites produce business" in four to six weeks, independent of whether Google ranks them.
+- **Add a paid conversion test.** A small Google Ads or Local Services Ads campaign on Site #1, roughly $500–1,000, sends real buying-intent traffic and measures whether the page produces qualified calls. This answers "do the sites produce business" in four to six weeks, independent of whether Google ranks them, and it gives Walker real leads while the organic curve builds. One thing to be precise about, because it comes up: **paid ads do not move organic rankings.** Google has said repeatedly that the two systems are separate. The ads buy evidence and leads, not positions.
+- **Actually shorten the organic curve** with the things that do move it for a new domain: a link from `wicfl.com` and Walker's other properties to each microsite, local citations, early indexing through Search Console, and steady content additions after launch. None of this is in the plan today and all of it is cheap.
 - **Add leading indicators for organic.** Indexation, impressions and average position in Search Console, click-through rate. These are the things that actually move inside 120 days. Set a bar for them too.
 - **Make Gate B two-stage.** B1 in March 2027: conversion test plus leading indicators, deciding whether to continue to five sites. B2 in September 2027: real organic data, deciding whether to build twenty.
 
-**What it asks of Kevin.** Approve a small ad budget for October–November, and accept that the March decision is "continue to 5" rather than "scale to 20".
+**What it asks of Kevin.** Approve a small ad budget for October–November, allow links from Walker's existing sites to the microsites, and accept that the March decision is "continue to 5" rather than "scale to 20".
 
-### Proposal 2 — Close the Google Business Profile question by policy, not by asking
+### Proposal 2 — Stop waiting on the Google Business Profile question; Google's rules already answer it
 
 **What the current plan says.** "Do pilot sites get their own Google Business Profiles?" is an open item on Kevin since 28 Aug, flagged as something that "may change which niches are viable."
 
-**The problem.** This is not Kevin's decision; it is Google's rule. Google Business Profile guidelines allow one listing per physical business location. A hundred microsites of the same agency at the same Stuart address cannot each have a profile; attempting it is grounds for suspension of all of them. So the answer is no, and the consequence is that microsites compete in organic results only, never in the map pack. That is a design constraint to accept, not a decision to wait on.
+**The problem.** The question has been open for three weeks and it is not really a business decision. Google Business Profile guidelines allow one listing per physical business location. Every microsite is the same agency at the same Stuart address, so they cannot each have a profile, and trying is grounds for suspension of all of them. The consequence is concrete: microsites compete in organic results only, never in the map pack. The map pack belongs to Walker's single existing profile.
 
-**Proposal.** Treat the item as settled by Google's rules rather than by a decision: microsites do not get their own GBP. Walker's single GBP is the only one, and every site's NAP points to it. If Kevin agrees, this removes a blocker that has been "overdue" for three weeks without anyone needing to do anything.
+A related risk that this question was standing in for: the sites all share Walker's name, phone and address, so Google sees one business behind all of them. That is honest and it is fine. What is not fine is if two of our sites, or a site and `wicfl.com`, chase the same keywords in the same geography, because then they compete with each other and split whatever authority exists. That is a keyword and geography planning problem, not a profile problem.
+
+**Proposal.** Record the answer as no, by Google's rules, and close the item. Then have Pavel keep a simple keyword and geography map across all sites and `wicfl.com` as part of niche validation, so no two properties target the same query in the same area.
 
 **What it asks of Kevin.** Nothing, unless he disagrees.
 
@@ -107,33 +110,37 @@ Gate B currently bundles two different questions: *can we rank?* and *does the p
 
 **What the current plan says.** Every site is its own domain, bought through Cloudflare Registrar. A hub-and-spoke alternative sits in the "watch" list, to be evaluated only if Gate B fails.
 
-**The problem.** The plan's doorway mitigation is content differentiation, which is right but is only half the picture. The other strong signal Google reads is the entity footprint: a hundred domains sharing the same phone, address, license and agency name look like a network even if every page passes the swap test. The alternative (`wicfl.com/stuart-homeowners/` instead of `stuarthomeownersinsurance.com`) inherits the parent domain's authority from day one, forms no pattern of doorway domains, and runs on the identical factory. What it gives up is the exact-match domain, which is worth far less today than it was ten years ago.
+**The problem.** The plan's doorway mitigation is content differentiation, which is right but is only half the picture. The other strong signal Google reads is the entity footprint: a hundred domains sharing the same phone, address and agency name look like a network even if every page passes the swap test. The alternative (`wicfl.com/stuart-homeowners/` instead of `stuarthomeownersinsurance.com`) inherits the parent domain's authority from day one, forms no pattern of doorway domains, and runs on the identical factory. What it gives up is the exact-match domain, which is worth far less today than it was ten years ago.
 
 This also matters for timing: Phase 7 automates domain purchasing. If it turns out in March that subdirectories were the right call, Phase 7 was wasted work.
+
+*Side note recorded here because it came up in this discussion: Kevin has said the sites do not need to display the agency license number. Florida DFS guidance is consistent with that (the license number is required on policy applications, not in advertising), so the license field in the site config is being made optional, the template stops rendering it, and it drops out of the launch blocker. This is a decision Kevin already made, not a proposal.*
 
 **Proposal.** Do not decide now which is better. Make the factory not decide either: a config field (`deploy.mode: "domain" | "subpath"`) makes it a per-site choice. Then use Site #3, which is already the repeatability test, to test the variable: Sites #1 and #2 on their own domains, Site #3 as a subdirectory of the main brand domain. Same Gate A test, plus a data point nobody has today.
 
 **What it asks of Kevin.** Agree that Site #3 may live under the main domain rather than a new one.
 
-### Proposal 4 — Minimum viable site is 6–8 pages, not 15–25
+### Proposal 4 — Page count is an output, not a target
 
-**What the current plan says.** 15 to 25 pages per site. Content at $50 per page is the project's real cost: $3,000 for the pilots, $100,000 at a hundred sites, and Pavel, holding three roles, is the bottleneck.
+**What the current plan says.** 15 to 25 pages per site.
 
-**The problem.** Site #1 has eight real pages and looks complete. Spam risk is per thin page, not per small site. Six dense pages with real local proof pass the swap test more easily than twenty-five that spread the same local evidence thin.
+**The problem.** More pages do not hurt by themselves. Twenty-five strong pages beat eight. What hurts is pages that exist to hit a count: the "flood insurance in Palm City" / "flood insurance in Jensen Beach" pattern where the city changes and nothing else does. That is the doorway pattern Google's June 2026 update enforced against, and a numeric target is exactly what pushes a writer toward it in week three. Site #1 has eight real pages and reads as complete; if Pavel has real local material for twenty more, twenty more is right.
 
-**Proposal.** Change the target from "15–25 pages" to "minimum viable site is 6–8 pages; add a page only when there is local evidence that justifies it." This cuts content cost by roughly 60%, relieves Pavel's triple role, and shrinks the doorway surface. It is the largest cost lever the plan has and is not using.
+**Proposal.** Drop the number as a target. The rule is the one the plan already has: every page passes the swap test, and a page gets written when there is local evidence that only that page can carry. Page count per site becomes whatever that rule produces.
 
-**What it asks of Kevin.** Agree to the smaller target.
+**What it asks of Kevin.** Nothing.
 
 ### Proposal 5 — Tag qualified calls with a script, spot-check with a person
 
 **What the current plan says.** Gate B counts qualified calls; applying the definition requires "someone tagging calls weekly rather than reconstructing 120 days from memory in March." The owner is not named.
 
-**The problem.** Weekly manual tagging is the kind of habit that breaks in November. GoTo records calls; transcribing and classifying a call against the definition (over 60 seconds, about a product the site sells, not a wrong number, not an existing client, not a repeat) is exactly what a language model does well and consistently. This does not conflict with the "no AI-generated content" rule: it is internal operations, not published content.
+**The problem.** Gate B's unit of measurement is a qualified call, defined as: over 60 seconds, about a product the site sells, not a wrong number, not a solicitation, not an existing client about an existing policy, not a repeat caller within the window. Someone has to apply those five checks to every call that comes in on a tracking number, every week, for five months. As written, that someone is a person listening to recordings in GoTo and keeping a spreadsheet. That habit breaks in November, and when it breaks, Gate B has no data.
 
-**Proposal.** The lead API Worker that already exists receives GoTo's call webhook, transcribes and classifies, and stores the result with the transcript. Pavel spot-checks 10% instead of tagging 100%. Gate B data accumulates automatically from 9 Oct.
+**Proposal.** Make it automatic. GoTo records the call and notifies our existing lead API when it ends. The API pulls the recording, transcribes it, and has a language model apply the five checks, storing the verdict with the transcript and the reasons. Pavel reviews a 10% sample each week for accuracy instead of tagging 100%. The count is live from 9 October and the criteria are applied the same way every time. This does not conflict with the "no AI-generated content" rule: nothing here is published, it is internal measurement.
 
-**What it asks of Kevin.** Confirm GoTo call recording is on for the tracking numbers.
+Two things have to be true for this to work: GoTo's recording and call-event integration has to be verified against their current API before we commit to it, and **Florida is an all-party consent state for call recording**, so every tracking line has to play a "this call may be recorded" announcement. GoTo supports that; it just has to be switched on.
+
+**What it asks of Kevin.** Confirm that call recording, with the announcement, is acceptable on the tracking lines.
 
 ### Proposal 6 — Generate the monthly report; do not write it
 
@@ -155,32 +162,23 @@ This also matters for timing: Phase 7 automates domain purchasing. If it turns o
 
 **What it asks of Kevin.** Acknowledge the budget so that when something is deferred to Phase 7, it is not a surprise.
 
-### Proposal 8 — Kevin's open items get a default that stands unless he overrides it
+### Proposal 8 — Three compliance items the new lead funnel requires before it goes live
 
-**What the current plan says.** Several decisions sit on Kevin with dates in late August and are marked "open, overdue."
+**What the current plan says.** Florida insurance advertising rules are encoded in the template (correct entity naming, no misleading claims).
 
-**The problem.** The one mechanism that has worked well is the Gate B model: propose a number, Kevin approves it instead of inventing it. Open-ended questions do not get answered; concrete defaults do.
-
-**Proposal.** Every item on Kevin carries a proposed default and a date. If there is no answer by the date, the default stands and is recorded as "decided by default on X; Kevin can reverse." The Spanish-site question, the qualified-call definition and the GBP question can all close this week under this rule.
-
-**What it asks of Kevin.** Agree to the mechanism, which mostly saves him messages.
-
-### Proposal 9 — Two compliance items the new lead funnel requires before it goes live
-
-**What the current plan says.** Florida insurance advertising rules are encoded in the template (license number displayed, correct entity naming, no misleading claims).
-
-**The problem.** The funnel Kevin designed on 18 Sep collects property address, current insurer, current premium, and uploads policy declaration pages: personal and financial data of Florida residents. And GoHighLevel sends automated SMS. The template does not yet have what that requires.
+**The problem.** The funnel Kevin designed on 18 Sep collects property address, current insurer, current premium, and uploads policy declaration pages: personal and financial data of Florida residents. GoHighLevel sends automated SMS. And Proposal 5 adds call recording. The template does not yet have what any of that requires.
 
 **Proposal.**
 
 - A **privacy policy page** on every site, and an explicit **TCPA consent** on the form (checkbox and text agreeing to calls and text messages). Without the consent, GoHighLevel's automated texting is a real legal exposure for Walker.
 - A **retention rule** for uploaded declaration pages: how long they live in storage and who deletes them.
+- The **recording announcement** on every tracking line, if Proposal 5 is adopted.
 
 Hours of work, not days, but it goes in before the first real lead, not after.
 
 **What it asks of Kevin.** The privacy policy text, or approval to use a standard one.
 
-### Proposal 10 — The differentiation gate is the whole thesis and has not been started
+### Proposal 9 — The differentiation gate is the whole thesis and has not been started
 
 **What the current plan says.** A CI check compares content across every site in the portfolio and blocks a deploy when two pages are too similar. Due before Site #2's content, mid-October.
 
@@ -194,18 +192,17 @@ Hours of work, not days, but it goes in before the first real lead, not after.
 
 | # | Proposal | Asks of Kevin |
 |---|---|---|
-| 1 | Split Gate B: paid conversion test + leading indicators; two-stage decision | Approve ~$500–1,000 ad budget; accept March = "continue to 5" |
-| 2 | Close the GBP question by policy: microsites have no GBP of their own | Nothing, unless he disagrees |
+| 1 | Gate B can't be answered organically in 120 days: paid conversion test, real organic accelerators, leading indicators, two-stage decision | Approve ~$500–1,000 ad budget; allow links from Walker's sites; accept March = "continue to 5" |
+| 2 | GBP question answered by Google's rules; keyword/geo map so sites don't compete with each other | Nothing, unless he disagrees |
 | 3 | Domain-agnostic factory; Site #3 tests subdirectories | Agree Site #3 may live under the main domain |
-| 4 | Minimum viable site = 6–8 pages | Agree to the smaller target |
-| 5 | Script-tagged qualified calls, human spot-check | Confirm GoTo call recording is on |
+| 4 | Page count is an output of the swap test, not a target | Nothing |
+| 5 | Script-tagged qualified calls, human spot-check | Confirm recording with announcement is acceptable on tracking lines |
 | 6 | Generated monthly dashboard instead of written report | Nothing |
 | 7 | Written budget on Victor's time post-handoff | Acknowledge the budget |
-| 8 | Defaults that stand unless Kevin overrides | Agree to the mechanism |
-| 9 | Privacy policy + TCPA consent + retention rule before the funnel goes live | Privacy policy text, or approve a standard one |
-| 10 | Build the differentiation gate before Site #2 | Nothing |
+| 8 | Privacy policy + TCPA consent + retention rule + recording notice before the funnel goes live | Privacy policy text, or approve a standard one |
+| 9 | Build the differentiation gate before Site #2 | Nothing |
 
-If Kevin adopts only three: **1, 3 and 4.** They are the ones that change the odds of reaching March with a real answer instead of "we don't know yet."
+If Kevin adopts only three: **1, 3 and 8.** The first two change whether March produces a real answer; the third has to be in place before the first lead arrives.
 
 ---
 
@@ -213,10 +210,10 @@ If Kevin adopts only three: **1, 3 and 4.** They are the ones that change the od
 
 1. Does the two-stage Gate B (Proposal 1) preserve the current plan's intent that "advancement runs on evidence, not elapsed time," or does it weaken it?
 2. Is there a version of the domain strategy (Proposal 3) that the plan considered and rejected in August, and if so, why?
-3. Is the 6–8 page minimum (Proposal 4) too thin for the insurance niches Kevin has in mind, and is there evidence either way?
+3. Is there anything in the automated call tagging (Proposal 5) that GoTo's current integration cannot support?
 4. What in the current plan does this review fail to mention that Kevin should still be tracking?
 5. Ranked by urgency, what does Kevin need to decide in the next two weeks?
 
 ---
 
-*Maintained by Victor. Source of truth for the project remains the repository (`CLAUDE.md`, `BACKLOG.md`, `BITACORA.md`, `docs/`). This review does not replace the master file (v1.6, 10 Sep 2026), which remains the plan of record; it proposes changes to it for Kevin's decision. v1.1 (22 Sep) reworded the framing so the current plan and the proposals are clearly separate; the content of the proposals is unchanged.*
+*Maintained by Victor. Source of truth for the project remains the repository (`CLAUDE.md`, `BACKLOG.md`, `BITACORA.md`, `docs/`). This review does not replace the master file (v1.6, 10 Sep 2026), which remains the plan of record; it proposes changes to it for Kevin's decision. v1.1 (22 Sep) reworded the framing so the current plan and the proposals are clearly separate. v1.2 (22 Sep) incorporated Victor's review: Proposal 1 leads with the 120-day problem and is explicit that ads do not move rankings; Proposal 2 separates the profile question from keyword overlap; the license number is recorded as not required (Kevin's decision, consistent with Florida DFS guidance); Proposal 4 drops the page target instead of lowering it; Proposal 5 spells out the mechanics and Florida's recording-consent rule; the former Proposal 8 (decision defaults) was removed as an internal working practice rather than something to formalize.*

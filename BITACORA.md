@@ -1,3 +1,47 @@
+## 2026-09-22 · Plan review v1.2 con los comments de Vic; licencia no requerida (Kevin)
+
+**Quién:** cowork, con revisión de Vic.
+
+Vic revisó el copy de las diez propuestas para Kevin y devolvió comments sobre 1, 2, 3, 4, 5
+y 8. Se aplicaron a `docs/PLAN_REVIEW_2026-09-21.md` (v1.1 → v1.2, ahora **nueve** propuestas):
+
+- **1.** El énfasis pasa a lo que Vic señaló: en 120 días orgánicos no hay resultado posible,
+  un sitio nuevo tarda 6+ meses, así que la probabilidad de fallar Gate B por prematuro es
+  alta. **Corrección de cowork a la idea de que los ads aceleran el SEO:** no lo hacen; Google
+  lo ha dicho repetidamente (Cutts 2014, Mueller, Sullivan), los dos sistemas están separados.
+  Los ads compran evidencia de conversión y leads, no posiciones. Lo que sí acorta la curva
+  orgánica de un dominio nuevo, y no está en el plan: links desde `wicfl.com` y las demás
+  propiedades de Walker, citations locales, indexación temprana por Search Console, y ritmo
+  de contenido post-launch. Se agregó como parte de la propuesta.
+- **2.** Vic entendía el problema (los sitios comparten datos) pero no la solución. Se separó
+  en dos: el GBP no es decisión (una ficha por ubicación física, regla de Google), y el riesgo
+  real detrás es canibalización de keywords entre sitios y contra `wicfl.com`, que se resuelve
+  con un mapa de keywords/geografía que lleve Pavel en la validación de nicho.
+- **3.** Kevin dice que **no hace falta el número de licencia en los sitios.** Verificado
+  contra la guía del Florida DFS: se exige en solicitudes de póliza, no en publicidad. Se
+  registró en el review como decisión de Kevin, no propuesta; se quitó "license" del
+  argumento de huella de entidad; y en `BACKLOG.md` W-008 se reduce a teléfono/email/dirección
+  y queda anotado el prompt chico pendiente (campo opcional en schema, fuera del template y
+  del gate).
+- **4.** A Kevin no le preocupa el costo de contenido, y la pregunta de Vic fue si más
+  páginas afectan. Respuesta honesta: no por sí mismas; 25 páginas buenas ganan a 8. Lo que
+  daña es la página que existe para llegar a un número (patrón "flood insurance in Palm City"
+  / "in Jensen Beach"). Se reescribió: no bajar el objetivo, **quitarlo**: el conteo es
+  resultado del swap test, no meta. Ya no pide nada a Kevin.
+- **5.** Se explicó la mecánica completa (GoTo graba → webhook al `lead-api` → transcripción
+  → modelo aplica los cinco criterios → veredicto con transcript → Pavel muestrea 10%). Se
+  agregaron dos condiciones: verificar la integración de grabación/eventos de GoTo contra su
+  API actual, y **Florida es all-party consent para grabar llamadas**, así que toda línea de
+  tracking necesita el anuncio "this call may be recorded". Se sumó al ítem de compliance.
+- **8 (defaults si Kevin no responde): eliminado** del review y del copy, a pedido de Vic.
+  Es práctica interna de trabajo (decidir, avisar a Kevin, él objeta si quiere), no algo que
+  se formaliza en documentación.
+
+Cerrado el pendiente de la Parte 1: el texto de llamada calificada ya figura como escrito en
+docs (v1.1 del 21-sep). Commit del review v1.2 en este mismo cierre.
+
+---
+
 ## 2026-09-21 · Next steps al launch acordados con Vic; prompt 015 (ensayo de deploy); W-100 escrito en docs
 
 **Quién:** cowork, como nuevo arquitecto del proyecto, con aprobación de Vic.
