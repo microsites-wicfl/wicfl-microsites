@@ -1,3 +1,35 @@
+## 2026-09-22 · Prompt 016 escrito: licencia opcional; copy de las ocho propuestas enviado a Kevin
+
+**Quién:** cowork, con Vic.
+
+**Copy enviado.** Vic mandó a Kevin el mensaje de introducción del plan review y los ocho
+puntos, después de cuatro rondas de ajuste (ver entrada anterior de hoy). Cambios de la última
+ronda que quedaron en `docs/PLAN_REVIEW_2026-09-21.md`: (1) la prueba pagada bajó de
+$500–1,000 a **$200–300** y se reencuadró como prueba de humo, no medición de tasa, con los
+benchmarks de CPC de seguros ($30–50/clic, CPL $80–140) como razón; (2) el "5 en marzo, 20 en
+septiembre" se reemplazó por **cadencia**: 6 páginas por sitio, 2 sitios al mes desde que pase
+Gate A, Gate B decide si continúa, ritmo de arranque con margen para crecer; con una tabla de
+capacidad (páginas/sitio × sitios/mes con Pavel solo) que muestra que con las 15–25 páginas
+que asume el plan no se llega ni a un sitio al mes, y que 100 sitios con un solo redactor son
+~4 años; (3) el punto de páginas por sitio se eliminó como propuesta separada y se absorbió en
+la cadencia; (4) se quitó la frase "if you only take three". Decisión de Vic: solo Pavel
+escribe, no habrá más redactores.
+
+**Prompt 016 escrito:** `prompts/2026-09-22_016_licencia-opcional.md`. Kevin decidió que los
+sitios no muestran número de licencia (verificado contra la guía del Florida DFS: se exige en
+solicitudes de póliza, no en publicidad). El prompt vuelve `contact.licenseNumber` opcional en
+el schema (relajar un required, único cambio de schema que no rompe nada), render condicional
+en `BaseLayout.astro` (y JSON-LD si aplica), lo quita del config de Stuart y del modo "Create
+new site" del formulario, y actualiza los ocho docs que lo mencionan como obligatorio. Regla
+explícita: **no tocar los patrones del gate**; al quitar el campo, el hallazgo desaparece solo.
+Fixtures y ejemplos conservan el campo a propósito. Corre en paralelo con 015 sin conflicto
+(archivos distintos). Con esto, W-008 queda en teléfono, email y dirección.
+
+**Orden para Codex:** 015 primero (ensayo de deploy, más riesgo, necesita margen), 016
+después.
+
+---
+
 ## 2026-09-22 · Plan review v1.2 con los comments de Vic; licencia no requerida (Kevin)
 
 **Quién:** cowork, con revisión de Vic.
