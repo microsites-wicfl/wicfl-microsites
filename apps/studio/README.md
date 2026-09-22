@@ -40,20 +40,20 @@ Cloudflare Access protege el Worker antes de que corra el código; el Worker lee
 `ctx.access.getIdentity()`. Como segunda barrera, si la variable `ALLOWED_EMAILS` existe, el
 correo tiene que estar en ella (401 sin sesión, 403 si no está en la lista).
 
-## Despliegue (lo hace Vic en el dashboard, una sola vez)
+## Despliegue
 
-1. **Token de GitHub** (fine-grained, solo el repo `microsites-wicfl/wicfl-microsites`):
+GitHub Actions despliega Studio al cambiar `apps/studio/`, y Codex puede relanzar el workflow.
+Lo único que hace Vic en el navegador es:
+
+1. Crear un **token de GitHub** fine-grained, solo para `microsites-wicfl/wicfl-microsites`:
    Contents read/write, Pull requests read/write, Commit statuses read, Checks read, Metadata
    read. El token de content-form tiene Contents y Pull requests pero probablemente no Checks:
    conviene uno nuevo solo para Studio.
-2. **Worker:** Workers & Pages → Create → Import a repository → este repo, **root directory
-   `apps/studio`**, deploy command `npx wrangler deploy`. Mismo mecanismo que content-form.
-3. **Variables:** secreto `GITHUB_TOKEN`; variable `ALLOWED_EMAILS` con los correos de Vic y
-   Pavel separados por coma.
-4. **Access:** en el Worker → pestaña Access → "Protect this Worker behind Access" → política
+2. Guardarlo como secret del repositorio `STUDIO_GITHUB_TOKEN` y guardar la lista de correos de
+   Vic y Pavel como `STUDIO_ALLOWED_EMAILS`.
+3. Activar Access en el Worker `wicfl-studio` con una política
    por correo con los mismos dos correos. Cubre la URL de `workers.dev`.
-5. Abrir la URL, entrar, y probar contra **Sitios de prueba → Example**: editar dos páginas,
-   ver un solo borrador con la vista previa lista, descartarlo.
+4. Pedir a Codex que relance el workflow después de guardar los secrets.
 
 ## Desarrollo y pruebas
 
