@@ -92,7 +92,7 @@ Cuando termines tiene que ser cierto:
   legible, jerarquía clara, estados vacíos y de carga explícitos, errores en lenguaje llano. No
   hace falta diseño elaborado; hace falta que Pavel no tenga que adivinar.
 - Ningún secreto en el cliente. El token de GitHub vive solo en el Worker (`GITHUB_TOKEN`).
-- Repo sincronizado con `origin/main` antes de empezar; si no lo está, detente y repórtalo.
+- Antes de empezar, `git fetch`: tu `main` local no puede estar **detrás** de `origin/main`; si lo está, detente y repórtalo. Estar **adelante** es normal (commits de cowork sin subir) y no es motivo para detenerse. Al terminar, `git push origin main`: sube tus commits y los de cowork juntos.
 
 ## Pasos
 

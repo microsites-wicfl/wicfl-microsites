@@ -16,6 +16,22 @@ Léeme antes de ejecutar cualquier prompt de esta carpeta.
    mismo mensaje. (Regla explícita de Vic, 2026-09-22, después de que cowork entregó 016 y 017
    juntos.)
 
+## Push: lo hace el ejecutor al final de cada prompt
+
+Vic no hace un paso de push aparte. Los commits que cowork hace por el bridge se quedan locales, y
+el ejecutor los sube junto con los suyos al terminar su prompt (`git push origin main` sube toda
+la rama). Por eso la condición de arranque de un prompt es "`main` local no está **detrás** de
+`origin/main`", no "sincronizado": estar adelante por commits de cowork es el estado normal.
+
+Se sigue subiendo **una vez por prompt**, no una sola vez al final de varios: CI, los previews,
+los ensayos de deploy y los Workers conectados a Git (content-form, Studio) corren contra lo que
+está en GitHub, y cada prompt tiene que verificarse contra CI por separado para que una falla se
+atribuya a un solo cambio.
+
+**Única excepción:** si el prompt que sigue depende de que GitHub ya tenga un commit de cowork
+(por ejemplo, un workflow que el propio prompt va a disparar), cowork lo dice explícitamente y le
+da a Vic el push como paso previo.
+
 ## Cómo se entrega el prompt a Codex
 
 El prompt completo vive en `prompts/`, ya commiteado por cowork antes de este paso. Lo que
