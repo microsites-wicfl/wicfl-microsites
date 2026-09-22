@@ -1,3 +1,20 @@
+## 2026-09-22 · W-119: ensayo de deploy llega a Cloudflare, bloqueado al crear la ruta DNS
+
+**Quién:** agente ejecutor, siguiendo `prompts/2026-09-21_015_ensayo-deploy-produccion.md`.
+
+Se activó `deploy.yml` solo por dispatch con confirmación, con target `rehearsal` separado de
+production, alias de host para `preview.stuarthomeownersinsurance.com`, y header noindex en el
+Worker de ensayo. Los checks locales, build del pod y router standalone pasaron. El primer run
+descubrió que Wrangler 4 no acepta `/*` para custom domains; se corrigió solo el config de
+ensayo porque el prompt prohibía tocar el de producción. El segundo run construyó, pasó el gate
+informativo, subió el Worker y 14 assets, pero Cloudflare rechazó crear la ruta de zona:
+el token de GitHub no tiene acceso a `zones/.../workers/routes`. Por ello `preview.` no resolvió;
+apex y `www` permanecieron HTTP 200 sin cambio. El runbook ahora exige, antes del launch, ampliar
+el token con el permiso mínimo de rutas y corregir por separado los patterns `/*` de producción,
+que Wrangler actual también rechazaría. Reporte y logs: `reports/2026-09-21_015_ensayo-deploy-produccion.md`.
+
+---
+
 ## 2026-09-22 · Prompt 016 escrito: licencia opcional; copy de las ocho propuestas enviado a Kevin
 
 **Quién:** cowork, con Vic.

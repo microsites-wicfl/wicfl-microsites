@@ -33,16 +33,22 @@ real pull request. If something about it doesn't work as described, that is exac
 gap Gate A's question-logging (`docs/SCHEDULE.md`) exists to catch — flag it rather than working
 around it silently.
 
-## How production deploys work
+## How rehearsal and production deploys work
 
 **Built (W-014), not yet turned on for a real site.** Sites are grouped into pods of up to ~25
 per Cloudflare Worker (`docs/ARCHITECTURE.md`, "Grouping" decision) instead of one Worker per
 site. `pods/pod-1.json` lists which site slugs belong to that pod; `wrangler.pod-1.toml` is its
 real deploy configuration, including the custom domain routes for each site in it.
-`.github/workflows/deploy.yml` builds the pod and deploys it to Cloudflare on every push to
-`main`, but the job is currently disabled (`if: false`). It stays off until a real site's config
-has no placeholder data left (license number, analytics IDs, tracking phone) — the
-production-readiness gate below would reject it anyway if it didn't.
+`.github/workflows/deploy.yml` is dispatch-only: in GitHub Actions, run **Deploy Cloudflare
+Workers**, select `rehearsal` or `production`, and type exactly `deploy`. Push-based deployment
+stays intentionally disabled until a separately reviewed post-launch change.
+
+The rehearsal target deploys the separate `wicfl-pod-1-rehearsal` Worker to
+`preview.stuarthomeownersinsurance.com`. It exercises custom-domain DNS, SSL, assets, and host
+routing without touching the apex; every response carries `X-Robots-Tag: noindex, nofollow`.
+Its readiness gate reports placeholder findings without blocking. Production uses
+`wrangler.pod-1.toml` and the same gate is fail-closed: a real site's config must contain no
+placeholder data before it can deploy. Follow `docs/LAUNCH_RUNBOOK.md` for the launch order.
 
 Before it deploys, `deploy.yml` runs `scripts/check-production-config.mjs` against every site
 actually listed in the pod being deployed. This rejects known placeholder patterns
@@ -51,9 +57,9 @@ fake license number or an unset GA4 ID. It does not run in the preview pipeline,
 legitimately iterating with pending fields while writing is fine, shipping them to production
 is not.
 
-**Adding a site to production:** add its slug to the relevant pod's JSON file, add its domain as
-a `[[routes]]` pair in that pod's `wrangler.*.toml`, and make sure its config has no placeholder
-data left before `deploy.yml` is enabled for it.
+**Adding a site to a pod:** add its slug to the relevant pod's JSON file, add its domain as a
+`[[routes]]` pair in the production `wrangler.*.toml`, and add an explicit rehearsal alias to
+the pod JSON. Make sure its config has no placeholder data before selecting production.
 
 ## Cloudflare account status
 

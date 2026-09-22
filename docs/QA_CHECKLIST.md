@@ -83,9 +83,14 @@ right before it publishes:
 |---|---|
 | `npm run check` and the build both pass in CI | Automatic |
 | The W-103 production-readiness gate passes | Automatic |
+| Rehearsal deploy serves the final content at `preview.stuarthomeownersinsurance.com` with valid HTTPS and `X-Robots-Tag: noindex, nofollow` | Manual — run the dispatch-only workflow with `target: rehearsal`, `confirm: deploy`; see `docs/LAUNCH_RUNBOOK.md` |
 | DNS points at the real Worker, not a parked/placeholder page | Manual — confirm in the Cloudflare dashboard before announcing launch |
 | SSL is active on the custom domain | Manual — Cloudflare handles issuance, confirm the certificate shows valid |
 | The deploy that went out matches what's in `main` | Manual — sanity check the deployed commit SHA against `git log` |
+
+The production run is also dispatch-only and requires `target: production` plus `confirm: deploy`.
+It keeps the W-103 gate blocking. Follow `docs/LAUNCH_RUNBOOK.md` for the required DNS-to-deploy
+order; do not treat the rehearsal exception as a production bypass.
 
 ## What to do if something here doesn't fit
 
