@@ -1,43 +1,49 @@
-import { identity } from "./access.js";
-import { discard, listSites, save, siteDetail, page } from "./model.js";
+import { requireUser } from "./access.js";
+import { UserError, json } from "./errors.js";
+import { GitHub } from "./github.js";
+import { discardDraft, getSite, listSites, readPage, savePage } from "./sites.js";
 
-function json(value, status = 200) {
-  return new Response(JSON.stringify(value), {
-    status,
-    headers: { "content-type": "application/json", "cache-control": "no-store" },
-  });
+// Routes:
+//   GET    /api/me
+//   GET    /api/sites
+//   GET    /api/sites/:slug
+//   GET    /api/sites/:slug/pages/<path>.md
+//   PUT    /api/sites/:slug/pages/<path>.md     body: { "content": "..." }
+//   DELETE /api/sites/:slug/draft
+async function route(request, github, user) {
+  const url = new URL(request.url);
+  const [, , resource, slug, section, ...rest] = url.pathname.split("/");
+  const method = request.method;
+
+  if (resource === "me" && method === "GET") return { email: user.email };
+  if (resource !== "sites") throw new UserError("No encontrado.", 404);
+  if (!slug && method === "GET") return listSites(github);
+  if (slug && !section && method === "GET") return getSite(github, slug);
+
+  if (section === "pages" && rest.length > 0) {
+    const page = rest.map(decodeURIComponent).join("/");
+    if (method === "GET") return readPage(github, slug, page);
+    if (method === "PUT") {
+      const body = await request.json().catch(() => ({}));
+      return savePage(github, slug, page, body.content, user.email);
+    }
+  }
+  if (section === "draft" && rest.length === 0 && method === "DELETE") return discardDraft(github, slug);
+  throw new UserError("No encontrado.", 404);
 }
 
 export function createHandler(fetcher = fetch) {
   return async function handle(request, env, ctx) {
     const url = new URL(request.url);
     if (!url.pathname.startsWith("/api/")) return env.ASSETS.fetch(request);
-    const auth = await identity(ctx, env);
-    if (auth.error) return json({ error: auth.message }, auth.error);
+
     try {
-      const parts = url.pathname.split("/").filter(Boolean);
-      if (url.pathname === "/api/me") return json({ email: auth.user.email });
-      if (url.pathname === "/api/sites") return json(await listSites(env, fetcher));
-      const slug = parts[2];
-      if (parts[1] !== "sites" || !slug) return json({ error: "No encontrado." }, 404);
-      if (request.method === "DELETE" && parts[3] === "draft") {
-        await discard(env, slug, fetcher);
-        return json({ ok: true });
-      }
-      const path = `sites/${slug}/content/${parts.slice(4).join("/")}`;
-      if (request.method === "GET" && parts[3] === "pages")
-        return json(await page(env, slug, path, fetcher));
-      if (request.method === "PUT" && parts[3] === "pages") {
-        await save(env, slug, path, (await request.json()).content, auth.user.email, fetcher);
-        return json({ ok: true });
-      }
-      if (request.method === "GET") return json(await siteDetail(env, slug, fetcher));
-      return json({ error: "No encontrado." }, 404);
+      const user = await requireUser(ctx, env);
+      return json(await route(request, new GitHub(env, fetcher), user));
     } catch (error) {
-      return json(
-        { error: error.message || "No se pudo completar la acción." },
-        error.status || 500,
-      );
+      if (error instanceof UserError) return json({ error: error.message }, error.status);
+      console.error(error);
+      return json({ error: "Algo falló de nuestro lado. Intenta de nuevo; si sigue, avísale a Vic." }, 502);
     }
   };
 }

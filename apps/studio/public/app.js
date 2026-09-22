@@ -1,58 +1,116 @@
+import { api } from "./api.js";
+import { $, esc, siteLink } from "./html.js";
 import { text } from "./strings.js";
+import { confirmDialog, toast } from "./ui.js";
+import { renderDashboard } from "./views/dashboard.js";
+import { renderPage } from "./views/page.js";
+import { renderSite } from "./views/site.js";
 
-const app = document.querySelector("#app");
-const user = document.querySelector("#user");
-const dialog = document.querySelector("#discard");
-let slug = "";
+const app = $("#app");
+const PREVIEW_REFRESH_MS = 15000;
+let refreshTimer;
+let unsavedEditor = null;
 
-function esc(value) {
-  return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+function parseRoute() {
+  const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean).map(decodeURIComponent);
+  if (parts[0] !== "sitio" || !parts[1]) return { view: "dashboard" };
+  if (parts[2] === "pagina" && parts.length > 3) {
+    return { view: "page", slug: parts[1], path: parts.slice(3).join("/") };
+  }
+  return { view: "site", slug: parts[1] };
 }
 
-async function api(path, init) {
-  const response = await fetch(`/api${path}`, init);
-  const body = await response.json();
-  if (!response.ok) throw new Error(body.error);
-  return body;
+function showError(error) {
+  app.innerHTML = `
+    <div class="panel">
+      <p class="status bad">${esc(error.message || text.genericError)}</p>
+      <button type="button" id="retry">${text.retry}</button>
+    </div>`;
+  $("#retry").onclick = render;
 }
 
-async function showPage(path) {
-  const data = await api(`/sites/${slug}/pages/${path}`);
-  app.innerHTML = `<button id="back">${text.back}</button><h2>${esc(path)}</h2><textarea id="content">${esc(data.text)}</textarea><p><button id="save">${text.save}</button></p>`;
-  document.querySelector("#back").onclick = () => { location.hash = `#/sitio/${slug}`; };
-  document.querySelector("#save").onclick = async () => {
-    await api(`/sites/${slug}/pages/${path}`, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ content: document.querySelector("#content").value }) });
-    location.hash = `#/sitio/${slug}`;
+async function showSite(slug) {
+  const site = await api.site(slug);
+  app.innerHTML = renderSite(site);
+  const discard = $("#discard");
+  if (discard) {
+    discard.onclick = async () => {
+      const sure = await confirmDialog({
+        message: text.discardQuestion,
+        yes: text.discardYes,
+        no: text.cancel,
+      });
+      if (!sure) return;
+      await api.discardDraft(slug);
+      toast(text.discarded);
+      render();
+    };
+  }
+  if (site.preview.state === "preparing") {
+    refreshTimer = setTimeout(() => {
+      if (parseRoute().view === "site") render();
+    }, PREVIEW_REFRESH_MS);
+  }
+}
+
+async function showPage(slug, path) {
+  const [site, page] = await Promise.all([api.site(slug), api.page(slug, path)]);
+  app.innerHTML = renderPage(site, page);
+  const editor = $("#content");
+  const saveButton = $("#save");
+  unsavedEditor = { isDirty: () => editor.value !== page.text };
+
+  saveButton.onclick = async () => {
+    saveButton.disabled = true;
+    saveButton.textContent = text.saving;
+    try {
+      const result = await api.savePage(slug, path, editor.value);
+      unsavedEditor = null;
+      toast(result.saved ? text.saved : text.noChanges);
+      location.hash = siteLink(slug);
+    } catch (error) {
+      toast(error.message);
+      saveButton.disabled = false;
+      saveButton.textContent = text.save;
+    }
   };
 }
 
 async function render() {
+  clearTimeout(refreshTimer);
+  const route = parseRoute();
+  app.innerHTML = `<p class="muted">${text.loading}</p>`;
   try {
-    user.textContent = (await api("/me")).email;
-    const route = location.hash.split("/").filter(Boolean);
-    if (!route.length) {
-      const sites = await api("/sites");
-      app.innerHTML = sites.length ? sites.map((site) => `<a class="card" href="#/sitio/${site.slug}"><b>${esc(site.brandName)}</b><br><span class="muted">${esc(site.domain)}</span><p class="tag">${site.changed ? text.draft : text.ready}</p></a>`).join("") : `<p>${text.empty}</p>`;
-      return;
-    }
-    slug = route[1];
-    if (route[2] === "pagina") return showPage(route.slice(3).join("/"));
-    const site = await api(`/sites/${slug}`);
-    const pages = site.pages.map((page) => {
-      const path = page.path.replace(`sites/${slug}/content/`, "");
-      return `<a class="card" href="#/sitio/${slug}/pagina/${path}">${esc(path)}${page.edited ? ` · ${text.edited}` : ""}</a>`;
-    }).join("");
-    app.innerHTML = `<button id="discardBtn">${text.discard}</button><h2>${esc(site.brandName)}</h2>${pages}`;
-    document.querySelector("#discardBtn").onclick = () => dialog.showModal();
-  } catch (error) { app.innerHTML = `<p>${esc(error.message || text.error)}</p>`; }
+    if (route.view === "dashboard") app.innerHTML = renderDashboard(await api.sites());
+    if (route.view === "site") await showSite(route.slug);
+    if (route.view === "page") await showPage(route.slug, route.path);
+  } catch (error) {
+    showError(error);
+  }
 }
 
-document.querySelector("[data-cancel]").onclick = () => dialog.close();
-document.querySelector("[data-confirm]").onclick = async () => {
-  await api(`/sites/${slug}/draft`, { method: "DELETE" });
-  dialog.close();
+// Leaving a page with unsaved edits asks first, inside the app and when closing the tab.
+let lastHash = location.hash;
+addEventListener("hashchange", async () => {
+  if (unsavedEditor?.isDirty()) {
+    const leave = await confirmDialog({ message: text.unsavedQuestion, yes: text.leave, no: text.stay });
+    if (!leave) {
+      history.replaceState(null, "", lastHash);
+      return;
+    }
+  }
+  unsavedEditor = null;
+  lastHash = location.hash;
   render();
-};
-addEventListener("hashchange", render);
+});
+addEventListener("beforeunload", (event) => {
+  if (unsavedEditor?.isDirty()) event.preventDefault();
+});
+
+api
+  .me()
+  .then((me) => {
+    $("#user").textContent = me.email;
+  })
+  .catch(() => {});
 render();

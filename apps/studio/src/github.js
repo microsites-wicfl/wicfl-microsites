@@ -1,36 +1,131 @@
-const decode = (value) =>
-  new TextDecoder().decode(
-    Uint8Array.from(atob(value.replace(/\n/g, "")), (character) => character.charCodeAt(0)),
-  );
-const encode = (value) => btoa(String.fromCharCode(...new TextEncoder().encode(value)));
-export function repo(env) {
-  return `/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}`;
-}
-export async function api(env, path, init = {}, fetcher = fetch) {
-  const response = await fetcher(`https://api.github.com${path}`, {
-    ...init,
-    headers: {
-      accept: "application/vnd.github+json",
-      authorization: `Bearer ${env.GITHUB_TOKEN}`,
-      "user-agent": "wicfl-studio/1.0",
-      "x-github-api-version": "2022-11-28",
-      ...(init.headers || {}),
-    },
-  });
-  if (!response.ok) {
-    const error = new Error(`GitHub ${response.status}: ${await response.text()}`);
-    error.status = response.status;
-    throw error;
+// Thin GitHub REST client. Every call goes through `fetcher`, which is the global fetch in
+// production and an in-memory fake in tests.
+
+export class GitHubError extends Error {
+  constructor(status, detail) {
+    super(`GitHub ${status}: ${detail}`);
+    this.status = status;
   }
-  return response.status === 204 ? null : response.json();
 }
-export async function file(env, path, ref, fetcher) {
-  const item = await api(
-    env,
-    `${repo(env)}/contents/${path}?ref=${encodeURIComponent(ref)}`,
-    {},
-    fetcher,
-  );
-  return { text: decode(item.content), sha: item.sha };
+
+function toBase64(text) {
+  const bytes = new TextEncoder().encode(text);
+  let binary = "";
+  for (let index = 0; index < bytes.length; index += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
+  }
+  return btoa(binary);
 }
-export { encode };
+
+function fromBase64(value) {
+  const binary = atob(value.replace(/\n/g, ""));
+  return new TextDecoder().decode(Uint8Array.from(binary, (character) => character.charCodeAt(0)));
+}
+
+export class GitHub {
+  constructor(env, fetcher = fetch) {
+    this.env = env;
+    this.fetcher = fetcher;
+    this.repo = `/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}`;
+  }
+
+  async request(path, { method = "GET", body } = {}) {
+    const response = await this.fetcher(`https://api.github.com${path}`, {
+      method,
+      headers: {
+        accept: "application/vnd.github+json",
+        authorization: `Bearer ${this.env.GITHUB_TOKEN}`,
+        "user-agent": "wicfl-studio/1.0",
+        "x-github-api-version": "2022-11-28",
+        ...(body ? { "content-type": "application/json" } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    if (!response.ok) throw new GitHubError(response.status, await response.text());
+    return response.status === 204 ? null : response.json();
+  }
+
+  // Returns null instead of throwing when GitHub answers 404.
+  async optional(path) {
+    try {
+      return await this.request(path);
+    } catch (error) {
+      if (error.status === 404) return null;
+      throw error;
+    }
+  }
+
+  async branchSha(branch) {
+    const ref = await this.optional(`${this.repo}/git/ref/heads/${branch}`);
+    return ref ? ref.object.sha : null;
+  }
+
+  createBranch(branch, sha) {
+    return this.request(`${this.repo}/git/refs`, {
+      method: "POST",
+      body: { ref: `refs/heads/${branch}`, sha },
+    });
+  }
+
+  deleteBranch(branch) {
+    return this.request(`${this.repo}/git/refs/heads/${branch}`, { method: "DELETE" });
+  }
+
+  async draftBranchNames() {
+    const refs = (await this.optional(`${this.repo}/git/matching-refs/heads/draft/`)) || [];
+    return refs.map((ref) => ref.ref.replace("refs/heads/", ""));
+  }
+
+  async readFile(path, ref) {
+    const item = await this.optional(`${this.repo}/contents/${path}?ref=${encodeURIComponent(ref)}`);
+    if (!item || Array.isArray(item)) return null;
+    return { text: fromBase64(item.content), sha: item.sha };
+  }
+
+  async listDirectory(path, ref) {
+    const items = await this.optional(`${this.repo}/contents/${path}?ref=${encodeURIComponent(ref)}`);
+    return Array.isArray(items) ? items : [];
+  }
+
+  writeFile(path, { text, sha, branch, message }) {
+    return this.request(`${this.repo}/contents/${path}`, {
+      method: "PUT",
+      body: { message, content: toBase64(text), sha, branch },
+    });
+  }
+
+  async treePaths(commitSha) {
+    const tree = await this.request(`${this.repo}/git/trees/${commitSha}?recursive=1`);
+    return tree.tree.filter((item) => item.type === "blob").map((item) => item.path);
+  }
+
+  async changedFiles(base, head) {
+    const comparison = await this.request(`${this.repo}/compare/${base}...${head}`);
+    return (comparison.files || []).map((file) => file.filename);
+  }
+
+  openPulls(branch) {
+    const head = encodeURIComponent(`${this.env.GITHUB_OWNER}:${branch}`);
+    return this.request(`${this.repo}/pulls?state=open&head=${head}`);
+  }
+
+  createPull({ branch, title, body }) {
+    return this.request(`${this.repo}/pulls`, {
+      method: "POST",
+      body: { head: branch, base: this.env.GITHUB_BASE_BRANCH, title, body },
+    });
+  }
+
+  closePull(number) {
+    return this.request(`${this.repo}/pulls/${number}`, { method: "PATCH", body: { state: "closed" } });
+  }
+
+  pullComments(number) {
+    return this.request(`${this.repo}/issues/${number}/comments?per_page=100`);
+  }
+
+  async checkRuns(sha) {
+    const result = await this.request(`${this.repo}/commits/${sha}/check-runs?per_page=100`);
+    return result.check_runs || [];
+  }
+}

@@ -4,7 +4,19 @@
   "main": "src/index.js",
   "compatibility_date": "2026-09-22",
   "observability": { "enabled": true },
-  "assets": { "directory": "public", "binding": "ASSETS" },
-  "vars": { "GITHUB_OWNER": "microsites-wicfl", "GITHUB_REPO": "wicfl-microsites", "GITHUB_BASE_BRANCH": "main" },
-  "access": { "dev": { "aud": "wicfl-studio-local", "identity": { "email": "vic@example.test" } } }
+  // The interface is plain static files; the Worker only answers /api/*.
+  "assets": { "directory": "public", "binding": "ASSETS", "run_worker_first": ["/api/*"] },
+  "vars": {
+    "GITHUB_OWNER": "microsites-wicfl",
+    "GITHUB_REPO": "wicfl-microsites",
+    "GITHUB_BASE_BRANCH": "main"
+  },
+  // Local development only (`wrangler dev`): a fake Access identity. In production, Cloudflare
+  // Access runs before the Worker and ctx.access carries the real signed-in user.
+  "access": {
+    "dev": {
+      "aud": "wicfl-studio-dev",
+      "identity": { "email": "vic@example.test" }
+    }
+  }
 }

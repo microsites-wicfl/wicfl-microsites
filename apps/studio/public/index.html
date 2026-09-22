@@ -2,17 +2,24 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>WICFL Studio</title>
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <header><strong>WICFL Studio</strong><span id="user"></span></header>
-    <main id="app"></main>
-    <dialog id="discard">
-      <p>¿Quieres descartar los cambios sin publicar?</p>
-      <button data-cancel>Cancelar</button><button data-confirm>Descartar</button>
+    <header class="topbar">
+      <a class="brand" href="#/">WICFL Studio</a>
+      <span id="user" class="user"></span>
+    </header>
+    <main id="app" aria-live="polite"></main>
+    <dialog id="confirm">
+      <p id="confirm-message"></p>
+      <div class="actions">
+        <button type="button" class="secondary" data-answer="no" id="confirm-no"></button>
+        <button type="button" class="danger" data-answer="yes" id="confirm-yes"></button>
+      </div>
     </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
     <script type="module" src="/app.js"></script>
   </body>
 </html>
