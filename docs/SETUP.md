@@ -53,7 +53,7 @@ placeholder data before it can deploy. Follow `docs/LAUNCH_RUNBOOK.md` for the l
 Before it deploys, `deploy.yml` runs `scripts/check-production-config.mjs` against every site
 actually listed in the pod being deployed. This rejects known placeholder patterns
 (`PLACEHOLDER`, `PENDING_`, an unconfigured tracking phone) so a site cannot go live showing a
-fake license number or an unset GA4 ID. It does not run in the preview pipeline, on purpose:
+unset tracking phone or an unset GA4 ID. It does not run in the preview pipeline, on purpose:
 legitimately iterating with pending fields while writing is fine, shipping them to production
 is not.
 

@@ -21,7 +21,7 @@ not before it. Do not wait on those to start writing.
 |---|---|
 | `site.config.json` validates against the schema | Automatic — `npm run check`, also runs in CI on every push |
 | Site builds cleanly from config + markdown | Automatic — `npm run build:site -- <slug>`, also runs in CI |
-| No placeholder data (fake license, unprovisioned analytics ID) in the config going to production | Automatic — the W-103 gate, runs right before deploy |
+| No placeholder data (unset tracking phone, unprovisioned analytics ID) in the config going to production | Automatic — the W-103 gate, runs right before deploy |
 | Every internal link resolves (no 404s within the site) | Manual — click through the built site once before requesting launch |
 | Site renders correctly in the theme variant it's assigned | Manual — open the built site, compare against the other pilot to confirm they read as distinct |
 
@@ -42,7 +42,7 @@ right before it publishes:
 
 | Check | Who / how |
 |---|---|
-| License number correct and visible | Manual — really a check that the config has the right number, the template renders it automatically |
+| If the config carries a license number, it renders correctly | Manual — WICFL sites do not carry one by Kevin's decision (22 Sep 2026) |
 | NAP matches the Google Business Profile character for character | Manual |
 | No guaranteed or absolute coverage claims | Manual |
 | Entity naming matches Walker's approved brand assets (W-008) | Manual |

@@ -63,8 +63,8 @@ es exactamente el perfil que esa política persigue. La IA está bien como ayuda
 investigación que después tú editas hasta que sea verdadero y específico. No está bien como el
 pipeline que publica una página. Cada página que publicas, la escribiste tú, en el idioma en que
 está escrita. El contenido en español especialmente: escrito en español desde el inicio, nunca
-traducido ni generado desde un brief en inglés. Números de licencia reales, detalle local real,
-tu propio conocimiento del mercado en el texto.
+traducido ni generado desde un brief en inglés. Detalle local real y tu propio conocimiento del
+mercado en el texto.
 
 Ninguna de las dos cosas fue un error tuyo. Nadie te había explicado estas reglas cuando
 escribiste ese documento. Quedan escritas ahora para no tener que reexplicarlas sitio por sitio.
@@ -151,8 +151,8 @@ git.
 4. Vas a ver dos tipos de campos:
    - **Nombre de marca y SEO** (`brand.name`, título y descripción de SEO, palabra clave
      primaria y secundarias) — los únicos campos de `site.config.json` que este formulario deja
-     tocar. El resto del config (dominio, contacto, licencia, analytics) sigue siendo terreno de
-     Vic.
+     tocar. El resto del config (dominio, contacto, licencia si existe, analytics) sigue siendo
+     terreno de Vic.
    - **El markdown de la página elegida**, en un cuadro de texto grande. Es el mismo formato que
      ves en el Part 2b: `## Título` para un encabezado, línea en blanco entre párrafos,
      `[texto del link](/otra-pagina/)` para un link interno.
@@ -376,10 +376,9 @@ Fíjate qué está haciendo cada parte, y por qué está ahí:
 - **Lenguaje calificado** ("generally," "typically," "usually," "confirm with your agent") —
   nunca un claim garantizado o absoluto ("always covered," "guaranteed approval"). Ese es el
   ítem 3 del checklist de autorevisión.
-- **Sin número de licencia, sin disclaimer de la entidad tipeado a mano** — el template los
-  renderiza automáticamente desde `site.config.json` en cada página. Si te encuentras tipeando un
-  número de licencia dentro de un archivo de contenido, parate, es una señal de que algo está
-  mal.
+- **Sin disclaimer de la entidad tipeado a mano** — el template lo renderiza automáticamente.
+  El número de licencia solo se renderiza desde `site.config.json` si existe; los sitios WICFL no
+  llevan uno por decisión de Kevin del 22 de septiembre de 2026. Nunca lo escribas en contenido.
 - **Un link interno** (`[flood coverage page](/flood-coverage/)`) — sintaxis simple de link de
   markdown, apuntando al slug de otra página. Así es también cómo una página recibe enlaces, no
   solo cómo enlaza — ver la advertencia de arriba sobre páginas inalcanzables desde ningún lado.
@@ -497,7 +496,7 @@ Una lista corta, sacada de `CLAUDE.md`, que aplica específicamente a tu trabajo
 4. **Ninguna página generada por IA se publica sin revisión**, y ninguna página se publica
    generada desde un brief sin que tú la escribas y la edites hasta que sea verdadera y
    específica para ese mercado.
-5. **Los números de licencia, el NAP, y las reglas de publicidad de Florida aplican en cada
+5. **El NAP y las reglas de publicidad de Florida aplican en cada
    página**, siempre, revisados contra el checklist de autorevisión antes de publicar.
 
 ## Part 5 — A quién preguntarle, y sobre qué

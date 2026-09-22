@@ -31,7 +31,7 @@ deploy if any of these are still placeholders.
 | `contact.trackingPhone`, `contact.displayPhone` | Required | Provisioned in GoTo (W-024) |
 | `contact.email` | Required | Kevin's approved public contact |
 | `contact.address` (street, city, state, zip) | Required | Kevin's approved address |
-| `contact.licenseNumber` | Required | Kevin, the real Florida license number — this is the field W-008 blocks |
+| `contact.licenseNumber` | Optional, not used on WICFL sites | If present, the template renders it; Kevin decided on 22 Sep 2026 that WICFL sites do not carry one |
 | `contact.googleBusinessProfilePlaceId` | Optional | Once a GBP exists (W-006), for NAP reconciliation |
 | `products` (array, same catalog as `niche.product`) | Required | Which coverage pages this site will have |
 | `seo.title`, `seo.description`, `seo.primaryKeyword`, `seo.secondaryKeywords` | Required | Pavel, from real keyword research — this is W-016's output |
@@ -73,7 +73,6 @@ once it's ranking and producing leads — don't build the long tail speculativel
 
 - **Logo file** (optional, but expected before a real launch) — placed at
   `sites/<slug>/public/<file>`, referenced from `brand.logo` in the config.
-- **Real Florida license number**, matching what's on file with the state.
 - **Real contact details** (address, phone, email) that match the site's Google Business
   Profile character for character — a mismatch actively suppresses local rankings, not just a
   compliance nitpick (`docs/CONTENT_STANDARDS.md`).
@@ -90,8 +89,10 @@ once it's ranking and producing leads — don't build the long tail speculativel
 ## Status note
 
 Written 8 Sep 2026 while `stuart-homeowners` is still a demo config: `brand.name` still says
-"(Demo)", `contact.email`/`address`/`licenseNumber` are all explicit placeholders, `analytics`
-and `crm` are the schema's placeholder patterns, and `differentiation` describes the config
+"(Demo)", `contact.email`/`address` are explicit placeholders; `licenseNumber` is intentionally
+absent under Kevin's 22 Sep 2026 decision. The fixtures and schema examples retain a license
+number to exercise the optional-present case. `analytics` and `crm` are the schema's placeholder
+patterns, and `differentiation` describes the config
 itself as an internal preview rather than real evidence. This checklist is what needs to change,
 field by field, once Kevin's real assets and Pavel's real research land — see backlog items
 W-008 and W-016.

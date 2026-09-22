@@ -70,7 +70,7 @@ wicfl-microsites/
 - **Technical SEO**: sitemap, robots, canonical, schema.org InsuranceAgency markup, all from config
 - **Analytics**: GA4 and GTM wired identically on every site, so cross site reporting works
 - **Lead capture**: forms routed into the CRM with the originating site recorded on every lead
-- **Production-readiness gate**: a site's built config is scanned for known placeholder patterns (a fake license number, an unprovisioned GA4 ID) and the deploy fails closed if any are found, so a config that is schema-valid but not launch-ready cannot reach a real domain. Fixture sites are exempt by name
+- **Production-readiness gate**: a site's built config is scanned for known placeholder patterns (an unset tracking phone, an unprovisioned GA4 ID) and the deploy fails closed if any are found, so a config that is schema-valid but not launch-ready cannot reach a real domain. Fixture sites are exempt by name
 - **Call tracking**: the number is a config field, rendered everywhere, routed into GoTo
 - **Performance**: zero JavaScript by default. Core Web Vitals are a build output, not a project
 

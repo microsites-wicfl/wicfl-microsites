@@ -30,7 +30,7 @@ npx --yes ajv-cli validate --spec=draft2020 -s packages/config-schema/site.confi
 }
 ```
 
-Every field has a type, description, and applicable pattern in the JSON Schema. It rejects unknown fields. The two executable examples live in `packages/config-schema/examples/`.
+Every field has a type, description, and applicable pattern in the JSON Schema. It rejects unknown fields. The two executable examples live in `packages/config-schema/examples/`. The contract overview intentionally includes `licenseNumber` to demonstrate the optional-present case; WICFL sites normally omit it under Kevin's 22 Sep 2026 decision.
 
 ## Design decisions
 
@@ -48,7 +48,7 @@ Optional `theme` configures only a prebuilt variant and an accent color. This fo
 
 ### 4. NAP has one local capture, then launch reconciliation
 
-The config is the template's single NAP source: it has exactly one name, address, tracking phone, display phone, and license number. JSON Schema cannot truthfully validate a remote Google Business Profile, so it does not pretend to. When a GBP exists, its optional Place ID enables W-029 launch QA to compare the config to the canonical profile before publishing. Until then, the approved capture is the source of truth; duplicating NAP fields would create drift.
+The config is the template's single NAP source: it has exactly one name, address, tracking phone, and display phone. JSON Schema cannot truthfully validate a remote Google Business Profile, so it does not pretend to. When a GBP exists, its optional Place ID enables W-029 launch QA to compare the config to the canonical profile before publishing. Until then, the approved capture is the source of truth; duplicating NAP fields would create drift.
 
 ### 5. Differentiation is structured for humans; CI evaluates output
 
@@ -56,7 +56,7 @@ The config is the template's single NAP source: it has exactly one name, address
 
 ### 6. Required fields protect legal operation and measurement
 
-The root schema requires contact, analytics, CRM, SEO, products, locale, geography, and differentiation. `contact.licenseNumber`, `contact.trackingPhone`, and both differentiation arrays are required. This prevents a site from validating without the minimum legal disclosure, call attribution, lead routing, and human differentiation record. Clearly marked placeholders are allowed for systems that have not yet been provisioned, but they remain explicit work to close before launch QA.
+The root schema requires contact, analytics, CRM, SEO, products, locale, geography, and differentiation. `contact.trackingPhone` and both differentiation arrays are required. This prevents a site from validating without call attribution, lead routing, and a human differentiation record. Clearly marked placeholders are allowed for systems that have not yet been provisioned, but they remain explicit work to close before launch QA.
 
 ### 7. Logo is optional, root-relative, and lives beside the site's own content
 
@@ -68,6 +68,12 @@ copies that folder over the built output the same way Astro's own `public/` conv
 This keeps the operator boundary intact (a logo is still something Pavel can add without
 touching the shared template) while keeping brand assets out of the JSON config, where a binary
 file has no business being.
+
+### 8. License number is optional by business decision
+
+On 22 Sep 2026 Kevin decided WICFL sites do not display an agency license number. Florida DFS
+guidance requires it on policy applications, not advertising. `contact.licenseNumber` therefore
+remains valid when present, but is optional and rendered only when supplied.
 
 ## Adding a field without breaking existing sites
 

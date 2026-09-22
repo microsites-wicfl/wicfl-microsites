@@ -1,6 +1,6 @@
 # Content standards
 
-**Version 1.2 · 3 Sep 2026. Added a self-review checklist for Pavel to run before every publish, since there is no dedicated second reviewer yet.**
+**Version 1.3 · 22 Sep 2026. License number is optional and not used on WICFL sites, per Kevin's decision and Florida DFS guidance.**
 
 ## The swap test
 
@@ -47,9 +47,9 @@ in the bitácora.
   scaled content policies. Spanish sites need a native writer.
 - **Local proof is required, not optional.** Real claims handled, area specific detail,
   local reviews, genuine market knowledge. This is the raw material the swap test looks for.
-- **Florida insurance advertising rules apply on every page.** License number displayed,
-  no misleading coverage claims, correct entity naming. Encoded in the template so it
-  cannot be forgotten per site.
+- **Florida insurance advertising rules apply on every page.** No misleading coverage claims
+  and correct entity naming. A license number is optional; Kevin decided on 22 Sep 2026 that
+  WICFL sites do not carry one.
 - **NAP consistency.** Name, address and phone must match the Google Business Profile
   exactly. Inconsistency actively suppresses local rankings.
 - **No AI generated content shipped unreviewed.** See the section below.
@@ -103,9 +103,8 @@ W-095.
 
 Before a page goes live, check:
 
-1. **License number is correct and visible.** The template renders it automatically from
-   `site.config.json` on every page, so this is really a check that the config has the right
-   number, not something to add by hand.
+1. **If the config carries a license number, it renders correctly.** WICFL sites do not carry
+   one by Kevin's decision (22 Sep 2026), so it is never typed into page content.
 2. **NAP matches exactly.** Name, address and phone as written on the page match the Google
    Business Profile character for character. A mismatch actively suppresses local rankings, not
    just a compliance nitpick.

@@ -50,8 +50,8 @@ how it's created," and a hundred pages written to a brief and generated at volum
 profile that policy targets. AI is fine as a drafting or research aid that you then edit into
 something true and specific. It is not fine as the pipeline that ships a page. Every page you
 publish, you wrote, in the language it's written in. Spanish content especially: written in
-Spanish from the start, never translated and never generated from an English brief. Real license
-numbers, real local detail, your own market knowledge in the copy.
+Spanish from the start, never translated and never generated from an English brief. Real local
+detail and your own market knowledge in the copy.
 
 Neither of these was a mistake on your part. Nobody had told you the constraints when you wrote
 that document. They're written down now so they don't have to be re-explained per site.
@@ -302,9 +302,9 @@ Notice what each part is doing, and why it's there:
 - **Qualified language** ("generally," "typically," "usually," "confirm with your agent") —
   never a guaranteed or absolute claim ("always covered," "guaranteed approval"). That's
   self-review checklist item 3.
-- **No license number, no entity disclaimer typed by hand** — the template renders those
-  automatically from `site.config.json` on every page. If you find yourself typing a license
-  number into a content file, stop, that's a sign something's wrong.
+- **No entity disclaimer typed by hand** — the template renders it automatically. A license
+  number renders from `site.config.json` only if present; WICFL sites do not carry one under
+  Kevin's 22 Sep 2026 decision. Never type one into a content file.
 - **An internal link** (`[flood coverage page](/flood-coverage/)`) — plain markdown link syntax,
   pointing at another page's slug. This is also how a page gets linked to, not just from — see
   the warning above about pages that aren't reachable from anywhere.
@@ -417,7 +417,7 @@ A short list, pulled from `CLAUDE.md`, that applies to your work specifically:
    `docs/CONTENT_STANDARDS.md`.
 4. **No AI-generated page ships unreviewed**, and no page ships generated from a brief without
    you writing and editing it into something true and specific to that market.
-5. **License numbers, NAP, and Florida advertising rules apply on every page**, every time,
+5. **NAP and Florida advertising rules apply on every page**, every time,
    checked against the self-review checklist before publish.
 
 ## Part 5 — Who to ask, and about what

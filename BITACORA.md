@@ -30,6 +30,20 @@ A2 (editor, página nueva, imágenes), A3 (publicar, alta de sitio). Meta: Pavel
 
 ---
 
+## 2026-09-22 · W-008 reducido: licencia opcional y fuera del sitio
+
+**Quién:** agente ejecutor, siguiendo `prompts/2026-09-22_016_licencia-opcional.md`.
+
+Kevin decidió que los sitios WICFL no muestran número de licencia. El schema ahora admite el
+campo opcional sin romper configs existentes; el template solo lo renderiza si está presente,
+Stuart y el formulario de creación ya no lo escriben. Los fixtures y ejemplos conservan el
+campo para cubrir el caso opcional-presente. `npm run check`, ambos builds y la revisión de
+sintaxis del formulario pasaron. El gate dejó de reportar la licencia y sigue bloqueando, como
+debe, por email, dirección, GA4, GTM y CRM placeholders. W-008 queda en teléfono, email y
+dirección aprobados. Reporte: `reports/2026-09-22_016_licencia-opcional.md`.
+
+---
+
 ## 2026-09-22 · W-119: ensayo de deploy llega a Cloudflare, bloqueado al crear la ruta DNS
 
 **Quién:** agente ejecutor, siguiendo `prompts/2026-09-21_015_ensayo-deploy-produccion.md`.

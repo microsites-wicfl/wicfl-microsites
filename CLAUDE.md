@@ -121,7 +121,7 @@ la puede resolver Vic o Pavel, no se le pide.
 - **W-093** — los datos de pago de la empresa para el billing. Solo el medio de pago; el vault
   lo monta Vic.
 - **W-006** — ¿los sitios piloto tienen su propio Google Business Profile? Lo maneja Kevin.
-- **W-008** — assets de marca de Walker (logo, contacto aprobado, disclosures, license numbers).
+- **W-008** — assets de marca de Walker (logo, contacto aprobado, disclosures).
 - **W-095** — quién firma el contenido antes de publicar, incluido compliance de Florida.
 - **W-005** — las tres cifras de negocio para derivar el número de Gate B. Ver `docs/GATE_B_MODEL.md`.
 - **W-100** — qué cuenta como llamada calificada. Vic propone, Kevin confirma.
