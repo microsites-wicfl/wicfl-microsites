@@ -12,5 +12,6 @@ binding = "ASSETS"
 WICFL_REHEARSAL = "1"
 
 [[routes]]
-pattern = "preview.stuarthomeownersinsurance.com/*"
+# Wrangler custom domains take a hostname, not a URL pattern; the Worker receives all paths.
+pattern = "preview.stuarthomeownersinsurance.com"
 custom_domain = true
