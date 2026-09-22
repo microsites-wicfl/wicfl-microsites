@@ -1,3 +1,18 @@
+## 2026-09-22 · Corrección de Vic: cowork le pidió ejecutar un push y configurar el despliegue a mano
+
+**Quién:** cowork, a partir de una corrección de Vic.
+
+Al cerrar la revisión de Studio, cowork le escribió a Vic "sube los commits" con un bloque de
+`git push`, y una lista de cuatro pasos de dashboard para desplegar. Las dos cosas rompen una
+regla que ya estaba en `CLAUDE.md` ("Vic no ejecuta ningún comando") y en la memoria del
+proyecto: todo lo ejecutable va como copy-paste para Codex. Se reescribió la regla también en
+`prompts/00_GUIA_GLOBAL.md`, más explícita, y el despliegue se rediseñó: **prompt 021**, un
+workflow de GitHub Actions que despliega Studio con el token de Cloudflare que ya existe, carga
+los secretos si están y termina verde si todavía no. A Vic solo le quedan dos acciones de
+navegador que no se pueden automatizar: crear el token personal de GitHub y activar Access.
+
+---
+
 ## 2026-09-22 · Revisión de Studio A1: el ejecutor solo conectó CI; cowork hizo la revisión y encontró un bug
 
 **Quién:** cowork.

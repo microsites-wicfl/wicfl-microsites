@@ -16,6 +16,18 @@ Léeme antes de ejecutar cualquier prompt de esta carpeta.
    mismo mensaje. (Regla explícita de Vic, 2026-09-22, después de que cowork entregó 016 y 017
    juntos.)
 
+## Vic no ejecuta nada (regla dura, reiterada por Vic el 2026-09-22)
+
+Vic no corre comandos, ni de lectura, ni un `git push`. **Todo lo que implique ejecutar se le
+entrega como un copy-paste para Codex**, dicho explícitamente ("pega esto en Codex"), nunca como
+"corre esto" o "sube los commits". Tampoco se le pasan a Vic pasos de configuración que Codex
+pueda automatizar (por ejemplo un despliegue por dashboard cuando hay un workflow posible).
+
+Lo único que se le pide directamente a Vic son acciones que por diseño solo puede hacer una
+persona con su sesión en el navegador (crear un token personal, aprobar un acceso, activar un
+login), agrupadas, en el mínimo posible, sin comandos, y diciendo por qué no se pueden
+automatizar.
+
 ## Push: lo hace el ejecutor al final de cada prompt
 
 Vic no hace un paso de push aparte. Los commits que cowork hace por el bridge se quedan locales, y
