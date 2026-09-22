@@ -6,5 +6,5 @@
   "observability": { "enabled": true },
   "assets": { "directory": "public", "binding": "ASSETS" },
   "vars": { "GITHUB_OWNER": "microsites-wicfl", "GITHUB_REPO": "wicfl-microsites", "GITHUB_BASE_BRANCH": "main" },
-  "access": { "dev": { "identity": { "email": "vic@example.test" } } }
+  "access": { "dev": { "aud": "wicfl-studio-local", "identity": { "email": "vic@example.test" } } }
 }

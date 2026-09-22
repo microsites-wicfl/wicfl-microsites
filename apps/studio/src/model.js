@@ -10,3 +10,26 @@ export async function save(env, slug, path, content, email, fetcher) { if (!safe
   if (!exists) await api(env, `${repo(env)}/pulls`, { method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify({title:`Draft: ${slug}`,head:branch,base:env.GITHUB_BASE_BRANCH,body:`WICFL Studio draft. Edited-by: ${email}. Do not edit by hand.`}) }, fetcher);
 }
 export async function discard(env, slug, fetcher) { if (!validSlug(slug)) throw new Error("Sitio inválido."); const prs = await api(env, `${repo(env)}/pulls?state=open&head=${encodeURIComponent(`${env.GITHUB_OWNER}:${draft(slug)}`)}`, {}, fetcher); for (const pr of prs) await api(env, `${repo(env)}/pulls/${pr.number}`, {method:"PATCH",headers:{"content-type":"application/json"},body:JSON.stringify({state:"closed"})}, fetcher); await api(env, `${repo(env)}/git/refs/heads/${encodeURIComponent(draft(slug))}`, {method:"DELETE"}, fetcher); }
+
+async function draftExists(env, slug, fetcher) {
+  try { await api(env, `${repo(env)}/git/ref/heads/${encodeURIComponent(draft(slug))}`, {}, fetcher); return true; }
+  catch (error) { if (error.status === 404) return false; throw error; }
+}
+
+export async function page(env, slug, path, fetcher) {
+  if (!safePath(slug, path)) throw new Error("Solo puedes abrir páginas del sitio seleccionado.");
+  const ref = await draftExists(env, slug, fetcher) ? draft(slug) : env.GITHUB_BASE_BRANCH;
+  return file(env, path, ref, fetcher);
+}
+
+export async function siteDetail(env, slug, fetcher) {
+  if (!validSlug(slug)) throw new Error("Sitio inválido.");
+  const [sites, hasDraft] = await Promise.all([listSites(env, fetcher), draftExists(env, slug, fetcher)]);
+  const site = sites.find((item) => item.slug === slug);
+  if (!site) { const error = new Error("No encontrado."); error.status = 404; throw error; }
+  const ref = hasDraft ? draft(slug) : env.GITHUB_BASE_BRANCH;
+  const tree = await api(env, `${repo(env)}/git/trees/${encodeURIComponent(ref)}?recursive=1`, {}, fetcher);
+  const compare = hasDraft ? await api(env, `${repo(env)}/compare/${env.GITHUB_BASE_BRANCH}...${draft(slug)}`, {}, fetcher) : null;
+  const edited = new Set(compare?.files?.map((item) => item.filename) || []);
+  return { ...site, pages: tree.tree.filter((item) => item.path.startsWith(`sites/${slug}/content/`) && item.path.endsWith(".md")).map((item) => ({ path: item.path, edited: edited.has(item.path) })), preview: hasDraft ? { state: "preparing" } : { state: "none" } };
+}
