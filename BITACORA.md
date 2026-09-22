@@ -1,3 +1,15 @@
+## 2026-09-22 · Update al equipo y fechas estimadas de Studio
+
+**Quién:** cowork, a pedido de Vic.
+
+Copy del día para el equipo (Zoom, dos mensajes): ensayo de deploy y sus dos hallazgos,
+licencia fuera de los sitios, dominio/teléfono de PSL, y presentación de WICFL Studio.
+Fechas comunicadas: **Pavel prueba A1 el jueves 24-sep; panel completo el jueves 1-oct.**
+Razonamiento y supuestos en W-120. El supuesto crítico es que A2/A3 los escriba cowork: el
+ejecutor no ha podido con piezas de ese tamaño (017–020).
+
+---
+
 ## 2026-09-22 · Studio desplegado (prompt 021); faltan dos pasos de navegador de Vic
 
 **Quién:** cowork, revisando el trabajo del ejecutor.
