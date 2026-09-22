@@ -6,7 +6,7 @@
 
 ## How to use this document
 
-This is a status update on the WICFL Microsite Factory plan, plus nine proposals for Kevin to consider. It was written four weeks after the plan was agreed (24–25 Aug 2026) and three days after the framework handoff to Pavel (18 Sep 2026).
+This is a status update on the WICFL Microsite Factory plan, plus eight proposals for Kevin to consider. It was written four weeks after the plan was agreed (24–25 Aug 2026) and three days after the framework handoff to Pavel (18 Sep 2026).
 
 **The plan as agreed in August is the plan. It stays in force as written.** Nothing in Part 2 is adopted; each item is a proposal that changes nothing until Kevin decides. Work continues under the current plan in the meantime.
 
@@ -36,7 +36,7 @@ Build a factory that generates niche insurance microsites for WICFL from a confi
 
 ### Site status
 
-- **Site #1 — Stuart homeowners, English.** `StuartHomeownersInsurance.com`, domain owned by Kevin (registered at GoDaddy, DNS on Cloudflare). Eight real content pages written by Pavel are merged and visible on the preview. **Launch is 9 Oct 2026.** Still blocked on: the approved phone, email and mailing address from Kevin (the license number is no longer needed on the sites, see Proposal 3); and the credentials for the lead funnel above.
+- **Site #1 — Stuart homeowners, English.** `StuartHomeownersInsurance.com`, domain owned by Kevin (registered at GoDaddy, DNS on Cloudflare). Eight real content pages written by Pavel are merged and visible on the preview. **Launch is 9 Oct 2026.** Still blocked on: the approved phone, email and mailing address from Kevin (the license number is no longer needed on the sites, see the note under Proposal 3); and the credentials for the lead funnel above.
 - **Site #2 — Port St. Lucie.** Kevin confirmed "Let's do PSL" on 17 Sep. Pavel has a structure, SEO and content outline. **Launch is 30 Oct 2026.** Open: the domain is not chosen or bought, and whether Site #2 is still the Spanish-language site as originally planned is not written down anywhere. This needs an explicit answer.
 - **Site #3 — Gate A repeatability test.** 9–13 Nov, Pavel alone, niche of his choosing. Not started, by design.
 
@@ -73,7 +73,7 @@ Build a factory that generates niche insurance microsites for WICFL from a confi
 
 ---
 
-## Part 2 — Nine proposals for Kevin to consider
+## Part 2 — Eight proposals for Kevin to consider
 
 Ordered by impact. Each one states what the current plan says, what we think the problem is, what we are proposing instead, and what it asks of Kevin. The current plan stays as written until he decides on each.
 
@@ -120,17 +120,7 @@ This also matters for timing: Phase 7 automates domain purchasing. If it turns o
 
 **What it asks of Kevin.** Agree that Site #3 may live under the main domain rather than a new one.
 
-### Proposal 4 — Page count is an output, not a target
-
-**What the current plan says.** 15 to 25 pages per site.
-
-**The problem.** More pages do not hurt by themselves. Twenty-five strong pages beat eight. What hurts is pages that exist to hit a count: the "flood insurance in Palm City" / "flood insurance in Jensen Beach" pattern where the city changes and nothing else does. That is the doorway pattern Google's June 2026 update enforced against, and a numeric target is exactly what pushes a writer toward it in week three. Site #1 has eight real pages and reads as complete; if Pavel has real local material for twenty more, twenty more is right.
-
-**Proposal.** Drop the number as a target. The rule is the one the plan already has: every page passes the swap test, and a page gets written when there is local evidence that only that page can carry. Page count per site becomes whatever that rule produces.
-
-**What it asks of Kevin.** Nothing.
-
-### Proposal 5 — Tag qualified calls with a script, spot-check with a person
+### Proposal 4 — Tag qualified calls with a script, spot-check with a person
 
 **What the current plan says.** Gate B counts qualified calls; applying the definition requires "someone tagging calls weekly rather than reconstructing 120 days from memory in March." The owner is not named.
 
@@ -142,7 +132,7 @@ Two things have to be true for this to work: GoTo's recording and call-event int
 
 **What it asks of Kevin.** Confirm that call recording, with the announcement, is acceptable on the tracking lines.
 
-### Proposal 6 — Generate the monthly report; do not write it
+### Proposal 5 — Generate the monthly report; do not write it
 
 **What the current plan says.** Pavel produces a monthly performance report during the SEO window (12 Oct – 5 Feb).
 
@@ -152,7 +142,7 @@ Two things have to be true for this to work: GoTo's recording and call-event int
 
 **What it asks of Kevin.** Nothing.
 
-### Proposal 7 — Put a written budget on Victor's time after the handoff
+### Proposal 6 — Put a written budget on Victor's time after the handoff
 
 **What the current plan says.** Victor exits the critical path at the 18 Sep handoff and is "advisory only" afterward.
 
@@ -162,23 +152,23 @@ Two things have to be true for this to work: GoTo's recording and call-event int
 
 **What it asks of Kevin.** Acknowledge the budget so that when something is deferred to Phase 7, it is not a surprise.
 
-### Proposal 8 — Three compliance items the new lead funnel requires before it goes live
+### Proposal 7 — Three compliance items the new lead funnel requires before it goes live
 
 **What the current plan says.** Florida insurance advertising rules are encoded in the template (correct entity naming, no misleading claims).
 
-**The problem.** The funnel Kevin designed on 18 Sep collects property address, current insurer, current premium, and uploads policy declaration pages: personal and financial data of Florida residents. GoHighLevel sends automated SMS. And Proposal 5 adds call recording. The template does not yet have what any of that requires.
+**The problem.** The funnel Kevin designed on 18 Sep collects property address, current insurer, current premium, and uploads policy declaration pages: personal and financial data of Florida residents. GoHighLevel sends automated SMS. And Proposal 4 adds call recording. The template does not yet have what any of that requires.
 
 **Proposal.**
 
 - A **privacy policy page** on every site, and an explicit **TCPA consent** on the form (checkbox and text agreeing to calls and text messages). Without the consent, GoHighLevel's automated texting is a real legal exposure for Walker.
 - A **retention rule** for uploaded declaration pages: how long they live in storage and who deletes them.
-- The **recording announcement** on every tracking line, if Proposal 5 is adopted.
+- The **recording announcement** on every tracking line, if Proposal 4 is adopted.
 
 Hours of work, not days, but it goes in before the first real lead, not after.
 
 **What it asks of Kevin.** The privacy policy text, or approval to use a standard one.
 
-### Proposal 9 — The differentiation gate is the whole thesis and has not been started
+### Proposal 8 — The differentiation gate is the whole thesis and has not been started
 
 **What the current plan says.** A CI check compares content across every site in the portfolio and blocks a deploy when two pages are too similar. Due before Site #2's content, mid-October.
 
@@ -195,14 +185,13 @@ Hours of work, not days, but it goes in before the first real lead, not after.
 | 1 | Gate B can't be answered organically in 120 days: one-time paid conversion test on the pilots, real organic accelerators, leading indicators, two-stage decision | Approve ~$500–1,000 one-time ad budget for Oct–Nov; allow links from Walker's sites; accept March = "continue to 5" |
 | 2 | GBP question answered by Google's rules; keyword/geo map so sites don't compete with each other | Nothing, unless he disagrees |
 | 3 | Domain-agnostic factory; Site #3 tests subdirectories | Agree Site #3 may live under the main domain |
-| 4 | Page count is an output of the swap test, not a target | Nothing |
-| 5 | Script-tagged qualified calls, human spot-check | Confirm recording with announcement is acceptable on tracking lines |
-| 6 | Generated monthly dashboard instead of written report | Nothing |
-| 7 | Written budget on Victor's time post-handoff | Acknowledge the budget |
-| 8 | Privacy policy + TCPA consent + retention rule + recording notice before the funnel goes live | Privacy policy text, or approve a standard one |
-| 9 | Build the differentiation gate before Site #2 | Nothing |
+| 4 | Script-tagged qualified calls, human spot-check | Confirm recording with announcement is acceptable on tracking lines |
+| 5 | Generated monthly dashboard instead of written report | Nothing |
+| 6 | Written budget on Victor's time post-handoff | Acknowledge the budget |
+| 7 | Privacy policy + TCPA consent + retention rule + recording notice before the funnel goes live | Privacy policy text, or approve a standard one |
+| 8 | Build the differentiation gate before Site #2 | Nothing |
 
-If Kevin adopts only three: **1, 3 and 8.** The first two change whether March produces a real answer; the third has to be in place before the first lead arrives.
+**Priority, if it helps.** Proposals 1 and 3 are the ones that change whether March produces a real answer instead of "too early to tell". Proposal 7 is the one with a deadline that is not ours: it has to be in place before the first real lead arrives, whatever is decided on the rest.
 
 ---
 
@@ -210,10 +199,10 @@ If Kevin adopts only three: **1, 3 and 8.** The first two change whether March p
 
 1. Does the two-stage Gate B (Proposal 1) preserve the current plan's intent that "advancement runs on evidence, not elapsed time," or does it weaken it?
 2. Is there a version of the domain strategy (Proposal 3) that the plan considered and rejected in August, and if so, why?
-3. Is there anything in the automated call tagging (Proposal 5) that GoTo's current integration cannot support?
+3. Is there anything in the automated call tagging (Proposal 4) that GoTo's current integration cannot support?
 4. What in the current plan does this review fail to mention that Kevin should still be tracking?
 5. Ranked by urgency, what does Kevin need to decide in the next two weeks?
 
 ---
 
-*Maintained by Victor. Source of truth for the project remains the repository (`CLAUDE.md`, `BACKLOG.md`, `BITACORA.md`, `docs/`). This review does not replace the master file (v1.6, 10 Sep 2026), which remains the plan of record; it proposes changes to it for Kevin's decision. v1.1 (22 Sep) reworded the framing so the current plan and the proposals are clearly separate. v1.2 (22 Sep) incorporated Victor's review: Proposal 1 leads with the 120-day problem and is explicit that ads do not move rankings; Proposal 2 separates the profile question from keyword overlap; the license number is recorded as not required (Kevin's decision, consistent with Florida DFS guidance); Proposal 4 drops the page target instead of lowering it; Proposal 5 spells out the mechanics and Florida's recording-consent rule; the former Proposal 8 (decision defaults) was removed as an internal working practice rather than something to formalize.*
+*Maintained by Victor. Source of truth for the project remains the repository (`CLAUDE.md`, `BACKLOG.md`, `BITACORA.md`, `docs/`). This review does not replace the master file (v1.6, 10 Sep 2026), which remains the plan of record; it proposes changes to it for Kevin's decision. v1.1 (22 Sep) reworded the framing so the current plan and the proposals are clearly separate. v1.2 (22 Sep) incorporated Victor's review: Proposal 1 leads with the 120-day problem and is explicit that ads do not move rankings; Proposal 2 separates the profile question from keyword overlap; the license number is recorded as not required (Kevin's decision, consistent with Florida DFS guidance); the page-count proposal was dropped (a one-line doc adjustment, not a decision for Kevin); Proposal 4 spells out the mechanics and Florida's recording-consent rule; the former Proposal 8 (decision defaults) was removed as an internal working practice rather than something to formalize.*
