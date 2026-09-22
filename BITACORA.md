@@ -70,6 +70,70 @@ Vic (y Kevin, donde aplica) digan cuáles compran.
 
 ---
 
+## 2026-09-21 · Cierre del día: revisión de W-118, regla de handoff de prompts, y guión de video para Pavel
+
+**Quién:** cowork.
+
+Tres cosas del mismo día que no habían quedado escritas en la bitácora todavía, aunque ya
+estaban commiteadas o entregadas por separado.
+
+**1. Revisión de cowork sobre W-118: Aprobado con hallazgos.** El diff real (`7814680`,
+`+385/-1`) coincide con el alcance pedido y las cinco decisiones de diseño del prompt están
+resueltas con razonamiento real, no solo la decisión (Worker separado, `PUT /contacts/:id` para
+evitar duplicar el lead, JS contenido a `/contact/`, provisioning documentado como pendiente de
+Vic, pruebas con `fetcher` inyectable y credenciales falsas). Verificado independientemente
+contra CI real (run 35638750950, verde) y el PR #12 mergeado y limpio. **Hallazgo real que el
+ejecutor no reportó:** el commit `9649a72` sobrescribió por completo la fila de W-118 en
+`BACKLOG.md` en vez de agregar al final, perdiendo el historial original y la nota de avance que
+cowork había dejado esa misma mañana. Cowork restauró el historial y agregó el avance del
+ejecutor al final en vez de reemplazarlo. Veredicto completo en
+`reports/2026-09-21_014_formulario-contacto-real.md`, sección `## Revisión de cowork`.
+
+**2. Corrección de regla de trabajo, a pedido de Vic.** Cowork entregó el prompt de W-118 pegando
+el contenido completo en el chat en vez de un copy-paste corto que referenciara el archivo ya
+commiteado en `prompts/`. Vic lo corrigió: la regla del proyecto siempre fue prompt commiteado +
+instrucción corta ("Ejecuta el prompt prompts/YYYY-MM-DD_NNN_slug.md"), nunca el prompt pegado
+en el chat, porque si cowork lo edita después de pegarlo la versión pegada queda desincronizada
+del archivo sin que nadie lo note. Documentado como regla permanente en
+`prompts/00_GUIA_GLOBAL.md`, commit `6437088`. **Lección para la próxima vez:** el ejecutor tiene
+acceso al repo completo; nunca hace falta pegarle el contenido de un prompt, solo decirle cuál
+correr.
+
+**3. Guión y capturas del video de handoff para Pavel.** Pavel arrancó su trabajo real el 21-sep
+y le pidió a Vic una junta para revisar sus tareas. Vic decidió reemplazarla con un video grabado
+y le pidió a cowork el guión completo más capturas de pantalla. Alcance confirmado con Vic:
+tutorial completo del operador, los dos caminos para publicar contenido (el formulario, edición y
+creación de sitio nuevo; y GitHub directo, edición, página nueva, lote completo), sin explicar
+conceptos de git desde cero, solo los pasos.
+
+Entregado: `pavel-video-tutorial/guion.md` (guión narrado completo, ~13-16 min, con el texto
+exacto de cada botón) y `pavel-video-tutorial/screenshots/github/` (las 12 capturas reales que ya
+existían de cuando el flujo de GitHub se probó de punta a punta, renombradas para calzar con el
+guión). Publicado también como artifact con el guión y las 12 capturas:
+https://claude.ai/artifact/8FSAzBZB42tBjdPgTR5WTQ
+
+Faltan 5 capturas, todas del formulario (`content-form`), no de GitHub: login, edición con
+contenido real, botón "Publish draft", selector "Mode", y el modo "Create new site" completo.
+Cowork no las pudo tomar porque el formulario pide contraseña para entrar y las reglas de esta
+sesión no permiten que cowork escriba una contraseña, ni siquiera si Vic se la pasa por chat.
+Vic tiene que iniciar sesión él mismo y avisar; cowork toma esas 5 desde ahí, sin tocar el login.
+Lista exacta en la sección "Capturas pendientes" del `guion.md` y del artifact.
+
+**Lección técnica:** la primera versión del artifact incrustó las 12 capturas como `data:` URIs
+dentro del propio HTML (1.1MB en un solo archivo) y Vic reportó que no se veían. Se republicó
+pasando las imágenes como archivos propios del artifact (parámetro `files`) en vez de
+incrustarlas: el HTML bajó a 42KB, las imágenes quedan servidas aparte, y sí se ven. La próxima
+vez que un artifact lleve fotos reales, usar `files`, no `data:` URIs, salvo que sean pocas y
+chicas.
+
+Ver W-102 en `BACKLOG.md`.
+
+**Qué sigue abierto de los tres:** las 5 capturas pendientes del formulario; sincronizar
+`docs/OPERATOR_GUIDE.es.md` (v1.3, desactualizado) con el artifact del manual del operador (v1.4)
+sigue sin resolverse, señalado ya varias veces.
+
+---
+
 ## 2026-09-21 · Tres decisiones de diseño de W-118 resueltas, prompt escrito
 
 **Quién:** cowork, con aprobación de Vic.
