@@ -103,10 +103,12 @@ const structuredData = JSON.stringify({
           <p><a href={`tel:${site.contact.trackingPhone}`}>{site.contact.displayPhone}</a></p>
           <p><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></p>
         </section>
-        <section>
-          <p class="footer-label">Licensing</p>
-          <p>Florida license: {site.contact.licenseNumber}</p>
-        </section>
+        {site.contact.licenseNumber && (
+          <section>
+            <p class="footer-label">Licensing</p>
+            <p>Florida license: {site.contact.licenseNumber}</p>
+          </section>
+        )}
       </div>
     </footer>
   </body>

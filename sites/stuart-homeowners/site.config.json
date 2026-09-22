@@ -9,8 +9,7 @@
     "trackingPhone": "+17725550100",
     "displayPhone": "(772) 555-0100",
     "email": "demo-placeholder@stuarthomeownersinsurance.com",
-    "address": { "street": "123 Placeholder Avenue", "city": "Stuart", "state": "FL", "zip": "34994" },
-    "licenseNumber": "PLACEHOLDER-FL-LICENSE-PENDING-W-008"
+    "address": { "street": "123 Placeholder Avenue", "city": "Stuart", "state": "FL", "zip": "34994" }
   },
   "products": ["homeowners"],
   "seo": {

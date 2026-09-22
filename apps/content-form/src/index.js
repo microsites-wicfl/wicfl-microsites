@@ -156,8 +156,7 @@ function newSiteConfig(directory, draft) {
       trackingPhone: "+10000000000",
       displayPhone: "PLACEHOLDER PHONE",
       email: `placeholder-${slug}@example.invalid`,
-      address: { street: "PLACEHOLDER ADDRESS", city: "PLACEHOLDER CITY", state: "FL", zip: "00000" },
-      licenseNumber: "PLACEHOLDER-FL-LICENSE"
+      address: { street: "PLACEHOLDER ADDRESS", city: "PLACEHOLDER CITY", state: "FL", zip: "00000" }
     },
     products: [product],
     seo: {

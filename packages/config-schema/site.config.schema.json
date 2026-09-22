@@ -46,7 +46,7 @@
     },
     "contact": {
       "type": "object", "description": "Single site-local NAP capture. It is the template source of truth and must be reconciled with the GBP before launch.", "additionalProperties": false,
-      "required": ["trackingPhone", "displayPhone", "email", "address", "licenseNumber"],
+      "required": ["trackingPhone", "displayPhone", "email", "address"],
       "properties": {
         "trackingPhone": { "type": "string", "description": "Required call-tracking number in E.164 form; rendered and measured by every template contact surface.", "pattern": "^\\+[1-9][0-9]{1,14}$" },
         "displayPhone": { "type": "string", "description": "Human-readable rendering of the tracking phone; its formatting is presentation-only.", "minLength": 7, "maxLength": 32 },
@@ -61,7 +61,7 @@
             "zip": { "type": "string", "description": "Five-digit or ZIP+4 code.", "pattern": "^[0-9]{5}(?:-[0-9]{4})?$" }
           }
         },
-        "licenseNumber": { "type": "string", "description": "Required Florida insurance license number displayed by the template on every required page.", "minLength": 1, "maxLength": 80 },
+        "licenseNumber": { "type": "string", "description": "Optional Florida insurance license number. If present, the template displays it in the footer; Kevin decided on 2026-09-22 that WICFL sites do not display one.", "minLength": 1, "maxLength": 80 },
         "googleBusinessProfilePlaceId": { "type": "string", "description": "Optional GBP Place ID once a profile exists; used by launch QA for NAP reconciliation, not by schema validation.", "pattern": "^ChI[A-Za-z0-9_-]{10,}$" }
       }
     },
