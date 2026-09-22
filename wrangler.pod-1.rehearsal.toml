@@ -1,0 +1,16 @@
+# W-119: exercises the production deployment path without touching the apex or www routes.
+# This config must only ever carry rehearsal subdomains, never production custom domains.
+name = "wicfl-pod-1-rehearsal"
+main = "dist/pods/pod-1/worker.mjs"
+compatibility_date = "2026-09-04"
+
+[assets]
+directory = "dist/pods/pod-1/sites"
+binding = "ASSETS"
+
+[vars]
+WICFL_REHEARSAL = "1"
+
+[[routes]]
+pattern = "preview.stuarthomeownersinsurance.com/*"
+custom_domain = true

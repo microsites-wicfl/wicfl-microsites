@@ -1,32 +1,45 @@
 name: Deploy Cloudflare Workers
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "package.json"
-      - "package-lock.json"
-      - "packages/template/**"
-      - "packages/config-schema/**"
-      - "sites/**"
-      - "scripts/**"
-      - "pods/**"
-      - "wrangler.pod-1.toml"
-      - ".github/workflows/deploy.yml"
+  # Re-enable this push trigger only in a separate post-launch change. Until then every deploy
+  # is deliberate, auditable, and requires the confirmation below.
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - "package.json"
+  #     - "package-lock.json"
+  #     - "packages/template/**"
+  #     - "packages/config-schema/**"
+  #     - "sites/**"
+  #     - "scripts/**"
+  #     - "pods/**"
+  #     - "wrangler.pod-1.toml"
+  #     - ".github/workflows/deploy.yml"
   workflow_dispatch:
+    inputs:
+      target:
+        description: Deployment target
+        required: true
+        default: rehearsal
+        type: choice
+        options:
+          - rehearsal
+          - production
+      confirm:
+        description: type deploy to confirm
+        required: true
+        type: string
 
 jobs:
   deploy:
-    name: Deploy pod-1
-    # W-014 built the real pod/Worker config (this workflow, wrangler.pod-1.toml,
-    # scripts/build-pod.mjs, pods/pod-1.json) on 4 Sep 2026. Still disabled: Site #1
-    # (sites/stuart-homeowners) still carries placeholder license, contact and analytics data
-    # while it's a demo for Kevin, and the W-103 gate below would fail it on purpose. Flip this
-    # to true only once that data is real and Vic decides to actually launch — see
-    # docs/QA_CHECKLIST.md section 7 ("Deploy") for what to check first.
-    if: ${{ false }}
+    name: Deploy pod-1 (${{ inputs.target }})
     runs-on: ubuntu-latest
     steps:
+      - name: Confirm intentional deployment
+        if: ${{ inputs.confirm != 'deploy' }}
+        run: |
+          echo "Refusing deployment: confirm must be exactly 'deploy'." >&2
+          exit 1
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -40,10 +53,17 @@ jobs:
       # every site this pod is about to ship — one check per slug actually listed in
       # pods/pod-1.json, not a hardcoded fixture name.
       - name: Check production readiness (W-103)
+        # Rehearsal deliberately reports but does not block on placeholders. Production never
+        # gets this exception, so a production target remains fail-closed.
+        continue-on-error: ${{ inputs.target == 'rehearsal' }}
         run: |
           for site in $(node scripts/pod-sites.mjs pod-1); do
             node scripts/check-production-config.mjs "$site"
           done
+      - name: Record rehearsal gate findings
+        if: ${{ inputs.target == 'rehearsal' }}
+        run: |
+          echo "REHEARSAL: gate findings above are expected while placeholders remain; production target would have blocked here." >> "$GITHUB_STEP_SUMMARY"
       # Required repository secrets (already set — verified working 2026-09-03 by the Stuart
       # Homeowners demo deploy and W-098's preview deploys, which use these same two secrets):
       # CLOUDFLARE_API_TOKEN: scoped Workers deployment token, never the Global API Key.
@@ -52,4 +72,4 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx wrangler deploy --config wrangler.pod-1.toml
+        run: npx wrangler deploy --config ${{ inputs.target == 'rehearsal' && 'wrangler.pod-1.rehearsal.toml' || 'wrangler.pod-1.toml' }}

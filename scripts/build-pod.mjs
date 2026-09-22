@@ -43,6 +43,17 @@ mkdirSync(podSitesRoot, { recursive: true });
 
 const routes = {};
 
+function addRoute(host, slug, source) {
+  const normalizedHost = host.toLowerCase();
+  if (routes[normalizedHost]) {
+    console.error(
+      `Route "${normalizedHost}" from ${source} would overwrite the existing route to "${routes[normalizedHost]}". Fix pods/${podName}.json before continuing.`
+    );
+    process.exit(1);
+  }
+  routes[normalizedHost] = slug;
+}
+
 for (const slug of pod.sites) {
   console.log(`\n== Building ${slug} (pod ${podName}) ==`);
   const build = spawnSync(process.execPath, [resolve(repositoryRoot, "scripts/build-site.mjs"), slug], {
@@ -61,11 +72,24 @@ for (const slug of pod.sites) {
     console.error(`sites/${slug}/site.config.json has no "domain"; cannot route to it in the pod.`);
     process.exit(1);
   }
-  routes[domain.toLowerCase()] = slug;
-  routes[`www.${domain.toLowerCase()}`] = slug;
+  addRoute(domain, slug, `sites/${slug}/site.config.json`);
+  addRoute(`www.${domain}`, slug, `sites/${slug}/site.config.json`);
 
   const builtSiteDir = resolve(repositoryRoot, "dist/sites", slug);
   cpSync(builtSiteDir, resolve(podSitesRoot, slug), { recursive: true });
+}
+
+if (pod.aliases !== undefined && (typeof pod.aliases !== "object" || Array.isArray(pod.aliases) || pod.aliases === null)) {
+  console.error(`pods/${podName}.json "aliases" must be an object mapping hostnames to site slugs.`);
+  process.exit(1);
+}
+
+for (const [host, slug] of Object.entries(pod.aliases ?? {})) {
+  if (!pod.sites.includes(slug)) {
+    console.error(`Alias "${host}" points to "${slug}", which is not listed in pods/${podName}.json "sites".`);
+    process.exit(1);
+  }
+  addRoute(host, slug, `pods/${podName}.json aliases`);
 }
 
 const workerTemplate = readFileSync(resolve(repositoryRoot, "scripts/pod-worker-template.mjs"), "utf8");

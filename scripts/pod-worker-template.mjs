@@ -1,6 +1,7 @@
 // GENERATED FILE — do not edit dist/pods/**/worker.mjs by hand. This is the source template;
 // scripts/build-pod.mjs copies it and substitutes the ROUTES marker below with the pod's real
-// domain -> site-slug map, built from each site's site.config.json "domain" field.
+// domain/alias -> site-slug map, built from each site's site.config.json "domain" field and
+// the optional "aliases" map in pods/<pod-name>.json.
 //
 // Why this file exists at all: docs/ARCHITECTURE.md's "Grouping" decision is pods of ~25 sites
 // per Worker, not one Worker per site (caps at 500, multiplies deploys) and not one Worker for
@@ -23,6 +24,12 @@ export default {
 
     const assetUrl = new URL(request.url);
     assetUrl.pathname = `/${slug}${url.pathname}`;
-    return env.ASSETS.fetch(new Request(assetUrl, request));
+    const response = await env.ASSETS.fetch(new Request(assetUrl, request));
+    if (env.WICFL_REHEARSAL === "1") {
+      const headers = new Headers(response.headers);
+      headers.set("X-Robots-Tag", "noindex, nofollow");
+      return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+    }
+    return response;
   }
 };

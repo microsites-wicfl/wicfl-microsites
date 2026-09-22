@@ -1,4 +1,7 @@
 {
   "name": "pod-1",
-  "sites": ["stuart-homeowners"]
+  "sites": ["stuart-homeowners"],
+  "aliases": {
+    "preview.stuarthomeownersinsurance.com": "stuart-homeowners"
+  }
 }
