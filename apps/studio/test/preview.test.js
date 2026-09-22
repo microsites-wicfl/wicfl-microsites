@@ -66,3 +66,25 @@ test("new commit still building: preparing, keeping the previous URL reachable",
   ]);
   assert.deepEqual(await preview(github), { state: "preparing", url });
 });
+
+test("a failing check unrelated to the site (Studio's own tests) does not mark the preview failed", async () => {
+  const github = await withDraft();
+  github.addComment(1, comment);
+  github.setCheckRuns(github.headOf("draft/stuart"), [
+    { name: "Test WICFL Studio", status: "completed", conclusion: "failure" },
+    { name: "Build stuart", status: "completed", conclusion: "success" },
+    { name: "Preview stuart", status: "completed", conclusion: "success" },
+  ]);
+  assert.deepEqual(await preview(github), { state: "ready", url });
+});
+
+test("a failing check for another site does not mark this site's preview failed", async () => {
+  const github = await withDraft();
+  github.addComment(1, comment);
+  github.setCheckRuns(github.headOf("draft/stuart"), [
+    { name: "Build _example", status: "completed", conclusion: "failure" },
+    { name: "Preview stuart", status: "completed", conclusion: "success" },
+  ]);
+  assert.deepEqual(await preview(github), { state: "ready", url });
+});
+
