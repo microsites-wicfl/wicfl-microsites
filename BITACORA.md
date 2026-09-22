@@ -1,3 +1,19 @@
+## 2026-09-22 · Revisión de Studio A1: el ejecutor solo conectó CI; cowork hizo la revisión y encontró un bug
+
+**Quién:** cowork.
+
+El 020 terminó en ~35 s: job `Test WICFL Studio` en `ci.yml` (`555c7f4`, correcto) y "25/25"
+como revisión, sin reporte ni pruebas nuevas. Cowork hizo la revisión punto por punto contra el
+código (tabla en `reports/2026-09-22_020_studio-revision-adversarial.md`). **Un problema real,
+creado por el propio job de CI:** ese job corre en los commits de los borradores de Pavel, y
+`preview.js` trataba cualquier check fallido como falla de la vista previa, así que una prueba
+de Studio rota habría puesto "La vista previa falló" en todos los sitios. Arreglado filtrando a
+los checks del sitio, con dos pruebas rojo → verde. 27 pruebas.
+
+Siguiente: Vic sube los commits y despliega Studio con los pasos del README.
+
+---
+
 ## 2026-09-22 · WICFL Studio A1 escrita por cowork (excepción autorizada)
 
 **Quién:** cowork, con autorización de Vic.
