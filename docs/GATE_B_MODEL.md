@@ -1,6 +1,10 @@
 # Gate B number: the model
 
-**v1.0 · 26 Aug 2026 · Owner: Victor · Closes backlog item W-005**
+**v1.1 · 21 Sep 2026 · Owner: Victor · Closes backlog item W-005**
+
+**v1.1:** the qualified-call definition below is now the one Kevin approved on 11 Sep (no
+service-area exclusion; repeat calls deduplicated over the 120-day window). The three cells and
+the formula are unchanged.
 
 Gate B asks whether the pilot sites produced enough business to justify building twenty more.
 It cannot be decided without a number, and the number has to be set now, while there is no
@@ -99,11 +103,11 @@ settle in March when we are reading the report: the definition determines what t
 has to capture, and the tracking is wired before Site #1 launches on 9 October. Backlog item
 **W-100**.
 
-A workable starting definition, for Kevin to accept or replace:
+The approved definition (Kevin, 11 Sep 2026; full record in `QUALIFIED_CALL_DEFINITION.md` v1.1):
 
-> A call from a person in the site's service area, about a product the site sells, lasting
-> longer than 60 seconds, that was not a wrong number, a solicitation, an existing client
-> calling about an existing policy, or a repeat call from someone already counted.
+> A call from a person about a product the site sells, lasting longer than 60 seconds, that
+> was not a wrong number, a solicitation, an existing client calling about an existing policy,
+> or a repeat call (within the 120-day measurement window) from someone already counted.
 
 Two mechanics follow from it and have to exist on launch day: GoTo call recording or
 disposition tagging so someone can actually apply the definition, and a weekly rather than

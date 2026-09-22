@@ -1,3 +1,80 @@
+## 2026-09-21 · Next steps al launch acordados con Vic; prompt 015 (ensayo de deploy); W-100 escrito en docs
+
+**Quién:** cowork, como nuevo arquitecto del proyecto, con aprobación de Vic.
+
+Vic pidió una revisión de bitácora y backlog y una propuesta de next steps **bajo el plan
+actual**, sin las diez propuestas de `docs/PLAN_REVIEW_2026-09-21.md`, que esperan a Kevin.
+Marco: 14 días hábiles al launch del sitio #1 (viernes 9-oct). Vic aprobó el orden completo.
+
+**Los siete comments de arquitecto, en orden de peso:**
+
+1. **El launch nunca se ha ensayado y es el riesgo #1, por encima de los datos de Kevin.**
+   `deploy.yml` sigue en `if: false`; `wrangler.pod-1.toml` engancha apex y `www` con
+   `custom_domain = true` en el primer deploy que corra; el apex todavía tiene dos `A` al
+   parking de GoDaddy que harían fallar `custom_domain` por conflicto. Nada de eso se ha
+   probado. → **W-119**, prompt `prompts/2026-09-21_015_ensayo-deploy-produccion.md`: ensayo
+   en `preview.stuarthomeownersinsurance.com` con Worker separado, deploy solo por dispatch con
+   confirmación, gate de W-103 informativo en ensayo y bloqueante en producción, y
+   `docs/LAUNCH_RUNBOOK.md` con la secuencia del 9-oct.
+2. **El número de tracking (W-024) tiene cero avance y es lo que le da sentido a la fecha:**
+   sin DID con grabación desde el 9-oct, los primeros días de Gate B no existen. **Corrección
+   de Vic:** él sí tiene acceso a GoTo (la nota de W-017 que lo ponía en Kevin queda sin
+   efecto). Vic compra el DID y enciende grabación/disposición esta semana.
+3. **La línea base de Gate A (W-032) empezó a perderse hoy:** Pavel arrancó el 21 y nadie
+   registra horas. Pavel abre la hoja (fábrica / contenido / espera de proveedor) esta semana,
+   retroactiva al 21.
+4. **La validación SEO (W-016) tiene una segunda oportunidad que sí importa: Port St. Lucie**,
+   antes de que Pavel escriba la primera página el 12-oct.
+5. **Nadie ha escrito si PSL es el sitio en español.** El plan dice sitio #2 = español; Kevin
+   dijo "Let's do PSL" y nada más. Se le pregunta la semana del 29-sep junto con el dominio; no
+   bloquea el 9-oct.
+6. **La deuda de documentación crece más rápido que se paga** (README y reporte 008 del
+   formulario, `OPERATOR_GUIDE.es.md` una versión atrás, 5 capturas del video, PR de prueba de
+   W-111 sin cerrar, token de Cloudflare sin propósito). Se junta en **un** prompt de higiene la
+   semana del 29-sep.
+7. **Dos cosas de seguridad que solo Vic puede hacer y llevan tres semanas vencidas:** el vault
+   (W-105, credenciales todavía en el chat de Zoom) y revocar el token de Cloudflare sin uso.
+   No van en la ruta crítica del launch, pero no se dejan de nombrar.
+
+**Plan por semana (aprobado):**
+
+- **22–26 sep.** Vic/Codex: provisionar el funnel de W-118 (GHL token/location/formId/custom
+  fields + esquema de tags, que cierra W-101; Google Places key; bucket R2 + CORS; desplegar
+  `wicfl-lead-api`; prueba de punta a punta contra el preview), GA4 + GTM reales, email routing
+  (W-114), DID en GoTo (W-024). Codex: prompt 015. Cowork: PR preparado con los campos reales de
+  Stuart listos para pegar cuando Kevin los mande. Pavel: hacer suyo el checklist de QA
+  (W-029), `differentiation-audit` + self-review de compliance sobre las 8 páginas, W-016 de
+  PSL, abrir la hoja de horas. **Kevin, un solo mensaje:** licencia, teléfono, email y
+  dirección aprobados para Stuart. Nada más.
+- **29 sep – 3 oct.** Ensayo de deploy completo en el subdominio (formulario mandando lead real
+  a GHL, llamada de prueba al DID). Datos reales al config, gate verde contra
+  `stuart-homeowners`. Prompt de higiene. W-027 (gate de diferenciación) si el ensayo salió
+  limpio, si no, semana del 6. Pavel: correcciones de QA, página real de About. **Kevin,
+  segundo mensaje:** dominio de PSL, y si el sitio #2 es en español o en inglés.
+- **6–9 oct.** Martes: congelar contenido. Miércoles: corrida completa de QA por Pavel.
+  Jueves: todo en `main`, gate verde, registros `A` del parking eliminados. Viernes en la
+  mañana: deploy por dispatch; verificar en producción una llamada grabada, un lead con tag en
+  GHL, GA4 en tiempo real; Search Console + sitemap a mano. Reloj de Gate B arranca.
+- **Desde el 12-oct.** Sitio #2 con Pavel solo por el formulario, registrando cada vez que
+  tenga que abrir GitHub o preguntar. W-027 antes de su primera página. Reporte mensual empieza.
+
+**Fuera de la ruta crítica a propósito:** W-113 (org de GitHub), W-112 (compra de dominio para
+Pavel, bloquea Gate A, no el launch), W-104 (audit de dependencias). Caben en la semana 2 si
+el ensayo sale limpio.
+
+**Hecho directo por cowork en esta sesión (edición de texto, sin ejecutor):**
+- `docs/QUALIFIED_CALL_DEFINITION.md` → v1.1 y `docs/GATE_B_MODEL.md` → v1.1 con el texto
+  que Kevin aprobó el 11-sep (sin exclusión por área de servicio; repetidas deduplicadas
+  sobre la ventana de 120 días). Los dos sincronizados. W-100 queda abierto solo por nombrar
+  al dueño del etiquetado semanal.
+- `BACKLOG.md`: W-119 nuevo; avances al final (no reemplazo) de W-014, W-016, W-017, W-024,
+  W-032, W-100.
+
+**Nota de estado del repo:** el commit del plan review (`67e7a48`) y el session wrap
+(`3c5990c`) ya estaban en `origin/main` al retomar; no hubo que pushear nada por Codex.
+
+---
+
 ## 2026-09-21 · Revisión general del plan: diez propuestas, escritas para Kevin y su ChatGPT
 
 **Quién:** cowork, a pedido de Vic.

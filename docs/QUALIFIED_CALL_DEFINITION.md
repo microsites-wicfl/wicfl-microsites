@@ -1,6 +1,12 @@
 # Qualified call: the definition
 
-**v1.0 · 10 Sep 2026 · Owner: Victor · Closes backlog item W-100**
+**v1.1 · 21 Sep 2026 · Owner: Victor · Closes backlog item W-100**
+
+**v1.1:** Kevin answered both open questions by Zoom chat on 11 Sep 2026. The definition below
+is now the approved one. Two changes from v1.0: the service-area exclusion is removed (Kevin:
+"we will not reject calls from outside a service area"), and repeat calls are deduplicated across
+the full 120-day measurement window rather than per month (Kevin declined to specify; the
+window is the unit the rest of the Gate B model already uses, so it was chosen for consistency).
 
 Gate B (`GATE_B_MODEL.md`) measures success in qualified calls per site per month. Nobody had
 written down what "qualified" means. That is not a detail to settle in March when the report
@@ -14,14 +20,14 @@ reopening the whole Gate B model.
 
 ---
 
-## The starting definition
+## The definition (approved 11 Sep 2026)
 
-> A call from a person in the site's service area, about a product the site sells, lasting
-> longer than 60 seconds, that was not a wrong number, a solicitation, an existing client
-> calling about an existing policy, or a repeat call from someone already counted.
+> A call from a person about a product the site sells, lasting longer than 60 seconds, that
+> was not a wrong number, a solicitation, an existing client calling about an existing policy,
+> or a repeat call (within the 120-day measurement window) from someone already counted.
 
-Kevin: accept as written, or edit any part of it. If you change the 60-second threshold or any
-of the exclusions, that's fine, just say what changes.
+This is the approved text. Any future change goes through Kevin and gets a new version here and
+in `GATE_B_MODEL.md`, which carries a copy.
 
 ## What has to exist on launch day, once the definition is set
 
