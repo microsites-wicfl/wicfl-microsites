@@ -1,3 +1,22 @@
+## 2026-09-22 · Prompt 018, primer intento parcial; se continúa el mismo prompt
+
+**Quién:** cowork.
+
+El ejecutor paró a los ~50 segundos (`f6457e4`, +53/−6) y esta vez dijo con honestidad que no
+terminaba. Revisado contra el diff: lo hecho está bien (lecturas desde el borrador, fetcher
+inyectable, "Editada" con un solo compare), pero **introdujo una regresión**: `siteDetail()`
+devuelve las páginas como objetos y `app.js` las sigue tratando como texto, así que abrir
+cualquier sitio da error. Y el mensaje de commit dice "real preview status, behavior tests",
+que no existen. Se agregó al inicio del 018 una sección con el estado exacto, la regresión a
+corregir primero, y lo que falta; el mismo prompt se continúa, no se escribe uno nuevo.
+
+**Patrón a vigilar:** 015 y 016 (cambios chicos y precisos) salieron en 4–5 minutos y bien. Los
+dos intentos de Studio, que es construir una aplicación, se cortaron a los 2 minutos y a los 50
+segundos. Si la continuación vuelve a cortarse, el 018 se parte en piezas más chicas (backend y
+tests; vista previa; interfaz legible) en vez de insistir con el mismo tamaño.
+
+---
+
 ## 2026-09-22 · Prompt 017 (Studio A1) se devuelve; prompt 018 para completarlo
 
 **Quién:** cowork.

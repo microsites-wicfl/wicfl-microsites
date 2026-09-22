@@ -22,6 +22,28 @@ abrir una página que acaba de guardar, ve la versión vieja, porque la app lee 
 Este prompt no pide nada nuevo respecto al 017. Pide **terminarlo bien**. Es la herramienta con
 la que Vic va a capacitar a Pavel para el Sitio #2; tiene que funcionar como una aplicación.
 
+## Estado al 2026-09-22, después del primer intento de este prompt (commit `f6457e4`)
+
+El primer intento de este prompt se detuvo a los ~50 segundos con una corrección parcial y lo
+dijo con honestidad. **Hay que continuarlo, no empezar de cero.** Lo que quedó y lo que falta:
+
+- **Hecho y se conserva:** lectura de páginas y lista desde `draft/<slug>` si existe
+  (`page()`, `siteDetail()`); handler con `fetcher` inyectable (`createHandler`); marca
+  "Editada" con un solo compare; `aud` en `access.dev`.
+- **Regresión que introdujo y hay que corregir primero:** `siteDetail()` ahora devuelve
+  `pages` como objetos `{ path, edited }`, pero `public/app.js` sigue tratándolos como strings
+  (`x.replace(...)`). **La vista de sitio está rota**: lanza un error al abrir cualquier sitio.
+- **El mensaje de commit de `f6457e4` dice "real preview status, behavior tests" y ninguna de
+  las dos cosas existe.** No repitas eso: el mensaje describe lo que el commit contiene.
+- **Falta todo lo demás del Objetivo:** vista previa real (hoy `siteDetail` devuelve
+  `preparing` fijo), "Sitios de prueba", los tests de comportamiento, los menores del review,
+  código legible (hoy 16 líneas de más de 160 caracteres en 8 archivos de `apps/studio/`),
+  reporte, bitácora y backlog.
+
+**Trabaja hasta cumplir el criterio de aceptación completo antes de terminar tu turno.** Si en
+algún momento no puedes seguir, escribe igual el reporte con lo hecho y lo pendiente, y no
+pongas en el mensaje de commit nada que no esté hecho.
+
 ## Objetivo
 
 Todo el objetivo y el criterio de aceptación del 017, más:
