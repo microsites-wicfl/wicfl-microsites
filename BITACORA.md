@@ -1,3 +1,22 @@
+## 2026-09-22 · Cowork formatea `apps/studio/` para desbloquear al ejecutor
+
+**Quién:** cowork.
+
+El primer intento del 019 duró 22 segundos y no cambió nada: la herramienta de edición de Codex
+rechazó reemplazar el `app.js` de una sola línea. Tercer intento seguido bloqueado por el mismo
+archivo. Cowork formateó `apps/studio/` con Prettier (el del repo, 3.9.6, `--print-width 100`)
+y **verificó que el AST de los siete archivos JS es idéntico antes y después** (acorn, sin
+posiciones ni `raw`): formato puro, cero cambio de comportamiento, así que no rompe la regla de
+que el código de producto lo escribe el ejecutor. Tests siguen verdes. Quedan tres líneas largas
+en `app.js` (plantillas HTML), que el 019 resuelve al partir las vistas. Nota agregada al 019.
+
+**Observación sobre el ejecutor:** duraciones de los últimos seis prompts en el mismo hilo de
+Codex: 5m34s, 4m25s, 1m51s, 50s, 19s, 22s. La caída coincide con prompts más grandes, pero
+también con un hilo cada vez más largo. Se le recomienda a Vic abrir una conversación nueva de
+Codex para el 019.
+
+---
+
 ## 2026-09-22 · El 018 no avanza; se parte en tres prompts chicos (019, 020, 021)
 
 **Quién:** cowork.

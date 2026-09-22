@@ -3,6 +3,19 @@
 **Backlog:** W-120 (pieza 1 de 3 de A1)
 **Reporte esperado:** `reports/2026-09-22_019_studio-legible.md`
 
+## Actualización de cowork, 2026-09-22 (léela primero)
+
+El primer intento de este prompt no cambió nada: la herramienta de edición rechazó reemplazar
+`public/app.js` de una sola línea. **Cowork ya formateó todo `apps/studio/` con Prettier**
+(commit siguiente a `75bfe44`, mensaje `style(studio): format…`), verificando que el árbol de
+sintaxis (AST) de cada archivo JS es idéntico antes y después: cero cambios de comportamiento.
+Ahora todos los archivos tienen líneas normales y se pueden editar con parches.
+
+Quedan tres líneas de más de 120 caracteres en `public/app.js` (22, 32 y 45): son plantillas
+HTML largas que Prettier no parte. Se resuelven en el objetivo 3 al separar las vistas en
+módulos. El resto del prompt sigue igual; la restricción de "escribir cada archivo completo" ya
+no hace falta, usa la herramienta de edición normal.
+
 ## Contexto
 
 WICFL Studio es la app donde Pavel va a editar sus sitios (especificación completa en
