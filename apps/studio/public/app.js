@@ -1,1 +1,59 @@
-import {text} from "./strings.js";const app=document.querySelector("#app"),api=async(path,init)=>{const r=await fetch(`/api${path}`,init);const d=await r.json();if(!r.ok)throw Error(d.error);return d};let selected="";const esc=(s)=>s.replaceAll("&","&amp;").replaceAll("<","&lt;");async function render(){try{const me=await api("/me");document.querySelector("#user").textContent=me.email;const p=location.hash.split("/").filter(Boolean);if(!p.length){const sites=await api("/sites");app.innerHTML=sites.length?sites.map(s=>`<a class="card" href="#/sitio/${s.slug}"><b>${esc(s.brandName)}</b><br><span class="muted">${esc(s.domain)}</span><p class="tag">${s.changed?text.draft:text.ready} · ${s.published?`${text.published} ${s.domain}`:text.unpublished}</p></a>`).join(""):`<p>${text.empty}</p>`;return}selected=p[1];if(p[2]==="pagina"){const path=p.slice(3).join("/");const data=await api(`/sites/${selected}/pages/${path}`);app.innerHTML=`<button id="back">${text.back}</button><h2>${esc(path)}</h2><textarea id="content">${esc(data.text)}</textarea><p><button id="save">${text.save}</button></p>`;document.querySelector("#back").onclick=()=>location.hash=`#/sitio/${selected}`;document.querySelector("#save").onclick=async()=>{await api(`/sites/${selected}/pages/${path}`,{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify({content:document.querySelector("#content").value})});location.hash=`#/sitio/${selected}`};return}const site=await api(`/sites/${selected}`);app.innerHTML=`<button id="discardBtn">${text.discard}</button><h2>${esc(site.brandName)}</h2><p class="tag">${site.changed?text.preview:text.noDraft}</p>${site.pages.map(x=>`<a class="card" href="#/sitio/${selected}/pagina/${x.replace(`sites/${selected}/content/`,"")}">${esc(x.replace(`sites/${selected}/content/`,""))}</a>`).join("")}`;document.querySelector("#discardBtn").onclick=()=>document.querySelector("#discard").showModal()}catch(e){app.innerHTML=`<p>${esc(e.message||text.error)}</p>`}}document.querySelector("[data-cancel]").onclick=()=>discard.close();document.querySelector("[data-confirm]").onclick=async()=>{await api(`/sites/${selected}/draft`,{method:"DELETE"});discard.close();render()};addEventListener("hashchange",render);render();
+import { text } from "./strings.js";
+const app = document.querySelector("#app"),
+  api = async (path, init) => {
+    const r = await fetch(`/api${path}`, init);
+    const d = await r.json();
+    if (!r.ok) throw Error(d.error);
+    return d;
+  };
+let selected = "";
+const esc = (s) => s.replaceAll("&", "&amp;").replaceAll("<", "&lt;");
+async function render() {
+  try {
+    const me = await api("/me");
+    document.querySelector("#user").textContent = me.email;
+    const p = location.hash.split("/").filter(Boolean);
+    if (!p.length) {
+      const sites = await api("/sites");
+      app.innerHTML = sites.length
+        ? sites
+            .map(
+              (s) =>
+                `<a class="card" href="#/sitio/${s.slug}"><b>${esc(s.brandName)}</b><br><span class="muted">${esc(s.domain)}</span><p class="tag">${s.changed ? text.draft : text.ready} · ${s.published ? `${text.published} ${s.domain}` : text.unpublished}</p></a>`,
+            )
+            .join("")
+        : `<p>${text.empty}</p>`;
+      return;
+    }
+    selected = p[1];
+    if (p[2] === "pagina") {
+      const path = p.slice(3).join("/");
+      const data = await api(`/sites/${selected}/pages/${path}`);
+      app.innerHTML = `<button id="back">${text.back}</button><h2>${esc(path)}</h2><textarea id="content">${esc(data.text)}</textarea><p><button id="save">${text.save}</button></p>`;
+      document.querySelector("#back").onclick = () => (location.hash = `#/sitio/${selected}`);
+      document.querySelector("#save").onclick = async () => {
+        await api(`/sites/${selected}/pages/${path}`, {
+          method: "PUT",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ content: document.querySelector("#content").value }),
+        });
+        location.hash = `#/sitio/${selected}`;
+      };
+      return;
+    }
+    const site = await api(`/sites/${selected}`);
+    app.innerHTML = `<button id="discardBtn">${text.discard}</button><h2>${esc(site.brandName)}</h2><p class="tag">${site.changed ? text.preview : text.noDraft}</p>${site.pages.map((x) => `<a class="card" href="#/sitio/${selected}/pagina/${x.replace(`sites/${selected}/content/`, "")}">${esc(x.replace(`sites/${selected}/content/`, ""))}</a>`).join("")}`;
+    document.querySelector("#discardBtn").onclick = () =>
+      document.querySelector("#discard").showModal();
+  } catch (e) {
+    app.innerHTML = `<p>${esc(e.message || text.error)}</p>`;
+  }
+}
+document.querySelector("[data-cancel]").onclick = () => discard.close();
+document.querySelector("[data-confirm]").onclick = async () => {
+  await api(`/sites/${selected}/draft`, { method: "DELETE" });
+  discard.close();
+  render();
+};
+addEventListener("hashchange", render);
+render();
