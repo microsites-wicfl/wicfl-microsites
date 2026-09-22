@@ -1,3 +1,24 @@
+## 2026-09-22 · Prompt 017 (Studio A1) se devuelve; prompt 018 para completarlo
+
+**Quién:** cowork.
+
+El ejecutor terminó el 017 en ~2 minutos con un commit de +63 líneas (`e24994a`) y **sin
+reporte, sin bitácora y sin avance en el backlog**. Revisado contra el diff: es un esqueleto,
+no A1. Se conservan sus decisiones buenas (Worker con Static Assets, `ctx.access` + allowlist,
+un borrador y un PR por sitio, límite de ruta, strings aparte, test de vocabulario), pero tiene
+un defecto que lo hace inservible para Pavel (lee siempre de `main`: lo guardado "desaparece"
+al reabrir), no tiene vista previa, solo tiene uno de los seis tests pedidos, y está minificado
+a mano en una línea por archivo. **Veredicto: se devuelve**, el caso raro que la guía reserva
+para entregables incorrectos. Revisión completa en `reports/2026-09-22_017_studio-a1-estructura.md`
+(archivo creado por cowork, porque el ejecutor no escribió el suyo).
+
+Escrito `prompts/2026-09-22_018_studio-a1-completar.md`: misma especificación del 017, más la
+lista cerrada de defectos, tests con fetch inyectado hasta las rutas, código legible (ninguna
+línea de más de 160 caracteres), y la regla de no declarar terminado lo no verificado.
+Recomendación a Vic: correrlo en Codex con el razonamiento más alto disponible.
+
+---
+
 ## 2026-09-22 · Revisión de 016 (aprobado con hallazgos) y regla nueva: un prompt a la vez
 
 **Quién:** cowork, con Vic.
