@@ -1,3 +1,20 @@
+## 2026-09-22 · 019, segundo intento: parcial otra vez (33 s, `f57471b`)
+
+**Quién:** cowork.
+
+Revisado contra el diff. **Bien:** la regresión de la vista de sitio está corregida (usa
+`page.path`, muestra "Editada"), `esc()` ahora escapa comillas, `app.js` legible. **Mal:** quitó
+dos cosas que funcionaban, contra la regla "mismo comportamiento" del prompt: el tablero ya no
+dice "Publicado en… / Aún no se publica" y la vista de sitio ya no muestra el estado del
+borrador. Siguen cuatro líneas de más de 120, cero tests nuevos, sin reporte ni bitácora. Y su
+resumen dice que "faltan los demás archivos minificados", cuando cowork ya los había formateado:
+no leyó la nota al inicio del prompt, lo que sugiere que sigue corriendo en el hilo largo.
+
+Cinco intentos de Studio (017, 018 ×2, 019 ×2) han producido, en total, unas 170 líneas netas y
+un test. Se le plantea a Vic cambiar de estrategia en vez de seguir partiendo prompts.
+
+---
+
 ## 2026-09-22 · Cowork formatea `apps/studio/` para desbloquear al ejecutor
 
 **Quién:** cowork.
