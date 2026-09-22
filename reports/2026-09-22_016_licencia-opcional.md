@@ -35,8 +35,8 @@ No hubo cambios fuera del alcance. Los ejemplos y fixtures se conservaron intenc
 
 ## Lo que no pude verificar
 
-El CI remoto del commit final queda pendiente de que el commit documental se suba; las pruebas
-locales requeridas pasaron.
+Nada pendiente. El CI remoto pasó: [run 35766505678](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/35766505678)
+validó configs y construyó `stuart-homeowners` y `_example`.
 
 ## Dónde dudaste
 
