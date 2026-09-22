@@ -1,3 +1,38 @@
+## 2026-09-22 · Revisión de 016 (aprobado con hallazgos) y regla nueva: un prompt a la vez
+
+**Quién:** cowork, con Vic.
+
+**Regla nueva, pedida por Vic:** cowork entrega **un solo prompt por vez**. El siguiente no se
+le da a Vic hasta que cowork revisó contra el diff el que acaba de terminar, porque la revisión
+puede cambiar el siguiente prompt. La regla ya existía en `prompts/00_GUIA_GLOBAL.md` ("nada
+avanza al siguiente prompt sin ese paso 4") y cowork la rompió hoy al entregar 016 y 017 juntos
+en el mismo mensaje. Ahora queda explícita también del lado de la entrega a Vic.
+
+**016, revisión contra el diff: aprobado con hallazgos.** El código es mínimo y correcto: el
+`required` del schema pierde `licenseNumber` (único cambio), el footer lo renderiza solo si
+existe, Stuart y el formulario ya no lo escriben, el gate no se tocó y el hallazgo de licencia
+desapareció solo. CI verde (run 35766505678). Hallazgos de proceso: la entrada de bitácora del
+ejecutor quedó en segundo lugar en vez de al inicio (movida por cowork), y **no agregó el avance
+en W-008 ni en W-103** como pedía el paso 7 (agregado por cowork). Veredicto en el reporte 016.
+
+**Siguiente:** prompt 017 (WICFL Studio A1), sin cambios por esta revisión.
+
+---
+
+## 2026-09-22 · W-008 reducido: licencia opcional y fuera del sitio
+
+**Quién:** agente ejecutor, siguiendo `prompts/2026-09-22_016_licencia-opcional.md`.
+
+Kevin decidió que los sitios WICFL no muestran número de licencia. El schema ahora admite el
+campo opcional sin romper configs existentes; el template solo lo renderiza si está presente,
+Stuart y el formulario de creación ya no lo escriben. Los fixtures y ejemplos conservan el
+campo para cubrir el caso opcional-presente. `npm run check`, ambos builds y la revisión de
+sintaxis del formulario pasaron. El gate dejó de reportar la licencia y sigue bloqueando, como
+debe, por email, dirección, GA4, GTM y CRM placeholders. W-008 queda en teléfono, email y
+dirección aprobados. Reporte: `reports/2026-09-22_016_licencia-opcional.md`.
+
+---
+
 ## 2026-09-22 · Revisión de W-119 (aprobado con hallazgos), fix de producción, PSL, y WICFL Studio (W-120, prompt 017)
 
 **Quién:** cowork, con Vic.
@@ -27,20 +62,6 @@ página; repo como base de datos; Cloudflare Access (ahora de un clic en Workers
 (estructura, tablero, borrador; escrito hoy, `prompts/2026-09-22_017_studio-a1-estructura.md`),
 A2 (editor, página nueva, imágenes), A3 (publicar, alta de sitio). Meta: Pavel empieza el Sitio
 #2 el 12-oct desde Studio, sin GitHub. Orden de Codex: 016 (licencia) → 017 (A1).
-
----
-
-## 2026-09-22 · W-008 reducido: licencia opcional y fuera del sitio
-
-**Quién:** agente ejecutor, siguiendo `prompts/2026-09-22_016_licencia-opcional.md`.
-
-Kevin decidió que los sitios WICFL no muestran número de licencia. El schema ahora admite el
-campo opcional sin romper configs existentes; el template solo lo renderiza si está presente,
-Stuart y el formulario de creación ya no lo escriben. Los fixtures y ejemplos conservan el
-campo para cubrir el caso opcional-presente. `npm run check`, ambos builds y la revisión de
-sintaxis del formulario pasaron. El gate dejó de reportar la licencia y sigue bloqueando, como
-debe, por email, dirección, GA4, GTM y CRM placeholders. W-008 queda en teléfono, email y
-dirección aprobados. Reporte: `reports/2026-09-22_016_licencia-opcional.md`.
 
 ---
 

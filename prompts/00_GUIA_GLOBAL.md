@@ -10,6 +10,11 @@ Léeme antes de ejecutar cualquier prompt de esta carpeta.
 4. **Cowork revisa.** No contra el reporte: contra el diff. Escribe su veredicto **dentro del
    mismo reporte** y luego actualiza `BITACORA.md` y `BACKLOG.md`
 5. **Nada avanza al siguiente prompt sin ese paso 4.**
+6. **Cowork le entrega a Vic un solo prompt por vez.** Aunque haya varios escritos y en cola, el
+   siguiente no se le da a Vic hasta que el anterior terminó y cowork lo revisó contra el diff,
+   porque la revisión puede cambiar el siguiente prompt. Nunca dos "Ejecuta el prompt …" en el
+   mismo mensaje. (Regla explícita de Vic, 2026-09-22, después de que cowork entregó 016 y 017
+   juntos.)
 
 ## Cómo se entrega el prompt a Codex
 

@@ -59,3 +59,26 @@ W-103 pueda pasar en producción.
 ## Commits
 
 - `0a8fd39` — `feat(schema): make contact.licenseNumber optional; render it only when present`
+
+## Revisión de cowork
+
+**2026-09-22 · Aprobado con hallazgos.** Revisado contra el diff (`0a8fd39`, `d7c12ac`,
+`8861c3d`).
+
+**Código:** exactamente lo pedido y nada más. El único cambio al `required` del schema es quitar
+`licenseNumber`; `minLength: 1` se conserva; el footer envuelve la sección entera (etiqueta
+incluida) en el condicional, así que no queda una etiqueta huérfana; Stuart y `createSite()`
+pierden el campo; fixtures y ejemplos intactos; gate sin tocar; sin cambios en wrangler,
+workflows ni pods. Evidencia de render correcta en ambos sentidos (0 coincidencias en Stuart, 3
+en `_example`). CI verde.
+
+**Hallazgos (de proceso, corregidos por cowork):**
+1. La entrada de bitácora quedó en segundo lugar, no al inicio. Movida.
+2. El paso 7 pedía agregar el avance al final de W-008 y W-103 en `BACKLOG.md`; no se hizo.
+   Agregado.
+
+**Hallazgo nuevo que sale de esta revisión:** el teléfono placeholder de Stuart
+(`+17725550100` / `(772) 555-0100`) **no** lo detecta el gate: el patrón busca números que
+terminan en `0000000` y este termina en `0100`. El gate pasaría con un teléfono falso en
+producción. Anotado en W-103; se resuelve cuando entre el número real de GoTo, y conviene que
+el prompt de higiene agregue un patrón para `555-01xx` (rango reservado para ficción).
