@@ -4,24 +4,26 @@
 `stuarthomeownersinsurance.com`; it deliberately separates the permanent rehearsal environment
 from the production apex.
 
-## Day-before preconditions
+## Preconditions, in this order
 
-0. **Before the production dispatch**, make the separately reviewed production config correction:
-   current Wrangler rejects `custom_domain = true` patterns containing `/*`; custom domains use
-   the hostname only. W-119 did not change `wrangler.pod-1.toml` because its prompt explicitly
-   prohibited it. The rehearsal failure documented in its report established this as a required
-   pre-launch fix.
-1. Vic merges the approved, real Site #1 values into `sites/stuart-homeowners/site.config.json`.
-   The production-readiness gate must contain no placeholder findings.
-2. Vic runs **Deploy Cloudflare Workers** from GitHub Actions with `target: rehearsal` and
-   `confirm: deploy`. The run must be green, its W-103 output must be clean, and
-   `https://preview.stuarthomeownersinsurance.com/` must serve the final content with valid
-   HTTPS. The rehearsal target still runs the gate, while production would block on any finding.
-3. Pavel completes the content and conversion checks in `docs/QA_CHECKLIST.md`.
-4. Vic updates the GitHub `CLOUDFLARE_API_TOKEN` to include the zone permission needed to create
-   Workers routes/custom domains, then re-runs rehearsal successfully. The current token uploads
-   a Worker and assets but Cloudflare rejects `zones/.../workers/routes` with "No access to the
-   specified resource." Do not broaden it beyond the least privilege necessary.
+Order matters: the rehearsal in step 3 cannot go green until steps 1 and 2 are done.
+
+1. ~~Production config correction~~ **Done 2026-09-22 (cowork).** `wrangler.pod-1.toml` now
+   declares both custom domains as bare hostnames. Wrangler 4 rejects `/*` and paths on custom
+   domains (found by the W-119 rehearsal, run 35764615432); the rehearsal config's hostname-only
+   form passed Wrangler's validation in run 35764722059, which failed later only on permissions.
+2. **Vic updates the Cloudflare API token** behind the GitHub secret `CLOUDFLARE_API_TOKEN`: add
+   **Zone → Workers Routes → Edit**, scoped to the `stuarthomeownersinsurance.com` zone (add each
+   future site's zone to the same token as it joins Cloudflare). Keep the existing Workers Scripts
+   permission. Nothing broader. The current token uploads a Worker and assets but Cloudflare
+   rejects `zones/.../workers/routes` with "No access to the specified resource."
+3. **Rehearsal run green.** GitHub Actions → **Deploy Cloudflare Workers** → `target: rehearsal`,
+   `confirm: deploy`. `https://preview.stuarthomeownersinsurance.com/` serves Site #1 over valid
+   HTTPS with `X-Robots-Tag: noindex, nofollow`; apex and `www` unchanged.
+4. Vic merges the approved, real Site #1 values into `sites/stuart-homeowners/site.config.json`.
+5. Rehearsal run again: green, and this time the W-103 output is **clean** (no findings). That
+   is the signal production will pass the gate.
+6. Pavel completes the content and conversion checks in `docs/QA_CHECKLIST.md`.
 
 ## Launch sequence, 9 October
 

@@ -78,3 +78,45 @@
 
 - `e7b5c84` — `feat(deploy): rehearsal target on a preview subdomain, dispatch-only production deploy`
 - `f777676` — `fix(deploy): use valid custom-domain hostname for rehearsal`
+
+## Revisión de cowork
+
+**2026-09-22 · Aprobado con hallazgos.** Revisado contra el diff (`e7b5c84`, `f777676`,
+`ece912d`), no contra este reporte.
+
+**El ensayo hizo exactamente su trabajo: encontró dos bloqueadores del launch dos semanas
+antes.** Sin él, el 9 de octubre el deploy de producción habría fallado dos veces seguidas:
+primero por los patterns `/*` que Wrangler 4 rechaza en custom domains, y después por el token
+sin permiso de rutas, con el apex ya sin sus registros `A` (paso 2 del runbook) y el dominio sin
+resolver. Que el run no esté verde no es fracaso del prompt; es su resultado más valioso.
+
+**Verificado en el diff:**
+- `deploy.yml`: solo `workflow_dispatch`; primer step aborta si `confirm != 'deploy'`;
+  `continue-on-error` del gate condicionado a `inputs.target == 'rehearsal'`, así que production
+  sigue fail-closed; el config se elige por target. Trigger `push` comentado, no borrado.
+- `wrangler.pod-1.rehearsal.toml`: una sola ruta, `WICFL_REHEARSAL = "1"` solo aquí, comentario
+  que prohíbe rutas de producción.
+- `build-pod.mjs`: `addRoute` impide que un alias sobrescriba un dominio real y valida que el
+  alias apunte a un slug del pod. Mejor que lo pedido.
+- Worker: header `noindex` solo con la variable de ensayo; producción no toca headers.
+- `wrangler.pod-1.toml` y `sites/stuart-homeowners/**` sin cambios, como exigía el prompt.
+- Bitácora al inicio; W-119 con el avance agregado al final de la fila, sin sobreescribir.
+
+**Hallazgos:**
+1. **Patterns de producción corregidos por cowork** (fuera de este prompt, que lo prohibía):
+   `wrangler.pod-1.toml` pasa a hostnames sin `/*`. Evidencia de que el formato es válido: el run
+   35764722059 pasó la validación de Wrangler con ese mismo formato y falló después, solo en
+   permisos. Dos líneas de config espejo de un fix ya validado; no justifica un prompt.
+2. **Orden del runbook incorrecto.** Las precondiciones pedían rehearsal verde (paso 2) antes de
+   arreglar el token (paso 4), que es lo que impide que sea verde. Reordenado por cowork, con el
+   permiso exacto: **Zone → Workers Routes → Edit** en la zona de Stuart (documentación de
+   Cloudflare: "Workers Routes Write for every affected zone").
+3. `scripts/test-pod-worker.mjs` no está conectado a `npm run check` ni a CI; hoy solo corre a
+   mano. Se anota para el prompt de higiene, no es bloqueante.
+4. Warnings preexistentes del build (`index` duplicado en content, Tailwind sin `content`): se
+   anotan para higiene.
+5. Cuando PSL entre al pod, su zona se agrega al mismo token y su alias `preview.` a
+   `pods/pod-1.json`.
+
+**Queda abierto W-119** hasta el rerun verde con los `curl` de `preview.`, apex y `www`
+pegados abajo. Depende solo de que Vic actualice el token.

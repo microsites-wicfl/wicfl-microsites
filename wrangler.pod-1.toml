@@ -3,7 +3,7 @@
 # pods/pod-1.json for how dist/pods/pod-1/ (the "directory" below) gets assembled.
 #
 # Adding a site to this pod: add its slug to pods/pod-1.json, then add its apex + www domain as
-# a [[routes]] pair below (custom_domain = true asks Cloudflare to manage the DNS record). Both
+# a [[routes]] pair below, hostname only (custom_domain = true asks Cloudflare to manage the DNS record). Both
 # steps are on you — build-pod.mjs only knows the site list, not which domains the deployed
 # Worker should actually answer for.
 name = "wicfl-pod-1"
@@ -15,9 +15,11 @@ directory = "dist/pods/pod-1/sites"
 binding = "ASSETS"
 
 [[routes]]
-pattern = "stuarthomeownersinsurance.com/*"
+# Custom domains take a hostname only; Wrangler 4 rejects "/*" and paths (W-119 rehearsal,
+# run 35764615432). The Worker receives every path on the hostname.
+pattern = "stuarthomeownersinsurance.com"
 custom_domain = true
 
 [[routes]]
-pattern = "www.stuarthomeownersinsurance.com/*"
+pattern = "www.stuarthomeownersinsurance.com"
 custom_domain = true
