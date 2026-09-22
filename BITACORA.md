@@ -1,3 +1,35 @@
+## 2026-09-22 · Revisión de W-119 (aprobado con hallazgos), fix de producción, PSL, y WICFL Studio (W-120, prompt 017)
+
+**Quién:** cowork, con Vic.
+
+**W-119, revisión contra el diff: aprobado con hallazgos.** El ensayo de deploy no quedó verde, y
+ese es su mejor resultado: encontró dos fallas que habrían tumbado el launch del 9-oct, con el
+apex ya sin sus registros `A`. (1) Wrangler 4 rechaza `/*` en custom domains; (2) el token del
+secret `CLOUDFLARE_API_TOKEN` no tiene permiso de rutas de zona. Cowork corrigió directo
+`wrangler.pod-1.toml` (hostnames sin `/*`; mismo formato que el run 35764722059 ya validó) y
+reordenó las precondiciones de `docs/LAUNCH_RUNBOOK.md`, que pedían ensayo verde antes del fix
+del token que lo hace posible. **Acción de Vic:** agregar **Zone → Workers Routes → Edit** en la
+zona de Stuart al token y reintentar `rehearsal`. Veredicto completo en el reporte 015.
+
+**Kevin, 22-sep por Zoom:** dominio del Sitio #2 `portsaintluciehomeinsurance.com` y teléfono
+1 772 335 4779. WHOIS: registrado hoy en GoDaddy, fuera de Cloudflare Registrar por segunda vez.
+Dominio en inglés → el Sitio #2 no es el sitio en español. Pendiente con Kevin: si el número es
+un DID nuevo de GoTo, quién compra los dominios de aquí en adelante, y el sitio en español.
+Anotado en W-007, W-024 y W-031. Cowork le dio a Vic un copy para preguntarlo.
+
+**WICFL Studio (W-120).** Vic volvió a plantear que el formulario de Pavel es poco amigable y que
+es su mayor bloqueo para capacitarlo. Cowork le dio la razón en el diagnóstico: el formulario
+expone git disfrazado. Lo que se defendió al inicio de esta conversación fue la capa de abajo
+(git, PR, preview, gates), no la interfaz. Plan aprobado por Vic: una app con vocabulario
+Borrador → Vista previa → Publicar → En vivo; **un borrador por sitio** en vez de un PR por
+página; repo como base de datos; Cloudflare Access (ahora de un clic en Workers, identidad por
+`ctx.access`); interfaz en español; escritura limitada a `sites/<slug>/`. Tres prompts: A1
+(estructura, tablero, borrador; escrito hoy, `prompts/2026-09-22_017_studio-a1-estructura.md`),
+A2 (editor, página nueva, imágenes), A3 (publicar, alta de sitio). Meta: Pavel empieza el Sitio
+#2 el 12-oct desde Studio, sin GitHub. Orden de Codex: 016 (licencia) → 017 (A1).
+
+---
+
 ## 2026-09-22 · W-119: ensayo de deploy llega a Cloudflare, bloqueado al crear la ruta DNS
 
 **Quién:** agente ejecutor, siguiendo `prompts/2026-09-21_015_ensayo-deploy-produccion.md`.
