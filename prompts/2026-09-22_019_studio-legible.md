@@ -1,3 +1,6 @@
+> **Cerrado sin ejecutor el 2026-09-22:** cowork escribió la A1 completa (excepción en `CLAUDE.md`).
+> Ver `reports/2026-09-22_019_studio-legible.md`. No ejecutar este archivo.
+
 # 2026-09-22_019 — Studio: reescribir `apps/studio/` como código legible y arreglar la vista de sitio
 
 **Backlog:** W-120 (pieza 1 de 3 de A1)

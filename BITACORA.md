@@ -1,3 +1,23 @@
+## 2026-09-22 · WICFL Studio A1 escrita por cowork (excepción autorizada)
+
+**Quién:** cowork, con autorización de Vic.
+
+Tras cinco intentos del ejecutor sin avance, Vic aprobó invertir papeles solo para Studio A1:
+cowork escribe y verifica, el ejecutor revisa. Registrado como excepción en `CLAUDE.md`.
+
+Entregado `apps/studio/` completo: backend modular (acceso, guardia de rutas, cliente GitHub,
+modelo de sitios, estado de vista previa), interfaz vanilla en español con tablero, sitios de
+prueba aparte, panel de vista previa que se refresca solo, "Editada", descartar con confirmación
+y aviso de cambios sin guardar. **25 pruebas verdes en el equipo de Vic**, con un GitHub en
+memoria de ramas reales; mutation testing en cuatro puntos críticos (una falla detectada en el
+propio falso y corregida); prueba en Chromium real de punta a punta sin errores de JavaScript.
+Reporte: `reports/2026-09-22_019_studio-legible.md`.
+
+Pendiente: revisión adversarial del ejecutor (prompt 020, que además conecta las pruebas a CI),
+y despliegue + prueba real por Vic con los pasos del README. W-120 sigue abierto.
+
+---
+
 ## 2026-09-22 · 019, segundo intento: parcial otra vez (33 s, `f57471b`)
 
 **Quién:** cowork.

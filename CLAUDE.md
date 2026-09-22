@@ -32,6 +32,14 @@ contiene la documentación de arquitectura y el sistema de trabajo. El primer tr
 | **Pavel** | Lead del proyecto WICFL. Opera la fábrica desde Fase 3 |
 | **Kevin** | Owner. Dirección de negocio, nichos, presupuesto, decisión de Gate B |
 
+**Excepción registrada, 2026-09-22 — WICFL Studio A1 (`apps/studio/`):** el código de esta
+fase lo escribió cowork, no el ejecutor. Autorizado por Vic después de cinco intentos del
+ejecutor (prompts 017, 018 ×2, 019 ×2) que en total produjeron ~170 líneas y un test, con una
+regresión y código minificado a mano que le impedía al propio ejecutor editarlo. Los papeles se
+invierten solo para esta pieza: cowork escribe y verifica (tests + prueba en navegador), el
+ejecutor hace una revisión adversarial del código de cowork con su propio prompt y reporte. La
+regla general no cambia: el trabajo de producto lo hace el ejecutor.
+
 **Vic no ejecuta ningún comando, ni siquiera de lectura.** Ni `git status`, ni `ls`, ni `npm`.
 No existe "que Vic lo corra en su terminal": si un doc lo sugiere, ese doc está mal.
 
