@@ -1,3 +1,16 @@
+## 2026-09-23 · Studio lee el estado de la vista previa por el API de Actions
+
+**Quién:** cowork (dentro de la excepción de Studio A1).
+
+Al crear el token de Studio, Vic no encontró el permiso "Checks" para tokens fine-grained: la
+documentación del endpoint `/commits/:sha/check-runs` lo menciona, pero la interfaz no lo ofrece.
+En lugar de pedir un token clásico con más alcance, Studio ahora lee los jobs de Actions del
+último commit del borrador (`/actions/runs?head_sha=` → `/actions/runs/:id/jobs`), que traen el
+mismo `name`/`status`/`conclusion` y solo necesitan "Actions: read". `preview.js` no cambió; el
+GitHub simulado de las pruebas se actualizó al mismo API. 27 pruebas verdes. README actualizado.
+
+---
+
 ## 2026-09-23 · 023 aprobado; cowork asume reportes, bitácora y backlog
 
 **Quién:** cowork.
