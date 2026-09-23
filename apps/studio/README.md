@@ -26,7 +26,7 @@ No hay base de datos: el repositorio es la base de datos.
 - **Lecturas:** si existe el borrador, la lista de páginas y su contenido salen de él; si no,
   de `main`. Lo guardado es lo que se ve al reabrir.
 - **Vista previa:** la produce `.github/workflows/preview.yml` en el PR del borrador. Studio
-  solo la lee: el link del comentario con `<!-- wicfl-preview:<slug> -->`, y los checks del
+  solo la lee: el link del comentario con `<!-- wicfl-preview:<slug> -->`, y los jobs de Actions del
   último commit del borrador. Estados: sin borrador / preparando / lista / falló (con el nombre
   del check que falló).
 - **Límite de escritura:** `src/paths.js` solo acepta rutas bajo `sites/<slug>/content/`, con
@@ -46,9 +46,9 @@ GitHub Actions despliega Studio al cambiar `apps/studio/`, y Codex puede relanza
 Lo único que hace Vic en el navegador es:
 
 1. Crear un **token de GitHub** fine-grained, solo para `microsites-wicfl/wicfl-microsites`:
-   Contents read/write, Pull requests read/write, Commit statuses read, Checks read, Metadata
-   read. El token de content-form tiene Contents y Pull requests pero probablemente no Checks:
-   conviene uno nuevo solo para Studio.
+   **Contents: read/write, Pull requests: read/write, Actions: read-only** (Metadata se pone
+   solo). Los tokens fine-grained no ofrecen el permiso "Checks", por eso Studio lee el estado
+   de los jobs con el API de Actions. Conviene un token nuevo solo para Studio.
 2. Guardarlo como secret del repositorio `STUDIO_GITHUB_TOKEN` y guardar la lista de correos de
    Vic y Pavel como `STUDIO_ALLOWED_EMAILS`.
 3. Activar Access en el Worker `wicfl-studio` con una política

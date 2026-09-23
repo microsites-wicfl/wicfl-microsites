@@ -140,8 +140,13 @@ export class FakeGitHub {
     if ((match = path.match(/^\/issues\/(\d+)\/comments$/))) {
       return { body: this.comments.get(Number(match[1])) || [] };
     }
-    if ((match = path.match(/^\/commits\/([^/]+)\/check-runs$/))) {
-      return { body: { check_runs: this.checkRunsBySha.get(match[1]) || [] } };
+    if (path === "/actions/runs" && method === "GET") {
+      // One workflow run per commit that has jobs recorded; its id is the commit sha.
+      const head = query.get("head_sha");
+      return { body: { workflow_runs: this.checkRunsBySha.has(head) ? [{ id: head }] : [] } };
+    }
+    if ((match = path.match(/^\/actions\/runs\/([^/]+)\/jobs$/))) {
+      return { body: { jobs: this.checkRunsBySha.get(match[1]) || [] } };
     }
     return notFound;
   }

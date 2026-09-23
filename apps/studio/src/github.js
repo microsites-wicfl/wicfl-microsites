@@ -124,8 +124,14 @@ export class GitHub {
     return this.request(`${this.repo}/issues/${number}/comments?per_page=100`);
   }
 
+  // Jobs of every Actions run on this commit ({ name, status, conclusion }). Read through the
+  // Actions API rather than /check-runs: fine-grained tokens can be granted "Actions: read" but
+  // GitHub does not offer them the "Checks" permission.
   async checkRuns(sha) {
-    const result = await this.request(`${this.repo}/commits/${sha}/check-runs?per_page=100`);
-    return result.check_runs || [];
+    const result = await this.request(`${this.repo}/actions/runs?head_sha=${sha}&per_page=100`);
+    const jobs = await Promise.all(
+      (result.workflow_runs || []).map((run) => this.request(`${this.repo}/actions/runs/${run.id}/jobs?per_page=100`)),
+    );
+    return jobs.flatMap((page) => page.jobs || []);
   }
 }
