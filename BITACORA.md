@@ -1,3 +1,18 @@
+## 2026-09-23 · Teléfono de Stuart confirmado; prompt 022
+
+**Quién:** cowork.
+
+Kevin dio el teléfono de Stuart (1 772 247 0106) y confirmó que cada sitio tiene su propio
+número; el 1 772 335 4779 queda para PSL. Con email y "sin dirección" ya definidos, los datos de
+contacto de Stuart quedan completos del lado de Kevin. Escrito
+`prompts/2026-09-23_022_stuart-contacto-real.md`: dirección opcional (mismo patrón que la
+licencia), datos reales en el config de Stuart, y dos patrones nuevos en el gate de producción.
+**Hallazgo:** el gate no detectaba el teléfono de ficción `(772) 555-0100` ni las marcas "Demo"
+que siguen en `brand.name` y `seo` de Stuart; con el 022 los atrapa. Los textos reales de marca y
+SEO de Stuart quedan como pendiente de Pavel antes del 9-oct.
+
+---
+
 ## 2026-09-23 · Kevin: email, teléfono y dirección de Stuart
 
 **Quién:** cowork, a partir de la respuesta de Kevin al update del 22-sep.
