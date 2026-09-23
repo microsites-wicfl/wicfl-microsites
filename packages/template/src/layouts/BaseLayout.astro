@@ -29,13 +29,10 @@ const structuredData = JSON.stringify({
   name: site.brand.name,
   telephone: site.contact.trackingPhone,
   email: site.contact.email,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: address.street,
-    addressLocality: address.city,
-    addressRegion: address.state,
-    postalCode: address.zip
-  },
+  ...(address ? { address: {
+    "@type": "PostalAddress", streetAddress: address.street, addressLocality: address.city,
+    addressRegion: address.state, postalCode: address.zip
+  } } : {}),
   ...(site.geo.serviceArea ? { areaServed: site.geo.serviceArea } : {})
 }).replace(/</g, "\\u003c");
 ---
@@ -96,7 +93,7 @@ const structuredData = JSON.stringify({
       <div class="shell footer-grid">
         <section>
           <p class="footer-brand">{site.brand.name}</p>
-          <address>{address.street}<br />{address.city}, {address.state} {address.zip}</address>
+          {address && <address>{address.street}<br />{address.city}, {address.state} {address.zip}</address>}
         </section>
         <section>
           <p class="footer-label">Talk to us</p>

@@ -46,13 +46,13 @@
     },
     "contact": {
       "type": "object", "description": "Single site-local NAP capture. It is the template source of truth and must be reconciled with the GBP before launch.", "additionalProperties": false,
-      "required": ["trackingPhone", "displayPhone", "email", "address"],
+      "required": ["trackingPhone", "displayPhone", "email"],
       "properties": {
         "trackingPhone": { "type": "string", "description": "Required call-tracking number in E.164 form; rendered and measured by every template contact surface.", "pattern": "^\\+[1-9][0-9]{1,14}$" },
         "displayPhone": { "type": "string", "description": "Human-readable rendering of the tracking phone; its formatting is presentation-only.", "minLength": 7, "maxLength": 32 },
         "email": { "type": "string", "description": "Approved public contact email.", "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", "maxLength": 254 },
         "address": {
-          "type": "object", "description": "Approved street address for local NAP and disclosures.", "additionalProperties": false,
+          "type": "object", "description": "Optional street address. If present the template shows it; WICFL sites do not show one per Kevin's 2026-09-23 decision.", "additionalProperties": false,
           "required": ["street", "city", "state", "zip"],
           "properties": {
             "street": { "type": "string", "description": "Street address including suite when applicable.", "minLength": 5, "maxLength": 120 },
