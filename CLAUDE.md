@@ -40,6 +40,12 @@ invierten solo para esta pieza: cowork escribe y verifica (tests + prueba en nav
 ejecutor hace una revisión adversarial del código de cowork con su propio prompt y reporte. La
 regla general no cambia: el trabajo de producto lo hace el ejecutor.
 
+**Ampliación, 2026-09-23 — Studio A2 y A3:** Vic autorizó que cowork escriba también A2 (editor
+con campos, validación, ligas en vivo, página nueva, borrar página, imágenes) y A3 (Publicar y
+alta de sitio), con el mismo reparto: cowork escribe y verifica; el ejecutor sube, despliega y
+revisa. Motivo: sostener el 1-oct para el panel completo. Fuera de `apps/studio/` la regla
+general sigue igual.
+
 **Vic no ejecuta ningún comando, ni siquiera de lectura.** Ni `git status`, ni `ls`, ni `npm`.
 No existe "que Vic lo corra en su terminal": si un doc lo sugiere, ese doc está mal.
 
