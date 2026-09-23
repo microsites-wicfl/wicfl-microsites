@@ -1,3 +1,28 @@
+## 2026-09-23 · Primera prueba real de Studio: el ciclo completo funciona
+
+**Quién:** Vic (prueba), cowork (revisión).
+
+Con el deploy de `b65a639` (run 35913898103) Studio lista los sitios y el ciclo completo
+funcionó contra GitHub real: Vic abrió `flood-insurance.md` de Stuart, guardó un cambio, la
+página quedó "Editada", la vista previa pasó a "preparando" y luego a "falló", y "Descartar
+borrador" dejó todo limpio (no queda ninguna rama `draft/*` en el remoto). La vista previa falló
+por una razón correcta: la línea de prueba quedó dentro del encabezado de la página (entre los
+`---`), eso rompe el YAML y el build. Studio hizo lo que debía, pero muestra el problema mal.
+
+Hallazgos para A2, en orden de impacto:
+1. **El encabezado (frontmatter) está expuesto como texto.** Pavel puede romper una página con
+   una línea mal puesta. A2: campos separados (título, descripción, etiqueta del menú) y el
+   cuerpo aparte; y validación antes de guardar, con mensaje en español.
+2. **El mensaje de falla no ayuda** ("Preview stuart-homeowners: failure"). A2: explicar la causa
+   en palabras de Pavel; con la validación del punto 1 casi no debería ocurrir.
+3. **"Publicado en stuarthomeownersinsurance.com" es falso antes del 9-oct.** Studio toma como
+   publicado todo sitio listado en un pod. A2: "En vivo" solo si el dominio responde con el sitio;
+   si no, "Aún no sale en vivo".
+4. **Pedido de Vic: liga para ver el sitio en vivo** desde el tablero y desde el sitio (y por
+   página). Antes del launch, liga a la versión actual en el ensayo.
+
+---
+
 ## 2026-09-23 · Causa real del 502: fetch llamado como método del cliente de GitHub
 
 **Quién:** cowork.
