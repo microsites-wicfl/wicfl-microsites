@@ -41,7 +41,9 @@ const config = JSON.parse(readFileSync(configPath, "utf8"));
 const patterns = [
   { name: "placeholder marker", regex: /placeholder/i },
   { name: "pending marker", regex: /^pending_/i },
-  { name: "placeholder tracking phone (ends in 0000000)", regex: /0000000$/ }
+  { name: "placeholder tracking phone (ends in 0000000)", regex: /0000000$/ },
+  { name: "fictional 555-01xx phone", regex: /(?:\+1\d{3}55501\d{2}|\b\d{3}[- )]555[- ]01\d{2}\b)/ },
+  { name: "demo marker", regex: /\bdemo\b/i }
 ];
 
 const findings = [];
@@ -49,6 +51,7 @@ const findings = [];
 function walk(value, path) {
   if (typeof value === "string") {
     for (const pattern of patterns) {
+      if (pattern.name === "demo marker" && path !== "brand.name" && !path.startsWith("seo.")) continue;
       if (pattern.regex.test(value)) {
         findings.push({ path, value, pattern: pattern.name });
       }
