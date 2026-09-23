@@ -53,6 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.changed.outputs.matrix }}
+      count: ${{ steps.changed.outputs.count }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -66,6 +67,9 @@ jobs:
   build-sites:
     name: Build ${{ matrix.site }}
     needs: discover-sites
+    # Changes that touch no site (for example only apps/studio) produce an empty matrix, and an
+    # empty matrix fails the whole run even though every job passed. Skip the job instead.
+    if: needs.discover-sites.outputs.count != '0'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

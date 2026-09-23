@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.changed.outputs.matrix }}
+      count: ${{ steps.changed.outputs.count }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,6 +36,8 @@ jobs:
   cleanup:
     name: Delete preview Worker for ${{ matrix.site }}
     needs: discover-sites
+    # An empty matrix fails the whole run; skip when the change touches no site.
+    if: needs.discover-sites.outputs.count != '0'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

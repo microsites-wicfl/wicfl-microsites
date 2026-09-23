@@ -1,3 +1,16 @@
+## 2026-09-23 · "Run failed" en CI con todos los jobs verdes
+
+**Quién:** cowork (aviso de Vic por los correos de GitHub).
+
+Desde `6768b2c`, cada push que solo toca `apps/studio/` marca "Validate and build" como fallido
+aunque todos los jobs pasan. Causa: `changed-sites.mjs` devuelve una matriz vacía cuando no
+cambió ningún sitio, y GitHub falla la corrida entera al evaluar una matriz vacía. El mismo
+problema existía latente en `preview.yml` y `preview-cleanup.yml`. Arreglo: el script también
+emite `count`, y los tres jobs de matriz se saltan con `if: count != '0'`. No era un problema
+de código ni de sitios; era ruido que entrenaba a ignorar los correos de CI.
+
+---
+
 ## 2026-09-23 · Primera prueba real de Studio: el ciclo completo funciona
 
 **Quién:** Vic (prueba), cowork (revisión).

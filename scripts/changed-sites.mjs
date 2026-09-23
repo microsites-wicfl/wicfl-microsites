@@ -43,3 +43,5 @@ const sites = !files || sharedInputChanged
     .sort((left, right) => left.localeCompare(right));
 
 process.stdout.write(`matrix=${JSON.stringify({ include: sites.map((site) => ({ site })) })}\n`);
+// An empty matrix makes GitHub fail the whole run, so callers skip the build job when count is 0.
+process.stdout.write(`count=${sites.length}\n`);
