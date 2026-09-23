@@ -48,7 +48,7 @@ Optional `theme` configures only a prebuilt variant and an accent color. This fo
 
 ### 4. NAP has one local capture, then launch reconciliation
 
-The config is the template's single NAP source: it has exactly one name, address, tracking phone, and display phone. JSON Schema cannot truthfully validate a remote Google Business Profile, so it does not pretend to. When a GBP exists, its optional Place ID enables W-029 launch QA to compare the config to the canonical profile before publishing. Until then, the approved capture is the source of truth; duplicating NAP fields would create drift.
+The config is the template's single NAP source: it has exactly one name, tracking phone, and display phone, plus an optional address (WICFL sites carry none since 23 Sep 2026, by Kevin's decision; the template renders it only when present). JSON Schema cannot truthfully validate a remote Google Business Profile, so it does not pretend to. When a GBP exists, its optional Place ID enables W-029 launch QA to compare the config to the canonical profile before publishing. Until then, the approved capture is the source of truth; duplicating NAP fields would create drift.
 
 ### 5. Differentiation is structured for humans; CI evaluates output
 

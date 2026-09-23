@@ -50,8 +50,8 @@ in the bitácora.
 - **Florida insurance advertising rules apply on every page.** No misleading coverage claims
   and correct entity naming. A license number is optional; Kevin decided on 22 Sep 2026 that
   WICFL sites do not carry one.
-- **NAP consistency.** Name, address and phone must match the Google Business Profile
-  exactly. Inconsistency actively suppresses local rankings.
+- **NAP consistency.** Name and phone must match the Google Business Profile exactly (WICFL
+  sites show no mailing address, per Kevin, 23 Sep 2026). Inconsistency actively suppresses local rankings.
 - **No AI generated content shipped unreviewed.** See the section below.
 
 ## How AI may and may not be used
@@ -105,7 +105,7 @@ Before a page goes live, check:
 
 1. **If the config carries a license number, it renders correctly.** WICFL sites do not carry
    one by Kevin's decision (22 Sep 2026), so it is never typed into page content.
-2. **NAP matches exactly.** Name, address and phone as written on the page match the Google
+2. **NAP matches exactly.** Name and phone as written on the page match the Google
    Business Profile character for character. A mismatch actively suppresses local rankings, not
    just a compliance nitpick.
 3. **No guaranteed or absolute coverage claims.** Phrases like "guaranteed approval," "always

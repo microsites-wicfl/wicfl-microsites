@@ -33,7 +33,7 @@ not before it. Do not wait on those to start writing.
 | `primaryKeyword` and `secondaryKeywords` reflect real research, not placeholders | Manual — this is W-016's output landing in the config |
 | Sitemap, robots.txt, canonical tags, schema.org `InsuranceAgency` markup | **Not built yet (W-023, Block B).** Required before launch, built during Phase 3 |
 | Search Console property verified, sitemap submitted | **Not built yet.** Vic sets this up once the site has a real domain attached |
-| NAP (name, address, phone) on the page matches the Google Business Profile exactly | Manual — mismatches actively suppress local rankings, this is not a nitpick |
+| Name and phone on the page match the Google Business Profile exactly (no mailing address on WICFL sites) | Manual — mismatches actively suppress local rankings, this is not a nitpick |
 
 ## 3 · Content and compliance
 

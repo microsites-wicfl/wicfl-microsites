@@ -30,7 +30,7 @@ deploy if any of these are still placeholders.
 | `locale.primary`, `locale.alternates` | Required | Set once, at site creation |
 | `contact.trackingPhone`, `contact.displayPhone` | Required | Provisioned in GoTo (W-024) |
 | `contact.email` | Required | Kevin's approved public contact |
-| `contact.address` (street, city, state, zip) | Required | Kevin's approved address |
+| `contact.address` (street, city, state, zip) | Optional, not used on WICFL sites | If present, the template renders it; Kevin decided on 23 Sep 2026 that WICFL sites show no mailing address |
 | `contact.licenseNumber` | Optional, not used on WICFL sites | If present, the template renders it; Kevin decided on 22 Sep 2026 that WICFL sites do not carry one |
 | `contact.googleBusinessProfilePlaceId` | Optional | Once a GBP exists (W-006), for NAP reconciliation |
 | `products` (array, same catalog as `niche.product`) | Required | Which coverage pages this site will have |
@@ -73,8 +73,8 @@ once it's ranking and producing leads — don't build the long tail speculativel
 
 - **Logo file** (optional, but expected before a real launch) — placed at
   `sites/<slug>/public/<file>`, referenced from `brand.logo` in the config.
-- **Real contact details** (address, phone, email) that match the site's Google Business
-  Profile character for character — a mismatch actively suppresses local rankings, not just a
+- **Real contact details** (phone and email; no mailing address on WICFL sites since 23 Sep
+  2026) that match the site's Google Business Profile character for character — a mismatch actively suppresses local rankings, not just a
   compliance nitpick (`docs/CONTENT_STANDARDS.md`).
 
 ## 4 · Where each piece is documented in full

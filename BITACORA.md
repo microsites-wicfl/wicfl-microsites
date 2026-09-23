@@ -1,3 +1,15 @@
+## 2026-09-23 · Revisión del 022: datos de Stuart aplicados; bug en el patrón de teléfonos
+
+**Quién:** cowork.
+
+El ejecutor aplicó bien el 022 (dirección opcional, teléfono y email reales en Stuart, dos
+patrones nuevos en el gate; CI verde, run 35886077888), pero otra vez sin reporte, bitácora,
+backlog ni docs. Los docs y el reporte los hizo cowork. Hallazgo: la regex de teléfonos de
+ficción no atrapa el formato `(772) 555-0142`, que es justo el de `displayPhone`. Prompt 023,
+chico: corregir la regex y dejar una prueba permanente del gate conectada a CI.
+
+---
+
 ## 2026-09-23 · Teléfono de Stuart confirmado; prompt 022
 
 **Quién:** cowork.
