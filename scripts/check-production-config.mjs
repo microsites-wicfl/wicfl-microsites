@@ -27,7 +27,8 @@ if (siteDirectory.startsWith("_")) {
   process.exit(0);
 }
 
-const configPath = resolve(repositoryRoot, "sites", siteDirectory, "site.config.json");
+const sitesRoot = process.env.WICFL_SITES_ROOT || resolve(repositoryRoot, "sites");
+const configPath = resolve(sitesRoot, siteDirectory, "site.config.json");
 if (!existsSync(configPath)) {
   console.error(`Cannot check ${siteDirectory}: no site.config.json at ${configPath}.`);
   process.exit(1);
@@ -42,7 +43,7 @@ const patterns = [
   { name: "placeholder marker", regex: /placeholder/i },
   { name: "pending marker", regex: /^pending_/i },
   { name: "placeholder tracking phone (ends in 0000000)", regex: /0000000$/ },
-  { name: "fictional 555-01xx phone", regex: /(?:\+1\d{3}55501\d{2}|\b\d{3}[- )]555[- ]01\d{2}\b)/ },
+  { name: "fictional 555-01xx phone", regex: /(?:\+1\d{3}55501\d{2}|(?:\(\d{3}\)|\b\d{3}\b)[ .-]*555[ .-]*01\d{2}\b)/ },
   { name: "demo marker", regex: /\bdemo\b/i }
 ];
 
