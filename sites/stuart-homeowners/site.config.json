@@ -6,10 +6,9 @@
   "geo": { "city": "Stuart", "county": "Martin", "state": "FL", "serviceArea": ["Stuart", "Port Salerno", "Palm City"] },
   "locale": { "primary": "en", "alternates": [] },
   "contact": {
-    "trackingPhone": "+17725550100",
-    "displayPhone": "(772) 555-0100",
-    "email": "demo-placeholder@stuarthomeownersinsurance.com",
-    "address": { "street": "123 Placeholder Avenue", "city": "Stuart", "state": "FL", "zip": "34994" }
+    "trackingPhone": "+17722470106",
+    "displayPhone": "(772) 247-0106",
+    "email": "info@stuarthomeownersinsurance.com"
   },
   "products": ["homeowners"],
   "seo": {
