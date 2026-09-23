@@ -9,10 +9,15 @@
   "vars": {
     "GITHUB_OWNER": "microsites-wicfl",
     "GITHUB_REPO": "wicfl-microsites",
-    "GITHUB_BASE_BRANCH": "main"
+    "GITHUB_BASE_BRANCH": "main",
+    // Cloudflare Access for this Worker (Zero Trust > Access > Applications > wicfl-studio).
+    // Used to verify the Access token, because Workers with Static Assets do not receive ctx.access.
+    // If the Zero Trust team name is ever renamed, ACCESS_TEAM_DOMAIN must change with it.
+    "ACCESS_TEAM_DOMAIN": "https://flat-rain-592f.cloudflareaccess.com",
+    "ACCESS_AUD": "61d64884938b6f84feaba58eb61d10d4230e0bb1811f7ee2aae99a73dc0f00f7"
   },
-  // Local development only (`wrangler dev`): a fake Access identity. In production, Cloudflare
-  // Access runs before the Worker and ctx.access carries the real signed-in user.
+  // Local development only (`wrangler dev`): a fake Access identity through ctx.access. In production
+  // ctx.access stays empty (Static Assets router) and src/access.js reads the Access token instead.
   "access": {
     "dev": {
       "aud": "wicfl-studio-dev",

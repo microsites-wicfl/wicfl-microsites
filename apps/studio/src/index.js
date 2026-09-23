@@ -32,13 +32,14 @@ async function route(request, github, user) {
   throw new UserError("No encontrado.", 404);
 }
 
-export function createHandler(fetcher = fetch) {
+// fetcher reaches GitHub; accessFetcher reaches the Access public keys (both injectable for tests).
+export function createHandler(fetcher = fetch, accessFetcher = fetch) {
   return async function handle(request, env, ctx) {
     const url = new URL(request.url);
     if (!url.pathname.startsWith("/api/")) return env.ASSETS.fetch(request);
 
     try {
-      const user = await requireUser(ctx, env);
+      const user = await requireUser(request, ctx, env, accessFetcher);
       return json(await route(request, new GitHub(env, fetcher), user));
     } catch (error) {
       if (error instanceof UserError) return json({ error: error.message }, error.status);

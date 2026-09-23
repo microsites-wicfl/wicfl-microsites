@@ -36,9 +36,20 @@ No hay base de datos: el repositorio es la base de datos.
 
 ## Acceso
 
-Cloudflare Access protege el Worker antes de que corra el código; el Worker lee el correo con
-`ctx.access.getIdentity()`. Como segunda barrera, si la variable `ALLOWED_EMAILS` existe, el
-correo tiene que estar en ella (401 sin sesión, 403 si no está en la lista).
+Cloudflare Access protege el Worker antes de que corra el código. Para saber quién entró, el
+Worker primero prueba `ctx.access.getIdentity()` (lo que simula `wrangler dev`), pero en
+producción viene vacío: los Workers con Static Assets corren detrás de un router interno que no
+pasa `ctx.access`. Por eso `src/access.js` verifica el token que Access adjunta a cada petición
+(`Cf-Access-Jwt-Assertion` o la cookie `CF_Authorization`): firma RS256 contra las llaves públicas
+del equipo (`<ACCESS_TEAM_DOMAIN>/cdn-cgi/access/certs`, en caché una hora), audiencia
+`ACCESS_AUD`, emisor `ACCESS_TEAM_DOMAIN` y vigencia. Las dos variables están en
+`wrangler.jsonc`; no son secretas. **Si se renombra el equipo de Zero Trust (`flat-rain-592f`),
+hay que cambiar `ACCESS_TEAM_DOMAIN`.** Como segunda barrera, si la variable `ALLOWED_EMAILS`
+existe, el correo tiene que estar en ella (401 sin sesión, 403 si no está en la lista).
+
+Login: Access con **One-time PIN** como único método (código al correo) y la política
+reutilizable **Studio - Team** (Emails: los de Vic y Pavel). La duración de la sesión la fija
+esa política.
 
 ## Despliegue
 
@@ -58,7 +69,7 @@ Lo único que hace Vic en el navegador es:
 ## Desarrollo y pruebas
 
 ```sh
-npm test --prefix apps/studio        # 25 pruebas, sin dependencias, GitHub simulado en memoria
+npm test --prefix apps/studio        # 42 pruebas, sin dependencias, GitHub simulado en memoria
 npx wrangler dev --cwd apps/studio   # identidad falsa de access.dev; necesita GITHUB_TOKEN en .dev.vars
 ```
 

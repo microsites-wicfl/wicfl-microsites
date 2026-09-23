@@ -1,3 +1,22 @@
+## 2026-09-23 · Access activado; Studio no leía quién había entrado
+
+**Quién:** cowork (dentro de la excepción de Studio).
+
+Vic activó Zero Trust (plan Free, equipo `flat-rain-592f`), creó la política reutilizable
+"Studio - Team" con su correo y el de Pavel, la aplicó a todo el tráfico del Worker y dejó
+One-time PIN como único método de login. Codex subió los commits pendientes; el deploy de
+Studio quedó verde con los dos secretos (run 35904738599). En la primera prueba real, el login
+pasó pero Studio respondió "Tienes que iniciar sesión": según la documentación de Cloudflare,
+los Workers con Static Assets corren detrás de un router interno que no pasa `ctx.access`, así
+que `getIdentity()` siempre llega vacío en producción. Error de diseño de cowork en A1: las
+pruebas simulaban `ctx.access` y no podían verlo. Arreglo: `src/access.js` ahora verifica el
+token de Access (firma RS256 contra las llaves del equipo, audiencia, emisor, vigencia) y saca
+de ahí el correo; `ctx.access` se queda como primera opción para `wrangler dev`. 15 pruebas
+nuevas, incluidas firmas falsas, audiencia y emisor ajenos, token vencido y payload alterado;
+mutation testing sobre las cuatro verificaciones: cada una rompe al menos una prueba. 42 verdes.
+
+---
+
 ## 2026-09-23 · Studio lee el estado de la vista previa por el API de Actions
 
 **Quién:** cowork (dentro de la excepción de Studio A1).
