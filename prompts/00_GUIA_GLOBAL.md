@@ -16,6 +16,20 @@ Léeme antes de ejecutar cualquier prompt de esta carpeta.
    mismo mensaje. (Regla explícita de Vic, 2026-09-22, después de que cowork entregó 016 y 017
    juntos.)
 
+## Reportes, bitácora y backlog: los escribe cowork (cambio de proceso, 2026-09-23)
+
+El ejecutor dejó de entregar reporte, entrada de bitácora y avance de backlog en seis prompts
+seguidos (017 a 023), aunque el prompt lo pusiera como criterio de aceptación. Devolver un
+cambio de código correcto y verificado solo para que escriba tres archivos de texto es ceremonia
+que cuesta una vuelta más de Vic. Desde el 023:
+
+- **El ejecutor entrega código, pruebas y commits.** Si escribe reporte, mejor, pero no es
+  condición de aceptación.
+- **Cowork escribe siempre el reporte, la bitácora y el backlog a partir del diff**, que es de
+  donde ya salía la revisión de todos modos.
+- Lo que sí se exige al ejecutor: el mensaje de commit describe solo lo que contiene, y el
+  resumen que deja en el chat no declara cosas que no hizo.
+
 ## Vic no ejecuta nada (regla dura, reiterada por Vic el 2026-09-22)
 
 Vic no corre comandos, ni de lectura, ni un `git push`. **Todo lo que implique ejecutar se le

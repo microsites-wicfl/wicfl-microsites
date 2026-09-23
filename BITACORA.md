@@ -1,3 +1,17 @@
+## 2026-09-23 · 023 aprobado; cowork asume reportes, bitácora y backlog
+
+**Quién:** cowork.
+
+El 023 corrigió bien el patrón de teléfonos y dejó una prueba permanente del gate en
+`npm run check`; cowork lo verificó rompiendo la regex a propósito y la prueba lo atrapó. El
+ejecutor otra vez no entregó reporte, bitácora ni backlog, aunque el prompt decía que se
+devolvía. No se devuelve: el código es correcto y devolverlo por tres archivos de texto era una
+vuelta más de Vic sin valor. En su lugar se cambia el proceso (`prompts/00_GUIA_GLOBAL.md`):
+desde ahora cowork escribe siempre reporte, bitácora y backlog desde el diff; al ejecutor se le
+pide código, pruebas, commits honestos y un resumen que no declare lo que no hizo.
+
+---
+
 ## 2026-09-23 · Revisión del 022: datos de Stuart aplicados; bug en el patrón de teléfonos
 
 **Quién:** cowork.
