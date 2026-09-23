@@ -1,3 +1,16 @@
+## 2026-09-23 · Kevin: email, teléfono y dirección de Stuart
+
+**Quién:** cowork, a partir de la respuesta de Kevin al update del 22-sep.
+
+Kevin contestó los tres datos pendientes de Stuart: el **email** es tarea de Vic (W-114, el
+reenvío `info@stuarthomeownersinsurance.com` → `info@wicfl.com` que Kevin pidió el 9-sep y que
+sigue sin activarse); **no habrá dirección postal en los sitios** (decisión nueva: se quita del
+schema y del template igual que la licencia); y el **teléfono** dice que ya lo dio, preguntándole
+a Pavel. El único número registrado es 1 772 335 4779, que llegó el 22-sep en el hilo del dominio
+de PSL. Se le pregunta a Kevin si es de Stuart, de PSL o de ambos. Detalle en W-008 y W-114.
+
+---
+
 ## 2026-09-22 · Update al equipo y fechas estimadas de Studio
 
 **Quién:** cowork, a pedido de Vic.
