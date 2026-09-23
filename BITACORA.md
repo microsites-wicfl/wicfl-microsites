@@ -1,3 +1,17 @@
+## 2026-09-23 · Update al equipo; contacto de Stuart verificado en el código
+
+**Quién:** cowork, a pedido de Vic.
+
+Verificado que lo que pidió Kevin ya está en `main` (`1977a6c`): el teléfono (772) 247-0106 y el
+correo info@stuarthomeownersinsurance.com salen en el botón del header y en el footer ("Talk to
+us"), y sin dirección ni licencia. Ese cambio entró directo a `main`, así que ninguna vista previa
+pública lo muestra todavía: las previews de los PR viejos (pr5–pr8) tienen el teléfono de
+ficción, y el ensayo en `preview.stuarthomeownersinsurance.com` sigue bloqueado por el permiso
+del token. Para verlo, Vic abre un borrador de Stuart en Studio (con eso también prueba el estado
+"lista"). Copy del día para el equipo enviado por Vic.
+
+---
+
 ## 2026-09-23 · "Run failed" en CI con todos los jobs verdes
 
 **Quién:** cowork (aviso de Vic por los correos de GitHub).
