@@ -25,7 +25,9 @@ function fromBase64(value) {
 export class GitHub {
   constructor(env, fetcher = fetch) {
     this.env = env;
-    this.fetcher = fetcher;
+    // Never call the platform fetch as a method of this object: in Workers, fetch invoked with a
+    // foreign `this` throws "Illegal invocation" before any request leaves. Wrap it instead.
+    this.fetcher = (input, init) => fetcher(input, init);
     this.repo = `/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}`;
   }
 

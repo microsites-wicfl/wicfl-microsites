@@ -221,3 +221,14 @@ test("a missing token fails with a clear message instead of calling GitHub", asy
   await assert.rejects(github.request("/rate_limit"), /GITHUB_TOKEN is not set/);
   assert.equal(called, false);
 });
+
+test("the platform fetch is never called with the GitHub client as `this`", async () => {
+  // Mimics Workers: fetch throws "Illegal invocation" when called with a foreign `this`.
+  const { GitHub } = await import("../src/github.js");
+  const strictFetch = function (url, init) {
+    if (this !== undefined && this !== globalThis) throw new TypeError("Illegal invocation");
+    return Promise.resolve(Response.json({ ok: true }));
+  };
+  const github = new GitHub(env, strictFetch);
+  assert.deepEqual(await github.request("/rate_limit"), { ok: true });
+});

@@ -1,3 +1,17 @@
+## 2026-09-23 · Causa real del 502: fetch llamado como método del cliente de GitHub
+
+**Quién:** cowork.
+
+El recorte del token no bastó: el error siguió saliendo en la columna de `this.fetcher(` de
+`GitHub.request`. Causa: el cliente guardaba el `fetch` de la plataforma como propiedad y lo
+llamaba como `this.fetcher(...)`; en Workers, `fetch` invocado con un `this` ajeno lanza
+"Illegal invocation" antes de mandar nada. Las pruebas usaban un fetch falso que no tiene esa
+regla, por eso no lo vieron. Arreglo: el cliente envuelve el fetch en una función flecha. Prueba
+nueva con un fetch que imita la regla de Workers (verificada con mutante: sin el arreglo falla).
+45 verdes. El recorte del token y el log en una línea se quedan: son correctos por sí mismos.
+
+---
+
 ## 2026-09-23 · Login de Studio funciona; la llamada a GitHub falla antes de salir
 
 **Quién:** cowork.
