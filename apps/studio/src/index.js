@@ -43,7 +43,9 @@ export function createHandler(fetcher = fetch, accessFetcher = fetch) {
       return json(await route(request, new GitHub(env, fetcher), user));
     } catch (error) {
       if (error instanceof UserError) return json({ error: error.message }, error.status);
-      console.error(error);
+      // One line with name and message: Workers Logs split a multi-line error and dropped the message.
+      console.error(`Studio error: ${error?.name}: ${error?.message} | ${request.method} ${url.pathname}`);
+      console.error(error?.stack);
       return json({ error: "Algo falló de nuestro lado. Intenta de nuevo; si sigue, avísale a Vic." }, 502);
     }
   };

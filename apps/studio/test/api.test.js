@@ -199,3 +199,25 @@ test("unexpected GitHub failures do not leak details", async () => {
   assert.equal(response.status, 502);
   assert.doesNotMatch(response.body.error, /secret/);
 });
+
+test("a token saved with a trailing newline or spaces still works", async () => {
+  const seen = [];
+  const { GitHub } = await import("../src/github.js");
+  const github = new GitHub({ ...env, GITHUB_TOKEN: "  ghp_example\n" }, async (url, init) => {
+    seen.push(init.headers.authorization);
+    return Response.json({ ok: true });
+  });
+  await github.request("/rate_limit");
+  assert.deepEqual(seen, ["Bearer ghp_example"]);
+});
+
+test("a missing token fails with a clear message instead of calling GitHub", async () => {
+  const { GitHub } = await import("../src/github.js");
+  let called = false;
+  const github = new GitHub({ ...env, GITHUB_TOKEN: "" }, async () => {
+    called = true;
+    return Response.json({});
+  });
+  await assert.rejects(github.request("/rate_limit"), /GITHUB_TOKEN is not set/);
+  assert.equal(called, false);
+});

@@ -3,7 +3,7 @@
 
 export class GitHubError extends Error {
   constructor(status, detail) {
-    super(`GitHub ${status}: ${detail}`);
+    super(`GitHub ${status}: ${String(detail).slice(0, 300)}`);
     this.status = status;
   }
 }
@@ -30,11 +30,14 @@ export class GitHub {
   }
 
   async request(path, { method = "GET", body } = {}) {
+    // A secret pasted with a trailing space or newline makes fetch reject the header outright.
+    const token = String(this.env.GITHUB_TOKEN || "").trim();
+    if (!token) throw new Error("GITHUB_TOKEN is not set on the Worker");
     const response = await this.fetcher(`https://api.github.com${path}`, {
       method,
       headers: {
         accept: "application/vnd.github+json",
-        authorization: `Bearer ${this.env.GITHUB_TOKEN}`,
+        authorization: `Bearer ${token}`,
         "user-agent": "wicfl-studio/1.0",
         "x-github-api-version": "2022-11-28",
         ...(body ? { "content-type": "application/json" } : {}),

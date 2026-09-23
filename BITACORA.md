@@ -1,3 +1,18 @@
+## 2026-09-23 · Login de Studio funciona; la llamada a GitHub falla antes de salir
+
+**Quién:** cowork.
+
+Con el arreglo del token de Access, Studio ya muestra el correo de Vic. La lista de sitios
+responde 502. El log de Cloudflare solo guardó la pila, sin el mensaje: el error sale de la
+línea del `fetch` a GitHub (columna de `this.fetcher`, no del `throw` de respuesta no-OK), es
+decir, la petición ni siquiera sale. La causa más probable es el secreto `STUDIO_GITHUB_TOKEN`
+pegado con un espacio o salto de línea al final, que hace inválido el encabezado
+`Authorization`. Arreglo: `github.js` recorta el token y falla con mensaje claro si falta;
+`index.js` registra nombre y mensaje del error en una sola línea para que Workers Logs no los
+pierda. 2 pruebas nuevas, 44 verdes. Si tras desplegar sigue fallando, el log ya dirá la causa.
+
+---
+
 ## 2026-09-23 · Access activado; Studio no leía quién había entrado
 
 **Quién:** cowork (dentro de la excepción de Studio).
