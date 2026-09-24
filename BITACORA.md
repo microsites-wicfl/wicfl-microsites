@@ -5,6 +5,8 @@
 No había forma de cerrar sesión. Arriba a la derecha, junto al correo, ahora hay **Sign out**, que
 lleva a `/cdn-cgi/access/logout`: la dirección con la que Cloudflare Access termina la sesión en el
 dominio de la app. La siguiente visita vuelve a pedir el código por correo.
+Subido y desplegado por Codex (`54db9c1`, run 36049427582, verde); verificado en Chrome. Un navegador
+que ya tenía Studio abierto puede necesitar recargar para verlo.
 
 ---
 
@@ -19,6 +21,10 @@ tomadas en la prueba en Chrome (tablero, sitio, campos, texto con vista en vivo,
 Publish, settings con bloqueos, sitio nuevo y su vista previa, descartar), tablas de campos y de
 formato Markdown, y reglas. Es privada: Vic la comparte con Pavel desde el menú Share. Faltan
 capturas de imágenes y de borrar/restaurar (no se probaron en real); se describen en texto.
+
+Más tarde el mismo día: botón EN | ES arriba a la derecha con la traducción completa al español
+(los nombres de botones de Studio quedan en inglés, en negritas), paso y captura de **Sign out** en
+los dos idiomas, y captura del tablero rehecha. Vic ya la compartió por link.
 
 ---
 
