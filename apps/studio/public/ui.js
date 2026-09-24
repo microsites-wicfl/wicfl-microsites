@@ -1,9 +1,11 @@
 import { $ } from "./html.js";
 
-export function confirmDialog({ message, yes, no }) {
+// danger: red confirm button for destructive actions (discard, delete); false for Publish.
+export function confirmDialog({ message, yes, no, danger = true }) {
   const dialog = $("#confirm");
   $("#confirm-message").textContent = message;
   $("#confirm-yes").textContent = yes;
+  $("#confirm-yes").classList.toggle("danger", danger);
   $("#confirm-no").textContent = no;
   return new Promise((resolve) => {
     const answer = (event) => {

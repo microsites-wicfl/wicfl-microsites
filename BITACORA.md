@@ -1,3 +1,30 @@
+## 2026-09-24 · Prueba real de A3 en Chrome: Publish y sitio nuevo funcionan; 3 arreglos
+
+**Quién:** cowork (manejó el Chrome de Vic, a su pedido).
+
+- **Publish (Example Flood Insurance):** se agregó una sección a `coverage-fixture.md`, se guardó,
+  la vista previa llegó a "ready" (`wicfl-pr15-_example`) y mostraba el cambio, y **Publish**
+  fusionó a `main` (verificado: la página ya no está en borrador y trae el texto). El token actual
+  basta para publicar.
+- **New site (Port St. Lucie, de prueba):** se creó desde el formulario, apareció en el tablero
+  con "New site, not published yet" y los 5 bloqueos esperados; la vista previa del sitio nuevo se
+  armó en CI real (`wicfl-pr16-port-st-lucie-homeowners`) con las páginas de arranque; se
+  descartó y desapareció del tablero.
+
+Tres problemas encontrados y corregidos:
+1. **La vista del sitio tardaba ~7 s** y, mientras la vista previa se preparaba, se refrescaba
+   cada 15 s mostrando "Loading…" (parpadeo). Ahora las llamadas a GitHub van en paralelo en tres
+   rondas en vez de ~12 seguidas, y el refresco automático es silencioso.
+2. **Descartar un sitio nuevo dejaba "That site doesn't exist"**: ahora vuelve al tablero con
+   "The new site was removed".
+3. **El aviso de Publish en un sitio de práctica decía que saldría en vivo**; ahora dice que los
+   de práctica nunca salen, y el botón de confirmar de Publish ya no es rojo.
+
+Se tomaron capturas de cada paso para la guía de Pavel. Stuart tiene cambios sin publicar de
+alguien más; no se tocaron.
+
+---
+
 ## 2026-09-24 · Guía de Pavel v2.0 para WICFL Studio
 
 **Quién:** cowork.

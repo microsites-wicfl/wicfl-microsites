@@ -31,14 +31,14 @@ export async function previewStatus(github, slug, { headSha, pull }) {
   if (!headSha) return { state: "none" };
   if (!pull) return { state: "preparing" };
 
-  const comments = await github.pullComments(pull.number);
+  const [comments, allRuns] = await Promise.all([github.pullComments(pull.number), github.checkRuns(headSha)]);
   const marker = `<!-- wicfl-preview:${slug} -->`;
   const comment = comments.find((item) => item.body && item.body.includes(marker));
   const url = comment ? (comment.body.match(/https:\/\/[^\s)*]+\.workers\.dev/) || [])[0] : undefined;
 
   // Only checks about this site count. Other jobs run on the same commit (Studio's own tests,
   // builds of other sites when shared files change) and must not make Pavel's preview look broken.
-  const runs = (await github.checkRuns(headSha)).filter((run) => isAboutSite(run.name, slug));
+  const runs = allRuns.filter((run) => isAboutSite(run.name, slug));
   const failed = runs.find((run) => run.status === "completed" && FAILED.has(run.conclusion));
   if (failed) {
     return {

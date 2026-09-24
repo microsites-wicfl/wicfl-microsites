@@ -26,6 +26,7 @@ export const text = {
   discardYes: "Discard",
   cancel: "Cancel",
   discarded: "Draft discarded. The site is back to its published version.",
+  discardedNewSite: "Draft discarded. The new site was removed.",
   publish: "Publish",
   publishing: "Publishing…",
   publishHint: "Publish when you have checked the preview. You can publish only when it is ready.",
@@ -33,6 +34,7 @@ export const text = {
     ? "Publish these changes? They become the official version and go live on the site in a few minutes."
     : "Publish these changes? They become the site's official version. The site itself goes live " +
       "when Vic launches it.",
+  publishQuestionPractice: "Publish these changes on the practice site? Practice sites are never live.",
   publishedLive: "Published. The live site updates in a few minutes.",
   publishedNotLive: "Published as the official version. It goes live when Vic launches the site.",
   publishedNeedsVic: "Published as the official version. Let Vic know so he puts it live.",

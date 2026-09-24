@@ -29,9 +29,12 @@ const configPath = (slug) => `sites/${assertSlug(slug)}/site.config.json`;
 // exists only there until it is published), otherwise from the published version.
 async function readConfig(github, slug, { draft = true } = {}) {
   const draftSha = draft ? await github.branchSha(draftBranch(slug)) : null;
-  const file = await github.readFile(configPath(slug), draftSha ? draftBranch(slug) : github.env.GITHUB_BASE_BRANCH);
-  if (!file) return null;
-  return JSON.parse(file.text);
+  return readConfigAt(github, slug, draftSha ? draftBranch(slug) : github.env.GITHUB_BASE_BRANCH);
+}
+
+async function readConfigAt(github, slug, ref) {
+  const file = await github.readFile(configPath(slug), ref);
+  return file ? JSON.parse(file.text) : null;
 }
 
 // Slugs listed in any pods/*.json on the base branch: those are the sites wired to production.
@@ -95,30 +98,33 @@ async function findPull(github, slug) {
   return pulls[0] || null;
 }
 
+// Everything the site view needs, fetched in as few sequential rounds as possible: each GitHub
+// call is ~0.3-0.6 s, and doing them one after another made this view take ~7 s.
 export async function getSite(github, slug, web = null) {
   assertSlug(slug);
-  const config = await readConfig(github, slug);
-  if (!config) throw new UserError("That site doesn't exist.", 404);
-
   const base = github.env.GITHUB_BASE_BRANCH;
-  const [published, draftSha, baseSha] = await Promise.all([
+  const [published, draftSha, baseSha, baseConfig] = await Promise.all([
     publishedSlugs(github),
     github.branchSha(draftBranch(slug)),
     github.branchSha(base),
+    readConfigAt(github, slug, base),
   ]);
+  const [config, paths, changed, basePaths, pull] = await Promise.all([
+    draftSha ? readConfigAt(github, slug, draftBranch(slug)) : baseConfig,
+    github.treePaths(draftSha || baseSha),
+    draftSha ? draftChanges(github, slug) : [],
+    draftSha ? github.treePaths(baseSha) : [],
+    draftSha ? findPull(github, slug) : null,
+  ]);
+  if (!config) throw new UserError("That site doesn't exist.", 404);
 
-  const paths = await github.treePaths(draftSha || baseSha);
-  const edited = new Set(draftSha ? await draftChanges(github, slug) : []);
+  const edited = new Set(changed);
   // Pages removed in the draft still show, marked, until the draft is published or discarded.
   const current = new Set(paths);
-  const deleted = draftSha
-    ? (await github.treePaths(baseSha)).filter(
-        (path) => path.startsWith(contentRoot(slug)) && path.endsWith(".md") && !current.has(path),
-      )
-    : [];
-  const pull = draftSha ? await findPull(github, slug) : null;
+  const isPage = (path) => path.startsWith(contentRoot(slug)) && path.endsWith(".md");
+  const deleted = basePaths.filter((path) => isPage(path) && !current.has(path));
   const pages = paths
-    .filter((path) => path.startsWith(contentRoot(slug)) && path.endsWith(".md"))
+    .filter(isPage)
     .map((path) => {
       const page = relativePage(slug, path);
       return {
@@ -136,11 +142,13 @@ export async function getSite(github, slug, web = null) {
     )
     .sort((left, right) => left.path.localeCompare(right.path));
 
-  const preview = await previewStatus(github, slug, { headSha: draftSha, pull });
-  const isNew = !(await github.readFile(configPath(slug), base));
+  const [preview, site] = await Promise.all([
+    previewStatus(github, slug, { headSha: draftSha, pull }),
+    summary(slug, config, published, edited.size, web),
+  ]);
   return {
-    ...(await summary(slug, config, published, edited.size, web)),
-    isNew,
+    ...site,
+    isNew: !baseConfig,
     blockers: slug.startsWith("_") ? [] : launchBlockers(config),
     canPublish: preview.state === "ready",
     pages,
@@ -148,7 +156,6 @@ export async function getSite(github, slug, web = null) {
   };
 }
 
-// While a draft exists it is the source of truth: what Pavel saved is what he sees next time.
 // `fields` and `body` are what the editor shows; `text` stays as the fallback when a page can't
 // be shown as fields (parsePage returns null), so nothing is ever hidden or lost.
 export async function readPage(github, slug, relativePath) {

@@ -47,17 +47,20 @@ async function showSite(slug) {
       });
       if (!sure) return;
       await api.discardDraft(slug);
-      toast(text.discarded);
-      render();
+      // A new site exists only in its draft: once discarded there is no site page to go back to.
+      toast(site.isNew ? text.discardedNewSite : text.discarded);
+      if (site.isNew) location.hash = "#/";
+      else render();
     };
   }
   const publish = $("#publish");
   if (publish) {
     publish.onclick = async () => {
       const sure = await confirmDialog({
-        message: text.publishQuestion(site.live),
+        message: site.isTest ? text.publishQuestionPractice : text.publishQuestion(site.live),
         yes: text.publish,
         no: text.cancel,
+        danger: false,
       });
       if (!sure) return;
       publish.disabled = true;
@@ -89,7 +92,7 @@ async function showSite(slug) {
   }
   if (site.preview.state === "preparing") {
     refreshTimer = setTimeout(() => {
-      if (parseRoute().view === "site") render();
+      if (parseRoute().view === "site" && !document.querySelector("dialog[open]")) render({ quiet: true });
     }, PREVIEW_REFRESH_MS);
   }
 }
@@ -316,10 +319,12 @@ function watchCounters() {
   }
 }
 
-async function render() {
+// quiet: an automatic refresh keeps the current screen until the new one is ready, instead of
+// flashing "Loading…" every few seconds while the preview is being prepared.
+async function render({ quiet = false } = {}) {
   clearTimeout(refreshTimer);
   const route = parseRoute();
-  app.innerHTML = `<p class="muted">${text.loading}</p>`;
+  if (!quiet) app.innerHTML = `<p class="muted">${text.loading}</p>`;
   try {
     if (route.view === "dashboard") app.innerHTML = renderDashboard(await api.sites());
     if (route.view === "site") await showSite(route.slug);
