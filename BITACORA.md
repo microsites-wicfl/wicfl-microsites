@@ -1,3 +1,17 @@
+## 2026-09-24 · Revisión: línea bajo el logo (`c6e2bf1`)
+
+**Quién:** Codex (código), cowork (revisión).
+
+Correcto y acotado (+6 −2 en `BaseLayout.astro`): con logo ya no se muestra la línea chica bajo
+el logo; sin logo, si `product` empieza con `audience` se usa solo `product` ("homeowners
+insurance" en lugar de "homeowner homeowners insurance"). Casos borde revisados en el diff:
+sin `audience` o sin `product` no truena. Check y builds de Stuart y `_example` en verde. Nota:
+los dos sitios tienen logo, así que la rama "sin logo" no la ejercita ningún sitio hoy; queda
+cubierta en cuanto exista uno sin logo. Los warnings de IDs `index` duplicados y Tailwind vacío
+son previos y no afectan.
+
+---
+
 ## 2026-09-24 · Studio A1 cerrada con prueba real
 
 **Quién:** Vic (prueba), cowork (verificación).
