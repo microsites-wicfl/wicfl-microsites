@@ -1,9 +1,9 @@
 import { api } from "./api.js";
-import { $, esc, siteLink } from "./html.js";
+import { $, esc, pageLink, siteLink } from "./html.js";
 import { text } from "./strings.js";
 import { confirmDialog, toast } from "./ui.js";
 import { renderDashboard } from "./views/dashboard.js";
-import { renderPage } from "./views/page.js";
+import { renderNewPage, renderPage } from "./views/page.js";
 import { renderSite } from "./views/site.js";
 
 const app = $("#app");
@@ -14,6 +14,7 @@ let unsavedEditor = null;
 function parseRoute() {
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean).map(decodeURIComponent);
   if (parts[0] !== "site" || !parts[1]) return { view: "dashboard" };
+  if (parts[2] === "new") return { view: "new", slug: parts[1] };
   if (parts[2] === "page" && parts.length > 3) {
     return { view: "page", slug: parts[1], path: parts.slice(3).join("/") };
   }
@@ -46,6 +47,19 @@ async function showSite(slug) {
       render();
     };
   }
+  for (const button of document.querySelectorAll("[data-restore]")) {
+    button.onclick = async () => {
+      button.disabled = true;
+      try {
+        await api.restorePage(slug, button.dataset.restore);
+        toast(text.restored);
+        render();
+      } catch (error) {
+        toast(error.message);
+        button.disabled = false;
+      }
+    };
+  }
   if (site.preview.state === "preparing") {
     refreshTimer = setTimeout(() => {
       if (parseRoute().view === "site") render();
@@ -62,6 +76,28 @@ async function showPage(slug, path) {
   unsavedEditor = { isDirty: () => JSON.stringify(payload()) !== initial };
   watchCounters();
 
+  const deleteButton = $("#delete");
+  if (deleteButton) {
+    deleteButton.onclick = async () => {
+      const { linkedFrom } = await api.links(slug, path);
+      const warning = linkedFrom.length ? `\n\n${text.deleteLinked(linkedFrom.join(", "))}` : "";
+      const sure = await confirmDialog({
+        message: `${text.deleteQuestion}${warning}`,
+        yes: text.deleteYes,
+        no: text.cancel,
+      });
+      if (!sure) return;
+      try {
+        await api.deletePage(slug, path);
+        unsavedEditor = null;
+        toast(text.deleted);
+        location.hash = siteLink(slug);
+      } catch (error) {
+        toast(error.message);
+      }
+    };
+  }
+
   saveButton.onclick = async () => {
     saveButton.disabled = true;
     saveButton.textContent = text.saving;
@@ -74,6 +110,45 @@ async function showPage(slug, path) {
       toast(error.message);
       saveButton.disabled = false;
       saveButton.textContent = text.save;
+    }
+  };
+}
+
+async function showNewPage(slug) {
+  const site = await api.site(slug);
+  app.innerHTML = renderNewPage(site);
+  const address = $("#new-address");
+  const title = $("#field-title");
+  const updateAddress = () => {
+    const name = title.value
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 60)
+      .replace(/-+$/g, "");
+    address.textContent = name ? text.newPageAddress(`/${name}/`) : "";
+  };
+  title.addEventListener("input", updateAddress);
+  watchCounters();
+  const initial = JSON.stringify(readFields());
+  unsavedEditor = { isDirty: () => JSON.stringify(readFields()) !== initial };
+
+  const button = $("#create");
+  button.onclick = async () => {
+    button.disabled = true;
+    button.textContent = text.creating;
+    try {
+      const { fields, body } = readFields();
+      const result = await api.createPage(slug, { fields, body: body.trim() ? body : undefined });
+      unsavedEditor = null;
+      toast(text.created);
+      location.hash = pageLink(slug, result.path);
+    } catch (error) {
+      toast(error.message);
+      button.disabled = false;
+      button.textContent = text.create;
     }
   };
 }
@@ -111,6 +186,7 @@ async function render() {
     if (route.view === "dashboard") app.innerHTML = renderDashboard(await api.sites());
     if (route.view === "site") await showSite(route.slug);
     if (route.view === "page") await showPage(route.slug, route.path);
+    if (route.view === "new") await showNewPage(route.slug);
   } catch (error) {
     showError(error);
   }

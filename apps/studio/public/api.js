@@ -21,5 +21,12 @@ export const api = {
   // payload is { fields, body } from the fields editor, or { content } for the whole file.
   savePage: (slug, path, payload) =>
     request(pagePath(slug, path), { method: "PUT", body: JSON.stringify(payload) }),
+  createPage: (slug, payload) =>
+    request(`/sites/${encodeURIComponent(slug)}/pages`, { method: "POST", body: JSON.stringify(payload) }),
+  deletePage: (slug, path) => request(pagePath(slug, path), { method: "DELETE" }),
+  links: (slug, path) =>
+    request(`/sites/${encodeURIComponent(slug)}/links?page=${encodeURIComponent(path)}`),
+  restorePage: (slug, path) =>
+    request(`/sites/${encodeURIComponent(slug)}/restore`, { method: "POST", body: JSON.stringify({ path }) }),
   discardDraft: (slug) => request(`/sites/${encodeURIComponent(slug)}/draft`, { method: "DELETE" }),
 };

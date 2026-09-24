@@ -15,3 +15,7 @@ export function pageLink(slug, path) {
 export function siteLink(slug) {
   return `#/site/${encodeURIComponent(slug)}`;
 }
+
+export function newPageLink(slug) {
+  return `#/site/${encodeURIComponent(slug)}/new`;
+}

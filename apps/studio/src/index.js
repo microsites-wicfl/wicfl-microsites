@@ -1,7 +1,17 @@
 import { requireUser } from "./access.js";
 import { UserError, json } from "./errors.js";
 import { GitHub } from "./github.js";
-import { discardDraft, getSite, listSites, readPage, savePage } from "./sites.js";
+import {
+  createPage,
+  deletePage,
+  discardDraft,
+  getSite,
+  listSites,
+  pagesLinkingTo,
+  readPage,
+  restorePage,
+  savePage,
+} from "./sites.js";
 
 // Routes:
 //   GET    /api/me
@@ -9,6 +19,10 @@ import { discardDraft, getSite, listSites, readPage, savePage } from "./sites.js
 //   GET    /api/sites/:slug
 //   GET    /api/sites/:slug/pages/<path>.md
 //   PUT    /api/sites/:slug/pages/<path>.md     body: { "fields": {...}, "body": "..." } or { "content": "..." }
+//   POST   /api/sites/:slug/pages                body: { "fields": {...}, "body": "..." }   (new page)
+//   DELETE /api/sites/:slug/pages/<path>.md
+//   GET    /api/sites/:slug/links?page=<path>.md  (pages that link to it)
+//   POST   /api/sites/:slug/restore              body: { "path": "<path>.md" }
 //   DELETE /api/sites/:slug/draft
 async function route(request, github, user, web) {
   const url = new URL(request.url);
@@ -20,6 +34,16 @@ async function route(request, github, user, web) {
   if (!slug && method === "GET") return listSites(github, web);
   if (slug && !section && method === "GET") return getSite(github, slug, web);
 
+  if (section === "pages" && rest.length === 0 && method === "POST") {
+    return createPage(github, slug, await request.json().catch(() => ({})), user.email);
+  }
+  if (section === "links" && rest.length === 0 && method === "GET") {
+    return pagesLinkingTo(github, slug, url.searchParams.get("page") || "");
+  }
+  if (section === "restore" && rest.length === 0 && method === "POST") {
+    const body = await request.json().catch(() => ({}));
+    return restorePage(github, slug, body.path, user.email);
+  }
   if (section === "pages" && rest.length > 0) {
     const page = rest.map(decodeURIComponent).join("/");
     if (method === "GET") return readPage(github, slug, page);
@@ -27,6 +51,7 @@ async function route(request, github, user, web) {
       const body = await request.json().catch(() => ({}));
       return savePage(github, slug, page, body, user.email);
     }
+    if (method === "DELETE") return deletePage(github, slug, page, user.email);
   }
   if (section === "draft" && rest.length === 0 && method === "DELETE") return discardDraft(github, slug);
   throw new UserError("Not found.", 404);

@@ -81,9 +81,18 @@ export class FakeGitHub {
     if ((match = path.match(/^\/contents\/(.+)$/))) {
       // GitHub resolves ".." segments, so the fake does too: a missing guard must be caught.
       const file = posix.normalize(decodeURIComponent(match[1]));
-      const branchName = method === "PUT" ? body.branch : query.get("ref");
+      const branchName = method === "PUT" || method === "DELETE" ? body.branch : query.get("ref");
       const branch = this.branches.get(branchName);
       if (!branch) return notFound;
+      if (method === "DELETE") {
+        const current = branch.files[file];
+        if (current === undefined) return notFound;
+        if (body.sha !== sha(current)) return { status: 409, body: { message: "conflict" } };
+        delete branch.files[file];
+        branch.head = `c-${++this.commitCounter}`;
+        branch.commits = [...branch.commits, { message: body.message, file, deleted: true }];
+        return { body: {} };
+      }
       if (method === "PUT") {
         const current = branch.files[file];
         if (current !== undefined && body.sha !== sha(current))

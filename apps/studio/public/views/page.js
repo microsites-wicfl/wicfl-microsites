@@ -10,9 +10,9 @@ function field(id, label, hint, input) {
     </label>`;
 }
 
-function fieldsForm(fields) {
+export function fieldsForm(fields, { allowHome = true } = {}) {
   const types = Object.entries(text.pageTypes)
-    .filter(([value]) => value !== "home" || fields.pageType === "home")
+    .filter(([value]) => value !== "home" || (allowHome && fields.pageType === "home"))
     .map(([value, label]) =>
       `<option value="${value}"${value === fields.pageType ? " selected" : ""}>${label}</option>`)
     .join("");
@@ -60,6 +60,24 @@ export function renderPage(site, page) {
     <p class="muted">${page.inDraft ? text.editingDraft : text.editingPublished}</p>
     ${editor}
     <div class="actions">
+      ${page.protected ? "" : `<button type="button" class="danger" id="delete">${text.deletePage}</button>`}
       <button type="button" id="save">${text.save}</button>
+    </div>`;
+}
+
+export function renderNewPage(site) {
+  const blank = { title: "", description: "", navLabel: "", showInNav: true, pageType: "content" };
+  return `
+    <a class="back" href="${siteLink(site.slug)}">${esc(text.backToSite(site.brandName))}</a>
+    <h1>${text.newPageTitle}</h1>
+    <p class="muted">${text.newPageHint} <output id="new-address"></output></p>
+    ${fieldsForm(blank, { allowHome: false })}
+    <label class="field" for="content">
+      <span class="label">${text.fieldBody}</span>
+      <span class="hint">${text.fieldBodyHint}</span>
+      <textarea id="content" spellcheck="true"></textarea>
+    </label>
+    <div class="actions">
+      <button type="button" id="create">${text.create}</button>
     </div>`;
 }

@@ -99,6 +99,13 @@ export class GitHub {
     });
   }
 
+  deleteFile(path, { sha, branch, message }) {
+    return this.request(`${this.repo}/contents/${path}`, {
+      method: "DELETE",
+      body: { message, sha, branch },
+    });
+  }
+
   async treePaths(commitSha) {
     const tree = await this.request(`${this.repo}/git/trees/${commitSha}?recursive=1`);
     return tree.tree.filter((item) => item.type === "blob").map((item) => item.path);

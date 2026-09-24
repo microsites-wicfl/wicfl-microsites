@@ -1,3 +1,26 @@
+## 2026-09-24 · Studio A2, parte 2: página nueva, borrar y restaurar
+
+**Quién:** cowork.
+
+- **Página nueva:** botón "New page" en el sitio. Pavel llena título, descripción, nombre en el
+  menú y tipo (content o coverage; nunca home); Studio muestra la dirección mientras escribe
+  (`/wind-hurricane-coverage-in-stuart/`), crea la página en el borrador del sitio con su
+  encabezado correcto y un texto inicial, y lo lleva al editor. Si la dirección ya existe, lo
+  dice y no escribe nada.
+- **Borrar página:** botón "Delete page" en el editor, con confirmación. Antes de confirmar,
+  Studio busca qué otras páginas del sitio ligan a esa y las nombra ("would have broken links").
+  La página se borra solo en el borrador: sigue en el sitio hasta publicar, aparece tachada con
+  "Will be deleted" y un botón **Restore** que la trae de vuelta tal como está publicada.
+  Inicio (`index.md`, en cualquier idioma) y `contact.md` no se pueden borrar: sin botón y el
+  servidor lo rechaza igual.
+
+API nueva: `POST /pages`, `DELETE /pages/<path>`, `GET /links?page=`, `POST /restore`. 75
+pruebas (6 nuevas). Probado en Chromium contra el GitHub simulado: crear, abrir, ligar desde el
+inicio, intentar borrar (aviso de liga rota), borrar, ver tachada, restaurar; sin errores de
+consola. Faltan de A2: imágenes y vista previa junto al editor.
+
+---
+
 ## 2026-09-24 · Studio A2, parte 1: campos por página, estado real, ligas en vivo, errores claros
 
 **Quién:** cowork (excepción de Studio A2/A3).

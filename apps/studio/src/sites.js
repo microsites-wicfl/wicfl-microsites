@@ -83,13 +83,31 @@ export async function getSite(github, slug, web = null) {
 
   const paths = await github.treePaths(draftSha || baseSha);
   const edited = new Set(draftSha ? await draftChanges(github, slug) : []);
+  // Pages removed in the draft still show, marked, until the draft is published or discarded.
+  const current = new Set(paths);
+  const deleted = draftSha
+    ? (await github.treePaths(baseSha)).filter(
+        (path) => path.startsWith(contentRoot(slug)) && path.endsWith(".md") && !current.has(path),
+      )
+    : [];
   const pull = draftSha ? await findPull(github, slug) : null;
   const pages = paths
     .filter((path) => path.startsWith(contentRoot(slug)) && path.endsWith(".md"))
     .map((path) => {
       const page = relativePage(slug, path);
-      return { path: page, route: pageRoute(page), edited: edited.has(path) };
+      return {
+        path: page,
+        route: pageRoute(page),
+        edited: edited.has(path),
+        protected: isProtectedPage(page),
+      };
     })
+    .concat(
+      deleted.map((path) => {
+        const page = relativePage(slug, path);
+        return { path: page, route: pageRoute(page), edited: true, deleted: true, protected: false };
+      }),
+    )
     .sort((left, right) => left.path.localeCompare(right.path));
 
   return {
@@ -116,6 +134,7 @@ export async function readPage(github, slug, relativePath) {
     fields: parsed?.fields || null,
     body: parsed?.body ?? null,
     inDraft: Boolean(draftSha),
+    protected: isProtectedPage(relativePath),
   };
 }
 
@@ -195,4 +214,104 @@ export async function discardDraft(github, slug) {
     if (error.status !== 404 && error.status !== 422) throw error;
   }
   return { discarded: true };
+}
+
+// Pages a site can't lose: its home page (in any language) and its contact page.
+export function isProtectedPage(relativePath) {
+  return relativePath === "contact.md" || relativePath.split("/").pop() === "index.md";
+}
+
+// A page's file name comes from its title: "Flood Insurance in Stuart, FL" -> "flood-insurance-in-stuart-fl".
+export function pageNameFromTitle(title) {
+  return String(title || "")
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 60)
+    .replace(/-+$/g, "");
+}
+
+async function currentRef(github, slug) {
+  const draftSha = await github.branchSha(draftBranch(slug));
+  return draftSha ? draftBranch(slug) : github.env.GITHUB_BASE_BRANCH;
+}
+
+export async function createPage(github, slug, input, email) {
+  const fields = input?.fields || {};
+  if (!["content", "coverage"].includes(fields.pageType)) {
+    throw new UserError("Choose a page type: content or coverage.", 400);
+  }
+  const name = pageNameFromTitle(input?.name || fields.title);
+  if (!name) throw new UserError("The page needs a title.", 400);
+  const relativePath = `${name}.md`;
+  const path = pageFile(slug, relativePath);
+
+  const ref = await currentRef(github, slug);
+  if (await github.readFile(path, ref)) {
+    throw new UserError(`A page at /${name}/ already exists. Change the title or open that page.`, 409);
+  }
+  const text = composePage("", fields, input?.body || "Write the page text here.");
+  const branch = await ensureDraftBranch(github, slug);
+  await github.writeFile(path, {
+    text,
+    branch,
+    message: `content(${slug}): add ${relativePath}\n\nEdited-by: ${email}`,
+  });
+  await ensurePull(github, slug);
+  return { created: true, path: relativePath, route: pageRoute(relativePath) };
+}
+
+export async function deletePage(github, slug, relativePath, email) {
+  const path = pageFile(slug, relativePath);
+  if (isProtectedPage(relativePath)) {
+    throw new UserError("The home page and the contact page can't be deleted.", 400);
+  }
+  const ref = await currentRef(github, slug);
+  const current = await github.readFile(path, ref);
+  if (!current) return { deleted: false };
+  const branch = await ensureDraftBranch(github, slug);
+  const inDraft = await github.readFile(path, branch);
+  await github.deleteFile(path, {
+    sha: (inDraft || current).sha,
+    branch,
+    message: `content(${slug}): delete ${relativePath}\n\nEdited-by: ${email}`,
+  });
+  await ensurePull(github, slug);
+  return { deleted: true };
+}
+
+// Brings back a page deleted in the draft, exactly as it is on the published version.
+export async function restorePage(github, slug, relativePath, email) {
+  const path = pageFile(slug, relativePath);
+  const published = await github.readFile(path, github.env.GITHUB_BASE_BRANCH);
+  if (!published) throw new UserError("That page doesn't exist on the published site.", 404);
+  const branch = await ensureDraftBranch(github, slug);
+  if (await github.readFile(path, branch)) return { restored: false };
+  await github.writeFile(path, {
+    text: published.text,
+    branch,
+    message: `content(${slug}): restore ${relativePath}\n\nEdited-by: ${email}`,
+  });
+  return { restored: true };
+}
+
+// Other pages of the site that link to this one, so deleting it doesn't leave broken links.
+export async function pagesLinkingTo(github, slug, relativePath) {
+  pageFile(slug, relativePath);
+  const route = pageRoute(relativePath);
+  const bare = route.replace(/\/$/, "");
+  const ref = await currentRef(github, slug);
+  const sha = await github.branchSha(ref);
+  const paths = (await github.treePaths(sha)).filter(
+    (path) => path.startsWith(contentRoot(slug)) && path.endsWith(".md") && path !== pageFile(slug, relativePath),
+  );
+  const linking = [];
+  for (const path of paths) {
+    const file = await github.readFile(path, ref);
+    const text = file?.text || "";
+    if (text.includes(`](${route})`) || (bare && text.includes(`](${bare})`))) linking.push(relativePage(slug, path));
+  }
+  return { route, linkedFrom: linking };
 }

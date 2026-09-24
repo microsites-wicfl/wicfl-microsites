@@ -128,8 +128,8 @@ test("site view marks edited pages, including nested language pages", async () =
   await call(github, "PUT", "/api/sites/_example/pages/es/index.md", { body: { content: "Hola" } });
   const { body } = await call(github, "GET", "/api/sites/_example");
   assert.deepEqual(body.pages, [
-    { path: "es/index.md", route: "/es/", edited: true },
-    { path: "index.md", route: "/", edited: false },
+    { path: "es/index.md", route: "/es/", edited: true, protected: true },
+    { path: "index.md", route: "/", edited: false, protected: true },
   ]);
   assert.equal(body.hasChanges, true);
   const dashboard = await call(github, "GET", "/api/sites");
@@ -305,3 +305,81 @@ test("saving fields without edits reports no changes", async () => {
   assert.deepEqual(saved.body, { saved: false });
   assert.equal(opened.status, 200);
 });
+
+test("a new page is created in the draft from its title, with its header and a starter text", async () => {
+  const github = sampleRepository();
+  const created = await call(github, "POST", "/api/sites/stuart/pages", {
+    body: { fields: { title: "Wind & Hurricane Coverage!", pageType: "coverage", navLabel: "Wind" } },
+  });
+  assert.equal(created.status, 200);
+  assert.deepEqual(created.body, {
+    created: true, path: "wind-hurricane-coverage.md", route: "/wind-hurricane-coverage/",
+  });
+  const text = github.branches.get("draft/stuart").files["sites/stuart/content/wind-hurricane-coverage.md"];
+  assert.equal(
+    text,
+    '---\ntitle: "Wind & Hurricane Coverage!"\nnavLabel: "Wind"\npageType: coverage\n---\n\nWrite the page text here.',
+  );
+  assert.equal(github.pulls.length, 1, "the new page lives in the site's one draft");
+  assert.equal(github.branches.get("main").files["sites/stuart/content/wind-hurricane-coverage.md"], undefined);
+});
+
+test("creating a page whose address already exists is refused in plain words", async () => {
+  const response = await call(sampleRepository(), "POST", "/api/sites/stuart/pages", {
+    body: { fields: { title: "Flood", pageType: "content" } },
+  });
+  assert.equal(response.status, 409);
+  assert.match(response.body.error, /\/flood\/ already exists/);
+});
+
+test("a new page can't be a home page, and needs a title", async () => {
+  const github = sampleRepository();
+  const home = await call(github, "POST", "/api/sites/stuart/pages", {
+    body: { fields: { title: "Another home", pageType: "home" } },
+  });
+  assert.equal(home.status, 400);
+  const empty = await call(github, "POST", "/api/sites/stuart/pages", {
+    body: { fields: { title: " !! ", pageType: "content" } },
+  });
+  assert.equal(empty.status, 400);
+  assert.equal(github.branches.has("draft/stuart"), false, "nothing is written for a refused page");
+});
+
+test("deleting a page removes it in the draft only; the site view keeps it, marked, until restored", async () => {
+  const github = sampleRepository();
+  const deleted = await call(github, "DELETE", "/api/sites/stuart/pages/flood.md");
+  assert.deepEqual(deleted.body, { deleted: true });
+  assert.equal(github.branches.get("draft/stuart").files["sites/stuart/content/flood.md"], undefined);
+  const original = "---\ntitle: Flood\n---\nFlood copy";
+  assert.equal(github.branches.get("main").files["sites/stuart/content/flood.md"], original);
+
+  const site = await call(github, "GET", "/api/sites/stuart");
+  const row = site.body.pages.find((page) => page.path === "flood.md");
+  assert.equal(row.deleted, true);
+
+  const restored = await call(github, "POST", "/api/sites/stuart/restore", { body: { path: "flood.md" } });
+  assert.deepEqual(restored.body, { restored: true });
+  assert.equal(github.branches.get("draft/stuart").files["sites/stuart/content/flood.md"], original);
+  const after = await call(github, "GET", "/api/sites/stuart");
+  assert.equal(after.body.pages.find((page) => page.path === "flood.md").deleted, undefined);
+});
+
+test("the home page and the contact page can't be deleted", async () => {
+  const github = sampleRepository();
+  for (const page of ["index.md", "contact.md"]) {
+    const response = await call(github, "DELETE", `/api/sites/stuart/pages/${page}`);
+    assert.equal(response.status, 400);
+    assert.match(response.body.error, /can't be deleted/);
+  }
+  assert.equal(github.branches.has("draft/stuart"), false);
+});
+
+test("before deleting, Studio lists the pages that link to it", async () => {
+  const github = sampleRepository();
+  await call(github, "PUT", "/api/sites/stuart/pages/index.md", {
+    body: { content: page("See [flood](/flood/) and [again](/flood).") },
+  });
+  const links = await call(github, "GET", "/api/sites/stuart/links?page=flood.md");
+  assert.deepEqual(links.body, { route: "/flood/", linkedFrom: ["index.md"] });
+});
+

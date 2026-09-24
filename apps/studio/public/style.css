@@ -263,3 +263,26 @@ select {
   padding: 0.5rem 0.6rem;
   height: 2.75rem;
 }
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+.section-head h2 {
+  margin: 0 0 0.6rem;
+}
+.page-row.deleted {
+  opacity: 0.7;
+}
+.page-row.deleted strong {
+  text-decoration: line-through;
+}
+button.small {
+  padding: 0.25rem 0.7rem;
+  font-size: 0.85rem;
+}
+#confirm-message {
+  white-space: pre-line;
+}
+
