@@ -45,8 +45,10 @@ de código ni de sitios; era ruido que entrenaba a ignorar los correos de CI.
 
 Con el deploy de `b65a639` (run 35913898103) Studio lista los sitios y el ciclo completo
 funcionó contra GitHub real: Vic abrió `flood-insurance.md` de Stuart, guardó un cambio, la
-página quedó "Editada", la vista previa pasó a "preparando" y luego a "falló", y "Descartar
-borrador" dejó todo limpio (no queda ninguna rama `draft/*` en el remoto). La vista previa falló
+página quedó "Editada", la vista previa pasó a "preparando" y luego a "falló". **Corrección
+2026-09-24:** aquí se escribió que "Descartar" dejó todo limpio; es falso. Cowork leyó mal la
+salida de `git ls-remote`: la rama `draft/stuart-homeowners` (PR #13, commit `5f7c41c`) sigue
+abierta con la línea de prueba, y Descartar todavía no se ha probado en real. La vista previa falló
 por una razón correcta: la línea de prueba quedó dentro del encabezado de la página (entre los
 `---`), eso rompe el YAML y el build. Studio hizo lo que debía, pero muestra el problema mal.
 
