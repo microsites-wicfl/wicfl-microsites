@@ -29,9 +29,14 @@ No hay base de datos: el repositorio es la base de datos.
   solo la lee: el link del comentario con `<!-- wicfl-preview:<slug> -->`, y los jobs de Actions del
   último commit del borrador. Estados: sin borrador / preparando / lista / falló (con el nombre
   del check que falló).
-- **Límite de escritura:** `src/paths.js` solo acepta rutas bajo `sites/<slug>/content/`, con
-  segmentos `[a-z0-9-_]` y extensión `.md`. Es lo que garantiza, por construcción, el criterio
-  de Gate A de que el trabajo de Pavel solo toca la carpeta de su sitio.
+- **Límite de escritura:** `src/paths.js` solo acepta páginas bajo `sites/<slug>/content/`
+  (segmentos `[a-z0-9-_]`, extensión `.md`) e imágenes bajo `sites/<slug>/public/images/`
+  (JPG, PNG, WebP o GIF, hasta 5 MB; sin SVG porque puede llevar scripts). Es lo que garantiza,
+  por construcción, el criterio de Gate A de que el trabajo de Pavel solo toca la carpeta de su
+  sitio.
+- **Editor (A2):** campos por página (`src/pagefields.js`), vista previa en vivo junto al texto
+  (`public/markdown.js`, render propio y seguro; la vista previa del sitio sigue siendo la
+  referencia), imágenes que se insertan donde está el cursor, página nueva, borrar y restaurar.
 - **Descartar:** cierra el PR y borra la rama. `preview-cleanup.yml` borra el Worker de preview.
 
 ## Acceso

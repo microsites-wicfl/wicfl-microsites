@@ -1,3 +1,26 @@
+## 2026-09-24 · Studio A2 completa: imágenes y vista previa junto al editor
+
+**Quién:** cowork.
+
+- **Imágenes:** panel "Images" en el editor. "Add image" sube JPG, PNG, WebP o GIF hasta 5 MB al
+  borrador del sitio, en `sites/<slug>/public/images/` (se sirven como `/images/<nombre>`); el
+  nombre se limpia ("Roof Photo (1).PNG" → `roof-photo-1.png`) y nunca pisa otro (`-2`, `-3`).
+  Al subir, se inserta `![Describe this image](/images/...)` donde está el cursor; cada miniatura
+  tiene "Insert". SVG excluido a propósito (puede llevar scripts). Studio sirve las imágenes del
+  borrador para que se vean antes de publicar; lee con el tipo raw de GitHub, que pasa el límite
+  de 1 MB del JSON.
+- **Vista previa junto al editor:** a la derecha del texto, se actualiza al teclear, con las
+  imágenes del borrador. Render propio y seguro (`public/markdown.js`: escapa todo HTML, bloquea
+  ligas `javascript:`). Cuando la vista previa del sitio está lista, liga directa a esa página en
+  ella, que sigue siendo la referencia del look final.
+
+Con esto **A2 queda completa** (8 de 8), cuatro días antes de lo comprometido (28-sep). 80
+pruebas (5 nuevas; incluye que los bytes de la imagen llegan idénticos). Probado en Chromium
+contra el GitHub simulado: subir PNG, miniatura, inserción, render en vivo y guardado; sin
+errores de consola. Sigue A3: Publicar, sitio nuevo y datos del sitio.
+
+---
+
 ## 2026-09-24 · Studio A2, parte 2: página nueva, borrar y restaurar
 
 **Quién:** cowork.

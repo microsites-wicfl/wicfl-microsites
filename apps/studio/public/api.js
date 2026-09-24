@@ -28,5 +28,11 @@ export const api = {
     request(`/sites/${encodeURIComponent(slug)}/links?page=${encodeURIComponent(path)}`),
   restorePage: (slug, path) =>
     request(`/sites/${encodeURIComponent(slug)}/restore`, { method: "POST", body: JSON.stringify({ path }) }),
+  images: (slug) => request(`/sites/${encodeURIComponent(slug)}/images`),
+  uploadImage: (slug, name, data) =>
+    request(`/sites/${encodeURIComponent(slug)}/images`, {
+      method: "POST",
+      body: JSON.stringify({ name, data }),
+    }),
   discardDraft: (slug) => request(`/sites/${encodeURIComponent(slug)}/draft`, { method: "DELETE" }),
 };

@@ -31,14 +31,14 @@ export class GitHub {
     this.repo = `/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}`;
   }
 
-  async request(path, { method = "GET", body } = {}) {
+  async request(path, { method = "GET", body, raw = false } = {}) {
     // A secret pasted with a trailing space or newline makes fetch reject the header outright.
     const token = String(this.env.GITHUB_TOKEN || "").trim();
     if (!token) throw new Error("GITHUB_TOKEN is not set on the Worker");
     const response = await this.fetcher(`https://api.github.com${path}`, {
       method,
       headers: {
-        accept: "application/vnd.github+json",
+        accept: raw ? "application/vnd.github.raw" : "application/vnd.github+json",
         authorization: `Bearer ${token}`,
         "user-agent": "wicfl-studio/1.0",
         "x-github-api-version": "2022-11-28",
@@ -47,6 +47,7 @@ export class GitHub {
       body: body ? JSON.stringify(body) : undefined,
     });
     if (!response.ok) throw new GitHubError(response.status, await response.text());
+    if (raw) return response.arrayBuffer();
     return response.status === 204 ? null : response.json();
   }
 
@@ -85,6 +86,23 @@ export class GitHub {
     const item = await this.optional(`${this.repo}/contents/${path}?ref=${encodeURIComponent(ref)}`);
     if (!item || Array.isArray(item)) return null;
     return { text: fromBase64(item.content), sha: item.sha };
+  }
+
+  // Raw bytes of a file (images). The raw media type also works above the 1 MB JSON limit.
+  async readBinary(path, ref) {
+    try {
+      return await this.request(`${this.repo}/contents/${path}?ref=${encodeURIComponent(ref)}`, { raw: true });
+    } catch (error) {
+      if (error.status === 404) return null;
+      throw error;
+    }
+  }
+
+  writeBinary(path, { base64, branch, message }) {
+    return this.request(`${this.repo}/contents/${path}`, {
+      method: "PUT",
+      body: { message, content: base64, branch },
+    });
   }
 
   async listDirectory(path, ref) {

@@ -383,3 +383,47 @@ test("before deleting, Studio lists the pages that link to it", async () => {
   assert.deepEqual(links.body, { route: "/flood/", linkedFrom: ["index.md"] });
 });
 
+
+// A real 1x1 PNG, so the round trip proves bytes survive untouched.
+const PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+
+test("an uploaded image lands in the site's public/images in the draft and can be read back", async () => {
+  const github = sampleRepository();
+  const uploaded = await call(github, "POST", "/api/sites/stuart/images", {
+    body: { name: "Roof Photo (1).PNG", data: `data:image/png;base64,${PNG}` },
+  });
+  assert.deepEqual(uploaded.body, { name: "roof-photo-1.png", url: "/images/roof-photo-1.png" });
+  const stored = github.branches.get("draft/stuart").files["sites/stuart/public/images/roof-photo-1.png"];
+  assert.equal(Buffer.compare(stored, Buffer.from(PNG, "base64")), 0);
+  assert.equal(github.branches.get("main").files["sites/stuart/public/images/roof-photo-1.png"], undefined);
+
+  const list = await call(github, "GET", "/api/sites/stuart/images");
+  assert.deepEqual(list.body, [{ name: "roof-photo-1.png", url: "/images/roof-photo-1.png" }]);
+
+  resetLiveCache();
+  const handle = createHandler(github.fetch, undefined, offline);
+  const image = await handle(new Request("https://studio.test/api/sites/stuart/images/roof-photo-1.png"), env, pavel);
+  assert.equal(image.headers.get("content-type"), "image/png");
+  assert.equal(Buffer.compare(Buffer.from(await image.arrayBuffer()), Buffer.from(PNG, "base64")), 0);
+});
+
+test("a second image with the same name gets a new name instead of overwriting", async () => {
+  const github = sampleRepository();
+  await call(github, "POST", "/api/sites/stuart/images", { body: { name: "roof.png", data: PNG } });
+  const second = await call(github, "POST", "/api/sites/stuart/images", { body: { name: "roof.png", data: PNG } });
+  assert.equal(second.body.name, "roof-2.png");
+});
+
+test("only web image formats under 5 MB are accepted, and never outside the site", async () => {
+  const github = sampleRepository();
+  for (const name of ["logo.svg", "script.js", "noextension"]) {
+    const response = await call(github, "POST", "/api/sites/stuart/images", { body: { name, data: PNG } });
+    assert.equal(response.status, 400, name);
+  }
+  const big = "A".repeat(7 * 1024 * 1024);
+  const tooBig = await call(github, "POST", "/api/sites/stuart/images", { body: { name: "big.jpg", data: big } });
+  assert.match(tooBig.body.error, /larger than 5 MB/);
+  const escape = await call(github, "GET", "/api/sites/stuart/images/..%2F..%2Fsite.config.json");
+  assert.equal(escape.status, 400);
+  assert.equal(github.branches.has("draft/stuart"), false);
+});

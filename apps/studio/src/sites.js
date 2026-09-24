@@ -2,7 +2,17 @@ import { validatePageHeader } from "./frontmatter.js";
 import { isLive } from "./live.js";
 import { composePage, pageRoute, parsePage } from "./pagefields.js";
 import { UserError } from "./errors.js";
-import { assertSlug, contentRoot, draftBranch, pageFile, relativePage } from "./paths.js";
+import {
+  IMAGE_TYPES,
+  assertSlug,
+  contentRoot,
+  draftBranch,
+  imageFile,
+  imageNameFrom,
+  imagesRoot,
+  pageFile,
+  relativePage,
+} from "./paths.js";
 import { previewStatus } from "./preview.js";
 
 async function readConfig(github, slug) {
@@ -314,4 +324,49 @@ export async function pagesLinkingTo(github, slug, relativePath) {
     if (text.includes(`](${route})`) || (bare && text.includes(`](${bare})`))) linking.push(relativePage(slug, path));
   }
   return { route, linkedFrom: linking };
+}
+
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
+export async function listImages(github, slug) {
+  assertSlug(slug);
+  const ref = await currentRef(github, slug);
+  const items = await github.listDirectory(imagesRoot(slug).replace(/\/$/, ""), ref);
+  return items
+    .filter((item) => item.type === "file" && IMAGE_TYPES[item.name.split(".").pop()])
+    .map((item) => ({ name: item.name, url: `/images/${item.name}` }))
+    .sort((left, right) => left.name.localeCompare(right.name));
+}
+
+export async function readImage(github, slug, name) {
+  const path = imageFile(slug, name);
+  const ref = await currentRef(github, slug);
+  const bytes = await github.readBinary(path, ref);
+  if (!bytes) throw new UserError("That image doesn't exist.", 404);
+  return { bytes, type: IMAGE_TYPES[name.split(".").pop()] };
+}
+
+// Uploads go into the site's draft. A name already taken gets -2, -3... so nothing is overwritten.
+export async function uploadImage(github, slug, input, email) {
+  const base64 = String(input?.data || "").replace(/^data:[^,]*,/, "");
+  if (!base64) throw new UserError("The image didn't arrive.", 400);
+  const size = Math.floor((base64.length * 3) / 4);
+  if (size > MAX_IMAGE_BYTES) {
+    throw new UserError("That image is larger than 5 MB. Make it smaller and try again.", 400);
+  }
+  const wanted = imageNameFrom(input?.name);
+  const taken = new Set((await listImages(github, slug)).map((image) => image.name));
+  const [stem, extension] = [wanted.replace(/\.[^.]+$/, ""), wanted.split(".").pop()];
+  let name = wanted;
+  for (let counter = 2; taken.has(name); counter += 1) name = `${stem}-${counter}.${extension}`;
+  imageFile(slug, name);
+
+  const branch = await ensureDraftBranch(github, slug);
+  await github.writeBinary(`${imagesRoot(slug)}${name}`, {
+    base64,
+    branch,
+    message: `content(${slug}): add image ${name}\n\nEdited-by: ${email}`,
+  });
+  await ensurePull(github, slug);
+  return { name, url: `/images/${name}` };
 }

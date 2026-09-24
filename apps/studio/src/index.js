@@ -6,11 +6,14 @@ import {
   deletePage,
   discardDraft,
   getSite,
+  listImages,
   listSites,
   pagesLinkingTo,
+  readImage,
   readPage,
   restorePage,
   savePage,
+  uploadImage,
 } from "./sites.js";
 
 // Routes:
@@ -23,6 +26,9 @@ import {
 //   DELETE /api/sites/:slug/pages/<path>.md
 //   GET    /api/sites/:slug/links?page=<path>.md  (pages that link to it)
 //   POST   /api/sites/:slug/restore              body: { "path": "<path>.md" }
+//   GET    /api/sites/:slug/images               (list)
+//   POST   /api/sites/:slug/images               body: { "name": "photo.jpg", "data": "<base64>" }
+//   GET    /api/sites/:slug/images/<name>        (the image itself, from the draft if there is one)
 //   DELETE /api/sites/:slug/draft
 async function route(request, github, user, web) {
   const url = new URL(request.url);
@@ -34,6 +40,16 @@ async function route(request, github, user, web) {
   if (!slug && method === "GET") return listSites(github, web);
   if (slug && !section && method === "GET") return getSite(github, slug, web);
 
+  if (section === "images" && rest.length === 0 && method === "GET") return listImages(github, slug);
+  if (section === "images" && rest.length === 0 && method === "POST") {
+    return uploadImage(github, slug, await request.json().catch(() => ({})), user.email);
+  }
+  if (section === "images" && rest.length === 1 && method === "GET") {
+    const image = await readImage(github, slug, decodeURIComponent(rest[0]));
+    return new Response(image.bytes, {
+      headers: { "content-type": image.type, "cache-control": "private, max-age=300" },
+    });
+  }
   if (section === "pages" && rest.length === 0 && method === "POST") {
     return createPage(github, slug, await request.json().catch(() => ({})), user.email);
   }
@@ -67,7 +83,8 @@ export function createHandler(fetcher = fetch, accessFetcher = fetch, webFetcher
     try {
       const user = await requireUser(request, ctx, env, accessFetcher);
       const web = (input, init) => webFetcher(input, init);
-      return json(await route(request, new GitHub(env, fetcher), user, web));
+      const result = await route(request, new GitHub(env, fetcher), user, web);
+      return result instanceof Response ? result : json(result);
     } catch (error) {
       if (error instanceof UserError) return json({ error: error.message }, error.status);
       // One line with name and message: Workers Logs split a multi-line error and dropped the message.

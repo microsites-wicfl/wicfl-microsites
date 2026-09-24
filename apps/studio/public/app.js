@@ -3,7 +3,8 @@ import { $, esc, pageLink, siteLink } from "./html.js";
 import { text } from "./strings.js";
 import { confirmDialog, toast } from "./ui.js";
 import { renderDashboard } from "./views/dashboard.js";
-import { renderNewPage, renderPage } from "./views/page.js";
+import { renderMarkdown } from "./markdown.js";
+import { renderImageList, renderNewPage, renderPage } from "./views/page.js";
 import { renderSite } from "./views/site.js";
 
 const app = $("#app");
@@ -75,6 +76,10 @@ async function showPage(slug, path) {
   const initial = JSON.stringify(payload());
   unsavedEditor = { isDirty: () => JSON.stringify(payload()) !== initial };
   watchCounters();
+  if (page.fields) {
+    watchLivePreview(slug);
+    wireImages(slug);
+  }
 
   const deleteButton = $("#delete");
   if (deleteButton) {
@@ -149,6 +154,64 @@ async function showNewPage(slug) {
       toast(error.message);
       button.disabled = false;
       button.textContent = text.create;
+    }
+  };
+}
+
+// Images shown in the live preview come through Studio, so drafts' new images show before publishing.
+function watchLivePreview(slug) {
+  const editor = $("#content");
+  const output = $("#live-preview");
+  const resolve = (url) =>
+    url.startsWith("/images/") ? `/api/sites/${encodeURIComponent(slug)}/images/${url.slice(8)}` : url;
+  const update = () => {
+    output.innerHTML = renderMarkdown(editor.value, resolve);
+  };
+  editor.addEventListener("input", update);
+  update();
+}
+
+function insertAtCursor(textarea, snippet) {
+  const { selectionStart: start, selectionEnd: end, value } = textarea;
+  textarea.value = `${value.slice(0, start)}${snippet}${value.slice(end)}`;
+  textarea.selectionStart = textarea.selectionEnd = start + snippet.length;
+  textarea.focus();
+  textarea.dispatchEvent(new Event("input"));
+}
+
+async function wireImages(slug) {
+  const list = $("#image-list");
+  const show = (images) => {
+    list.innerHTML = renderImageList(slug, images);
+    for (const button of list.querySelectorAll("[data-insert]")) {
+      button.onclick = () => insertAtCursor($("#content"), `\n\n![${text.imageAlt}](${button.dataset.insert})\n\n`);
+    }
+  };
+  show(await api.images(slug).catch(() => []));
+
+  const input = $("#image-file");
+  input.onchange = async () => {
+    const file = input.files[0];
+    if (!file) return;
+    const label = input.parentElement;
+    label.classList.add("busy");
+    toast(text.uploading);
+    try {
+      const data = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+      });
+      const image = await api.uploadImage(slug, file.name, data);
+      toast(text.uploaded);
+      show(await api.images(slug));
+      insertAtCursor($("#content"), `\n\n![${text.imageAlt}](${image.url})\n\n`);
+    } catch (error) {
+      toast(error.message);
+    } finally {
+      label.classList.remove("busy");
+      input.value = "";
     }
   };
 }

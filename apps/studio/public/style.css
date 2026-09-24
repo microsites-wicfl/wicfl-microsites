@@ -285,4 +285,62 @@ button.small {
 #confirm-message {
   white-space: pre-line;
 }
+main {
+  max-width: 1200px;
+}
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+.rendered {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.5rem 1.2rem;
+  min-height: 60vh;
+  max-height: 80vh;
+  overflow: auto;
+}
+.rendered img {
+  max-width: 100%;
+}
+.images {
+  margin: 1rem 0;
+}
+.images .section-head {
+  margin-top: 0;
+}
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.7rem;
+}
+.thumb {
+  margin: 0;
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+}
+.thumb img {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+}
+label.button.small {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+}
+.busy {
+  opacity: 0.6;
+  pointer-events: none;
+}
 

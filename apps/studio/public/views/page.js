@@ -39,18 +39,59 @@ export function fieldsForm(fields, { allowHome = true } = {}) {
     </section>`;
 }
 
+export function imagesPanel() {
+  return `
+    <section class="panel images">
+      <div class="section-head">
+        <span class="label">${text.imagesTitle}</span>
+        <label class="button small">${text.addImage}
+          <input id="image-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+        </label>
+      </div>
+      <p class="hint">${text.imagesHint}</p>
+      <div id="image-list" class="thumbs"><p class="muted small">${text.imagesEmpty}</p></div>
+    </section>`;
+}
+
+export function renderImageList(slug, images) {
+  if (!images.length) return `<p class="muted small">${text.imagesEmpty}</p>`;
+  return images
+    .map(
+      (image) => `
+      <figure class="thumb">
+        <img src="/api/sites/${encodeURIComponent(slug)}/images/${encodeURIComponent(image.name)}" alt="">
+        <figcaption>${esc(image.name)}</figcaption>
+        <button type="button" class="secondary small" data-insert="${esc(image.url)}">${text.insert}</button>
+      </figure>`,
+    )
+    .join("");
+}
+
 export function renderPage(site, page) {
   const liveLink = site.live
     ? `<a href="${esc(`https://${site.domain}${page.route}`)}" target="_blank" rel="noopener">${
       text.viewLivePage}</a>`
     : "";
+  const sitePreview =
+    site.preview?.state === "ready" && site.preview.url
+      ? `<a href="${esc(`${site.preview.url.replace(/\/$/, "")}${page.route}`)}" target="_blank" rel="noopener">${
+        text.openInSitePreview}</a>`
+      : "";
   const editor = page.fields
     ? `${fieldsForm(page.fields)}
-       <label class="field" for="content">
-         <span class="label">${text.fieldBody}</span>
-         <span class="hint">${text.fieldBodyHint}</span>
-         <textarea id="content" spellcheck="true">${esc(page.body)}</textarea>
-       </label>`
+       ${imagesPanel()}
+       <div class="split">
+         <label class="field" for="content">
+           <span class="label">${text.fieldBody}</span>
+           <span class="hint">${text.fieldBodyHint}</span>
+           <textarea id="content" spellcheck="true">${esc(page.body)}</textarea>
+         </label>
+         <section class="field live">
+           <span class="label">${text.livePreview}</span>
+           <span class="hint">${text.livePreviewHint} ${sitePreview}</span>
+           <article id="live-preview" class="rendered"></article>
+         </section>
+       </div>`
     : `<p class="status wait">${text.rawEditorNote}</p>
        <textarea id="content" spellcheck="true">${esc(page.text)}</textarea>`;
   return `

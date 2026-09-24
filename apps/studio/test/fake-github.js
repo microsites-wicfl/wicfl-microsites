@@ -46,6 +46,10 @@ export class FakeGitHub {
     const path = url.pathname.replace("/repos/owner/repo", "");
     const result = this.handle(method, path, url.searchParams, body);
     const status = result.status || 200;
+    const wantsRaw = (init.headers?.accept || "").includes("raw");
+    if (wantsRaw && status === 200 && result.body?.content !== undefined && result.body.type === "file") {
+      return new Response(Buffer.from(result.body.content, "base64"), { status });
+    }
     return new Response(status === 204 ? null : JSON.stringify(result.body ?? {}), { status });
   }
 
@@ -97,7 +101,9 @@ export class FakeGitHub {
         const current = branch.files[file];
         if (current !== undefined && body.sha !== sha(current))
           return { status: 409, body: { message: "conflict" } };
-        branch.files[file] = Buffer.from(body.content, "base64").toString("utf8");
+        // Images stay as bytes; everything else is text, like the real repository.
+        const bytes = Buffer.from(body.content, "base64");
+        branch.files[file] = file.includes("/public/images/") ? bytes : bytes.toString("utf8");
         branch.head = `c-${++this.commitCounter}`;
         branch.commits = [...branch.commits, { message: body.message, file }];
         return { body: { content: { sha: sha(branch.files[file]) } } };
