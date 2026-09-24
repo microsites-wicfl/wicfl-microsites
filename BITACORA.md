@@ -1,3 +1,17 @@
+## 2026-09-24 · Handbook ilustrado de Studio para Pavel
+
+**Quién:** cowork, a pedido de Vic.
+
+La guía v2.0 (`docs/OPERATOR_GUIDE.md`) publicada también como página ilustrada:
+https://claude.ai/artifact/5ebz5VQL1Q7iFrLv9zJ6B5 ("WICFL Studio Handbook"). Mismo contenido, con
+el ciclo Edit → Save to draft → Preview → Publish → Live arriba, glosario, 16 capturas reales
+tomadas en la prueba en Chrome (tablero, sitio, campos, texto con vista en vivo, vista previa,
+Publish, settings con bloqueos, sitio nuevo y su vista previa, descartar), tablas de campos y de
+formato Markdown, y reglas. Es privada: Vic la comparte con Pavel desde el menú Share. Faltan
+capturas de imágenes y de borrar/restaurar (no se probaron en real); se describen en texto.
+
+---
+
 ## 2026-09-24 · Prueba real de A3 en Chrome: Publish y sitio nuevo funcionan; 3 arreglos
 
 **Quién:** cowork (manejó el Chrome de Vic, a su pedido).
