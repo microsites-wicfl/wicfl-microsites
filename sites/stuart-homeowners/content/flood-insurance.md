@@ -9,6 +9,8 @@ Living in Stuart means being surrounded by rivers, canals, waterways and the Atl
 
 Flood insurance is generally separate from a standard homeowners policy and may provide coverage specifically for certain types of flood-related damage. Walker Insurance Agency helps homeowners in Stuart and Martin County explore flood insurance options based on their property's location and individual needs.
 
+Bla bla
+
 **[Request a Flood Insurance Quote](/contact/)**
 
 ## What does flood insurance cover?
