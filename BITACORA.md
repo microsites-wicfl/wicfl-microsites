@@ -1,3 +1,17 @@
+## 2026-09-24 · Studio A1 cerrada con prueba real
+
+**Quién:** Vic (prueba), cowork (verificación).
+
+Tras desplegar la validación del encabezado, Vic movió las líneas de prueba al cuerpo de
+`flood-insurance.md`: la vista previa llegó a "lista", el sitio completo se vio con
+(772) 247-0106 en el botón de llamar, y "Descartar borrador" borró la rama (verificado con
+`git ls-remote`: no queda ninguna `draft/*`). A1 queda cerrada. Hallazgo de plantilla: bajo el
+logo de Stuart sale "HOMEOWNER HOMEOWNERS INSURANCE" (el kicker junta audience + product);
+va a Codex. Vic preguntó por Publicar: es A3 (1-oct); mientras, publicar un borrador lo hace Codex
+fusionando el PR a `main`, y Stuart no sale en vivo hasta el lanzamiento del 9-oct.
+
+---
+
 ## 2026-09-24 · Studio valida el encabezado de la página al guardar
 
 **Quién:** cowork.
