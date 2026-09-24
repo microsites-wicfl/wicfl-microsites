@@ -1,3 +1,33 @@
+## 2026-09-24 · Studio A2, parte 1: campos por página, estado real, ligas en vivo, errores claros
+
+**Quién:** cowork (excepción de Studio A2/A3).
+
+Cuatro de los ocho puntos de A2:
+1. **Campos por página.** El editor ya no muestra el encabezado `---`: Title (con contador y guía
+   de <60), Description (contador, guía 120–160, se guarda en una línea), Menu name, Page type
+   (Home fijo en el inicio) y "Show this page in the site menu", más el texto de la página aparte.
+   `src/pagefields.js` reescribe solo esos campos y deja intacta cualquier otra línea del
+   encabezado, con su sangría; un campo sin cambios conserva su línea original, así que guardar
+   sin editar produce el mismo archivo y dice "no changes". Si una página no se puede mostrar
+   como campos (sin encabezado, o un campo en varias líneas), cae al editor del archivo completo
+   con un aviso. La validación del encabezado sigue debajo.
+2. **Estado real.** "Published at" era falso (salía para todo sitio en un pod). Ahora `live` es
+   verdad solo si el dominio responde con una página cuyo canonical es ese dominio
+   (`src/live.js`, 3 s de timeout, caché de 5 min; los sitios de prueba nunca se consultan).
+3. **Ligas en vivo** en el tablero, el sitio y cada página, solo cuando el sitio está en vivo.
+   Cada página muestra su dirección (`/flood-insurance/`).
+4. **Errores claros.** Si la vista previa falla, Studio explica según qué falló (el build → revisa
+   tu último cambio; la validación → avisa a Vic; publicar la vista previa → es de nuestro lado)
+   y deja abajo el mensaje técnico para Vic.
+
+Además las rutas internas de Studio pasaron a inglés (`#/site/.../page/...`). 69 pruebas (14
+nuevas); las pruebas ya no tocan internet (fetcher `offline`). Probado en navegador real
+(Chromium) contra un GitHub simulado: tablero, sitio, editor de campos, guardar, página con
+campo multilínea en modo archivo completo, reabrir y ver lo guardado; sin errores de consola.
+Faltan de A2: página nueva, borrar página, imágenes y vista previa junto al editor.
+
+---
+
 ## 2026-09-24 · Regla: todo en inglés; Studio traducido
 
 **Quién:** cowork, a pedido de Vic.

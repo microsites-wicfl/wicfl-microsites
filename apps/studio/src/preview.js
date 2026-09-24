@@ -7,6 +7,19 @@ function isAboutSite(name, slug) {
   );
 }
 
+// What a failed check means, in words Pavel can act on. The raw reason still travels along so
+// Vic can find the run.
+function explain(name, slug) {
+  if (name === `Build ${slug}`) {
+    return "The site couldn't be built with your latest change. Check the page you edited last; " +
+      "if it looks right, send Vic the message below.";
+  }
+  if (name === "Validate all site configurations") {
+    return "The site's settings didn't pass the automatic checks. Send Vic the message below.";
+  }
+  return "The preview couldn't be published. That's on our side: send Vic the message below.";
+}
+
 const FAILED = new Set(["failure", "timed_out", "cancelled", "action_required", "startup_failure"]);
 
 // Where the preview of a site's draft stands, derived only from what GitHub already has:
@@ -28,7 +41,12 @@ export async function previewStatus(github, slug, { headSha, pull }) {
   const runs = (await github.checkRuns(headSha)).filter((run) => isAboutSite(run.name, slug));
   const failed = runs.find((run) => run.status === "completed" && FAILED.has(run.conclusion));
   if (failed) {
-    return { state: "failed", reason: `${failed.name}: ${failed.conclusion}`, url };
+    return {
+      state: "failed",
+      help: explain(failed.name, slug),
+      reason: `${failed.name}: ${failed.conclusion}`,
+      url,
+    };
   }
 
   const previewRun = runs.find((run) => run.name === `Preview ${slug}`);

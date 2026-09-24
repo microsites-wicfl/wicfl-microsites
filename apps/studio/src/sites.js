@@ -1,4 +1,6 @@
 import { validatePageHeader } from "./frontmatter.js";
+import { isLive } from "./live.js";
+import { composePage, pageRoute, parsePage } from "./pagefields.js";
 import { UserError } from "./errors.js";
 import { assertSlug, contentRoot, draftBranch, pageFile, relativePage } from "./paths.js";
 import { previewStatus } from "./preview.js";
@@ -25,18 +27,25 @@ async function draftChanges(github, slug) {
   return files.filter((path) => path.startsWith(`sites/${slug}/`));
 }
 
-function summary(slug, config, published, changedCount) {
+// inPod: wired for production (listed in pods/*.json). live: the domain really serves this site.
+// Test sites (slug starting with "_") are never live and are never checked.
+async function summary(slug, config, published, changedCount, web) {
+  const isTest = slug.startsWith("_");
+  const inPod = published.has(slug);
+  const live = !isTest && inPod ? await isLive(config.domain, web) : false;
   return {
     slug,
     brandName: config.brand?.name || slug,
     domain: config.domain,
-    isTest: slug.startsWith("_"),
-    published: published.has(slug),
+    isTest,
+    inPod,
+    live,
+    liveUrl: live ? `https://${config.domain}/` : null,
     hasChanges: changedCount > 0,
   };
 }
 
-export async function listSites(github) {
+export async function listSites(github, web = null) {
   const base = github.env.GITHUB_BASE_BRANCH;
   const [directories, published, drafts] = await Promise.all([
     github.listDirectory("sites", base),
@@ -50,7 +59,7 @@ export async function listSites(github) {
     const config = await readConfig(github, slug);
     if (!config) continue;
     const changed = drafts.includes(`draft/${slug}`) ? await draftChanges(github, slug) : [];
-    sites.unshift(summary(slug, config, published, changed.length));
+    sites.unshift(await summary(slug, config, published, changed.length, web));
   }
   return sites.sort((left, right) => left.slug.localeCompare(right.slug));
 }
@@ -60,7 +69,7 @@ async function findPull(github, slug) {
   return pulls[0] || null;
 }
 
-export async function getSite(github, slug) {
+export async function getSite(github, slug, web = null) {
   assertSlug(slug);
   const config = await readConfig(github, slug);
   if (!config) throw new UserError("That site doesn't exist.", 404);
@@ -77,24 +86,37 @@ export async function getSite(github, slug) {
   const pull = draftSha ? await findPull(github, slug) : null;
   const pages = paths
     .filter((path) => path.startsWith(contentRoot(slug)) && path.endsWith(".md"))
-    .map((path) => ({ path: relativePage(slug, path), edited: edited.has(path) }))
+    .map((path) => {
+      const page = relativePage(slug, path);
+      return { path: page, route: pageRoute(page), edited: edited.has(path) };
+    })
     .sort((left, right) => left.path.localeCompare(right.path));
 
   return {
-    ...summary(slug, config, published, edited.size),
+    ...(await summary(slug, config, published, edited.size, web)),
     pages,
     preview: await previewStatus(github, slug, { headSha: draftSha, pull }),
   };
 }
 
 // While a draft exists it is the source of truth: what Pavel saved is what he sees next time.
+// `fields` and `body` are what the editor shows; `text` stays as the fallback when a page can't
+// be shown as fields (parsePage returns null), so nothing is ever hidden or lost.
 export async function readPage(github, slug, relativePath) {
   const path = pageFile(slug, relativePath);
   const draftSha = await github.branchSha(draftBranch(slug));
   const ref = draftSha ? draftBranch(slug) : github.env.GITHUB_BASE_BRANCH;
   const file = await github.readFile(path, ref);
   if (!file) throw new UserError("That page doesn't exist.", 404);
-  return { path: relativePath, text: file.text, inDraft: Boolean(draftSha) };
+  const parsed = parsePage(file.text);
+  return {
+    path: relativePath,
+    route: pageRoute(relativePath),
+    text: file.text,
+    fields: parsed?.fields || null,
+    body: parsed?.body ?? null,
+    inDraft: Boolean(draftSha),
+  };
 }
 
 async function ensureDraftBranch(github, slug) {
@@ -123,8 +145,12 @@ async function ensurePull(github, slug) {
   });
 }
 
-export async function savePage(github, slug, relativePath, text, email) {
-  if (typeof text !== "string") throw new UserError("The page content didn't arrive.", 400);
+// Accepts either { fields, body } from the fields editor or { content } with the whole file.
+export async function savePage(github, slug, relativePath, input, email) {
+  const byFields = input && typeof input === "object" && input.fields;
+  if (!byFields && typeof input?.content !== "string") {
+    throw new UserError("The page content didn't arrive.", 400);
+  }
   const path = pageFile(slug, relativePath);
 
   const existingDraft = await github.branchSha(draftBranch(slug));
@@ -133,6 +159,7 @@ export async function savePage(github, slug, relativePath, text, email) {
     existingDraft ? draftBranch(slug) : github.env.GITHUB_BASE_BRANCH,
   );
   if (!current) throw new UserError("That page doesn't exist.", 404);
+  const text = byFields ? composePage(current.text, input.fields, input.body) : input.content;
   if (current.text === text) return { saved: false };
   validatePageHeader(text, current.text);
 

@@ -13,8 +13,8 @@ let unsavedEditor = null;
 
 function parseRoute() {
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean).map(decodeURIComponent);
-  if (parts[0] !== "sitio" || !parts[1]) return { view: "dashboard" };
-  if (parts[2] === "pagina" && parts.length > 3) {
+  if (parts[0] !== "site" || !parts[1]) return { view: "dashboard" };
+  if (parts[2] === "page" && parts.length > 3) {
     return { view: "page", slug: parts[1], path: parts.slice(3).join("/") };
   }
   return { view: "site", slug: parts[1] };
@@ -56,15 +56,17 @@ async function showSite(slug) {
 async function showPage(slug, path) {
   const [site, page] = await Promise.all([api.site(slug), api.page(slug, path)]);
   app.innerHTML = renderPage(site, page);
-  const editor = $("#content");
   const saveButton = $("#save");
-  unsavedEditor = { isDirty: () => editor.value !== page.text };
+  const payload = () => (page.fields ? readFields() : { content: $("#content").value });
+  const initial = JSON.stringify(payload());
+  unsavedEditor = { isDirty: () => JSON.stringify(payload()) !== initial };
+  watchCounters();
 
   saveButton.onclick = async () => {
     saveButton.disabled = true;
     saveButton.textContent = text.saving;
     try {
-      const result = await api.savePage(slug, path, editor.value);
+      const result = await api.savePage(slug, path, payload());
       unsavedEditor = null;
       toast(result.saved ? text.saved : text.noChanges);
       location.hash = siteLink(slug);
@@ -74,6 +76,31 @@ async function showPage(slug, path) {
       saveButton.textContent = text.save;
     }
   };
+}
+
+function readFields() {
+  return {
+    fields: {
+      title: $("#field-title").value,
+      description: $("#field-description").value,
+      navLabel: $("#field-navLabel").value,
+      showInNav: $("#field-showInNav").checked,
+      pageType: $("#field-pageType").value,
+    },
+    body: $("#content").value,
+  };
+}
+
+// Live character counts under the title and description, so length guidance is visible as he types.
+function watchCounters() {
+  for (const input of document.querySelectorAll("[data-count]")) {
+    const output = $(`#${input.dataset.count}`);
+    const update = () => {
+      output.textContent = text.characters(input.value.length);
+    };
+    input.addEventListener("input", update);
+    update();
+  }
 }
 
 async function render() {

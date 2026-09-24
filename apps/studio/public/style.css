@@ -84,6 +84,53 @@ h2 {
   justify-content: space-between;
   align-items: center;
 }
+.page-link {
+  color: inherit;
+  text-decoration: none;
+  flex: 1;
+}
+.fields {
+  display: grid;
+  gap: 0.9rem;
+  margin: 1rem 0;
+}
+.field {
+  display: grid;
+  gap: 0.3rem;
+  margin-top: 1rem;
+}
+.fields .field {
+  margin-top: 0;
+}
+.label {
+  font-weight: 600;
+}
+.hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0.9rem;
+}
+input[type="text"],
+select {
+  font: inherit;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+textarea.short {
+  min-height: 4.5rem;
+  font-family: inherit;
+}
+.check {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
 .badges {
   display: flex;
   flex-wrap: wrap;
@@ -208,4 +255,11 @@ dialog::backdrop {
   padding: 0.7rem 1.2rem;
   border-radius: 8px;
   max-width: 90vw;
+}
+a {
+  color: var(--accent);
+}
+select {
+  padding: 0.5rem 0.6rem;
+  height: 2.75rem;
 }

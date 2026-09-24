@@ -9,9 +9,9 @@ export function $(selector, root = document) {
 }
 
 export function pageLink(slug, path) {
-  return `#/sitio/${encodeURIComponent(slug)}/pagina/${path.split("/").map(encodeURIComponent).join("/")}`;
+  return `#/site/${encodeURIComponent(slug)}/page/${path.split("/").map(encodeURIComponent).join("/")}`;
 }
 
 export function siteLink(slug) {
-  return `#/sitio/${encodeURIComponent(slug)}`;
+  return `#/site/${encodeURIComponent(slug)}`;
 }

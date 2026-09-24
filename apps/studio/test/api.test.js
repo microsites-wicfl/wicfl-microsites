@@ -2,13 +2,15 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createHandler } from "../src/index.js";
 import { pageFile } from "../src/paths.js";
-import { env, pavel, sampleRepository } from "./fake-github.js";
+import { env, offline, pavel, sampleRepository } from "./fake-github.js";
+import { resetLiveCache } from "../src/live.js";
 
 // Real pages always carry a header; saves must keep it valid (see src/frontmatter.js).
 const page = (body) => `---\ntitle: Home\n---\n${body}`;
 
-function call(github, method, path, { body, ctx = pavel, environment = env } = {}) {
-  const handle = createHandler(github.fetch);
+function call(github, method, path, { body, ctx = pavel, environment = env, web = offline } = {}) {
+  resetLiveCache();
+  const handle = createHandler(github.fetch, undefined, web);
   const request = new Request(`https://studio.test${path}`, {
     method,
     headers: body ? { "content-type": "application/json" } : {},
@@ -34,21 +36,43 @@ test("an email outside ALLOWED_EMAILS answers 403", async () => {
 });
 
 test("non-API paths are served from static assets", async () => {
-  const handle = createHandler(sampleRepository().fetch);
+  const handle = createHandler(sampleRepository().fetch, undefined, offline);
   const response = await handle(new Request("https://studio.test/"), env, {});
   assert.equal(await response.text(), "asset");
 });
 
-test("dashboard lists sites with published and test flags, sorted", async () => {
+test("dashboard lists sites with pod, live and test flags, sorted", async () => {
   const { status, body } = await call(sampleRepository(), "GET", "/api/sites");
   assert.equal(status, 200);
   assert.deepEqual(
-    body.map((site) => [site.slug, site.brandName, site.published, site.isTest, site.hasChanges]),
+    body.map((site) => [site.slug, site.brandName, site.inPod, site.live, site.isTest, site.hasChanges]),
     [
-      ["_example", "Example", false, true, false],
-      ["stuart", "Stuart Homes", true, false, false],
+      ["_example", "Example", false, false, true, false],
+      ["stuart", "Stuart Homes", true, false, false, false],
     ],
   );
+});
+
+test("a site is live only when its own domain serves a page with its canonical address", async () => {
+  const seen = [];
+  const serving = (html, status = 200) => async (url) => {
+    seen.push(String(url));
+    return new Response(html, { status });
+  };
+  const ours = '<link rel="canonical" href="https://stuart.test/">';
+  const cases = [
+    [serving(ours), true],
+    [serving("<html>Parked domain</html>"), false],
+    [serving(ours, 503), false],
+    [async () => { throw new Error("DNS"); }, false],
+  ];
+  for (const [web, expected] of cases) {
+    const { body } = await call(sampleRepository(), "GET", "/api/sites", { web });
+    const stuart = body.find((site) => site.slug === "stuart");
+    assert.equal(stuart.live, expected);
+    assert.equal(stuart.liveUrl, expected ? "https://stuart.test/" : null);
+  }
+  assert.ok(seen.every((url) => url === "https://stuart.test/"), "test sites are never probed");
 });
 
 test("first save creates the draft from main and opens one pull request", async () => {
@@ -104,8 +128,8 @@ test("site view marks edited pages, including nested language pages", async () =
   await call(github, "PUT", "/api/sites/_example/pages/es/index.md", { body: { content: "Hola" } });
   const { body } = await call(github, "GET", "/api/sites/_example");
   assert.deepEqual(body.pages, [
-    { path: "es/index.md", edited: true },
-    { path: "index.md", edited: false },
+    { path: "es/index.md", route: "/es/", edited: true },
+    { path: "index.md", route: "/", edited: false },
   ]);
   assert.equal(body.hasChanges, true);
   const dashboard = await call(github, "GET", "/api/sites");
@@ -250,4 +274,34 @@ test("saving a page with a loose line in its header answers 400 and writes nothi
   assert.equal(response.status, 400);
   assert.match(response.body.error, /Prueba Estudio/);
   assert.equal(writes(), writesBefore, "no commit for an invalid header");
+});
+
+test("the editor reads a page as fields and saves it back through them", async () => {
+  const github = sampleRepository();
+  const opened = await call(github, "GET", "/api/sites/stuart/pages/flood.md");
+  assert.deepEqual(opened.body.fields, {
+    title: "Flood", description: "", navLabel: "", showInNav: true, pageType: "content",
+  });
+  assert.equal(opened.body.route, "/flood/");
+  const fields = { ...opened.body.fields, title: "Flood insurance", pageType: "coverage" };
+  const saved = await call(github, "PUT", "/api/sites/stuart/pages/flood.md", {
+    body: { fields, body: "New flood copy" },
+  });
+  assert.equal(saved.status, 200);
+  const text = github.branches.get("draft/stuart").files["sites/stuart/content/flood.md"];
+  assert.equal(text, '---\ntitle: "Flood insurance"\npageType: coverage\n---\nNew flood copy');
+});
+
+test("saving fields without edits reports no changes", async () => {
+  const github = sampleRepository();
+  const opened = await call(github, "GET", "/api/sites/stuart/pages/index.md");
+  // The fixture has no pageType; the editor sends what it shows, which adds it: that is a change.
+  const text = '---\ntitle: Home\npageType: home\n---\nHello';
+  await call(github, "PUT", "/api/sites/stuart/pages/index.md", { body: { content: text } });
+  const again = await call(github, "GET", "/api/sites/stuart/pages/index.md");
+  const saved = await call(github, "PUT", "/api/sites/stuart/pages/index.md", {
+    body: { fields: again.body.fields, body: again.body.body },
+  });
+  assert.deepEqual(saved.body, { saved: false });
+  assert.equal(opened.status, 200);
 });

@@ -1,17 +1,17 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createHandler } from "../src/index.js";
-import { env, pavel, sampleRepository } from "./fake-github.js";
+import { env, pavel, sampleRepository, offline } from "./fake-github.js";
 
 async function preview(github) {
-  const handle = createHandler(github.fetch);
+  const handle = createHandler(github.fetch, undefined, offline);
   const response = await handle(new Request("https://studio.test/api/sites/stuart"), env, pavel);
   return (await response.json()).preview;
 }
 
 async function withDraft() {
   const github = sampleRepository();
-  const handle = createHandler(github.fetch);
+  const handle = createHandler(github.fetch, undefined, offline);
   await handle(
     new Request("https://studio.test/api/sites/stuart/pages/index.md", {
       method: "PUT",
@@ -53,9 +53,28 @@ test("a failed check on the latest commit: failed, with the reason in one line",
   ]);
   assert.deepEqual(await preview(github), {
     state: "failed",
+    help: "The site's settings didn't pass the automatic checks. Send Vic the message below.",
     reason: "Validate all site configurations: failure",
     url,
   });
+});
+
+test("a failed build of the site points Pavel at his last change", async () => {
+  const github = await withDraft();
+  github.setCheckRuns(github.headOf("draft/stuart"), [
+    { name: "Build stuart", status: "completed", conclusion: "failure" },
+  ]);
+  const status = await preview(github);
+  assert.equal(status.state, "failed");
+  assert.match(status.help, /Check the page you edited last/);
+});
+
+test("a failed preview publish says it is on our side", async () => {
+  const github = await withDraft();
+  github.setCheckRuns(github.headOf("draft/stuart"), [
+    { name: "Preview stuart", status: "completed", conclusion: "failure" },
+  ]);
+  assert.match((await preview(github)).help, /on our side/);
 });
 
 test("new commit still building: preparing, keeping the previous URL reachable", async () => {

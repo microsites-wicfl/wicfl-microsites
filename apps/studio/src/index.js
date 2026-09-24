@@ -8,39 +8,41 @@ import { discardDraft, getSite, listSites, readPage, savePage } from "./sites.js
 //   GET    /api/sites
 //   GET    /api/sites/:slug
 //   GET    /api/sites/:slug/pages/<path>.md
-//   PUT    /api/sites/:slug/pages/<path>.md     body: { "content": "..." }
+//   PUT    /api/sites/:slug/pages/<path>.md     body: { "fields": {...}, "body": "..." } or { "content": "..." }
 //   DELETE /api/sites/:slug/draft
-async function route(request, github, user) {
+async function route(request, github, user, web) {
   const url = new URL(request.url);
   const [, , resource, slug, section, ...rest] = url.pathname.split("/");
   const method = request.method;
 
   if (resource === "me" && method === "GET") return { email: user.email };
   if (resource !== "sites") throw new UserError("Not found.", 404);
-  if (!slug && method === "GET") return listSites(github);
-  if (slug && !section && method === "GET") return getSite(github, slug);
+  if (!slug && method === "GET") return listSites(github, web);
+  if (slug && !section && method === "GET") return getSite(github, slug, web);
 
   if (section === "pages" && rest.length > 0) {
     const page = rest.map(decodeURIComponent).join("/");
     if (method === "GET") return readPage(github, slug, page);
     if (method === "PUT") {
       const body = await request.json().catch(() => ({}));
-      return savePage(github, slug, page, body.content, user.email);
+      return savePage(github, slug, page, body, user.email);
     }
   }
   if (section === "draft" && rest.length === 0 && method === "DELETE") return discardDraft(github, slug);
   throw new UserError("Not found.", 404);
 }
 
-// fetcher reaches GitHub; accessFetcher reaches the Access public keys (both injectable for tests).
-export function createHandler(fetcher = fetch, accessFetcher = fetch) {
+// fetcher reaches GitHub; accessFetcher reaches the Access public keys; webFetcher checks whether a
+// site's own domain is live. All injectable for tests.
+export function createHandler(fetcher = fetch, accessFetcher = fetch, webFetcher = fetch) {
   return async function handle(request, env, ctx) {
     const url = new URL(request.url);
     if (!url.pathname.startsWith("/api/")) return env.ASSETS.fetch(request);
 
     try {
       const user = await requireUser(request, ctx, env, accessFetcher);
-      return json(await route(request, new GitHub(env, fetcher), user));
+      const web = (input, init) => webFetcher(input, init);
+      return json(await route(request, new GitHub(env, fetcher), user, web));
     } catch (error) {
       if (error instanceof UserError) return json({ error: error.message }, error.status);
       // One line with name and message: Workers Logs split a multi-line error and dropped the message.

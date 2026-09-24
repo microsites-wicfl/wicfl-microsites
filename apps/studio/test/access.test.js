@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { requireUser, resetAccessKeyCache, verifyAccessToken } from "../src/access.js";
 import { createHandler } from "../src/index.js";
-import { env as baseEnv, sampleRepository } from "./fake-github.js";
+import { env as baseEnv, offline, sampleRepository } from "./fake-github.js";
 
 const TEAM = "https://team.cloudflareaccess.com";
 const AUD = "studio-aud-tag";
@@ -133,7 +133,7 @@ test("public keys are cached between requests", async () => {
 
 test("end to end: /api/me answers with the email from the Access token", async () => {
   resetAccessKeyCache();
-  const handle = createHandler(sampleRepository().fetch, keyServer());
+  const handle = createHandler(sampleRepository().fetch, keyServer(), offline);
   const token = await sign({ email: "vic@example.test" });
   const response = await handle(request({ "cf-access-jwt-assertion": token }), env, {});
   assert.equal(response.status, 200);

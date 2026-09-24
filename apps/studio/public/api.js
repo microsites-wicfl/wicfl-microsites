@@ -18,7 +18,8 @@ export const api = {
   sites: () => request("/sites"),
   site: (slug) => request(`/sites/${encodeURIComponent(slug)}`),
   page: (slug, path) => request(pagePath(slug, path)),
-  savePage: (slug, path, content) =>
-    request(pagePath(slug, path), { method: "PUT", body: JSON.stringify({ content }) }),
+  // payload is { fields, body } from the fields editor, or { content } for the whole file.
+  savePage: (slug, path, payload) =>
+    request(pagePath(slug, path), { method: "PUT", body: JSON.stringify(payload) }),
   discardDraft: (slug) => request(`/sites/${encodeURIComponent(slug)}/draft`, { method: "DELETE" }),
 };

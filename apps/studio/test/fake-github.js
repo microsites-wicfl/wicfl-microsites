@@ -179,3 +179,7 @@ export function sampleRepository() {
     "packages/template/index.astro": "template",
   });
 }
+
+// Stands in for the public internet in tests: no site's domain is reachable, so nothing is live.
+export const offline = async () => new Response("", { status: 404 });
+

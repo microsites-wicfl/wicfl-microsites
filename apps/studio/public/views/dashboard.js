@@ -2,7 +2,7 @@ import { esc, siteLink } from "../html.js";
 import { text } from "../strings.js";
 
 function siteCard(site) {
-  const publishing = site.published ? text.publishedAt(site.domain) : text.notPublished;
+  const publishing = site.live ? text.liveAt(site.domain) : text.notLive;
   const changes = site.hasChanges
     ? `<span class="badge warn">${text.hasChanges}</span>`
     : `<span class="badge ok">${text.upToDate}</span>`;
@@ -10,7 +10,7 @@ function siteCard(site) {
     <a class="card site-card" href="${siteLink(site.slug)}">
       <strong>${esc(site.brandName)}</strong>
       <span class="muted">${esc(site.domain)}</span>
-      <span class="badges">${changes}<span class="badge">${esc(publishing)}</span></span>
+      <span class="badges">${changes}<span class="badge${site.live ? " ok" : ""}">${esc(publishing)}</span></span>
     </a>`;
 }
 

@@ -10,7 +10,8 @@ function previewPanel(preview) {
     case "failed":
       return `
         <p class="status bad">${text.previewFailed}</p>
-        <p class="muted">${text.previewFailedHelp}</p>
+        <p>${esc(preview.help || text.previewFailedHelp)}</p>
+        <p class="muted small">${text.previewFailedDetails}</p>
         <pre class="reason">${esc(preview.reason)}</pre>
         ${preview.url ? link(text.previewPrevious) : ""}`;
     case "preparing":
@@ -20,21 +21,33 @@ function previewPanel(preview) {
   }
 }
 
-function pageRow(slug, page) {
+function pageRow(site, page) {
   const badge = page.edited ? `<span class="badge warn">${text.edited}</span>` : "";
-  return `<a class="card page-row" href="${pageLink(slug, page.path)}"><span>${esc(page.path)}</span>${badge}</a>`;
+  const live = site.live
+    ? `<a class="small" href="${esc(`https://${site.domain}${page.route}`)}" target="_blank" rel="noopener">${
+      text.viewLive}</a>`
+    : "";
+  return `
+    <div class="card page-row">
+      <a class="page-link" href="${pageLink(site.slug, page.path)}">
+        <strong>${esc(page.route)}</strong> <span class="muted small">${esc(page.path)}</span>
+      </a>
+      <span class="badges">${badge}${live}</span>
+    </div>`;
 }
 
 export function renderSite(site) {
   const pages = site.pages.length
-    ? site.pages.map((page) => pageRow(site.slug, page)).join("")
+    ? site.pages.map((page) => pageRow(site, page)).join("")
     : `<p class="muted">${text.noPages}</p>`;
   const hasDraft = site.preview.state !== "none";
   return `
     <a class="back" href="#/">${text.allSites}</a>
     <h1>${esc(site.brandName)}</h1>
     <p class="muted">
-      ${site.published ? esc(text.publishedAt(site.domain)) : `${esc(site.domain)} · ${text.notPublished}`}
+      ${site.live
+        ? `${text.liveAt("")}<a href="${esc(site.liveUrl)}" target="_blank" rel="noopener">${esc(site.domain)}</a>`
+        : `${esc(site.domain)} · ${text.notLive}`}
     </p>
     <section class="panel">
       <h2>${text.previewTitle}</h2>
