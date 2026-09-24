@@ -3,6 +3,9 @@
 **Updated 4 Sep 2026.** This repository is the WICFL microsite factory. The shared Astro
 template runs locally without a Cloudflare account or a real domain.
 
+**Studio.** WICFL Studio has its own setup, deploy and test notes in `apps/studio/README.md`;
+it deploys from GitHub Actions ("Deploy WICFL Studio") whenever `apps/studio/` changes.
+
 ## Run the template locally
 
 1. Install Node.js 22 or newer.

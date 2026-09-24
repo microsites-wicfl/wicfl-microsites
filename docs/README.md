@@ -19,4 +19,9 @@ la versión en inglés se mantiene como original de referencia.
 | `SCHEDULE.md` | Las 10 fases y los dos gates |
 | `SETUP.md` | Cómo correr el template local, cómo funcionan los preview y production deploys |
 | `QA_CHECKLIST.md` | Checklist de lanzamiento: técnico, SEO, contenido, mobile, conversión, tracking, deploy |
+| `LAUNCH_RUNBOOK.md` | Pasos del lanzamiento de un sitio (preflight, ensayo, deploy, rollback) |
+| `QUALIFIED_CALL_DEFINITION.md` | Qué cuenta como llamada calificada para Gate B (texto aprobado por Kevin) |
+| `PLAN_REVIEW_2026-09-21.md` | Revisión del plan con propuestas para Kevin; nada adoptado hasta que él decida |
+| `VAULT_SETUP_CHECKLIST.md` | Checklist de la bóveda de credenciales |
+| `../apps/studio/README.md` | WICFL Studio: cómo funciona, acceso, despliegue y pruebas. El acceso también está en `ACCOUNTS_AND_ACCESS.md` |
 | `master-file-source.html` | Fuente de la página viva del equipo. Editar aquí y republicar |

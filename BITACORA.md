@@ -1,3 +1,17 @@
+## 2026-09-24 · Documentación al día con Studio
+
+**Quién:** cowork, a pregunta de Vic.
+
+Revisión de `docs/`: la bitácora, el backlog, el README de Studio y los docs del schema estaban
+al día, pero ningún documento de referencia mencionaba Studio. Se agregó: decisión y carpeta en
+`ARCHITECTURE.md`; sección de acceso a Studio en `ACCOUNTS_AND_ACCESS.md` (equipo Zero Trust,
+One-time PIN, política "Studio - Team", `ALLOWED_EMAILS`, token de GitHub y cómo dar o quitar
+acceso); fechas A1–A3 en `SCHEDULE.md`; puntero en `SETUP.md`; índice de `docs/README.md` con
+los cinco archivos que faltaban. Las guías del operador llevan un aviso arriba: describen el
+formulario viejo y se reescriben completas para Studio antes de la capacitación del 2-oct.
+
+---
+
 ## 2026-09-23 · Update al equipo; contacto de Stuart verificado en el código
 
 **Quién:** cowork, a pedido de Vic.

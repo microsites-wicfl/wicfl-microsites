@@ -1,5 +1,12 @@
 # Guía del operador
 
+> **Aviso, 24 de septiembre de 2026:** esta guía describe el formulario anterior
+> (`apps/content-form`) y el camino por GitHub. Los dos se reemplazan por **WICFL Studio**
+> (https://wicfl-studio.wicfl-microsites.workers.dev): entras con un código que te llega al
+> correo, editas, ves la vista previa y descartas sin tocar GitHub. Esta guía se reescribe
+> completa para Studio antes de la capacitación del 2 de octubre. Mientras, para editar páginas
+> que ya existen, usa Studio y practica en "Sitios de prueba".
+
 **Versión 1.3 · 17 de septiembre de 2026 · Traducida y actualizada para la sesión de handoff con
 Pavel de hoy. Es la versión en español de `docs/OPERATOR_GUIDE.md` (v1.2), cierra parte de
 W-102.** Léela antes de la sesión de handoff, no durante. Trae las preguntas que la sesión no

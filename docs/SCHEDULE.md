@@ -21,6 +21,12 @@ dependency lives in `WICFL-microsite-schedule.xlsx`.
 | **Gate B · Go or no-go** | 1–5 Mar 27 | Kevin | Commercial decision. Moved from February so Site #2 gets its full 120 days |
 | **10 · Scale to 20** | from 8 Mar 27 | Pavel | Conditional. Nothing here starts unless Gate B passes |
 
+**Added 23 Sep 2026, WICFL Studio (inside Phase 3, no phase dates change).** Pavel's panel ships
+in three steps: A1 edit, draft, preview and discard (live 23 Sep, Pavel tries it from 24 Sep);
+A2 page fields and validation, new and deleted pages, images, live-site links (28 Sep); A3
+Publish and new-site creation (1 Oct), with Pavel's training on 2 Oct. Goal: Pavel builds
+Site #2 from 12 Oct without touching GitHub.
+
 ## Schedule confirmed 25 Aug 2026
 
 Pavel confirmed his dedication to the project and that he writes native Spanish. Two effects:

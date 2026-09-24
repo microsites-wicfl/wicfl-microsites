@@ -20,6 +20,7 @@ without remembering why.
 | Generator timing | **Minimal generator from Site #1**, heavy automation after Site #3 | Pavel argued for building sites #1 and #2 first and extracting the pattern afterward. Middle ground: the Phase 2 generator is deliberately crude, it only renders the template from config, and it gets rewritten during the pilots. If Site #1 is hand assembled there is no config driven path to improve, and Gate A stops meaning anything. Domain registration and provisioning automation do wait until after Site #3. |
 | Niche selection | **SEO validation before any domain is bought** | Added 25 Aug 2026 from Pavel's research. Kevin selecting a niche is not the same as the niche being winnable. If a market is dominated by national aggregators with no real local angle, we find out in days rather than at Gate B four months later. Backlog item W-016, blocks W-007 and W-011. |
 | Operator profile | **Config and markdown only** | Pavel leads SEO and content and is ramping on the technical side. Framework design must assume the operator never writes HTML, never edits components to launch a site, and can diagnose but not build. This is a hard requirement, not a preference. |
+| Operator tooling | **WICFL Studio** (`apps/studio/`), a web panel in Spanish | Added 22 Sep 2026. The earlier form (`apps/content-form`) exposed Git in disguise: one pull request per page, no preview, no publish, no new pages. Studio keeps one draft per site (branch `draft/<slug>`, one pull request, one full-site preview), uses the repository as its only database, never shows Git vocabulary, and can only write under `sites/<slug>/content/`, which protects Gate A by construction. Sign-in is Cloudflare Access, not a password. Phases: A1 edit/draft/preview/discard (live 23 Sep), A2 page fields, validation, new and deleted pages, images, live links (28 Sep), A3 Publish and new site (1 Oct). `apps/content-form` is retired after A3. Details in `apps/studio/README.md`. |
 | Site #3 | **Generated, not hand built** | If all three are assembled by hand, #3 is faster because Pavel has done it twice. That measures the learning curve, not the factory. |
 
 ## How a site comes into existence
@@ -56,6 +57,9 @@ wicfl-microsites/
 ├── packages/
 │   ├── template/          shared Astro theme, layouts, components
 │   └── config-schema/     the contract + validation
+├── apps/
+│   ├── studio/            WICFL Studio, Pavel's panel (Worker + static UI)
+│   └── content-form/      earlier form, retired after Studio A3
 ├── sites/
 │   ├── <slug>/
 │   │   ├── site.config.json

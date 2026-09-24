@@ -1,5 +1,10 @@
 # Operator guide
 
+> **Notice, 24 Sep 2026:** this guide describes the earlier form (`apps/content-form`) and the
+> GitHub path. Both are being replaced by **WICFL Studio**
+> (https://wicfl-studio.wicfl-microsites.workers.dev). The guide will be rewritten for Studio
+> before Pavel's training on 2 Oct. The Spanish version is the one Pavel uses.
+
 **Version 1.2 · 9 Sep 2026 · Written for Pavel ahead of the 17 Sep handoff, closes backlog item
 W-102.** Read this before the handoff session, not during it. Bring questions the session
 doesn't answer; each one gets logged, because a gap this guide misses is a defect in the guide,
