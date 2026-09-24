@@ -1,0 +1,64 @@
+{
+  "slug": "port-st-lucie-homeowners",
+  "domain": "portsaintluciehomeinsurance.com",
+  "brand": {
+    "name": "Port St. Lucie Home Insurance",
+    "parent": "WICFL"
+  },
+  "niche": {
+    "product": "homeowners",
+    "audience": "homeowner"
+  },
+  "geo": {
+    "city": "Port St. Lucie",
+    "county": "St. Lucie",
+    "state": "FL",
+    "serviceArea": [
+      "Port St. Lucie"
+    ]
+  },
+  "locale": {
+    "primary": "en",
+    "alternates": []
+  },
+  "contact": {
+    "trackingPhone": "+10000000000",
+    "displayPhone": "Phone pending",
+    "email": "pending_email@portsaintluciehomeinsurance.com"
+  },
+  "products": [
+    "homeowners"
+  ],
+  "seo": {
+    "title": "Home Insurance in Port St. Lucie, FL",
+    "description": "Compare homeowners insurance options in Port St. Lucie, Florida with a local agency.",
+    "primaryKeyword": "Port St. Lucie home insurance",
+    "secondaryKeywords": []
+  },
+  "analytics": {
+    "ga4": "G-PLACEHOLDER",
+    "gtm": "GTM-PLACEHOLDER"
+  },
+  "crm": {
+    "formId": "PENDING_GHL_FORM_ID",
+    "leadSource": "port-st-lucie-homeowners"
+  },
+  "theme": {
+    "variant": "coastal",
+    "accentColor": "#0F6B75"
+  },
+  "differentiation": {
+    "localProof": [
+      {
+        "type": "market-data",
+        "summary": "Test site created from Studio to check the new-site flow."
+      }
+    ],
+    "uniqueSections": [
+      {
+        "title": "Test section",
+        "rationale": "Only a test of the new site flow, will be discarded."
+      }
+    ]
+  }
+}
