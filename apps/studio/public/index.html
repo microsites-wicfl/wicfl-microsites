@@ -9,7 +9,11 @@
   <body>
     <header class="topbar">
       <a class="brand" href="#/">WICFL Studio</a>
-      <span id="user" class="user"></span>
+      <span class="account">
+        <span id="user" class="user"></span>
+        <!-- Cloudflare Access ends the session at this address on the app's own domain. -->
+        <a class="signout" href="/cdn-cgi/access/logout">Sign out</a>
+      </span>
     </header>
     <main id="app" aria-live="polite"></main>
     <dialog id="confirm">

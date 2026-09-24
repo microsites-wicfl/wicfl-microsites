@@ -371,4 +371,17 @@ input[type="email"] {
   border: 1px solid var(--line);
   border-radius: 8px;
 }
+.account {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.signout {
+  color: #fff;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+.signout:hover {
+  opacity: 1;
+}
 

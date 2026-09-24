@@ -1,3 +1,13 @@
+## 2026-09-24 · Studio: botón "Sign out"
+
+**Quién:** cowork, a pregunta de Vic.
+
+No había forma de cerrar sesión. Arriba a la derecha, junto al correo, ahora hay **Sign out**, que
+lleva a `/cdn-cgi/access/logout`: la dirección con la que Cloudflare Access termina la sesión en el
+dominio de la app. La siguiente visita vuelve a pedir el código por correo.
+
+---
+
 ## 2026-09-24 · Handbook ilustrado de Studio para Pavel
 
 **Quién:** cowork, a pedido de Vic.
