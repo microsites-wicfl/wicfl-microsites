@@ -18,7 +18,11 @@ import { routeForPageId, site } from "../lib/site-data.mjs";
 
 const { title, description = site.seo.description, pageType, path, lang = site.locale.primary, hreflangAlternates = [] } = Astro.props;
 const address = site.contact.address;
-const kicker = [site.niche?.audience, site.niche?.product].filter(Boolean).join(" ");
+const audience = site.niche?.audience;
+const product = site.niche?.product;
+const kicker = product?.toLowerCase().startsWith(audience?.toLowerCase() ?? "")
+  ? product
+  : [audience, product].filter(Boolean).join(" ");
 const canonicalUrl = `https://${site.domain}${path}`;
 const navPages = (await getCollection("pages"))
   .filter((page) => page.data.pageType !== "home" && page.data.showInNav)
@@ -63,7 +67,7 @@ const structuredData = JSON.stringify({
           {site.brand.logo
             ? <img class="wordmark-logo" src={site.brand.logo} alt={site.brand.name} />
             : <span class="wordmark-name">{site.brand.name}</span>}
-          {kicker && <span class="wordmark-kicker">{kicker} insurance</span>}
+          {!site.brand.logo && kicker && <span class="wordmark-kicker">{kicker} insurance</span>}
         </a>
         <div class="header-contact">
           <span class="header-location">
