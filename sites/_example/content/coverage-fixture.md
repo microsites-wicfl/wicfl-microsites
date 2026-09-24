@@ -10,3 +10,7 @@ This placeholder page exists only to exercise the shared coverage layout. It is 
 
 - Markdown remains operator-authored.
 - The shared layout supplies contact and license information.
+
+## Publish test from Studio
+
+This line was added to test **Publish** on the practice site.
