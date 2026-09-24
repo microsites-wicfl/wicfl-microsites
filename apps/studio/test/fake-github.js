@@ -152,6 +152,29 @@ export class FakeGitHub {
       pull.state = body.state;
       return { body: pull };
     }
+    if ((match = path.match(/^\/pulls\/(\d+)\/merge$/)) && method === "PUT") {
+      const pull = this.pulls.find((item) => item.number === Number(match[1]));
+      if (!pull || pull.state !== "open") return { status: 405, body: { message: "Not mergeable" } };
+      if (this.mergeConflict) return { status: 405, body: { message: "Merge conflict" } };
+      const head = this.branches.get(pull.head);
+      const main = this.branches.get(this.env?.base || "main");
+      const reference = (head.base || main).files;
+      for (const name of new Set([...Object.keys(head.files), ...Object.keys(reference)])) {
+        if (head.files[name] === reference[name]) continue;
+        if (head.files[name] === undefined) delete main.files[name];
+        else main.files[name] = head.files[name];
+      }
+      main.head = `c-${++this.commitCounter}`;
+      main.commits = [...main.commits, { message: body.commit_title, squash: true }];
+      pull.state = "closed";
+      pull.merged = true;
+      return { body: { merged: true } };
+    }
+    if ((match = path.match(/^\/actions\/workflows\/([^/]+)\/dispatches$/)) && method === "POST") {
+      if (this.dispatchForbidden) return { status: 403, body: { message: "Resource not accessible" } };
+      this.dispatches = [...(this.dispatches || []), { workflow: match[1], ...body }];
+      return { status: 204 };
+    }
     if ((match = path.match(/^\/issues\/(\d+)\/comments$/))) {
       return { body: this.comments.get(Number(match[1])) || [] };
     }

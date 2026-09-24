@@ -3,6 +3,10 @@ import { UserError, json } from "./errors.js";
 import { GitHub } from "./github.js";
 import {
   createPage,
+  createSite,
+  getSettings,
+  publishDraft,
+  saveSettings,
   deletePage,
   discardDraft,
   getSite,
@@ -29,6 +33,10 @@ import {
 //   GET    /api/sites/:slug/images               (list)
 //   POST   /api/sites/:slug/images               body: { "name": "photo.jpg", "data": "<base64>" }
 //   GET    /api/sites/:slug/images/<name>        (the image itself, from the draft if there is one)
+//   POST   /api/sites                           body: new site form            (new site, as a draft)
+//   GET    /api/sites/:slug/settings
+//   PUT    /api/sites/:slug/settings            body: settings form
+//   POST   /api/sites/:slug/publish
 //   DELETE /api/sites/:slug/draft
 async function route(request, github, user, web) {
   const url = new URL(request.url);
@@ -38,6 +46,14 @@ async function route(request, github, user, web) {
   if (resource === "me" && method === "GET") return { email: user.email };
   if (resource !== "sites") throw new UserError("Not found.", 404);
   if (!slug && method === "GET") return listSites(github, web);
+  if (!slug && method === "POST") return createSite(github, await request.json().catch(() => ({})), user.email);
+  if (section === "settings" && rest.length === 0 && method === "GET") return getSettings(github, slug);
+  if (section === "settings" && rest.length === 0 && method === "PUT") {
+    return saveSettings(github, slug, await request.json().catch(() => ({})), user.email);
+  }
+  if (section === "publish" && rest.length === 0 && method === "POST") {
+    return publishDraft(github, slug, user.email, web);
+  }
   if (slug && !section && method === "GET") return getSite(github, slug, web);
 
   if (section === "images" && rest.length === 0 && method === "GET") return listImages(github, slug);

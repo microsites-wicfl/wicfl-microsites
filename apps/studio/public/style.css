@@ -343,4 +343,32 @@ label.button.small {
   opacity: 0.6;
   pointer-events: none;
 }
+.buttons {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.4rem;
+}
+.panel .buttons button.danger {
+  margin-top: 0;
+}
+.blockers {
+  margin-top: 1rem;
+  border-color: #f0d7a8;
+  background: #fffaf0;
+}
+.blockers ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+a.button.secondary {
+  background: #e7ecf1;
+  color: var(--ink);
+}
+input[type="email"] {
+  font: inherit;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
 

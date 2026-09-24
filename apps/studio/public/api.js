@@ -34,5 +34,10 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ name, data }),
     }),
+  createSite: (payload) => request("/sites", { method: "POST", body: JSON.stringify(payload) }),
+  settings: (slug) => request(`/sites/${encodeURIComponent(slug)}/settings`),
+  saveSettings: (slug, payload) =>
+    request(`/sites/${encodeURIComponent(slug)}/settings`, { method: "PUT", body: JSON.stringify(payload) }),
+  publish: (slug) => request(`/sites/${encodeURIComponent(slug)}/publish`, { method: "POST" }),
   discardDraft: (slug) => request(`/sites/${encodeURIComponent(slug)}/draft`, { method: "DELETE" }),
 };

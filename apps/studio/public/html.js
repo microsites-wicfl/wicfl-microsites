@@ -19,3 +19,9 @@ export function siteLink(slug) {
 export function newPageLink(slug) {
   return `#/site/${encodeURIComponent(slug)}/new`;
 }
+
+export function settingsLink(slug) {
+  return `#/site/${encodeURIComponent(slug)}/settings`;
+}
+
+export const newSiteLink = "#/new-site";

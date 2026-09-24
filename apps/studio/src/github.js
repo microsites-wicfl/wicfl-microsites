@@ -150,6 +150,20 @@ export class GitHub {
     return this.request(`${this.repo}/pulls/${number}`, { method: "PATCH", body: { state: "closed" } });
   }
 
+  mergePull(number, { title, message }) {
+    return this.request(`${this.repo}/pulls/${number}/merge`, {
+      method: "PUT",
+      body: { merge_method: "squash", commit_title: title, commit_message: message },
+    });
+  }
+
+  dispatchWorkflow(file, inputs) {
+    return this.request(`${this.repo}/actions/workflows/${file}/dispatches`, {
+      method: "POST",
+      body: { ref: this.env.GITHUB_BASE_BRANCH, inputs },
+    });
+  }
+
   pullComments(number) {
     return this.request(`${this.repo}/issues/${number}/comments?per_page=100`);
   }

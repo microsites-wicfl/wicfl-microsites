@@ -37,6 +37,17 @@ No hay base de datos: el repositorio es la base de datos.
 - **Editor (A2):** campos por página (`src/pagefields.js`), vista previa en vivo junto al texto
   (`public/markdown.js`, render propio y seguro; la vista previa del sitio sigue siendo la
   referencia), imágenes que se insertan donde está el cursor, página nueva, borrar y restaurar.
+- **Publicar y sitios (A3):** **Publish** solo con la vista previa lista: fusiona el borrador a
+  `main` (squash) y borra la rama. Si el sitio ya está en vivo, además lanza `deploy.yml` a
+  producción; eso pide que el token de Studio tenga **Actions: Read and write**. Sin ese permiso
+  publica igual y avisa que Vic lo ponga en vivo. Un sitio que no está en vivo (antes del
+  lanzamiento, o nuevo) solo queda como versión oficial. **New site** crea `sites/<slug>/` en un
+  borrador: `site.config.json` válido contra el schema (la prueba lo valida con el AJV del repo
+  cuando está instalado), inicio, contacto y una página de cobertura. Teléfono, correo,
+  analítica y CRM arrancan como placeholders marcados, y el sitio no entra a ningún pod: la
+  primera salida en vivo es de Vic. **Site settings** edita marca, teléfono, correo, SEO y área
+  de servicio, y muestra "Before this site can go live" con los mismos patrones del gate de
+  producción.
 - **Descartar:** cierra el PR y borra la rama. `preview-cleanup.yml` borra el Worker de preview.
 
 ## Acceso

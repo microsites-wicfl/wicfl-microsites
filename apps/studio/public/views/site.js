@@ -1,4 +1,5 @@
-import { esc, newPageLink, pageLink } from "../html.js";
+import { esc, newPageLink, pageLink, settingsLink } from "../html.js";
+import { blockersPanel } from "./settings.js";
 import { text } from "../strings.js";
 
 function previewPanel(preview) {
@@ -53,7 +54,11 @@ export function renderSite(site) {
   const hasDraft = site.preview.state !== "none";
   return `
     <a class="back" href="#/">${text.allSites}</a>
-    <h1>${esc(site.brandName)}</h1>
+    <div class="section-head">
+      <h1>${esc(site.brandName)}</h1>
+      <a class="button secondary" href="${settingsLink(site.slug)}">${text.settings}</a>
+    </div>
+    ${site.isNew ? `<p><span class="badge warn">${text.newSiteBadge}</span></p>` : ""}
     <p class="muted">
       ${site.live
         ? `${text.liveAt("")}<a href="${esc(site.liveUrl)}" target="_blank" rel="noopener">${esc(site.domain)}</a>`
@@ -62,9 +67,15 @@ export function renderSite(site) {
     <section class="panel">
       <h2>${text.previewTitle}</h2>
       ${previewPanel(site.preview)}
-      ${hasDraft ? `<p class="muted small">${text.publishSoon}</p>` : ""}
-      ${hasDraft ? `<button type="button" class="danger" id="discard">${text.discardDraft}</button>` : ""}
+      ${hasDraft ? `<p class="muted small">${text.publishHint}</p>` : ""}
+      <div class="buttons">
+        ${hasDraft
+          ? `<button type="button" id="publish"${site.canPublish ? "" : " disabled"}>${text.publish}</button>`
+          : ""}
+        ${hasDraft ? `<button type="button" class="danger" id="discard">${text.discardDraft}</button>` : ""}
+      </div>
     </section>
+    ${site.isTest || !site.blockers?.length ? "" : blockersPanel(site.blockers)}
     <div class="section-head">
       <h2>${text.pagesTitle}</h2>
       <a class="button" href="${newPageLink(site.slug)}">${text.newPage}</a>

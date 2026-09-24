@@ -14,9 +14,22 @@ import {
   relativePage,
 } from "./paths.js";
 import { previewStatus } from "./preview.js";
+import {
+  applySettings,
+  formatConfig,
+  launchBlockers,
+  newSiteConfig,
+  settingsOf,
+  starterPages,
+} from "./siteconfig.js";
 
-async function readConfig(github, slug) {
-  const file = await github.readFile(`sites/${slug}/site.config.json`, github.env.GITHUB_BASE_BRANCH);
+const configPath = (slug) => `sites/${assertSlug(slug)}/site.config.json`;
+
+// The site's settings as Pavel last saved them: from its draft when there is one (a new site
+// exists only there until it is published), otherwise from the published version.
+async function readConfig(github, slug, { draft = true } = {}) {
+  const draftSha = draft ? await github.branchSha(draftBranch(slug)) : null;
+  const file = await github.readFile(configPath(slug), draftSha ? draftBranch(slug) : github.env.GITHUB_BASE_BRANCH);
   if (!file) return null;
   return JSON.parse(file.text);
 }
@@ -63,9 +76,12 @@ export async function listSites(github, web = null) {
     github.draftBranchNames(),
   ]);
 
+  const slugs = new Set(directories.filter((item) => item.type === "dir").map((item) => item.name));
+  // New sites live only in their draft until they are published.
+  for (const branch of drafts) slugs.add(branch.replace(/^draft\//, ""));
+
   const sites = [];
-  for (const directory of directories.filter((item) => item.type === "dir")) {
-    const slug = directory.name;
+  for (const slug of slugs) {
     const config = await readConfig(github, slug);
     if (!config) continue;
     const changed = drafts.includes(`draft/${slug}`) ? await draftChanges(github, slug) : [];
@@ -120,10 +136,15 @@ export async function getSite(github, slug, web = null) {
     )
     .sort((left, right) => left.path.localeCompare(right.path));
 
+  const preview = await previewStatus(github, slug, { headSha: draftSha, pull });
+  const isNew = !(await github.readFile(configPath(slug), base));
   return {
     ...(await summary(slug, config, published, edited.size, web)),
+    isNew,
+    blockers: slug.startsWith("_") ? [] : launchBlockers(config),
+    canPublish: preview.state === "ready",
     pages,
-    preview: await previewStatus(github, slug, { headSha: draftSha, pull }),
+    preview,
   };
 }
 
@@ -369,4 +390,96 @@ export async function uploadImage(github, slug, input, email) {
   });
   await ensurePull(github, slug);
   return { name, url: `/images/${name}` };
+}
+
+export async function getSettings(github, slug) {
+  const config = await readConfig(github, slug);
+  if (!config) throw new UserError("That site doesn't exist.", 404);
+  return { settings: settingsOf(config), blockers: slug.startsWith("_") ? [] : launchBlockers(config) };
+}
+
+export async function saveSettings(github, slug, input, email) {
+  const branchExists = await github.branchSha(draftBranch(slug));
+  const ref = branchExists ? draftBranch(slug) : github.env.GITHUB_BASE_BRANCH;
+  const file = await github.readFile(configPath(slug), ref);
+  if (!file) throw new UserError("That site doesn't exist.", 404);
+  const next = formatConfig(applySettings(JSON.parse(file.text), input || {}));
+  if (JSON.stringify(JSON.parse(next)) === JSON.stringify(JSON.parse(file.text))) return { saved: false };
+
+  const branch = await ensureDraftBranch(github, slug);
+  const inDraft = await github.readFile(configPath(slug), branch);
+  await github.writeFile(configPath(slug), {
+    text: next,
+    sha: inDraft.sha,
+    branch,
+    message: `content(${slug}): update site settings\n\nEdited-by: ${email}`,
+  });
+  await ensurePull(github, slug);
+  return { saved: true, blockers: launchBlockers(JSON.parse(next)) };
+}
+
+// A new site is born as a draft: its settings plus three starter pages, all inside sites/<slug>/.
+// It is not wired to any domain; going live the first time stays with Vic.
+export async function createSite(github, input, email) {
+  const config = newSiteConfig(input || {});
+  const slug = config.slug;
+  const base = github.env.GITHUB_BASE_BRANCH;
+  if ((await github.readFile(configPath(slug), base)) || (await github.branchSha(draftBranch(slug)))) {
+    throw new UserError(`A site for ${config.geo.city} and ${config.niche.product} already exists.`, 409);
+  }
+  const branch = await ensureDraftBranch(github, slug);
+  await github.writeFile(configPath(slug), {
+    text: formatConfig(config),
+    branch,
+    message: `content(${slug}): create site\n\nEdited-by: ${email}`,
+  });
+  for (const [name, text] of Object.entries(starterPages(config))) {
+    await github.writeFile(pageFile(slug, name), {
+      text,
+      branch,
+      message: `content(${slug}): add starter ${name}\n\nEdited-by: ${email}`,
+    });
+  }
+  await ensurePull(github, slug);
+  return { created: true, slug };
+}
+
+// Publish = the draft becomes the site's official version. A site already live on its domain is
+// then deployed; a site that isn't live yet (before launch, or a new site) waits for Vic.
+export async function publishDraft(github, slug, email, web = null) {
+  const draftSha = await github.branchSha(draftBranch(slug));
+  if (!draftSha) throw new UserError("There is nothing to publish on this site.", 400);
+  const pull = await findPull(github, slug);
+  const preview = await previewStatus(github, slug, { headSha: draftSha, pull });
+  if (preview.state !== "ready") {
+    throw new UserError("Wait until the preview is ready, and check it, before publishing.", 409);
+  }
+  try {
+    await github.mergePull(pull.number, {
+      title: `content(${slug}): publish from Studio`,
+      message: `Published-by: ${email}`,
+    });
+  } catch (error) {
+    if (error.status === 405 || error.status === 409) {
+      throw new UserError("This draft can't be published automatically right now. Let Vic know.", 409);
+    }
+    throw error;
+  }
+  try {
+    await github.deleteBranch(draftBranch(slug));
+  } catch (error) {
+    if (error.status !== 404 && error.status !== 422) throw error;
+  }
+
+  const config = await readConfig(github, slug, { draft: false });
+  const inPod = (await publishedSlugs(github)).has(slug);
+  const live = inPod && config ? await isLive(config.domain, web) : false;
+  if (!live) return { published: true, deploying: false };
+  try {
+    await github.dispatchWorkflow("deploy.yml", { target: "production", confirm: "deploy" });
+    return { published: true, deploying: true };
+  } catch (error) {
+    console.error(`Studio error: publish deploy dispatch failed: ${error.message}`);
+    return { published: true, deploying: false, needsVic: true };
+  }
 }

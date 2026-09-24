@@ -1,3 +1,33 @@
+## 2026-09-24 · Studio A3: Publicar, sitio nuevo y datos del sitio. El panel queda completo
+
+**Quién:** cowork.
+
+- **Publish:** se activa solo cuando la vista previa está lista y pide confirmación. Fusiona el
+  borrador a `main` como un solo cambio y borra la rama. Si el sitio ya está en vivo, lanza el
+  deploy de producción; si no lo está (Stuart hoy, o un sitio nuevo), queda como versión oficial y
+  sale en vivo cuando Vic lo lance. Si GitHub no deja fusionar, no publica nada y lo dice.
+  **Pendiente de Vic antes del 9-oct:** cambiar el permiso del token de Studio a **Actions: Read
+  and write**; sin él, Publish en un sitio en vivo publica pero pide a Vic desplegar.
+- **New site:** formulario con marca, dominio, ciudad, condado, producto, público, área de
+  servicio, SEO y la prueba local + sección única (el candado de diferenciación, obligatorios).
+  Crea `sites/<slug>/` en un borrador con un `site.config.json` que pasa el schema real (probado
+  con AJV) y tres páginas de arranque en inglés que dicen "Replace this text". Teléfono, correo,
+  GA4, GTM y CRM arrancan como placeholders marcados; el sitio no entra a ningún pod. El tablero
+  lo muestra desde su borrador ("New site, not published yet").
+- **Site settings:** marca, teléfono (se normaliza: `772.335.4779` → `+17723354779` /
+  `(772) 335-4779`), correo, SEO, keywords y área de servicio, con validación de los límites del
+  schema. El sitio muestra "Before this site can go live" con exactamente los patrones del gate
+  de producción. Para Stuart hoy: el "Demo" de marca y SEO (Pavel lo cambia desde aquí) y
+  GA4/GTM/CRM (Vic).
+
+Todo sigue escribiendo solo dentro de `sites/<slug>/` (Gate A). 92 pruebas (12 nuevas). Probado
+en Chromium contra el GitHub simulado: bloqueos de Stuart, editar datos, bloqueos que
+desaparecen, publicar, crear el sitio de PSL, verlo en el tablero; sin errores de consola.
+**Con A3, el panel de Pavel queda completo el 24-sep, una semana antes del 1-oct.** Falta:
+reescribir la guía de Pavel para Studio y retirar el formulario viejo antes de la capacitación.
+
+---
+
 ## 2026-09-24 · Studio A2 completa: imágenes y vista previa junto al editor
 
 **Quién:** cowork.

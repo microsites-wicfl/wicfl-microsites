@@ -1,5 +1,6 @@
 import { api } from "./api.js";
 import { $, esc, pageLink, siteLink } from "./html.js";
+import { renderNewSite, renderSettings } from "./views/settings.js";
 import { text } from "./strings.js";
 import { confirmDialog, toast } from "./ui.js";
 import { renderDashboard } from "./views/dashboard.js";
@@ -14,7 +15,9 @@ let unsavedEditor = null;
 
 function parseRoute() {
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean).map(decodeURIComponent);
+  if (parts[0] === "new-site") return { view: "new-site" };
   if (parts[0] !== "site" || !parts[1]) return { view: "dashboard" };
+  if (parts[2] === "settings") return { view: "settings", slug: parts[1] };
   if (parts[2] === "new") return { view: "new", slug: parts[1] };
   if (parts[2] === "page" && parts.length > 3) {
     return { view: "page", slug: parts[1], path: parts.slice(3).join("/") };
@@ -46,6 +49,29 @@ async function showSite(slug) {
       await api.discardDraft(slug);
       toast(text.discarded);
       render();
+    };
+  }
+  const publish = $("#publish");
+  if (publish) {
+    publish.onclick = async () => {
+      const sure = await confirmDialog({
+        message: text.publishQuestion(site.live),
+        yes: text.publish,
+        no: text.cancel,
+      });
+      if (!sure) return;
+      publish.disabled = true;
+      publish.textContent = text.publishing;
+      try {
+        const result = await api.publish(slug);
+        const message = result.deploying ? text.publishedLive : text.publishedNotLive;
+        toast(result.needsVic ? text.publishedNeedsVic : message);
+        render();
+      } catch (error) {
+        toast(error.message);
+        publish.disabled = false;
+        publish.textContent = text.publish;
+      }
     };
   }
   for (const button of document.querySelectorAll("[data-restore]")) {
@@ -115,6 +141,55 @@ async function showPage(slug, path) {
       toast(error.message);
       saveButton.disabled = false;
       saveButton.textContent = text.save;
+    }
+  };
+}
+
+function formValues(form) {
+  return Object.fromEntries(new FormData(form).entries());
+}
+
+async function showSettings(slug) {
+  const [site, data] = await Promise.all([api.site(slug), api.settings(slug)]);
+  app.innerHTML = renderSettings(site, data);
+  const form = $("#settings");
+  const initial = JSON.stringify(formValues(form));
+  unsavedEditor = { isDirty: () => JSON.stringify(formValues(form)) !== initial };
+  const button = $("#save-settings");
+  button.onclick = async () => {
+    button.disabled = true;
+    button.textContent = text.saving;
+    try {
+      const result = await api.saveSettings(slug, formValues(form));
+      unsavedEditor = null;
+      toast(result.saved ? text.settingsSaved : text.noChanges);
+      location.hash = siteLink(slug);
+    } catch (error) {
+      toast(error.message);
+      button.disabled = false;
+      button.textContent = text.save;
+    }
+  };
+}
+
+function showNewSite() {
+  app.innerHTML = renderNewSite();
+  const form = $("#new-site");
+  const initial = JSON.stringify(formValues(form));
+  unsavedEditor = { isDirty: () => JSON.stringify(formValues(form)) !== initial };
+  const button = $("#create-site");
+  button.onclick = async () => {
+    button.disabled = true;
+    button.textContent = text.creating;
+    try {
+      const result = await api.createSite(formValues(form));
+      unsavedEditor = null;
+      toast(text.siteCreated);
+      location.hash = siteLink(result.slug);
+    } catch (error) {
+      toast(error.message);
+      button.disabled = false;
+      button.textContent = text.createSite;
     }
   };
 }
@@ -250,6 +325,8 @@ async function render() {
     if (route.view === "site") await showSite(route.slug);
     if (route.view === "page") await showPage(route.slug, route.path);
     if (route.view === "new") await showNewPage(route.slug);
+    if (route.view === "settings") await showSettings(route.slug);
+    if (route.view === "new-site") showNewSite();
   } catch (error) {
     showError(error);
   }

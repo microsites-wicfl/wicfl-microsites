@@ -1,4 +1,4 @@
-import { esc, siteLink } from "../html.js";
+import { esc, newSiteLink, siteLink } from "../html.js";
 import { text } from "../strings.js";
 
 function siteCard(site) {
@@ -26,7 +26,10 @@ export function renderDashboard(sites) {
        </section>`
     : "";
   return `
-    <h1>${text.dashboardTitle}</h1>
+    <div class="section-head">
+      <h1>${text.dashboardTitle}</h1>
+      <a class="button" href="${newSiteLink}">${text.newSite}</a>
+    </div>
     <div class="grid">${realList}</div>
     ${practiceSection}`;
 }
