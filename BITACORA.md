@@ -1,3 +1,16 @@
+## 2026-09-24 · Regla: todo en inglés; Studio traducido
+
+**Quién:** cowork, a pedido de Vic.
+
+Vic fijó como regla que todo lo que se construye va en inglés: Studio completo y todo el
+contenido de los sitios, siempre. Registrada en `CLAUDE.md` (Idioma). Studio traducido: los 40
+textos de la interfaz, `lang="en"`, y todos los mensajes del servidor (acceso, errores, validación
+del encabezado). Prueba nueva en `ui-words.test.js`: falla si aparece un carácter del español en
+`public/` o `src/`. 55 pruebas verdes. Choque con el plan: el sitio en español (W-031, Fase 4)
+queda fuera hasta que Kevin decida; la guía de Pavel para Studio se escribe en inglés.
+
+---
+
 ## 2026-09-24 · Limpieza de PRs y ramas viejas: todo es prueba u obsoleto
 
 **Quién:** Codex (inventario), cowork (revisión de cada diff).
