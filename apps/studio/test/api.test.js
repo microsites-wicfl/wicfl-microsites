@@ -4,6 +4,9 @@ import { createHandler } from "../src/index.js";
 import { pageFile } from "../src/paths.js";
 import { env, pavel, sampleRepository } from "./fake-github.js";
 
+// Real pages always carry a header; saves must keep it valid (see src/frontmatter.js).
+const page = (body) => `---\ntitle: Home\n---\n${body}`;
+
 function call(github, method, path, { body, ctx = pavel, environment = env } = {}) {
   const handle = createHandler(github.fetch);
   const request = new Request(`https://studio.test${path}`, {
@@ -51,10 +54,10 @@ test("dashboard lists sites with published and test flags, sorted", async () => 
 test("first save creates the draft from main and opens one pull request", async () => {
   const github = sampleRepository();
   const response = await call(github, "PUT", "/api/sites/stuart/pages/index.md", {
-    body: { content: "New home" },
+    body: { content: page("New home") },
   });
   assert.equal(response.status, 200);
-  assert.equal(github.branches.get("draft/stuart").files["sites/stuart/content/index.md"], "New home");
+  assert.equal(github.branches.get("draft/stuart").files["sites/stuart/content/index.md"], page("New home"));
   assert.equal(
     github.branches.get("main").files["sites/stuart/content/index.md"],
     "---\ntitle: Home\n---\nHello",
@@ -66,8 +69,8 @@ test("first save creates the draft from main and opens one pull request", async 
 
 test("a second save of another page reuses the same draft and pull request", async () => {
   const github = sampleRepository();
-  await call(github, "PUT", "/api/sites/stuart/pages/index.md", { body: { content: "One" } });
-  await call(github, "PUT", "/api/sites/stuart/pages/flood.md", { body: { content: "Two" } });
+  await call(github, "PUT", "/api/sites/stuart/pages/index.md", { body: { content: page("One") } });
+  await call(github, "PUT", "/api/sites/stuart/pages/flood.md", { body: { content: page("Two") } });
   assert.equal(github.pulls.length, 1);
   assert.equal(github.commitsOn("draft/stuart").length, 2);
   for (const commit of github.commitsOn("draft/stuart")) assert.match(commit.message, /Edited-by: /);
@@ -84,9 +87,9 @@ test("saving identical content makes no commit", async () => {
 
 test("a page reopened after saving shows the saved text, read from the draft", async () => {
   const github = sampleRepository();
-  await call(github, "PUT", "/api/sites/stuart/pages/index.md", { body: { content: "Saved text" } });
+  await call(github, "PUT", "/api/sites/stuart/pages/index.md", { body: { content: page("Saved text") } });
   const { body } = await call(github, "GET", "/api/sites/stuart/pages/index.md");
-  assert.equal(body.text, "Saved text");
+  assert.equal(body.text, page("Saved text"));
   assert.equal(body.inDraft, true);
 });
 
@@ -158,14 +161,14 @@ test("saving a page that does not exist is refused, not created", async () => {
 
 test("a stale sha answers 409 in plain language", async () => {
   const github = sampleRepository();
-  await call(github, "PUT", "/api/sites/stuart/pages/index.md", { body: { content: "First" } });
+  await call(github, "PUT", "/api/sites/stuart/pages/index.md", { body: { content: page("First") } });
   const realFetch = github.fetch;
   github.fetch = async (input, init = {}) => {
     if (init.method === "PUT") return new Response("{}", { status: 409 });
     return realFetch(input, init);
   };
   const response = await call(github, "PUT", "/api/sites/stuart/pages/index.md", {
-    body: { content: "Second" },
+    body: { content: page("Second") },
   });
   assert.equal(response.status, 409);
   assert.match(response.body.error, /cambió mientras la editabas/);
@@ -173,15 +176,15 @@ test("a stale sha answers 409 in plain language", async () => {
 
 test("a draft branch whose pull request was closed gets a new one on the next save", async () => {
   const github = sampleRepository();
-  await call(github, "PUT", "/api/sites/stuart/pages/index.md", { body: { content: "One" } });
+  await call(github, "PUT", "/api/sites/stuart/pages/index.md", { body: { content: page("One") } });
   github.pulls[0].state = "closed";
-  await call(github, "PUT", "/api/sites/stuart/pages/flood.md", { body: { content: "Two" } });
+  await call(github, "PUT", "/api/sites/stuart/pages/flood.md", { body: { content: page("Two") } });
   assert.equal(github.pulls.filter((pull) => pull.state === "open").length, 1);
 });
 
 test("discard closes the pull request and deletes the draft; discarding twice is fine", async () => {
   const github = sampleRepository();
-  await call(github, "PUT", "/api/sites/stuart/pages/index.md", { body: { content: "One" } });
+  await call(github, "PUT", "/api/sites/stuart/pages/index.md", { body: { content: page("One") } });
   const first = await call(github, "DELETE", "/api/sites/stuart/draft");
   assert.equal(first.status, 200);
   assert.equal(github.pulls[0].state, "closed");
@@ -231,4 +234,20 @@ test("the platform fetch is never called with the GitHub client as `this`", asyn
   };
   const github = new GitHub(env, strictFetch);
   assert.deepEqual(await github.request("/rate_limit"), { ok: true });
+});
+
+test("saving a page with a loose line in its header answers 400 and writes nothing", async () => {
+  const github = sampleRepository();
+  // Seed the page with a valid header through a normal save first.
+  await call(github, "PUT", "/api/sites/stuart/pages/index.md", {
+    body: { content: '---\ntitle: "Home"\npageType: home\n---\nBody' },
+  });
+  const writes = () => github.calls.filter((c) => c.method === "PUT").length;
+  const writesBefore = writes();
+  const response = await call(github, "PUT", "/api/sites/stuart/pages/index.md", {
+    body: { content: '---\ntitle: "Home"\npageType: home\nPrueba Estudio\n---\nBody' },
+  });
+  assert.equal(response.status, 400);
+  assert.match(response.body.error, /Prueba Estudio/);
+  assert.equal(writes(), writesBefore, "no commit for an invalid header");
 });

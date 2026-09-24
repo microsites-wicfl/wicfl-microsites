@@ -1,3 +1,17 @@
+## 2026-09-24 · Studio valida el encabezado de la página al guardar
+
+**Quién:** cowork.
+
+La segunda prueba de Vic volvió a fallar por lo mismo: la línea nueva quedó otra vez dentro del
+encabezado (antes del segundo `---`). Si el arquitecto cae dos veces, Pavel también: no puede
+esperar a A2. `src/frontmatter.js` revisa el encabezado antes de guardar y, si hay una línea que
+no es `campo: valor`, si falta el cierre `---`, si se borró el encabezado o si se borró `title`
+o `pageType`, no guarda y dice en español qué línea está mal y a dónde moverla. El aviso dura en
+pantalla según su largo. 9 pruebas nuevas (incluidos los dos casos reales de Vic), 54 verdes.
+A2 sigue reemplazando el encabezado crudo por campos; esta revisión se queda debajo.
+
+---
+
 ## 2026-09-24 · Documentación al día con Studio
 
 **Quién:** cowork, a pregunta de Vic.

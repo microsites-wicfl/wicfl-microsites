@@ -15,7 +15,7 @@ async function withDraft() {
   await handle(
     new Request("https://studio.test/api/sites/stuart/pages/index.md", {
       method: "PUT",
-      body: JSON.stringify({ content: "Changed" }),
+      body: JSON.stringify({ content: "---\ntitle: Home\n---\nChanged" }),
     }),
     env,
     pavel,

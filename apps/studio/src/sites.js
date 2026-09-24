@@ -1,3 +1,4 @@
+import { validatePageHeader } from "./frontmatter.js";
 import { UserError } from "./errors.js";
 import { assertSlug, contentRoot, draftBranch, pageFile, relativePage } from "./paths.js";
 import { previewStatus } from "./preview.js";
@@ -133,6 +134,7 @@ export async function savePage(github, slug, relativePath, text, email) {
   );
   if (!current) throw new UserError("Esa página no existe.", 404);
   if (current.text === text) return { saved: false };
+  validatePageHeader(text, current.text);
 
   const branch = await ensureDraftBranch(github, slug);
   try {

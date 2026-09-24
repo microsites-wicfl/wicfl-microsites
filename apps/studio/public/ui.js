@@ -27,5 +27,5 @@ export function toast(message) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => {
     element.hidden = true;
-  }, 5000);
+  }, Math.max(5000, message.length * 70));
 }
