@@ -3,7 +3,7 @@ import { UserError } from "./errors.js";
 // Every page starts with a header between two "---" lines (title, description, pageType, navLabel).
 // It has a strict format: one "name: value" per line. A loose line there breaks the whole site
 // build, and GitHub only reports "failure". This check catches it at save time and says, in
-// Pavel's words, which line is wrong and where it should go. A2 replaces the raw header with
+// plain English, which line is wrong and where it should go. A2 replaces the raw header with
 // separate fields; this guard stays underneath as the last line of defence.
 
 const KEY_LINE = /^[A-Za-z_][\w-]*:(\s|$)/;
@@ -27,8 +27,8 @@ export function validatePageHeader(newText, oldText) {
   if (!after) {
     if (before) {
       throw new UserError(
-        "Falta el encabezado de la página: la primera línea tiene que ser --- y después vienen " +
-          "title, description, pageType y navLabel. Recarga la página para recuperarlo.",
+        "The page header is missing: the first line must be --- followed by title, " +
+          "description, pageType and navLabel. Reload the page to get it back.",
         400,
       );
     }
@@ -36,7 +36,7 @@ export function validatePageHeader(newText, oldText) {
   }
   if (!after.closed) {
     throw new UserError(
-      "El encabezado de la página no está cerrado: falta la segunda línea --- después de navLabel.",
+      "The page header isn't closed: the second --- line after navLabel is missing.",
       400,
     );
   }
@@ -47,9 +47,9 @@ export function validatePageHeader(newText, oldText) {
     if (/^\s/.test(line) || trimmed.startsWith("- ")) continue;
     if (!KEY_LINE.test(line)) {
       throw new UserError(
-        `La línea «${trimmed.slice(0, 60)}» quedó dentro del encabezado de la página (entre las ` +
-          "dos líneas ---), donde solo van campos como title: o description:. Muévela debajo " +
-          "de la segunda línea ---, con el resto del texto.",
+        `The line "${trimmed.slice(0, 60)}" ended up inside the page header (between the two --- ` +
+          "lines), where only fields like title: or description: belong. Move it below the " +
+          "second --- line, with the rest of the text.",
         400,
       );
     }
@@ -61,7 +61,7 @@ export function validatePageHeader(newText, oldText) {
     const missing = REQUIRED.filter((key) => had.has(key) && !has.has(key));
     if (missing.length) {
       throw new UserError(
-        `Falta ${missing.join(" y ")} en el encabezado de la página. Recarga para recuperarlo.`,
+        `The page header is missing ${missing.join(" and ")}. Reload the page to get it back.`,
         400,
       );
     }

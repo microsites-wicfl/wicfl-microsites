@@ -171,7 +171,7 @@ test("a stale sha answers 409 in plain language", async () => {
     body: { content: page("Second") },
   });
   assert.equal(response.status, 409);
-  assert.match(response.body.error, /cambió mientras la editabas/);
+  assert.match(response.body.error, /changed while you were editing/);
 });
 
 test("a draft branch whose pull request was closed gets a new one on the next save", async () => {

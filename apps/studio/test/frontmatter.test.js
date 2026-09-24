@@ -14,24 +14,24 @@ test("a loose line inside the header is rejected and named (the 23 Sep test case
   const broken = page('title: "Flood"\ndescription: "D"\npageType: coverage\nnavLabel: "Flood"\nPrueba Estudio');
   assert.throws(() => validatePageHeader(broken, original), (error) => {
     assert.equal(error.status, 400);
-    assert.match(error.message, /«Prueba Estudio»/);
-    assert.match(error.message, /debajo/);
+    assert.match(error.message, /"Prueba Estudio"/);
+    assert.match(error.message, /below/);
     return true;
   });
 });
 
 test("a line with a comma but no field name is still rejected", () => {
   const broken = page('title: "Flood"\npageType: coverage\nprueba, studio');
-  assert.throws(() => validatePageHeader(broken, original), /«prueba, studio»/);
+  assert.throws(() => validatePageHeader(broken, original), /"prueba, studio"/);
 });
 
 test("removing the header entirely is rejected when the page had one", () => {
-  assert.throws(() => validatePageHeader("Just text", original), /Falta el encabezado/);
+  assert.throws(() => validatePageHeader("Just text", original), /header is missing/);
 });
 
 test("an unclosed header is rejected", () => {
   assert.throws(() => validatePageHeader('---\ntitle: "Flood"\npageType: coverage\n\nText', original),
-    /no está cerrado/);
+    /isn't closed/);
 });
 
 test("deleting title or pageType is rejected", () => {

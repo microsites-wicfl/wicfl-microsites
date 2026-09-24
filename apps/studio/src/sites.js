@@ -63,7 +63,7 @@ async function findPull(github, slug) {
 export async function getSite(github, slug) {
   assertSlug(slug);
   const config = await readConfig(github, slug);
-  if (!config) throw new UserError("Ese sitio no existe.", 404);
+  if (!config) throw new UserError("That site doesn't exist.", 404);
 
   const base = github.env.GITHUB_BASE_BRANCH;
   const [published, draftSha, baseSha] = await Promise.all([
@@ -93,7 +93,7 @@ export async function readPage(github, slug, relativePath) {
   const draftSha = await github.branchSha(draftBranch(slug));
   const ref = draftSha ? draftBranch(slug) : github.env.GITHUB_BASE_BRANCH;
   const file = await github.readFile(path, ref);
-  if (!file) throw new UserError("Esa página no existe.", 404);
+  if (!file) throw new UserError("That page doesn't exist.", 404);
   return { path: relativePath, text: file.text, inDraft: Boolean(draftSha) };
 }
 
@@ -124,7 +124,7 @@ async function ensurePull(github, slug) {
 }
 
 export async function savePage(github, slug, relativePath, text, email) {
-  if (typeof text !== "string") throw new UserError("No llegó el contenido de la página.", 400);
+  if (typeof text !== "string") throw new UserError("The page content didn't arrive.", 400);
   const path = pageFile(slug, relativePath);
 
   const existingDraft = await github.branchSha(draftBranch(slug));
@@ -132,7 +132,7 @@ export async function savePage(github, slug, relativePath, text, email) {
     path,
     existingDraft ? draftBranch(slug) : github.env.GITHUB_BASE_BRANCH,
   );
-  if (!current) throw new UserError("Esa página no existe.", 404);
+  if (!current) throw new UserError("That page doesn't exist.", 404);
   if (current.text === text) return { saved: false };
   validatePageHeader(text, current.text);
 
@@ -147,7 +147,7 @@ export async function savePage(github, slug, relativePath, text, email) {
   } catch (error) {
     if (error.status === 409) {
       throw new UserError(
-        "Esta página cambió mientras la editabas. Recarga para ver la versión actual.",
+        "This page changed while you were editing it. Reload to see the current version.",
         409,
       );
     }

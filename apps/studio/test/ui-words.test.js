@@ -53,3 +53,15 @@ test("no hand-minified source: every line fits in 120 characters", () => {
       );
   }
 });
+
+// Rule, 24 Sep 2026: everything in Studio is in English. Spanish-only characters in anything the
+// browser receives or in the server's messages mean a string slipped through untranslated.
+test("the interface and server messages are in English", () => {
+  const srcDir = join(import.meta.dirname, "..", "src");
+  for (const file of [...files(publicDir), ...files(srcDir)]) {
+    const body = readFileSync(file, "utf8");
+    const match = body.match(/[áéíóúñÁÉÍÓÚÑ¿¡«»]/);
+    assert.equal(match, null, `${file} contains "${match?.[0]}": translate it to English`);
+  }
+});
+

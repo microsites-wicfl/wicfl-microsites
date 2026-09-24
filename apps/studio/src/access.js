@@ -15,14 +15,14 @@ import { UserError } from "./errors.js";
 // ALLOWED_EMAILS is a second, independent check in case Access is ever switched off by mistake.
 export async function requireUser(request, ctx, env, fetcher = fetch) {
   const email = (await identityEmail(request, ctx, env, fetcher))?.trim().toLowerCase();
-  if (!email) throw new UserError("Tienes que iniciar sesión para usar Studio.", 401);
+  if (!email) throw new UserError("You need to sign in to use Studio.", 401);
 
   const allowed = (env.ALLOWED_EMAILS || "")
     .split(",")
     .map((entry) => entry.trim().toLowerCase())
     .filter(Boolean);
   if (allowed.length > 0 && !allowed.includes(email)) {
-    throw new UserError("Tu cuenta no tiene acceso a Studio. Pídele acceso a Vic.", 403);
+    throw new UserError("Your account doesn't have access to Studio. Ask Vic for access.", 403);
   }
   return { email };
 }

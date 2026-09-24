@@ -121,6 +121,13 @@ una terminal local que no existe.
 - **Nunca uses guiones largos (—) en los copys para el equipo (Kevin, Pavel).** Punto,
   coma o dos puntos en su lugar. Regla de Vic, ya avisada una vez e incumplida: no se repite.
 - **Conversación con Vic**: español mexicano. NO voseo.
+- **Regla de Vic, 24-sep-2026: todo lo que se construye es en inglés.** WICFL Studio (cada
+  texto de la interfaz, cada mensaje de error), las páginas que se crean y todo el contenido de
+  los sitios. Nada en español en el producto. Studio lo vigila con una prueba que falla si
+  aparece un carácter del español en `apps/studio/public` o `apps/studio/src`. La guía de Pavel
+  para Studio se escribe en inglés. Lo único que sigue en español son los docs operativos de
+  arriba y la conversación con Vic. **Choca con el plan original de un sitio en español
+  (W-031, Fase 4):** queda como pregunta para Kevin, no se construye nada en español mientras.
 
 ## Bloqueadores activos al 2026-08-26
 

@@ -16,7 +16,7 @@ async function route(request, github, user) {
   const method = request.method;
 
   if (resource === "me" && method === "GET") return { email: user.email };
-  if (resource !== "sites") throw new UserError("No encontrado.", 404);
+  if (resource !== "sites") throw new UserError("Not found.", 404);
   if (!slug && method === "GET") return listSites(github);
   if (slug && !section && method === "GET") return getSite(github, slug);
 
@@ -29,7 +29,7 @@ async function route(request, github, user) {
     }
   }
   if (section === "draft" && rest.length === 0 && method === "DELETE") return discardDraft(github, slug);
-  throw new UserError("No encontrado.", 404);
+  throw new UserError("Not found.", 404);
 }
 
 // fetcher reaches GitHub; accessFetcher reaches the Access public keys (both injectable for tests).
@@ -46,7 +46,7 @@ export function createHandler(fetcher = fetch, accessFetcher = fetch) {
       // One line with name and message: Workers Logs split a multi-line error and dropped the message.
       console.error(`Studio error: ${error?.name}: ${error?.message} | ${request.method} ${url.pathname}`);
       console.error(error?.stack);
-      return json({ error: "Algo falló de nuestro lado. Intenta de nuevo; si sigue, avísale a Vic." }, 502);
+      return json({ error: "Something went wrong on our side. Try again; if it keeps happening, let Vic know." }, 502);
     }
   };
 }
