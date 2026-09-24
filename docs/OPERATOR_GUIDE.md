@@ -1,444 +1,228 @@
 # Operator guide
 
-> **Notice, 24 Sep 2026:** this guide describes the earlier form (`apps/content-form`) and the
-> GitHub path. Both are being replaced by **WICFL Studio**
-> (https://wicfl-studio.wicfl-microsites.workers.dev). The guide will be rewritten for Studio
-> before Pavel's training on 2 Oct. The Spanish version is the one Pavel uses.
+**Version 2.0 · 24 Sep 2026 · Written for Pavel for the WICFL Studio training on 2 Oct.**
+It replaces version 1.2 (9 Sep), which described the GitHub steps and the earlier content form.
+You no longer need GitHub for anything. Read this once before the training, not during it, and
+bring the questions it doesn't answer: a gap here is a defect in the guide, not in you.
 
-**Version 1.2 · 9 Sep 2026 · Written for Pavel ahead of the 17 Sep handoff, closes backlog item
-W-102.** Read this before the handoff session, not during it. Bring questions the session
-doesn't answer; each one gets logged, because a gap this guide misses is a defect in the guide,
-not in you.
-
-*A Spanish translation of this guide, updated for the 17 Sep handoff and including the
-new content-form section (Part 2a), lives at `docs/OPERATOR_GUIDE.es.md`. That is the
-version handed to Pavel; keep both in sync when either changes.*
-
-*Updated 8 Sep 2026: added Part 2 below, the exact click-by-click GitHub steps. The first draft
-assumed you already knew git and GitHub; that assumption was wrong, and this version doesn't
-make it. Everything in Part 2 was clicked through for real on this repository before being
-written down — see `BITACORA.md`, 8 Sep 2026.*
-
-*Updated 9 Sep 2026: added a new subsection to Part 2, "Publishing a full batch of pages at
-once," for launching a whole site's real content in one pull request instead of one page at a
-time. Clicked through for real on Site #1's actual content, see `BITACORA.md`, 9 Sep 2026.*
-
-This is the guide, not the reference material. It tells you what this repo is, what you touch,
-what you never touch, and how a week actually goes. When you need the exact schema fields, the
-content rules, or the launch checklist, it points you to the document that owns that answer
-instead of repeating it here out of date.
+Studio: **https://wicfl-studio.wicfl-microsites.workers.dev**
 
 ## Part 1 — The mental model
 
 ### This is a factory, not a website
 
-This repo does not contain a site. It contains the system that generates sites. A microsite is
-the output of one config file plus a folder of markdown, run through a shared template. Nobody
-opens an HTML file and edits it. If a site needs something the template can't currently produce,
-that is a gap in the template, and the fix happens once, in the template, for every site at
-once, not by hand-patching the one site that needed it.
+Each microsite is generated from two things: the site's **settings** (brand, domain, phone, SEO)
+and its **pages** (the text you write). A shared template turns them into the site. Nobody edits
+HTML. If a site needs something the template can't do yet, that is a template change Vic makes
+once for every site, never a patch on one site.
 
-This matters for a concrete reason: two things in your own planning document assumed a different
-model than the one this framework actually uses, and both are worth naming directly so they
-don't quietly resurface in October.
+Two rules come from this, and they matter more than anything else in this guide:
 
-**Sites are generated, never hand-built.** Your document described building sites by hand.
-Here, a site is `sites/<slug>/site.config.json` plus `sites/<slug>/content/*.md`, and the
-generator turns that into the live site. You never touch HTML, CSS, or the template's code. If
-you find yourself wanting to, stop and flag it. Wanting to edit a template file usually means
-the template is missing something, and that's a framework change, not a per-site patch.
+**Sites are generated, never hand-built.** You work in Studio; Studio only lets you change the
+site you're working on. That boundary is also what Gate A (13 Nov) measures.
 
-**You write the content yourself. Nothing ships from an AI-generated brief.** Your document
-proposed content generated from briefs. `docs/CONTENT_STANDARDS.md` draws this line explicitly,
-and it matters more than it might look: Google's scaled content abuse policy applies "no matter
-how it's created," and a hundred pages written to a brief and generated at volume is exactly the
-profile that policy targets. AI is fine as a drafting or research aid that you then edit into
-something true and specific. It is not fine as the pipeline that ships a page. Every page you
-publish, you wrote, in the language it's written in. Spanish content especially: written in
-Spanish from the start, never translated and never generated from an English brief. Real local
-detail and your own market knowledge in the copy.
+**You write the content. Nothing ships from an AI-generated brief.** Google's scaled content
+abuse policy applies "no matter how it's created", and a hundred pages written to a brief is
+exactly what it targets. AI is fine to research or draft something you then rewrite into
+something true and specific to that market. Every page that ships is yours.
 
-Neither of these was a mistake on your part. Nobody had told you the constraints when you wrote
-that document. They're written down now so they don't have to be re-explained per site.
+**Everything is in English.** Studio, the pages, and all site content. Always.
 
-### What you touch, and what you never touch
+### What you do, and what stays with Vic
 
-**Yours, every time:**
-- `sites/<slug>/site.config.json` — the one site you're working on
-- `sites/<slug>/content/*.md` — its pages
-- `sites/<slug>/public/` — its logo and any other brand image, once one exists (see below)
+**Yours, all in Studio:** the pages of each site (write, edit, create, delete, images), the
+site's settings (brand name, phone and email once they exist, SEO, service area), checking the
+preview, and publishing.
 
-**Never, under any circumstance:**
-- `packages/template/` — the shared Astro template, layouts, components
-- `packages/config-schema/` — the contract every config validates against
-- `scripts/` — the generator, the build pipeline, the CI logic
-- `.github/workflows/` — CI, preview deploys, production deploys
-- Any other site's `sites/<other-slug>/`
+**Vic's:** the template and everything shared between sites, analytics and CRM IDs, putting a
+site live on its domain for the first time, and anything Studio shows as "Let Vic know".
 
-If something in that second list needs to change to make your site work, that's not your fix.
-Flag it. A config field that's missing, a template layout that can't do what a page needs, a
-build error that isn't about your content: all of those are framework questions, and Gate A
-(13 Nov) is partly measuring exactly this boundary. `git diff --name-only` against your own
-commits should only ever show files under `sites/<your-slug>/`.
-
-### What a week actually looks like, during Site #1 (21 Sep – 9 Oct)
-
-Roughly, in the order it happens:
-
-1. Spec the page or the site with the `microsite-brief` skill if you're starting fresh — it
-   produces the config, the page map, and the differentiation plan before anything is generated.
-2. Write markdown, page by page. As each page is drafted, run the `differentiation-audit` skill
-   on it. Not at the end of the week, not before launch: on the page, while it's still cheap to
-   fix. This is the single most important habit in this guide. Skipping it doesn't block
-   anything today, which is exactly why it's the step that gets skipped, and exactly why
-   `docs/CONTENT_STANDARDS.md` calls it out by name.
-3. Push a branch. A pull request gets you a live preview URL automatically, posted as a comment
-   and updated on every push. You do not need a local dev server running to see your work
-   rendered; that exists too (`docs/SETUP.md`) but it's a convenience, not a requirement.
-4. Before you ask for it to merge, run the self-review checklist in `docs/CONTENT_STANDARDS.md`
-   and the full launch checklist in `docs/QA_CHECKLIST.md`. Both are yours to run; nobody else
-   currently reviews before you (see the note on that below).
-5. Merge. Once the real production deploy is turned on for a site, that's what ships it live.
+If Studio can't do something you need, don't look for a way around it. Tell Vic what you were
+trying to do; that is how Studio and the template get better.
 
 ### Who reviews your content
 
-Nobody else does, right now. `docs/CONTENT_STANDARDS.md`'s self-review checklist exists because
-there's no second person on the team to be a dedicated reviewer today. You can ask Kevin
-informally when something feels ambiguous — a coverage claim, an edge case only a licensed agent
-should assert — but that's your call, not a required approval step. This is a floor, not a
-substitute for licensed review, and it gets revisited if the portfolio grows past the three
-pilot sites. You're not being asked to carry more risk quietly; it's written down as a known gap
-on purpose.
+Nobody else, for now. The self-review checklist in `docs/CONTENT_STANDARDS.md` is there because
+there is no second reviewer on the team. Ask Kevin informally when something feels uncertain (a
+coverage claim, something only a licensed agent should say). This is a known gap, written down
+on purpose, and it is revisited if the portfolio grows past the pilot sites.
 
-## Part 2 — Doing it: GitHub, click by click, assuming nothing
+## Part 2 — Studio, step by step
 
-Part 1 told you what you touch and why. This part is what was missing: exactly what to click,
-in order, to make a change and get it live, assuming you've never used git or GitHub before.
-Every step below was clicked through for real on this repository, twice, on 8 Sep 2026 (see
-`BITACORA.md`), not written from memory of how GitHub usually works.
+### Signing in
 
-### A short glossary
+1. Open the Studio link. Use a normal browser window, not a private one.
+2. Enter your email. You get a code by email; type it in.
+3. You stay signed in for a while in that browser. When the session ends, you get a new code.
 
-You'll see these words on GitHub itself and in the rest of this guide. You don't need to
-understand git as a system, just what these particular words mean here.
+If Studio says your account doesn't have access, tell Vic.
 
-- **Repo (repository)** — the project's files and their entire history, all together. This one
-  lives at `github.com/microsites-wicfl/wicfl-microsites`.
-- **`main`** — the one copy of the repo that's "real." Whatever's live, or about to go live,
-  always traces back to `main`.
-- **Branch** — a separate, parallel copy of the files where you can make changes without
-  touching `main` yet. When you edit a file on GitHub's website, GitHub creates one of these for
-  you automatically. You'll see a checkbox for it, but you never have to name it or manage it
-  yourself.
-- **Commit** — a saved snapshot of the exact lines you changed, labeled with a short message.
-  GitHub creates this when you click "Commit changes."
-- **Pull request (PR)** — a request to bring your branch's changes into `main`. It's a page
-  where you (and, if something fails, Vic) can see exactly what changed, and where automated
-  checks run before anything merges.
-- **Checks** — automated jobs that run on every pull request. `Validate and build` checks your
-  config and content are well-formed and builds the site to make sure nothing is broken.
-  `Preview deploy` publishes a temporary, live copy of your exact changes so you can look at the
-  real rendered page before it goes anywhere near production. Green check means it passed; red X
-  means something's wrong — see "If a check fails" below.
-- **Merge** — folding your branch's changes into `main`. This is the one step that feels
-  permanent; everything before it can be abandoned without a trace.
+### The words Studio uses
 
-### Editing a page that already exists
+- **Draft:** your unpublished changes to one site. Each site has at most one draft, and every
+  change you save goes into it. The public never sees a draft; only people you share its
+  preview link with can.
+- **Preview:** a private copy of the whole site with your draft applied. It takes 2 to 4 minutes
+  to update after each save.
+- **Publish:** your draft becomes the site's official version.
+- **Live:** the site is on its real domain for anyone to visit. Studio shows **Live at …** or
+  **Not live yet** for every site.
+- **Discard draft:** throws away all unsaved and unpublished changes on that site. It can't be
+  undone.
 
-1. Go to `github.com/microsites-wicfl/wicfl-microsites` and sign in.
-2. Click into `sites/<your-site>/content/`, then click the `.md` file you want to change (for
-   example `flood-coverage.md`).
-3. Click the pencil icon in the top-right of the file view ("Edit this file").
-4. Edit the text. It's plain markdown: `## Heading` for a heading, a blank line between
-   paragraphs, `[link text](/some-slug/)` for a link. If you're unsure what a piece of markdown
-   will look like once rendered, that's exactly what the preview step below is for.
-5. Scroll to the bottom. Under "Commit changes," write a short message describing what changed
-   (for example "Update flood deductible figures").
+### The dashboard
 
-   ![The "Commit changes" dialog, showing the commit message field and the two radio options: commit directly to main, or create a new branch and start a pull request.](images/operator-guide/06-commit-dialog-options.jpg)
+**Your sites** lists the real sites; **Practice sites** lists sites for practice that are never
+published. Each card shows whether the site has **Unpublished changes** or is **Up to date**, and
+whether it is live.
 
-6. Make sure the second option is selected: **"Create a new branch for this commit and start a
-   pull request."** Not the first one — that tries to save straight to `main`.
+**Practice first.** Try anything new on **Example Flood Insurance** before doing it on a real
+site. Nothing there reaches the public.
 
-   ![The second radio option selected, showing the auto-generated branch name and the green "Propose changes" button.](images/operator-guide/07-new-branch-selected.jpg)
+### Editing a page
 
-7. Click **"Propose changes."**
-8. You land on a "comparing changes" page. The title box is pre-filled from your commit message
-   — edit it if you want something clearer. Click **"Create pull request."**
+1. Open the site, then the page. Each page shows its address, like `/flood-insurance/`.
+2. The top fields:
+   - **Title:** shown in Google and at the top of the page. Aim for under 60 characters (the
+     counter helps).
+   - **Description:** shown under the title in Google. Aim for 120 to 160 characters.
+   - **Menu name:** the short name in the site menu. Empty means the title is used.
+   - **Page type:** *Content page* or *Coverage page*. The home page is fixed.
+   - **Show this page in the site menu:** untick for pages that shouldn't be in the menu.
+3. **Page text** is on the left and the **Live preview** on the right, updating as you type.
+   The text uses Markdown:
+   - `## Heading` for a section heading (`###` for a smaller one)
+   - `**bold**` and `*italic*`
+   - `[link text](/flood-insurance/)` for a link to another page of the site
+   - `- item` for a bullet list
+4. Click **Save to draft**. Studio goes back to the site and the page shows **Edited**.
 
-   ![The "Open a pull request" comparing page, with the title field pre-filled and the green "Create pull request" button.](images/operator-guide/08-create-pull-request-page.jpg)
+The live preview on the right is an approximation for writing. The **site preview** is the real
+thing: once it's ready, the editor shows **Open this page in the site preview**.
 
-9. You're now on the pull request page. Wait a minute or two, refreshing if needed, while the
-   two automated checks run.
+If a page opens as "the whole file" instead of fields, its settings are written in a way the
+fields can't show. You can still edit it; tell Vic so he fixes that page.
 
-    ![The pull request page while checks are still running, some in progress, some already green.](images/operator-guide/09-checks-running.jpg)
+### Images
 
-10. Once `Preview deploy` finishes, a comment appears on the PR from GitHub Actions with a link
-    that looks like `https://wicfl-prNN-<slug>.wicfl-microsites.workers.dev`. Click it: this is
-    your exact change, live, before anyone else sees it.
+1. In the page editor, open **Images** and click **Add image**. JPG, PNG, WebP or GIF, up to
+   5 MB. Resize big phone photos first.
+2. The image is inserted where your cursor is in the text, like
+   `![Describe this image](/images/roof-photo.png)`.
+3. Replace **Describe this image** with a real description of what it shows. That text is read
+   by screen readers and by Google.
+4. To reuse an image, click **Insert** under it.
 
-    ![The pull request page once both checks have passed, with the GitHub Actions bot comment posting the live preview link.](images/operator-guide/10-checks-passed-preview-link.jpg)
+### Creating a page
 
-11. Look at the real page. Then run the self-review checklist in `docs/CONTENT_STANDARDS.md`,
-    and `docs/QA_CHECKLIST.md` if this is a launch-readiness pass.
-12. If both checks are green and the preview looks right, click the green **"Merge pull
-    request"** button, then the confirm button that appears under it. Afterward, GitHub offers a
-    **"Delete branch"** button — click it; the branch was only scaffolding for the PR.
+1. On the site, click **New page**.
+2. Fill in the title (Studio shows the page's address as you type), description, menu name and
+   page type.
+3. Click **Create page**. It opens in the editor with a starter line; replace it and save.
 
-    ![A closed pull request offering the "Delete branch" button. This screenshot is from a test PR that was closed without merging, a merged PR shows a purple "Merged" badge instead of red "Closed," but the "Delete branch" button looks and works the same either way.](images/operator-guide/12-closed-delete-branch.jpg)
+If Studio says the address already exists, change the title or open the existing page.
 
-13. `main` now has your change. The temporary preview Worker deletes itself automatically a few
-    minutes after the PR closes, merged or not — that's expected, and separate from the real,
-    permanent site.
+### Deleting and restoring a page
 
-### Creating a brand-new page
+1. Open the page and click **Delete page**.
+2. If other pages link to it, Studio lists them. Fix those links first, or they'll point to a
+   missing page.
+3. The page shows crossed out as **Will be deleted**. It stays on the site until you publish.
+   Click **Restore** to bring it back.
 
-A page is one markdown file. Here's the exact recipe.
+The home page and the contact page can't be deleted.
 
-1. Go to `sites/<your-site>/content/` in the repo.
+### Checking the preview
 
-   ![The content folder's file listing, with the "Add file" dropdown button near the top-right.](images/operator-guide/01-content-folder-add-file.jpg)
+On the site page, the **Preview** box shows one of:
 
-2. Click the **"Add file"** dropdown near the top-right of the file listing, then **"Create new
-   file."**
+- **Preparing the preview…** Wait; it refreshes by itself.
+- **Preview ready.** Click **Open preview** and check every page you changed, on your phone too.
+- **The preview failed.** Studio says what kind of problem it is. If it points at your last
+  change, open that page and check it. Otherwise send Vic the message shown under it.
 
-   ![The "Add file" dropdown open, showing its two options: "Create new file" and "Upload files."](images/operator-guide/02-add-file-dropdown.jpg)
+### Publishing
 
-3. In the **"Name your file..."** field, type a filename ending in `.md`: lowercase words
-   separated by hyphens, no spaces — for example `flood-coverage.md`. **This filename becomes
-   the page's web address automatically once it's live**: `flood-coverage.md` becomes the page
-   at `/flood-coverage/`. There's no separate "URL" field anywhere; the filename is the address,
-   so get it right the first time (renaming the file later changes the page's URL).
+1. Check the preview first: every changed page, the links, the images, and the self-review
+   checklist in `docs/CONTENT_STANDARDS.md`.
+2. Click **Publish** and confirm. The button only works when the preview is ready.
+3. What happens next depends on the site:
+   - **Live site:** it updates on its domain within a few minutes.
+   - **Not live yet** (before launch, or a new site): your changes become the official version,
+     and they go live when Vic launches the site.
 
-   ![The new-file page with the empty "Name your file..." field and blank editor.](images/operator-guide/03-new-file-name-field.jpg)
-   ![The filename typed in: windstorm-coverage-demo.md.](images/operator-guide/04-filename-typed.jpg)
+If Studio says the draft can't be published automatically, nothing was lost; tell Vic.
 
-4. In the editor, the very first thing in the file has to be a frontmatter block: three dashes,
-   some fields, three dashes, before any of your actual content.
+### Site settings
 
-   ```
-   ---
-   title: "Flood Coverage in Miami-Dade"
-   description: "What flood insurance covers and doesn't, explained plainly."
-   pageType: content
-   ---
+On the site, click **Site settings** to edit the brand name, phone, email, SEO title,
+description and keywords, and the service area. Save puts the change into the site's draft, like
+any page; check the preview and publish.
 
-   Your page content starts here, as normal markdown.
-   ```
+- **Phone and email:** leave them empty until Kevin provides them. Type the phone any way you
+  like; Studio formats it.
+- **Before this site can go live:** the list of what still blocks the launch (a placeholder, a
+  "demo" in the brand or SEO, missing analytics). Items marked **(Vic)** are his. The rest are
+  yours, fixed right here in the settings.
 
-   Here's what that looks like actually typed into the real editor, using the worked example
-   from below:
+### Creating a new site
 
-   ![The editor filled in with a real frontmatter block and page content.](images/operator-guide/05-frontmatter-and-content.jpg)
+1. On the dashboard, click **New site**.
+2. Fill in the brand name, domain, city, county, what the site sells, who it is for, the service
+   area, and the SEO title, description and main keyword.
+3. **Local proof** and **Unique section** are required, and they are the heart of the
+   differentiation rule: a real local fact you can back up in the content, and a section only
+   this market needs, with why. If you can't fill them honestly, the site isn't ready to exist.
+4. Click **Create site**. Studio creates it as a draft with three starter pages (home, contact
+   and one coverage page) that say "Replace this text". Replace them all.
+5. Phone, email, analytics and CRM start as placeholders, so the site can't go live with fake
+   data. Publishing a new site makes it official; Vic puts it on its domain the first time.
 
-   - `title` — required. The page's headline and browser-tab title.
-   - `description` — optional, but write one anyway; it's what shows up in search results and
-     social previews.
-   - `pageType` — required, and must be exactly one of three words: `home`, `content`, or
-     `coverage`. Every site has exactly one `home` page (`index.md`, its front page — don't
-     create a second one). For everything else use `content`, unless the page is specifically
-     about what a coverage type does or doesn't cover, in which case `coverage` gives it a small
-     visual treatment (a divider under the header) built for that. If you're genuinely unsure
-     which of `content`/`coverage` fits, use `content` and ask Vic — it's a styling choice, not
-     something that can break the build.
-   - Nothing else goes in that block. A field name that doesn't exist here will fail the
-     `Validate and build` check — that's the schema doing its job, not a bug.
-5. Scroll down and commit exactly as in steps 5–13 above: new branch, pull request, wait for
-   checks, preview, review, merge.
+### When something goes wrong
 
-**The one thing that will bite you if you skip it:** this site has no navigation menu anywhere —
-no header links, no footer sitemap, nothing that lists pages automatically. A page you publish
-this way is live at its URL, but unreachable by anyone clicking around the site unless another
-page links to it. So before you merge a new page, edit at least one existing page (the home page
-is the usual choice) and add a plain markdown link to it, for example
-`[Flood coverage in Miami-Dade](/flood-coverage/)` — as part of the same pull request or a
-follow-up one. A page nothing links to is a page Google and every real visitor will never find.
+- Every error in Studio says what happened in plain words. If it says to let Vic know, send him
+  a screenshot and what you were doing.
+- **"This page changed while you were editing it":** reload and redo your change. It happens if
+  the same page was saved from another tab.
+- A preview link that shows "There is nothing here yet" belongs to a draft that was discarded or
+  published. Use the site's current preview in Studio.
 
-### A worked example: what a finished page's markdown actually looks like
+## Part 3 — How a site gets made, start to finish
 
-The frontmatter contract above is only three lines. Here's a full example of what a real page
-looks like once you write it, structure and all, so you have something to pattern-match against
-instead of a blank editor. **Don't copy this text into a real page** — the sentences below are
-illustrative, not researched or approved copy, and `docs/CONTENT_STANDARDS.md` requires every
-real page to be your own writing, specific to that market:
+1. **Plan it** with the `microsite-brief` skill: the page map and the differentiation plan come
+   before any page exists.
+2. **Create the site** in Studio (or open the existing one).
+3. **Write each page.** As each page is drafted, run the `differentiation-audit` skill on it,
+   while it is still cheap to fix. This is the single most important habit in this guide.
+4. **Check the preview** as you go, and run the self-review checklist in
+   `docs/CONTENT_STANDARDS.md` and the launch checklist in `docs/QA_CHECKLIST.md`.
+5. **Clear the settings blockers** that are yours.
+6. **Publish.** For a site that isn't live yet, tell Vic it's ready to launch.
 
-```
----
-title: "Windstorm Coverage for Stuart, FL Homeowners"
-description: "What windstorm coverage typically includes for waterfront homes in Martin
-  County, and what to confirm with your agent."
-pageType: coverage
----
-
-Homes along the St. Lucie River and the Intracoastal in Stuart carry windstorm exposure that
-most inland Florida homes don't face the same way. Here's what a windstorm endorsement
-generally covers, and where the specifics come down to your policy and your agent.
-
-## What's typically included
-
-- Wind and hail damage to the structure of your home
-- Damage from wind-driven rain that enters through a wind-created opening
-- Detached structures on your property, like a dock or a screened lanai, when your policy
-  lists them
-
-## What's usually excluded, or needs a separate policy
-
-- Flood damage from storm surge, even during the same storm, always requires a separate flood
-  policy
-- Damage from lack of maintenance rather than the storm itself
-
-Coverage limits, deductibles, and exact terms vary by policy. Confirm your specific windstorm
-deductible with your Walker Insurance Company of Florida agent before hurricane season.
-
-See also our [flood coverage page](/flood-coverage/) for how storm surge is handled separately.
-```
-
-This exact file was actually created and previewed live on 8 Sep 2026, to confirm the whole
-recipe works end to end before writing it down here — the filename alone produced this page, at
-its own URL, with no code changes anywhere:
-
-![The live preview of the page above, rendered at its own URL exactly as the filename predicted, no template or code changes needed.](images/operator-guide/11-live-preview-page.jpg)
-
-Notice what each part is doing, and why it's there:
-
-- **Real, local detail** ("St. Lucie River," "Martin County," "dock," "screened lanai") — this
-  is exactly what the swap test in `docs/CONTENT_STANDARDS.md` is looking for. Swap the city and
-  most of this paragraph stops being true, which is the point.
-- **Qualified language** ("generally," "typically," "usually," "confirm with your agent") —
-  never a guaranteed or absolute claim ("always covered," "guaranteed approval"). That's
-  self-review checklist item 3.
-- **No entity disclaimer typed by hand** — the template renders it automatically. A license
-  number renders from `site.config.json` only if present; WICFL sites do not carry one under
-  Kevin's 22 Sep 2026 decision. Never type one into a content file.
-- **An internal link** (`[flood coverage page](/flood-coverage/)`) — plain markdown link syntax,
-  pointing at another page's slug. This is also how a page gets linked to, not just from — see
-  the warning above about pages that aren't reachable from anywhere.
-- **`pageType: coverage`** — because this page is specifically about what one coverage type does
-  and doesn't cover. A general page (an About page, a service-area page) would use `content`
-  instead.
-
-### Publishing a full batch of pages at once (what a new site's first real content looks like)
-
-Everything above walks through one page at a time. When you're launching a whole site's real
-content at once, like Site #1 on 9 Sep 2026, you're doing the same recipe seven or eight times
-before opening a single pull request, so the checks and preview only have to run once for the
-whole batch instead of once per page. Here's the exact sequence, clicked through for real on
-`stuart-homeowners` — see `BITACORA.md`, 9 Sep 2026.
-
-1. **Write every page's frontmatter and content somewhere else first** — a text editor, a doc,
-   anywhere off GitHub — before you touch the browser. You're about to paste seven or eight
-   files in a row; composing them live in the editor is how a stray character or a missed
-   frontmatter field slips in unnoticed.
-2. Go to `sites/<your-site>/content/`, click **"Add file" → "Create new file,"** same as steps
-   1-2 in "Creating a brand-new page" above, but only for your **first** page.
-3. Name the file, paste its frontmatter and content, same as steps 3-4 above.
-4. Scroll to **"Commit changes..."**. This time, select **"Create a new branch for this commit
-   and start a pull request,"** and before clicking through, replace the auto-generated branch
-   name (something like `<you>-patch-2`) with something short and readable, for example
-   `site1-real-content`. Click the button that creates the branch.
-5. You land on the same "Open a pull request" page as before. **Don't create the pull request
-   yet.** Every other page still needs to go onto this same branch first.
-6. For each remaining page, go directly to this address, with your branch's name and your
-   site's slug in place of the placeholders:
-
-   `github.com/microsites-wicfl/wicfl-microsites/new/<your-branch-name>/sites/<your-site>/content`
-
-   This is the exact same "new file" screen as step 2, just already pointed at your branch
-   instead of `main` — check the small label next to the filename field, it should say
-   **"in \<your-branch-name>,"** not "in main."
-7. Name the file, paste its content, scroll to **"Commit changes..."**. Because the branch
-   already exists, GitHub now defaults to **"Commit directly to the \<your-branch-name>
-   branch."** That's what you want this time — leave it as is, don't touch the radio buttons,
-   just click **"Commit changes."**
-8. Repeat steps 6-7 for every remaining page.
-9. Once every page is committed, go to:
-
-   `github.com/microsites-wicfl/wicfl-microsites/compare/main...<your-branch-name>?quick_pull=1`
-
-   Give the pull request one title that describes the whole batch (for example "Site 1: real
-   content, 8 pages"), and a description listing every page it includes. Click **"Create pull
-   request."**
-10. Wait for checks, same as step 9 in "Editing a page that already exists" above — there will
-    be more of them this time (5, not 2), because building and previewing a whole site with new
-    pages takes a few more jobs than a one-line edit, but they're the same kind of checks and
-    they behave the same way.
-11. Click through to the preview link the bot comments. **Click around, don't just look at one
-    page** — open the home page and at least two or three of the new pages. A batch this size
-    can have one broken internal link even when every page passes validation on its own.
-12. Run the self-review checklist from `docs/CONTENT_STANDARDS.md` on every page, not once for
-    the whole batch.
-13. If everything checks out, merge, confirm, and delete the branch, same as steps 12-13 above.
-
-**One thing that's different from a single-page PR:** the temporary preview link disappears
-within a few minutes of merging, same as always, but there's no other live link to point at
-afterward until the site is actually deployed to production (still gated behind W-103 until
-launch). To see what shipped after merging, the durable link is the pull request itself, not a
-live URL — it stays on GitHub forever and shows exactly what changed, page by page.
-
-### If a check fails
-
-A red X next to `Validate and build` or `Preview deploy` on your pull request means something's
-wrong, usually a frontmatter typo (a missing `title`, a `pageType` that isn't one of the three
-allowed words) or a markdown syntax slip. Click the red X, then "Details," to read what failed.
-If the message doesn't make it obvious what to fix, don't guess and don't start editing files
-outside `sites/<your-slug>/` to work around it: copy the error and message Vic with a link to
-the pull request. A confusing error message is itself something worth reporting, not something
-to route around.
-
-## Part 3 — The reference documents, and when to open each
-
-Don't read all of these cover to cover before the handoff. Skim this guide fully, skim
-`docs/ARCHITECTURE.md` for the decisions and why they were made, and treat the rest as reference
-you open when the situation in front of you calls for it.
+## Part 4 — Reference documents, and when to open each
 
 | Document | Open it when... |
 |---|---|
-| `docs/ARCHITECTURE.md` | You want the decisions and the reasoning behind them, once, before the handoff |
-| `docs/SITE_CONFIG_SCHEMA.md` | You're filling in or debugging a `site.config.json` |
-| `docs/SITE_CONFIG_SCHEMA.md`, design decision 7 | You're adding a logo — drop the file in `sites/<slug>/public/` and point `brand.logo` at it |
-| `docs/SITE_CONTENT_CHECKLIST.md` | You're starting a new site, or checking how close an existing one is to being real instead of a placeholder — every config field and how many pages a site needs, in one place |
-| `docs/CONTENT_STANDARDS.md` | You're writing a page, always — the swap test, the AI-use rules, the self-review checklist all live here |
+| `docs/CONTENT_STANDARDS.md` | You're writing a page. Always. The swap test, the AI rules, the self-review checklist |
 | `docs/QA_CHECKLIST.md` | You think a page or a site is ready to publish |
-| `docs/SETUP.md` | You want a local dev server running, or you're troubleshooting the deploy pipeline itself |
-| `docs/GATE_B_MODEL.md` | You want to understand what "qualified call" means and why the Gate B bar is built the way it is |
-| `BACKLOG.md` | You want to know what's built, what's deliberately not built yet, and why |
+| `docs/SITE_CONTENT_CHECKLIST.md` | You're starting a site, or checking how close one is to real: every setting and how many pages |
+| `docs/ARCHITECTURE.md` | You want the decisions behind the factory and the reasons, once |
+| `docs/QUALIFIED_CALL_DEFINITION.md` | You want to know what counts as a qualified call for Gate B |
+| `BACKLOG.md` | You want to know what's built and what isn't yet |
 
-And two skills you'll run yourself, not just read about:
+## Part 5 — The rules that don't bend
 
-- **`microsite-brief`** — specs a new site or a new page before it's generated. Produces the
-  config, the page map, and the differentiation plan.
-- **`differentiation-audit`** — the swap test, run as a skill instead of a mental exercise. Run
-  it per page, while writing.
+1. **No site is built by hand.** It's generated from its settings and pages.
+2. **The swap test is law.** If a page would still make sense with another city's name swapped
+   in, it isn't done. Run `differentiation-audit` on every page.
+3. **Everything is in English.**
+4. **No AI-generated page ships.** AI can help you research or draft; you write what ships.
+5. **Florida advertising rules and the site's name and phone apply to every page**, checked
+   against the self-review checklist before you publish.
 
-## Part 4 — The rules that don't bend
+## Part 6 — Who to ask, and about what
 
-A short list, pulled from `CLAUDE.md`, that applies to your work specifically:
-
-1. **No site is built by hand.** It's generated from its config. If the generator can't produce
-   something you need, that's a generator problem, not a reason to hand-edit output.
-2. **The swap test is law.** There's a CI gate for it once Site #2 exists to compare against
-   (W-027), but during Site #1 the only thing enforcing it is you running the skill per page.
-3. **Spanish is written, not translated.** Every time, no exceptions, for the reason in
-   `docs/CONTENT_STANDARDS.md`.
-4. **No AI-generated page ships unreviewed**, and no page ships generated from a brief without
-   you writing and editing it into something true and specific to that market.
-5. **NAP and Florida advertising rules apply on every page**, every time,
-   checked against the self-review checklist before publish.
-
-## Part 5 — Who to ask, and about what
-
-- **Vic** — anything about the template, the schema, the pipeline, the generator, or a question
-  this guide didn't answer. Log the question; it goes into fixing the guide or the framework,
-  not just answering you once.
-- **Kevin** — brand assets, niche and domain approval, budget, Google Business Profiles, and
-  anything that's a business call rather than a content or technical one.
-
-## What's still open when you read this
-
-Written 4 Sep 2026, before the handoff. A few things this guide describes are not fully live
-yet: production deploys are built but not yet turned on for a real site (they wait on real brand
-and analytics data replacing the current placeholders), and the differentiation CI gate doesn't
-exist until Site #2 has content to compare against. None of that changes what you do; it changes
-what's automatic versus what's still on you in the meantime. `BACKLOG.md` is the source of truth
-for exactly what's built versus pending, if this guide and reality ever disagree, believe the
-backlog.
+- **Vic:** Studio, the template, errors, publishing problems, and anything this guide didn't
+  answer. Your question goes into fixing the guide or Studio, not just into one answer.
+- **Kevin:** brand assets, niches and domains, phone numbers, Google Business Profiles, and
+  anything that is a business decision rather than a content or technical one.

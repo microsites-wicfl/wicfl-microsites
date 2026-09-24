@@ -1,3 +1,20 @@
+## 2026-09-24 · Guía de Pavel v2.0 para WICFL Studio
+
+**Quién:** cowork.
+
+`docs/OPERATOR_GUIDE.md` reescrita desde cero (444 → ~230 líneas), en inglés, para la
+capacitación del 2-oct. Conserva lo que sigue siendo verdad de la v1.2 (la fábrica, no escribir
+con IA, la revisión propia, las reglas) y reemplaza toda la parte de GitHub por Studio paso a
+paso: entrar, vocabulario (draft, preview, publish, live, discard), tablero y sitios de práctica,
+editar con campos y Markdown, imágenes, página nueva, borrar/restaurar, vista previa, Publish,
+Site settings con sus bloqueos, sitio nuevo con la prueba local obligatoria, y qué hacer ante
+errores. Cada instrucción corresponde a un botón que existe hoy en Studio con ese nombre. La
+versión en español queda retirada (regla de inglés); `docs/README.md` actualizado. Pendiente
+menor: `CONTENT_STANDARDS.md` aún tiene su sección "Spanish specifically", que queda sin uso
+mientras el sitio en español siga en pausa.
+
+---
+
 ## 2026-09-24 · Studio A3: Publicar, sitio nuevo y datos del sitio. El panel queda completo
 
 **Quién:** cowork.

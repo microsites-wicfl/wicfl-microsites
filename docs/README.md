@@ -1,15 +1,13 @@
 # docs/
 
 Referencia del equipo. **Estos archivos están en inglés a propósito**: los leen Kevin y Pavel.
-**Excepción, 17-sep-2026:** `OPERATOR_GUIDE.md` ahora también tiene una versión en español
-(`OPERATOR_GUIDE.es.md`), para la sesión de handoff con Pavel. Es la que se le entrega a él;
-la versión en inglés se mantiene como original de referencia.
+**24-sep-2026:** la guía de Pavel es solo `OPERATOR_GUIDE.md` (v2.0, WICFL Studio), en inglés como
+todo el producto. La versión en español quedó retirada.
 
 | Archivo | Qué es |
 |---|---|
 | `ARCHITECTURE.md` | Decisiones técnicas con su razonamiento. No reabrir sin razón nueva |
-| `OPERATOR_GUIDE.md` | La guía de Pavel: qué toca, qué nunca toca, cómo se ve su semana. Leer antes que todo lo demás |
-| `OPERATOR_GUIDE.es.md` | La misma guía, traducida y actualizada al español, para entregarle a Pavel directamente |
+| `OPERATOR_GUIDE.md` | La guía de Pavel para WICFL Studio: modelo mental, Studio paso a paso, cómo se hace un sitio, reglas. Leer antes que todo lo demás |
 | `SITE_CONFIG_SCHEMA.md` | El contrato entre el template y cada sitio. El artefacto más importante |
 | `SITE_CONTENT_CHECKLIST.md` | Qué necesita cualquier sitio para existir: cada campo del config y cuántas páginas, antes de llegar a QA |
 | `CONTENT_STANDARDS.md` | El swap test, español nativo, compliance de Florida |
