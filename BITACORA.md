@@ -1,3 +1,21 @@
+## 2026-09-24 · Limpieza de PRs y ramas viejas: todo es prueba u obsoleto
+
+**Quién:** Codex (inventario), cowork (revisión de cada diff).
+
+- **PR #8 / `microsites-wicfl-patch-2`** ("Site 1 preview link for the team"): el fix de
+  `.page-content` ya está en `main` desde `277d7e6` (W-115); lo demás es una línea en blanco al
+  final de `contact.md`. Nada que conservar. Al cerrarlo, `preview-cleanup` borra el Worker
+  `wicfl-pr8-stuart-homeowners`: la liga vieja que Vic le mostró al equipo deja de existir (ya
+  tenía el teléfono de ficción).
+- **`microsites-wicfl-patch-1`**: prueba end-to-end de cowork del 8-sep, marcada "revertir tras
+  verificar".
+- **PR #9 / `content/_example/about-fixture-039ac05e`**: prueba del formulario viejo del 17-sep,
+  dice "Close without merging".
+
+Ningún contenido de Pavel en juego. Se cierran los dos PR sin fusionar y se borran las tres ramas.
+
+---
+
 ## 2026-09-24 · Revisión: línea bajo el logo (`c6e2bf1`)
 
 **Quién:** Codex (código), cowork (revisión).
