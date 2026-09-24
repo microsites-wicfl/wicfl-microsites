@@ -1,3 +1,62 @@
+## 2026-09-24 (cierre del día) · Studio completo, guía nueva
+
+**Quién:** Vic + cowork (código de Studio bajo la excepción A1–A3 de `CLAUDE.md`), Codex (push y
+deploys).
+
+**19 commits.** En la mañana Studio solo editaba páginas que ya existían (A1). Al cierre cubre
+todo el trabajo de Pavel: campos por página, vista en vivo, página nueva, borrar y restaurar,
+imágenes, Publish, sitio nuevo y datos del sitio con los bloqueos del gate. Pavel entra el 2-oct a
+un panel completo, no a un prototipo.
+
+**Hecho hoy:**
+- A1 cerrada con prueba real de Vic (vista previa lista, Descartar borró la rama).
+- Regla de Vic: todo en inglés, Studio y contenido. Studio traducido completo, con una prueba que
+  falla si aparece español en la interfaz.
+- A2 y A3 completas; 92 pruebas.
+- Prueba real en el Chrome de Vic: Publish fusionó a `main`, y un sitio nuevo de prueba armó su
+  vista previa en CI y se descartó. Tres arreglos salieron de ahí (`08326be`).
+- Guía v2.0 para Studio (`docs/OPERATOR_GUIDE.md`) y handbook ilustrado con 17 capturas reales y
+  botón EN | ES, compartido por link: https://claude.ai/artifact/5ebz5VQL1Q7iFrLv9zJ6B5
+- Botón **Sign out** (`54db9c1`), desplegado.
+- Template: la línea bajo el logo se oculta en sitios con logo (`c6e2bf1`).
+- Limpieza de PRs y ramas viejas; todo era prueba u obsoleto.
+- Dos updates al equipo (mañana y tarde).
+
+**Lo que vale conservar:**
+- **El navegador real encontró lo que 92 pruebas no ven:** la vista del sitio tardaba ~7 s, la
+  pantalla parpadeaba con cada refresco, y descartar un sitio nuevo dejaba una pantalla de error.
+  Ninguna prueba unitaria mide eso. La prueba de uso merece su propio paso antes de dar algo por
+  terminado.
+- **Si un usuario rompe algo por accidente dos veces, lo que está mal es la interfaz.** La vista
+  previa falló dos veces porque el texto de Vic cayó dentro del encabezado de la página. Primero
+  se agregó validación; lo que lo resolvió fue quitar el encabezado de la vista y convertirlo en
+  campos.
+- **Error de cowork:** reporté el descarte como hecho leyendo mal la salida de `ls-remote`. Se
+  corrigió la bitácora y se le dijo a Vic. Regla: citar la salida exacta antes de reportar algo
+  como verificado.
+- **Caché después de un deploy:** el Chrome de Vic, con Studio abierto, siguió mostrando la
+  versión anterior hasta recargar. A Pavel no le afecta en su primera visita, pero si Studio
+  cambia mientras lo usa, tiene que recargar.
+
+**Estado al cierre:** `origin/main` en `54db9c1`. Este cierre y `32fe897` están locales, sin
+subir. Stuart tiene cambios sin publicar en su borrador que no son de la prueba; no se tocaron.
+
+**Pendientes:**
+- **Vic:** agregar el correo real de Pavel a la política "Studio - Team"; subir el token de
+  Studio a Actions: Read and write antes del 9-oct; token de Cloudflare con Workers Routes: Edit
+  (W-119); correo de prueba a `info@stuarthomeownersinsurance.com` (W-114); sesión de la política
+  a 1 mes.
+- **Codex:** retirar `apps/content-form` (Worker `wicfl-content-form-w111` y código).
+- **Pavel:** quitar "Demo" de la marca y el SEO de Stuart desde Site settings; leer el handbook
+  antes del 2-oct.
+- **Kevin:** sitio en español (en pausa por la regla), dónde se compran los dominios, números de
+  Gate B, respuesta a la revisión del plan.
+
+**Siguiente acción, una sola:** Vic confirma el correo de Pavel y lo agrega a "Studio - Team". Sin
+eso, Pavel no puede entrar a Studio el día de la capacitación.
+
+---
+
 ## 2026-09-24 · Studio: botón "Sign out"
 
 **Quién:** cowork, a pregunta de Vic.
