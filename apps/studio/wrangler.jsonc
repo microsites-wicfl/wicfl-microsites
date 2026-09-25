@@ -10,6 +10,7 @@
     "GITHUB_OWNER": "microsites-wicfl",
     "GITHUB_REPO": "wicfl-microsites",
     "GITHUB_BASE_BRANCH": "main",
+    "PUBLISHED_SITES_HOST": "wicfl-microsites.workers.dev",
     // Cloudflare Access for this Worker (Zero Trust > Access > Applications > wicfl-studio).
     // Used to verify the Access token, because Workers with Static Assets do not receive ctx.access.
     // If the Zero Trust team name is ever renamed, ACCESS_TEAM_DOMAIN must change with it.

@@ -15,6 +15,10 @@ export const text = {
   liveAt: (domain) => `Live at ${domain}`,
   notLive: "Not live yet",
   viewLive: "View live",
+  viewLiveSite: "View live site",
+  viewPublishedSite: "View published version",
+  publishedHint: "The published version is the site as it is now, without your unpublished changes. " +
+    "It's what goes live at launch.",
   viewLivePage: "View this page live",
 
   allSites: "← All sites",

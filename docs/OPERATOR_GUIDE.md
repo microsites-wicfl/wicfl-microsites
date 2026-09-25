@@ -67,6 +67,9 @@ If Studio says your account doesn't have access, tell Vic.
 - **Publish:** your draft becomes the site's official version.
 - **Live:** the site is on its real domain for anyone to visit. Studio shows **Live at …** or
   **Not live yet** for every site.
+- **Published version:** the site as it is now, without your unpublished changes. It's what goes
+  live at launch. Inside a site, **View live site** opens the real site once it's live; before
+  that, **View published version** opens this copy. Search engines don't index it.
 - **Discard draft:** throws away all unsaved and unpublished changes on that site. It can't be
   undone.
 

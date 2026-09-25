@@ -22,6 +22,17 @@ function previewPanel(preview) {
   }
 }
 
+// The real site when it's live; otherwise its published version, which is what goes live at launch.
+function siteLinks(site) {
+  const open = (href, label) =>
+    `<div class="buttons"><a class="button secondary" href="${esc(href)}" target="_blank" rel="noopener">${
+      label}</a></div>`;
+  if (site.live && site.liveUrl) return open(site.liveUrl, text.viewLiveSite);
+  if (site.publishedUrl) return `${open(site.publishedUrl, text.viewPublishedSite)}<p class="muted small">${
+    text.publishedHint}</p>`;
+  return "";
+}
+
 function pageRow(site, page) {
   if (page.deleted) {
     return `
@@ -64,6 +75,7 @@ export function renderSite(site) {
         ? `${text.liveAt("")}<a href="${esc(site.liveUrl)}" target="_blank" rel="noopener">${esc(site.domain)}</a>`
         : `${esc(site.domain)} · ${text.notLive}`}
     </p>
+    ${siteLinks(site)}
     <section class="panel">
       <h2>${text.previewTitle}</h2>
       ${previewPanel(site.preview)}

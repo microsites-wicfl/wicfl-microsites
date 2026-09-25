@@ -53,6 +53,13 @@ async function draftChanges(github, slug) {
   return files.filter((path) => path.startsWith(`sites/${slug}/`));
 }
 
+// Every site on main also has its published version on workers.dev (CI "Publish site Workers"),
+// so a site that isn't live yet can still be seen as it is now, without the draft.
+export function publishedUrl(env, slug) {
+  const host = env?.PUBLISHED_SITES_HOST;
+  return host ? `https://wicfl-${slug}-published.${host}/` : null;
+}
+
 // inPod: wired for production (listed in pods/*.json). live: the domain really serves this site.
 // Test sites (slug starting with "_") are never live and are never checked.
 async function summary(slug, config, published, changedCount, web) {
@@ -149,6 +156,7 @@ export async function getSite(github, slug, web = null) {
   return {
     ...site,
     isNew: !baseConfig,
+    publishedUrl: baseConfig ? publishedUrl(github.env, slug) : null,
     blockers: slug.startsWith("_") ? [] : launchBlockers(config),
     canPublish: preview.state === "ready",
     pages,

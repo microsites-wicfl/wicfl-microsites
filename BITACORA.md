@@ -1,3 +1,25 @@
+## 2026-09-25 · W-126 y W-129: versión publicada por sitio, botón en Studio y noindex
+
+**Quién:** Codex (CI, `19e8146`), cowork (revisión y Studio).
+
+**Revisado contra el diff de Codex:** workflow nuevo `publish-sites.yml`. En cada push a `main` que
+cambie un sitio, construye ese sitio y lo despliega a `wicfl-<slug>-published` en `workers.dev`, sin
+el gate de producción; `workflow_dispatch` publica todos. Las vistas previas de PR, las versiones
+publicadas y el demo de Stuart escriben un `_headers` con `X-Robots-Tag: noindex, nofollow` solo
+en su propio artefacto de deploy. `deploy.yml` y los pods no cambiaron, así que el dominio real no
+lleva noindex. `preview-cleanup` ahora se niega a borrar cualquier Worker que no empiece con
+`wicfl-pr`. Codex lo verificó con curl (200 y el header en los cuatro) y con un PR temporal (#18)
+que ya cerró y limpió. Aprobado. Menor, sin urgencia: dos pushes seguidos podrían desplegar fuera
+de orden (no hay `concurrency`), y un sitio borrado deja su Worker publicado.
+
+**Studio (cowork):** dentro de un sitio, botón **View live site** si está en vivo y, si no,
+**View published version** con una línea que explica que es lo que sale en vivo al lanzar. La
+dirección se arma con la variable `PUBLISHED_SITES_HOST` de `wrangler.jsonc`. Un sitio nuevo que
+nunca se publicó no muestra el botón. Tres pruebas nuevas (98). Guía actualizada (glosario). W-126 y
+W-129 cerrados al desplegarse.
+
+---
+
 ## 2026-09-25 · W-124 parte 1 revisada; Studio ya no reescribe todo el config al guardar
 
 **Quién:** Codex (template, `28a9550`), cowork (revisión y arreglo de Studio).
