@@ -14,6 +14,8 @@ import {
   listSites,
   pagesLinkingTo,
   readImage,
+  readLogo,
+  uploadLogo,
   readPage,
   restorePage,
   savePage,
@@ -33,11 +35,25 @@ import {
 //   GET    /api/sites/:slug/images               (list)
 //   POST   /api/sites/:slug/images               body: { "name": "photo.jpg", "data": "<base64>" }
 //   GET    /api/sites/:slug/images/<name>        (the image itself, from the draft if there is one)
+//   GET    /api/sites/:slug/logo                 (the site's logo, from the draft if there is one)
+//   POST   /api/sites/:slug/logo                 body: { "name": "logo.svg", "data": "<base64>" }
 //   POST   /api/sites                           body: new site form            (new site, as a draft)
 //   GET    /api/sites/:slug/settings
 //   PUT    /api/sites/:slug/settings            body: settings form
 //   POST   /api/sites/:slug/publish
 //   DELETE /api/sites/:slug/draft
+// Uploaded files are served so they can never run code in Studio, even if one is opened directly.
+function fileResponse(file) {
+  return new Response(file.bytes, {
+    headers: {
+      "content-type": file.type,
+      "cache-control": "private, max-age=300",
+      "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+      "x-content-type-options": "nosniff",
+    },
+  });
+}
+
 async function route(request, github, user, web) {
   const url = new URL(request.url);
   const [, , resource, slug, section, ...rest] = url.pathname.split("/");
@@ -62,9 +78,11 @@ async function route(request, github, user, web) {
   }
   if (section === "images" && rest.length === 1 && method === "GET") {
     const image = await readImage(github, slug, decodeURIComponent(rest[0]));
-    return new Response(image.bytes, {
-      headers: { "content-type": image.type, "cache-control": "private, max-age=300" },
-    });
+    return fileResponse(image);
+  }
+  if (section === "logo" && rest.length === 0 && method === "GET") return fileResponse(await readLogo(github, slug));
+  if (section === "logo" && rest.length === 0 && method === "POST") {
+    return uploadLogo(github, slug, await request.json().catch(() => ({})), user.email);
   }
   if (section === "pages" && rest.length === 0 && method === "POST") {
     return createPage(github, slug, await request.json().catch(() => ({})), user.email);

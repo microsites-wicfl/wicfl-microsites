@@ -192,6 +192,19 @@ any page; check the preview and publish.
   "demo" in the brand or SEO, missing analytics). Items marked **(Vic)** are his. The rest are
   yours, fixed right here in the settings.
 
+**Brand**, at the bottom of Site settings, gives each site its own look. A small preview on the
+right redraws as you change anything.
+
+- **Logo:** SVG, PNG or WebP, up to 1 MB. It's saved to the draft as soon as you upload it. An SVG
+  that carries code (not just a drawing) is refused; export it again as a plain SVG, or use a PNG.
+- **Style:** Rounded, Square or Soft (corners and shadows).
+- **Four colors:** main (buttons, links, the bar at the top), second (small details only, never
+  text), soft background (header, quotes, tables) and footer (must be dark). The text color stays
+  dark on every site so it always reads well.
+- **Fonts:** one for titles and one for text, from a fixed list. The sites serve them themselves.
+- If a color wouldn't be readable, Studio names it, says how far off it is, and won't save until
+  it's fixed. The site build checks the same rules.
+
 ### Creating a new site
 
 1. On the dashboard, click **New site**.

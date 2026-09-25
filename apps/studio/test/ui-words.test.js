@@ -21,7 +21,9 @@ const publicDir = join(import.meta.dirname, "..", "public");
 function files(directory) {
   return readdirSync(directory).flatMap((name) => {
     const path = join(directory, name);
-    return statSync(path).isDirectory() ? files(path) : [path];
+    // Only text the browser reads as code or words; font files are binary and carry no interface text.
+    if (statSync(path).isDirectory()) return files(path);
+    return /\.(js|css|html)$/.test(name) ? [path] : [];
   });
 }
 

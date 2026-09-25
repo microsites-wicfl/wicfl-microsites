@@ -412,3 +412,265 @@ input[type="email"] {
   opacity: 1;
 }
 
+
+/* Brand panel in Site settings. The fonts below are the sites' own font files, used only by the
+   preview; the browser downloads one only when the preview shows it. */
+@font-face {
+  font-family: "Inter";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/inter-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/inter-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/source-sans-3-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/source-sans-3-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nunito Sans";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/nunito-sans-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nunito Sans";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/nunito-sans-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Montserrat";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/montserrat-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Montserrat";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/montserrat-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Lora";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/lora-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Lora";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/lora-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Merriweather";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/merriweather-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Merriweather";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/merriweather-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/playfair-display-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/playfair-display-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fraunces";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/fraunces-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fraunces";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/fraunces-latin-700-normal.woff2") format("woff2");
+}
+.brand-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .brand-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.brand-side {
+  position: sticky;
+  top: 1rem;
+}
+.color-pair {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.color-pair input[type="color"] {
+  width: 3rem;
+  height: 2.4rem;
+  padding: 0.15rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  cursor: pointer;
+}
+.color-pair .hex {
+  width: 7.5rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.color-field.bad .color-pair input {
+  outline: 2px solid #b3261e;
+  outline-offset: 1px;
+}
+.logo-block {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.logo-current {
+  max-height: 3rem;
+  max-width: 220px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+}
+.mock {
+  margin-top: 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  color: #12181f;
+  font-family: var(--b-body);
+}
+.mock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  background: var(--b-surface);
+  border-top: 4px solid var(--b-secondary);
+}
+.mock-name {
+  font-family: var(--b-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.mock-logo {
+  max-height: 2.2rem;
+  max-width: 160px;
+}
+.mock-phone {
+  background: var(--b-accent);
+  color: var(--b-on-accent);
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.style-civic .mock-phone {
+  border-radius: var(--b-radius);
+}
+.mock-nav {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0 1rem 0.7rem;
+  background: var(--b-surface);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.mock-nav span {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+.mock-nav .active {
+  background: var(--b-accent);
+  color: var(--b-on-accent);
+}
+.mock-body {
+  padding: 0.4rem 1rem 1rem;
+}
+.mock-body h3 {
+  font-family: var(--b-heading);
+  font-size: 1.35rem;
+  margin: 0.8rem 0 0.4rem;
+}
+.mock-body p {
+  margin: 0 0 0.8rem;
+  font-size: 0.95rem;
+}
+.mock-body a {
+  color: var(--b-accent);
+  text-decoration: underline;
+}
+.mock-body blockquote {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  background: var(--b-surface);
+  border-left: 4px solid var(--b-secondary);
+  border-radius: 0 var(--b-radius) var(--b-radius) 0;
+  font-size: 0.9rem;
+}
+.mock-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.8rem 1rem;
+  background: var(--b-footer);
+  color: #eef1f5;
+}
+.mock-footer strong {
+  font-family: var(--b-heading);
+}
+.mock-footer small {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.68rem;
+  color: rgba(238, 241, 245, 0.6);
+  font-weight: 700;
+}
+.brand-controls {
+  display: grid;
+  gap: 1rem;
+}
+.brand-controls .row {
+  align-items: start;
+}
+.brand-controls .field {
+  margin: 0;
+}

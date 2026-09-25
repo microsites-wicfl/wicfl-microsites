@@ -98,10 +98,10 @@ export class GitHub {
     }
   }
 
-  writeBinary(path, { base64, branch, message }) {
+  writeBinary(path, { base64, sha, branch, message }) {
     return this.request(`${this.repo}/contents/${path}`, {
       method: "PUT",
-      body: { message, content: base64, branch },
+      body: { message, content: base64, sha, branch },
     });
   }
 

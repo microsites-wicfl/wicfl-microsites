@@ -1,6 +1,7 @@
 import { api } from "./api.js";
 import { $, esc, pageLink, siteLink } from "./html.js";
-import { renderNewSite, renderSettings } from "./views/settings.js";
+import { logoBlock, renderNewSite, renderSettings } from "./views/settings.js";
+import { VARIANT_SURFACE, brandPreview, brandProblems } from "./brand.js";
 import { text } from "./strings.js";
 import { confirmDialog, toast } from "./ui.js";
 import { renderDashboard } from "./views/dashboard.js";
@@ -161,6 +162,7 @@ async function showSettings(slug) {
   const initial = JSON.stringify(formValues(form));
   unsavedEditor = { isDirty: () => JSON.stringify(formValues(form)) !== initial };
   const button = $("#save-settings");
+  if (data.brand) wireBrand(slug, form, data.brand, button);
   button.onclick = async () => {
     button.disabled = true;
     button.textContent = text.saving;
@@ -175,6 +177,87 @@ async function showSettings(slug) {
       button.textContent = text.save;
     }
   };
+}
+
+// Brand panel: color pickers and their hex boxes stay in step, the preview redraws on every
+// change, and colors that wouldn't be readable are named and block saving until fixed.
+function wireBrand(slug, form, brand, saveButton) {
+  let logoUrl = brand.logo ? `/api/sites/${encodeURIComponent(slug)}/logo` : null;
+  let style = brand.style;
+  let accent = brand.accentColor;
+  const field = (name) => form.elements.namedItem(name);
+  const setColor = (name, value) => {
+    field(name).value = value;
+    form.querySelector(`[data-hex-for="${name}"]`).value = value;
+  };
+  const update = () => {
+    const values = formValues(form);
+    $("#brand-preview").innerHTML = brandPreview(values, { brandName: values.brandName, logoUrl });
+    const problems = brandProblems(values);
+    const box = $("#brand-problems");
+    box.hidden = problems.length === 0;
+    box.innerHTML = problems.map((problem) => `<p>${problem.message}</p>`).join("");
+    for (const input of form.querySelectorAll(".color-field")) input.classList.remove("bad");
+    for (const problem of problems) field(problem.field).closest(".color-field").classList.add("bad");
+    saveButton.disabled = problems.length > 0;
+  };
+
+  for (const hex of form.querySelectorAll("[data-hex-for]")) {
+    const picker = field(hex.dataset.hexFor);
+    picker.addEventListener("input", () => {
+      hex.value = picker.value;
+    });
+    hex.addEventListener("input", () => {
+      const value = hex.value.trim().replace(/^([0-9a-f]{6})$/i, "#$1").toLowerCase();
+      if (/^#[0-9a-f]{6}$/.test(value)) {
+        picker.value = value;
+        picker.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    });
+  }
+  // A color still at its default follows what it depends on: the second color follows the main
+  // color, the soft background follows the style.
+  field("accentColor").addEventListener("input", () => {
+    if (field("secondaryColor").value === accent) setColor("secondaryColor", field("accentColor").value);
+    accent = field("accentColor").value;
+  });
+  field("style").addEventListener("change", () => {
+    if (field("surfaceColor").value === VARIANT_SURFACE[style]) {
+      setColor("surfaceColor", VARIANT_SURFACE[field("style").value]);
+    }
+    style = field("style").value;
+  });
+  form.addEventListener("input", update);
+  form.addEventListener("change", update);
+  update();
+
+  const wireLogo = () => {
+    const input = $("#logo-file");
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return;
+      toast(text.logoUploading);
+      try {
+        const data = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(reader.error);
+          reader.readAsDataURL(file);
+        });
+        const result = await api.uploadLogo(slug, file.name, data);
+        const version = Date.now();
+        logoUrl = `/api/sites/${encodeURIComponent(slug)}/logo?v=${version}`;
+        $("#logo-slot").innerHTML = logoBlock(slug, { logo: result.logo }, version);
+        wireLogo();
+        update();
+        toast(text.logoSaved);
+      } catch (error) {
+        toast(error.message);
+        input.value = "";
+      }
+    };
+  };
+  wireLogo();
 }
 
 function showNewSite() {

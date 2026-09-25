@@ -1,5 +1,6 @@
 import { esc, siteLink } from "../html.js";
 import { text } from "../strings.js";
+import { FONTS, STYLES, brandPreview } from "../brand.js";
 
 const PRODUCTS = [
   "homeowners", "flood", "windstorm", "condo", "renters", "landlord", "umbrella", "contractor",
@@ -41,6 +42,81 @@ export function blockersPanel(blockers) {
   return `<section class="panel blockers"><h2>${text.blockersTitle}</h2>${items}</section>`;
 }
 
+function brandSelect(name, options, value) {
+  const [label, hint] = text.brandFields[name];
+  const items = options
+    .map(([key, title]) => `<option value="${key}"${key === value ? " selected" : ""}>${esc(title)}</option>`)
+    .join("");
+  return `
+    <label class="field" for="b-${name}">
+      <span class="label">${label}</span>
+      <select id="b-${name}" name="${name}">${items}</select>
+      <span class="hint">${hint}</span>
+    </label>`;
+}
+
+function brandColor(name, value) {
+  const [label, hint] = text.brandFields[name];
+  return `
+    <label class="field color-field" for="b-${name}">
+      <span class="label">${label}</span>
+      <span class="color-pair">
+        <input id="b-${name}" name="${name}" type="color" value="${esc(value)}">
+        <input type="text" class="hex" data-hex-for="${name}" value="${esc(value)}" maxlength="7" spellcheck="false"
+          aria-label="${esc(label)}">
+      </span>
+      <span class="hint">${hint}</span>
+    </label>`;
+}
+
+export function logoBlock(slug, brand, version = "") {
+  const img = brand.logo
+    ? `<img class="logo-current" src="/api/sites/${encodeURIComponent(slug)}/logo?v=${esc(version)}" alt="">`
+    : `<p class="muted small">${text.noLogo}</p>`;
+  return `
+    <div class="logo-block">
+      <span class="label">${text.logoLabel}</span>
+      <div class="logo-row">
+        ${img}
+        <label class="button small secondary">${brand.logo ? text.replaceLogo : text.uploadLogo}
+          <input id="logo-file" type="file" accept=".svg,.png,.webp,image/svg+xml,image/png,image/webp" hidden>
+        </label>
+      </div>
+      <span class="hint">${text.logoHint}</span>
+    </div>`;
+}
+
+export function brandPanel(site, brand) {
+  return `
+    <section class="panel brand-panel">
+      <h2>${text.brandTitle}</h2>
+      <p class="hint">${text.brandHint}</p>
+      <div class="brand-grid">
+        <div class="brand-controls">
+          <div id="logo-slot">${logoBlock(site.slug, brand)}</div>
+          ${brandSelect("style", STYLES, brand.style)}
+          <div class="row">
+            ${brandColor("accentColor", brand.accentColor)}
+            ${brandColor("secondaryColor", brand.secondaryColor)}
+          </div>
+          <div class="row">
+            ${brandColor("surfaceColor", brand.surfaceColor)}
+            ${brandColor("footerColor", brand.footerColor)}
+          </div>
+          <div class="row">
+            ${brandSelect("headingFont", FONTS, brand.headingFont)}
+            ${brandSelect("bodyFont", FONTS, brand.bodyFont)}
+          </div>
+          <div id="brand-problems" class="status warn" hidden></div>
+        </div>
+        <div class="brand-side">
+          <span class="label">${text.brandPreviewLabel}</span>
+          <div id="brand-preview">${brandPreview(brand, { brandName: site.brandName, logoUrl: null })}</div>
+        </div>
+      </div>
+    </section>`;
+}
+
 export function renderSettings(site, data) {
   const values = data.settings;
   return `
@@ -57,6 +133,7 @@ export function renderSettings(site, data) {
         ${input("secondaryKeywords", values.secondaryKeywords, { multiline: true })}
         ${input("serviceArea", values.serviceArea, { multiline: true })}
       </div>
+      ${data.brand ? brandPanel(site, data.brand) : ""}
     </form>
     <div class="actions"><button type="button" id="save-settings">${text.save}</button></div>`;
 }

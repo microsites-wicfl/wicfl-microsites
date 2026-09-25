@@ -34,6 +34,11 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ name, data }),
     }),
+  uploadLogo: (slug, name, data) =>
+    request(`/sites/${encodeURIComponent(slug)}/logo`, {
+      method: "POST",
+      body: JSON.stringify({ name, data }),
+    }),
   createSite: (payload) => request("/sites", { method: "POST", body: JSON.stringify(payload) }),
   settings: (slug) => request(`/sites/${encodeURIComponent(slug)}/settings`),
   saveSettings: (slug, payload) =>

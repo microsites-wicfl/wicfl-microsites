@@ -103,7 +103,7 @@ export class FakeGitHub {
           return { status: 409, body: { message: "conflict" } };
         // Images stay as bytes; everything else is text, like the real repository.
         const bytes = Buffer.from(body.content, "base64");
-        branch.files[file] = file.includes("/public/images/") ? bytes : bytes.toString("utf8");
+        branch.files[file] = /\/public\/.+\.(png|jpe?g|webp|gif)$/.test(file) ? bytes : bytes.toString("utf8");
         branch.head = `c-${++this.commitCounter}`;
         branch.commits = [...branch.commits, { message: body.message, file }];
         return { body: { content: { sha: sha(branch.files[file]) } } };

@@ -1,3 +1,39 @@
+## 2026-09-25 · W-123 y W-130: marca por sitio (Codex) y editor de marca y logo en Studio (cowork)
+
+**Quién:** Codex (template, `22ff409` y `512f841`), cowork (revisión y Studio).
+
+**Revisión de Codex, contra el diff:** tema opcional con secundario, fondo suave, footer y fuentes
+de lista; `packages/config-schema/theme.mjs` sin dependencias con `checkTheme` y `textOnPrimary`;
+el build falla antes de construir; solo se copian las fuentes elegidas (Example: Inter y Lora,
+400 y 700). Stuart no declara nada nuevo, así que no cambia. Aprobado, con un hallazgo menor: el
+mensaje del build para el fondo suave y el footer muestra el color del texto (`#12181f` o
+`#eef1f5`) en vez del color del sitio, y siempre dice "too light", también cuando el problema es
+que el fondo es muy oscuro. Va en el próximo prompt de Codex.
+
+**Studio (cowork):**
+- Sección **Brand** al final de Site settings:
+  - Estilo (Rounded, Square, Soft).
+  - Los cuatro colores, cada uno con selector y caja hex sincronizados.
+  - Fuente de títulos y de texto.
+  - Vista previa en vivo con el header, el menú, un título, un párrafo con liga, una cita y el
+    footer.
+- Contraste revisado en vivo: nombra el color, dice cuánto le falta y bloquea el guardado. El
+  servidor vuelve a revisar con el módulo del build, así que hay una sola fuente de verdad, y una
+  prueba confirma que la revisión en vivo y la del build coinciden color por color.
+- Un valor igual al predeterminado no se escribe en el config. El segundo color sigue al
+  principal, y el fondo suave sigue al estilo, mientras no se cambien.
+- **Logo (W-130):** se sube SVG, PNG o WebP de hasta 1 MB. Se guarda en el borrador al subirlo, en
+  `sites/<slug>/public/logo.<ext>`, y actualiza `brand.logo`.
+  - El SVG se rechaza, no se limpia, si trae scripts, `on*`, `foreignObject`, ligas externas,
+    entidades, `@import` o `url()` externos.
+  - Studio sirve imágenes y logo con `Content-Security-Policy: sandbox` y `nosniff`.
+- Las fuentes del sitio están copiadas en `apps/studio/public/fonts` solo para la vista previa;
+  el navegador baja una solo cuando la preview la muestra.
+- 6 pruebas nuevas (112), probado en el Studio local con el logo real de Stuart. El bundle del
+  Worker incluye el módulo de `packages/` sin problema. Guía actualizada.
+
+---
+
 ## 2026-09-25 · W-123 branding por sitio: diseño decidido
 
 **Quién:** Vic (decisiones), cowork (propuesta).

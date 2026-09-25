@@ -1,3 +1,4 @@
+import { LOGO_TYPES, MAX_LOGO_BYTES, applyBrand, brandOf, checkSvg } from "./brand.js";
 import { validateColumns } from "./columns.js";
 import { validatePageHeader } from "./frontmatter.js";
 import { isLive } from "./live.js";
@@ -416,7 +417,11 @@ export async function uploadImage(github, slug, input, email) {
 export async function getSettings(github, slug) {
   const config = await readConfig(github, slug);
   if (!config) throw new UserError("That site doesn't exist.", 404);
-  return { settings: settingsOf(config), blockers: slug.startsWith("_") ? [] : launchBlockers(config) };
+  return {
+    settings: settingsOf(config),
+    brand: brandOf(config),
+    blockers: slug.startsWith("_") ? [] : launchBlockers(config),
+  };
 }
 
 export async function saveSettings(github, slug, input, email) {
@@ -424,7 +429,11 @@ export async function saveSettings(github, slug, input, email) {
   const ref = branchExists ? draftBranch(slug) : github.env.GITHUB_BASE_BRANCH;
   const file = await github.readFile(configPath(slug), ref);
   if (!file) throw new UserError("That site doesn't exist.", 404);
-  const next = formatConfig(applySettings(JSON.parse(file.text), input || {}), file.text);
+  const current = JSON.parse(file.text);
+  const updated = applySettings(current, input || {});
+  const theme = applyBrand(current, input || {});
+  if (theme) updated.theme = theme;
+  const next = formatConfig(updated, file.text);
   if (JSON.stringify(JSON.parse(next)) === JSON.stringify(JSON.parse(file.text))) return { saved: false };
 
   const branch = await ensureDraftBranch(github, slug);
@@ -503,4 +512,64 @@ export async function publishDraft(github, slug, email, web = null) {
     console.error(`Studio error: publish deploy dispatch failed: ${error.message}`);
     return { published: true, deploying: false, needsVic: true };
   }
+}
+
+// The logo lives next to the site's other public files as logo.svg, logo.png or logo.webp, and
+// brand.logo points at it. Uploading replaces it in the draft like any other change.
+function logoTypeOf(name) {
+  const extension = String(name || "").toLowerCase().split(".").pop();
+  if (!LOGO_TYPES[extension]) throw new UserError("A logo must be an SVG, PNG or WebP file.", 400);
+  return extension;
+}
+
+export async function uploadLogo(github, slug, input, email) {
+  const extension = logoTypeOf(input?.name);
+  const base64 = String(input?.data || "").replace(/^data:[^,]*,/, "");
+  if (!base64) throw new UserError("The logo didn't arrive.", 400);
+  if (Math.floor((base64.length * 3) / 4) > MAX_LOGO_BYTES) {
+    throw new UserError("That logo is larger than 1 MB. Export a smaller version and try again.", 400);
+  }
+  if (extension === "svg") {
+    const bytes = Uint8Array.from(atob(base64), (character) => character.charCodeAt(0));
+    checkSvg(new TextDecoder().decode(bytes));
+  }
+
+  const ref = await currentRef(github, slug);
+  const configFile = await github.readFile(configPath(slug), ref);
+  if (!configFile) throw new UserError("That site doesn't exist.", 404);
+  const branch = await ensureDraftBranch(github, slug);
+  const path = `sites/${slug}/public/logo.${extension}`;
+  const existing = await github.readFile(path, branch);
+  await github.writeBinary(path, {
+    base64,
+    sha: existing?.sha,
+    branch,
+    message: `content(${slug}): new logo\n\nEdited-by: ${email}`,
+  });
+
+  const config = JSON.parse(configFile.text);
+  const logo = `/logo.${extension}`;
+  if (config.brand.logo !== logo) {
+    config.brand.logo = logo;
+    const inDraft = await github.readFile(configPath(slug), branch);
+    await github.writeFile(configPath(slug), {
+      text: formatConfig(config, inDraft.text),
+      sha: inDraft.sha,
+      branch,
+      message: `content(${slug}): use the new logo\n\nEdited-by: ${email}`,
+    });
+  }
+  await ensurePull(github, slug);
+  return { logo };
+}
+
+export async function readLogo(github, slug) {
+  const ref = await currentRef(github, slug);
+  const config = await readConfigAt(github, slug, ref);
+  const logo = config?.brand?.logo;
+  if (!/^\/logo\.(svg|png|webp)$/.test(logo || "")) throw new UserError("This site has no logo yet.", 404);
+  const extension = logoTypeOf(logo);
+  const bytes = await github.readBinary(`sites/${slug}/public${logo}`, ref);
+  if (!bytes) throw new UserError("This site has no logo yet.", 404);
+  return { bytes, type: LOGO_TYPES[extension] };
 }
