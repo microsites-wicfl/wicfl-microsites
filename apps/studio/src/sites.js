@@ -391,7 +391,10 @@ export async function uploadImage(github, slug, input, email) {
   if (!base64) throw new UserError("The image didn't arrive.", 400);
   const size = Math.floor((base64.length * 3) / 4);
   if (size > MAX_IMAGE_BYTES) {
-    throw new UserError("That image is larger than 5 MB. Make it smaller and try again.", 400);
+    throw new UserError(
+      "That image is still larger than 5 MB after Studio made it smaller. Export a smaller version and try again.",
+      400,
+    );
   }
   const wanted = imageNameFrom(input?.name);
   const taken = new Set((await listImages(github, slug)).map((image) => image.name));

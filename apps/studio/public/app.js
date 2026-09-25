@@ -5,6 +5,7 @@ import { text } from "./strings.js";
 import { confirmDialog, toast } from "./ui.js";
 import { renderDashboard } from "./views/dashboard.js";
 import { renderMarkdown } from "./markdown.js";
+import { shrinkImage } from "./resize.js";
 import { renderImageList, renderNewPage, renderPage } from "./views/page.js";
 import { renderSite } from "./views/site.js";
 
@@ -301,12 +302,13 @@ async function wireImages(slug) {
 
   const input = $("#image-file");
   input.onchange = async () => {
-    const file = input.files[0];
-    if (!file) return;
+    const picked = input.files[0];
+    if (!picked) return;
     const label = input.parentElement;
     label.classList.add("busy");
     toast(text.uploading);
     try {
+      const file = await shrinkImage(picked);
       const data = await new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);

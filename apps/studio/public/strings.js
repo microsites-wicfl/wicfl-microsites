@@ -101,7 +101,8 @@ export const text = {
   livePreviewHint: "Updates as you type. The site preview shows the final look.",
   openInSitePreview: "Open this page in the site preview",
   imagesTitle: "Images",
-  imagesHint: "JPG, PNG, WebP or GIF, up to 5 MB. Insert puts it where your cursor is in the text.",
+  imagesHint: "JPG, PNG, WebP or GIF. Big photos are made smaller automatically before they're added. " +
+    "Insert puts it where your cursor is in the text.",
   imagesEmpty: "No images yet.",
   addImage: "Add image",
   uploading: "Uploading…",

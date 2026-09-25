@@ -1,3 +1,22 @@
+## 2026-09-25 · W-124 parte 2: Studio achica las fotos al subirlas; manual v2.1
+
+**Quién:** cowork.
+
+**Fotos:** antes de subir, Studio redibuja la imagen en el navegador. Si su lado más largo pasa de
+2000 px (el ancho máximo de un bloque, al doble para pantallas retina), la reduce a ese tamaño. Los
+JPEG se redibujan siempre, porque así se les quitan los datos ocultos del teléfono (entre ellos el
+GPS del lugar de la foto). PNG y WebP solo si son muy grandes, y los GIF pasan tal cual porque
+pueden tener animación. Si el resultado de un PNG o WebP no sale más chico, se sube el original. Prueba en
+el Studio local con una foto de 4032×3024 y 4.0 MB con GPS: se subió de 2000×1500 y 364 KB, sin
+EXIF. 3 pruebas nuevas (106). El límite de 5 MB del servidor se queda como red de seguridad.
+
+**Manual v2.1** (artifact, EN y ES) y guía: botón **View published version**, sección de columnas
+con **With text**, glosario con "Published version" y el paso de imágenes sin "achica tus fotos
+antes". Las capturas nuevas salieron del Studio local de prueba (el Chrome de Vic no estaba
+conectado); muestran la misma interfaz.
+
+---
+
 ## 2026-09-25 · W-122: columnas en el template (Codex) y en Studio (cowork)
 
 **Quién:** Codex (template, `127bb4e` y `d979f54`), cowork (revisión, Studio).

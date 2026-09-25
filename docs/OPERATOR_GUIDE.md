@@ -108,8 +108,9 @@ fields can't show. You can still edit it; tell Vic so he fixes that page.
 
 ### Images
 
-1. In the page editor, open **Images** and click **Add image**. JPG, PNG, WebP or GIF, up to
-   5 MB. Resize big phone photos first.
+1. In the page editor, open **Images** and click **Add image**. JPG, PNG, WebP or GIF. Phone
+   photos are fine: Studio makes big ones smaller before adding them, and removes the hidden data
+   a phone stores in them, like where the photo was taken.
 2. The image is inserted where your cursor is in the text, like
    `![Describe this image](/images/roof-photo.png)`.
 3. Replace **Describe this image** with a real description of what it shows. That text is read
