@@ -1,0 +1,70 @@
+name: Publish site Workers
+
+# W-126: every changed site has an independently addressable published version for
+# review. These are workers.dev-only artifacts, not the real-domain production pods.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - "packages/template/**"
+      - "packages/config-schema/**"
+      - "scripts/**"
+      - "sites/**"
+      - ".github/workflows/publish-sites.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  discover-sites:
+    name: Discover sites to publish
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.changed.outputs.matrix }}
+      count: ${{ steps.changed.outputs.count }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: changed
+        env:
+          BASE_SHA: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        # workflow_dispatch has no before SHA. Passing an empty base makes
+        # changed-sites.mjs intentionally return every configured site.
+        run: node scripts/changed-sites.mjs "$BASE_SHA" "$HEAD_SHA" >> "$GITHUB_OUTPUT"
+
+  publish:
+    name: Publish ${{ matrix.site }}
+    needs: discover-sites
+    if: needs.discover-sites.outputs.count != '0'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.discover-sites.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:site -- ${{ matrix.site }}
+      # No W-103 production-readiness gate: these workers.dev URLs are review copies,
+      # not production deployments to a real site domain.
+      - name: Deploy published Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          WORKER_NAME="wicfl-${{ matrix.site }}-published"
+          # W-129: add this only to the workers.dev deployment artifact. It must not
+          # leak into shared builds or the production pod deployment.
+          cat > "dist/sites/${{ matrix.site }}/_headers" <<'EOF'
+          /*
+            X-Robots-Tag: noindex, nofollow
+          EOF
+          npx wrangler deploy --name "$WORKER_NAME" --assets "dist/sites/${{ matrix.site }}" --compatibility-date "2026-09-04"

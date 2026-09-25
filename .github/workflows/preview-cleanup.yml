@@ -49,4 +49,11 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         # A PR that never touched this site's build never got a preview Worker deployed for it,
         # so "not found" here is expected, not an error: swallow it rather than fail the job.
-        run: npx wrangler delete "wicfl-pr${{ github.event.pull_request.number }}-${{ matrix.site }}" --force || true
+        run: |
+          # Only names constructed here are eligible for cleanup; published Workers use
+          # wicfl-<slug>-published and must survive when any PR closes.
+          PREVIEW_WORKER_NAME="wicfl-pr${{ github.event.pull_request.number }}-${{ matrix.site }}"
+          case "$PREVIEW_WORKER_NAME" in
+            wicfl-pr*) npx wrangler delete "$PREVIEW_WORKER_NAME" --force || true ;;
+            *) echo "Refusing to delete a non-preview Worker: $PREVIEW_WORKER_NAME" >&2; exit 1 ;;
+          esac
