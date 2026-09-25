@@ -1,3 +1,33 @@
+## 2026-09-25 · Junta de Vic con Pavel: siete pedidos para Studio y el template
+
+**Quién:** Vic (junta con Pavel), cowork (backlog).
+
+También hoy: Vic mandó el correo de prueba a `info@stuarthomeownersinsurance.com` y llegó (W-114
+cerrado), y subió la sesión de la política "Studio - Team" a 1 mes.
+
+Lo que salió de la junta, ya en el backlog como W-121 a W-127:
+- **W-121 Plantilla de estructura:** Pavel entrega la estructura base de un sitio; Studio la usa
+  al crear un sitio nuevo y Pavel solo escribe el contenido.
+- **W-122 Secciones con columnas:** bloques de 2 o 3 columnas (imagen y párrafo, dos o tres
+  párrafos).
+- **W-123 Branding por sitio:** paleta y design system propios, editables en Site settings.
+- **W-124 Imágenes enormes:** revisado en el código, es un bug del template. No hay ninguna regla
+  que limite el ancho de las imágenes del contenido, así que salen a su tamaño original.
+- **W-125 Schema markup por página.**
+- **W-126 Botón al sitio real:** el link existe, pero solo aparece cuando el sitio está en vivo, y
+  Stuart todavía no lo está.
+- **W-127 Formulario de GHL:** el formulario ya está definido y construido (W-118). Lo que falta
+  definir es en qué páginas aparece y si Pavel lo puede poner donde quiera.
+
+Criterio de cowork para todos: bloques y opciones cerradas, no un constructor de páginas libre.
+Un set chico de secciones, tokens de marca y tipos de schema se mantiene consistente y se puede
+validar en CI; un editor libre regresa a los sitios hechos a mano que el proyecto evita. Orden
+propuesto: W-124 y W-126 antes del 9-oct (chicos; el primero afecta a Stuart), después W-122,
+W-121 y W-123 antes de que Pavel escriba Port St. Lucie el 12-oct, y W-125 al final. El trabajo en
+Studio necesita extender la excepción de `CLAUDE.md` a una fase A4; se decide cuando arranque.
+
+---
+
 ## 2026-09-25 · Correo de Pavel confirmado
 
 **Quién:** Vic.
