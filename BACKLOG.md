@@ -3,7 +3,7 @@
 Items priorizados. **Solo cowork crea items nuevos.** El agente ejecutor puede cerrar el
 item que su prompt cerraba, con refs a prompt/report/commit, pero no crea ni reprioriza.
 
-Formato de id: `W-NNN` · Última actualización: 2026-09-25 (W-114 cerrado; W-121 a W-127 abiertos a partir de la junta de Vic con Pavel — ver `BITACORA.md` 2026-09-25)
+Formato de id: `W-NNN` · Última actualización: 2026-09-25 (W-114 cerrado; W-121 a W-128 abiertos a partir de la junta de Vic con Pavel — ver `BITACORA.md` 2026-09-25)
 
 ---
 
@@ -123,6 +123,7 @@ dentro de octubre sin tocar el handoff ni el 21 de septiembre.
 | W-125 | **Schema markup por página** | Codex (template) + cowork (Studio) | **Abierto el 2026-09-25** (junta con Pavel). El sitio ya genera su JSON-LD a nivel sitio. Propuesta: Pavel elige tipos (FAQ armado con las preguntas visibles de la página, Service, Article; breadcrumbs automáticos) y el template genera el markup desde el contenido. No se pega JSON a mano: se puede romper, y Google penaliza el markup que no coincide con lo que se ve en la página. Validación en CI. |
 | W-126 | **Botón al sitio real desde la vista del sitio en Studio** | cowork (Studio) | **Abierto el 2026-09-25** (junta con Pavel). Hoy la liga al dominio solo aparece, como texto, cuando el sitio está en vivo; Stuart no lo está, por eso Pavel no la ve. Propuesta: botón **View live site** cuando está en vivo, y cuando no, un botón a la versión publicada (oficial, sin borrador). Esto último necesita una URL estable de lo publicado para sitios que aún no están en vivo; se define al construirlo. Chico, antes del 9-oct. |
 | W-127 | **Dónde va el formulario de GHL en las páginas** | Vic + Pavel | **Abierto el 2026-09-25** (junta con Pavel). **El formulario ya está definido y construido** (W-118): el de 3 pasos del diseño de Kevin, que manda el lead a GoHighLevel por la API desde `apps/lead-api`, con guardado progresivo. No se incrusta el formulario propio de GHL: ese no permite el guardado progresivo ni el diseño y la velocidad del sitio. Falta definir en qué páginas aparece y si Pavel lo puede poner en cualquier página, como un bloque más de W-122. Para que funcione de verdad, Vic tiene que dar de alta GHL, Google Places y R2 (W-118). |
+| W-128 | **Imágenes de fondo en secciones** | Codex (template) + cowork (Studio) | **Abierto el 2026-09-25** (junta de Vic con Pavel; Vic lo agregó después). Propuesta: una opción de las secciones de W-122 (p. ej. el encabezado de la página o una sección destacada con foto de fondo), no un fondo libre en cualquier parte. El template pone encima una capa oscura o clara automática para que el texto siempre se lea (contraste AA), recorta bien en el celular, sirve la imagen reducida y, si es la primera de la página, la carga primero (pega directo en la velocidad que mide Google). Límite: un fondo es decoración. Google y los lectores de pantalla no lo leen, así que nada importante puede ir escrito dentro de la imagen. Depende de W-122 y de reducir fotos al subirlas (W-124). |
 
 ---
 

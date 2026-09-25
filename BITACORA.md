@@ -5,7 +5,7 @@
 También hoy: Vic mandó el correo de prueba a `info@stuarthomeownersinsurance.com` y llegó (W-114
 cerrado), y subió la sesión de la política "Studio - Team" a 1 mes.
 
-Lo que salió de la junta, ya en el backlog como W-121 a W-127:
+Lo que salió de la junta, ya en el backlog como W-121 a W-128:
 - **W-121 Plantilla de estructura:** Pavel entrega la estructura base de un sitio; Studio la usa
   al crear un sitio nuevo y Pavel solo escribe el contenido.
 - **W-122 Secciones con columnas:** bloques de 2 o 3 columnas (imagen y párrafo, dos o tres
@@ -18,6 +18,8 @@ Lo que salió de la junta, ya en el backlog como W-121 a W-127:
   Stuart todavía no lo está.
 - **W-127 Formulario de GHL:** el formulario ya está definido y construido (W-118). Lo que falta
   definir es en qué páginas aparece y si Pavel lo puede poner donde quiera.
+- **W-128 Imágenes de fondo** (Vic lo agregó después): como opción de las secciones de W-122,
+  con capa automática para que el texto se lea; nada importante escrito dentro de la imagen.
 
 Criterio de cowork para todos: bloques y opciones cerradas, no un constructor de páginas libre.
 Un set chico de secciones, tokens de marca y tipos de schema se mantiene consistente y se puede
