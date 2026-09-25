@@ -18,6 +18,10 @@ dirección se arma con la variable `PUBLISHED_SITES_HOST` de `wrangler.jsonc`. U
 nunca se publicó no muestra el botón. Tres pruebas nuevas (98). Guía actualizada (glosario). W-126 y
 W-129 cerrados al desplegarse.
 
+**Prueba de Vic (2026-09-25):** **View published version** en Example abre
+`wicfl-_example-published.wicfl-microsites.workers.dev` con el sitio publicado. Funciona. Vic pidió
+además que Pavel pueda subir el logo desde Studio: W-130.
+
 ---
 
 ## 2026-09-25 · W-124 parte 1 revisada; Studio ya no reescribe todo el config al guardar
