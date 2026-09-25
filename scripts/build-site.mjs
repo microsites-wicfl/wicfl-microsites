@@ -17,12 +17,13 @@ const siteRoot = resolve(repositoryRoot, "sites", siteDirectory);
 const configPath = resolve(siteRoot, "site.config.json");
 const contentPath = resolve(siteRoot, "content");
 const schemaPath = resolve(repositoryRoot, "packages/config-schema/site.config.schema.json");
-const config = JSON.parse(readFileSync(configPath, "utf8"));
 
 if (!existsSync(configPath) || !existsSync(contentPath)) {
   console.error(`Cannot build ${siteDirectory}: expected site.config.json and content/ in sites/${siteDirectory}/.`);
   process.exit(1);
 }
+
+const config = JSON.parse(readFileSync(configPath, "utf8"));
 
 const themeProblems = checkTheme(config.theme);
 if (themeProblems.length > 0) {
