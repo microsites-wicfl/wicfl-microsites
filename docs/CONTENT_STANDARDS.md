@@ -135,3 +135,22 @@ Before a page goes live, check:
 Sites start at 15 to 25 pages and expand to 40 to 50 only once they are ranking and
 producing leads. Do not build the long tail speculatively; that is how a site becomes thin
 across forty pages instead of strong across twenty.
+
+## Column blocks in page Markdown
+
+Use column blocks only when side-by-side content makes a page easier to scan. A block has two
+or three columns. Markers must be the complete line, but blank lines around them are optional:
+
+```md
+:::columns
+**First column** with ordinary Markdown.
+:::next
+![An image](/images/example.png)
+:::
+```
+
+`:::columns` opens a block, `:::next` begins the next column and `:::` closes it. Do not nest
+blocks. Paragraphs, lists, emphasis, links and images work inside each column. On narrow
+screens the columns stack in the written order. The build rejects unclosed blocks, stray
+markers, and blocks with fewer than two or more than three columns, identifying the file and
+line to fix.

@@ -1,7 +1,8 @@
-import { existsSync, cpSync } from "node:fs";
+import { existsSync, cpSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { validateColumns } from "../packages/template/src/lib/remark-columns.mjs";
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const siteDirectory = process.argv[2];
@@ -18,6 +19,23 @@ const schemaPath = resolve(repositoryRoot, "packages/config-schema/site.config.s
 
 if (!existsSync(configPath) || !existsSync(contentPath)) {
   console.error(`Cannot build ${siteDirectory}: expected site.config.json and content/ in sites/${siteDirectory}/.`);
+  process.exit(1);
+}
+
+function markdownFiles(directory) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const entryPath = resolve(directory, entry.name);
+    if (entry.isDirectory()) return markdownFiles(entryPath);
+    return entry.isFile() && entry.name.endsWith(".md") ? [entryPath] : [];
+  });
+}
+
+try {
+  for (const markdownPath of markdownFiles(contentPath)) {
+    validateColumns(readFileSync(markdownPath, "utf8"), markdownPath);
+  }
+} catch (error) {
+  console.error(error.message);
   process.exit(1);
 }
 
