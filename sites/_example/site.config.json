@@ -57,8 +57,13 @@
     "leadSource": "example-flood"
   },
   "theme": {
-    "variant": "coastal",
-    "accentColor": "#006D77"
+    "variant": "warm",
+    "accentColor": "#005F73",
+    "secondaryColor": "#0077B6",
+    "surfaceColor": "#F2F8FA",
+    "footerColor": "#182C3B",
+    "headingFont": "lora",
+    "bodyFont": "inter"
   },
   "differentiation": {
     "localProof": [

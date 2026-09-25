@@ -97,7 +97,12 @@
       "required": ["variant", "accentColor"],
       "properties": {
         "variant": { "type": "string", "description": "Prebuilt design-system variant.", "enum": ["coastal", "civic", "warm"] },
-        "accentColor": { "type": "string", "description": "Accessible six-digit accent color reviewed against template contrast tokens.", "pattern": "^#[0-9A-Fa-f]{6}$" }
+        "accentColor": { "type": "string", "description": "Accessible six-digit accent color reviewed against template contrast tokens.", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "secondaryColor": { "type": "string", "description": "Optional six-digit decorative color for accents, borders, and icons; never used for text.", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "surfaceColor": { "type": "string", "description": "Optional six-digit light surface color for header, quotes, tables, and forms.", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "footerColor": { "type": "string", "description": "Optional six-digit footer background color.", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "headingFont": { "type": "string", "description": "Optional heading font from the closed template font list.", "enum": ["system-sans", "georgia", "inter", "source-sans-3", "nunito-sans", "montserrat", "lora", "merriweather", "playfair-display", "fraunces"] },
+        "bodyFont": { "type": "string", "description": "Optional body font from the closed template font list.", "enum": ["system-sans", "georgia", "inter", "source-sans-3", "nunito-sans", "montserrat", "lora", "merriweather", "playfair-display", "fraunces"] }
       }
     },
     "differentiation": {

@@ -11,7 +11,7 @@
     "build": "npm run build:site -- _example",
     "build:site": "node scripts/build-site.mjs",
     "build:pod": "node scripts/build-pod.mjs",
-    "check": "npm run validate:configs && npm run check:types && node --test scripts/check-production-config.test.mjs scripts/remark-columns.test.mjs",
+    "check": "npm run validate:configs && npm run check:types && node --test scripts/check-production-config.test.mjs scripts/remark-columns.test.mjs scripts/theme.test.mjs",
     "check:types": "node scripts/check-types.mjs",
     "check:production": "node scripts/check-production-config.mjs",
     "validate:configs": "ajv validate --spec=draft2020 -s packages/config-schema/site.config.schema.json -d \"packages/config-schema/examples/*.json\" -d \"sites/*/site.config.json\""
@@ -27,6 +27,14 @@
     "npm": ">=10.0.0"
   },
   "dependencies": {
+    "@fontsource/fraunces": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/lora": "^5.3.0",
+    "@fontsource/merriweather": "^5.3.0",
+    "@fontsource/montserrat": "^5.3.0",
+    "@fontsource/nunito-sans": "^5.3.0",
+    "@fontsource/playfair-display": "^5.3.0",
+    "@fontsource/source-sans-3": "^5.3.0",
     "aws4fetch": "^1.0.20"
   }
 }

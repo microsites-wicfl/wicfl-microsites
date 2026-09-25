@@ -15,6 +15,7 @@ interface Props {
 
 import { getCollection } from "astro:content";
 import { routeForPageId, site } from "../lib/site-data.mjs";
+import { FONT_FAMILIES, textOnPrimary } from "../../../config-schema/theme.mjs";
 
 const { title, description = site.seo.description, pageType, path, lang = site.locale.primary, hreflangAlternates = [] } = Astro.props;
 const address = site.contact.address;
@@ -39,6 +40,24 @@ const structuredData = JSON.stringify({
   } } : {}),
   ...(site.geo.serviceArea ? { areaServed: site.geo.serviceArea } : {})
 }).replace(/</g, "\\u003c");
+type FontKey = keyof typeof FONT_FAMILIES;
+const headingFont = (site.theme.headingFont ?? "georgia") as FontKey;
+const bodyFont = (site.theme.bodyFont ?? "system-sans") as FontKey;
+const webFonts = [...new Set([headingFont, bodyFont])]
+  .map((font) => ({ key: font, ...FONT_FAMILIES[font] }))
+  .filter((font): font is typeof font & { package: string; family: string } => Boolean(font.package && font.family));
+const accentText = textOnPrimary(site.theme.accentColor);
+const themeCss = [
+  webFonts.map((font) => [400, 700].map((weight) => `@font-face{font-family:${font.family};font-style:normal;font-display:swap;font-weight:${weight};src:url(/fonts/${font.package}-latin-${weight}-normal.woff2) format("woff2")}`).join("")).join(""),
+  bodyFont !== "system-sans" ? `:root{font-family:${FONT_FAMILIES[bodyFont].css}}` : "",
+  headingFont !== "georgia" ? `.wordmark-name,h1,h2,h3,.footer-brand{font-family:${FONT_FAMILIES[headingFont].css}}` : "",
+  site.theme.surfaceColor ? `:root{--variant-surface:${site.theme.surfaceColor}}` : "",
+  site.theme.footerColor ? `.site-footer{background:${site.theme.footerColor}}` : "",
+  site.theme.secondaryColor ? `.page-home .page-content::before,blockquote{border-color:${site.theme.secondaryColor}}.site-header{border-top-color:${site.theme.secondaryColor}}.icon{color:${site.theme.secondaryColor}}` : "",
+  accentText !== "#ffffff" ? `.phone-link,.site-nav a[aria-current="page"]{color:${accentText}}` : "",
+].join("");
+const headingFontDefinition = FONT_FAMILIES[headingFont];
+const headingFontPackage = headingFontDefinition.package;
 ---
 
 <!doctype html>
@@ -57,6 +76,8 @@ const structuredData = JSON.stringify({
     {hreflangAlternates.map((alternate) => (
       <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />
     ))}
+    {headingFontPackage && <link rel="preload" href={`/fonts/${headingFontPackage}-latin-700-normal.woff2`} as="font" type="font/woff2" crossorigin="anonymous" />}
+    {themeCss && <style is:inline set:html={themeCss}></style>}
     <script is:inline type="application/ld+json" set:html={structuredData}></script>
   </head>
   <body>

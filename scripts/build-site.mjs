@@ -1,8 +1,9 @@
-import { existsSync, cpSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, cpSync, copyFileSync, mkdirSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { validateColumns } from "../packages/template/src/lib/remark-columns.mjs";
+import { checkTheme, FONT_FAMILIES } from "../packages/config-schema/theme.mjs";
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const siteDirectory = process.argv[2];
@@ -16,9 +17,19 @@ const siteRoot = resolve(repositoryRoot, "sites", siteDirectory);
 const configPath = resolve(siteRoot, "site.config.json");
 const contentPath = resolve(siteRoot, "content");
 const schemaPath = resolve(repositoryRoot, "packages/config-schema/site.config.schema.json");
+const config = JSON.parse(readFileSync(configPath, "utf8"));
 
 if (!existsSync(configPath) || !existsSync(contentPath)) {
   console.error(`Cannot build ${siteDirectory}: expected site.config.json and content/ in sites/${siteDirectory}/.`);
+  process.exit(1);
+}
+
+const themeProblems = checkTheme(config.theme);
+if (themeProblems.length > 0) {
+  console.error(`Theme contrast check failed for ${configPath}:`);
+  for (const problem of themeProblems) {
+    console.error(`  - theme.${problem.field} ${problem.color} is too light for ${problem.description}: ${problem.contrast.toFixed(1)}:1, needs ${problem.minimum}:1`);
+  }
   process.exit(1);
 }
 
@@ -69,6 +80,18 @@ if (build.status !== 0) {
 const sitePublicDir = resolve(siteRoot, "public");
 if (existsSync(sitePublicDir)) {
   cpSync(sitePublicDir, resolve(repositoryRoot, "dist/sites", siteDirectory), { recursive: true });
+}
+
+const selectedFonts = new Set([config.theme.headingFont ?? "georgia", config.theme.bodyFont ?? "system-sans"]);
+const fontsOutput = resolve(repositoryRoot, "dist/sites", siteDirectory, "fonts");
+for (const font of selectedFonts) {
+  const fontDefinition = FONT_FAMILIES[font];
+  if (!fontDefinition.package) continue;
+  mkdirSync(fontsOutput, { recursive: true });
+  for (const weight of [400, 700]) {
+    const filename = `${fontDefinition.package}-latin-${weight}-normal.woff2`;
+    copyFileSync(resolve(repositoryRoot, "node_modules", "@fontsource", fontDefinition.package, "files", filename), resolve(fontsOutput, filename));
+  }
 }
 
 process.exit(0);

@@ -44,7 +44,9 @@ Products use the supported shared-template catalog: flood, homeowners, renters, 
 
 ### 3. Theme stays in config, with constrained tokens
 
-Optional `theme` configures only a prebuilt variant and an accent color. This follows the project default of config over overrides, lets an operator vary a site without editing code, and prevents per-site CSS or component forks. If future requirements exceed these design tokens, extend the shared template first; do not add arbitrary overrides.
+`theme.variant` controls only the prebuilt shape and shadow personality. `accentColor` remains the accessible primary color for links and controls. The optional `secondaryColor` is restricted to decorative details such as borders and icons, never text. `surfaceColor` replaces the selected variant's surface token and `footerColor` sets the footer background. All four colors are six-digit hex values and are checked during every site build for the relevant WCAG contrast ratio.
+
+`headingFont` and `bodyFont` are optional closed-list choices: `system-sans`, `georgia`, `inter`, `source-sans-3`, `nunito-sans`, `montserrat`, `lora`, `merriweather`, `playfair-display`, and `fraunces`. The defaults are `georgia` for headings and `system-sans` for body text. Downloadable choices are self-hosted Latin WOFF2 assets at weights 400 and 700, with `font-display: swap`; builds copy only the families selected by that site and preload the heading font. Omitting every new field retains the existing site appearance exactly.
 
 ### 4. NAP has one local capture, then launch reconciliation
 
