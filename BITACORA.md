@@ -21,6 +21,9 @@ W-129 cerrados al desplegarse.
 **Prueba de Vic (2026-09-25):** **View published version** en Example abre
 `wicfl-_example-published.wicfl-microsites.workers.dev` con el sitio publicado. Funciona. Vic pidió
 además que Pavel pueda subir el logo desde Studio: W-130.
+Decisión de Vic sobre formatos del logo: SVG con revisión estricta que rechaza lo sospechoso, y PNG
+o WebP como alternativa. Motivo: los logos llegan en SVG (el de Stuart lo es) y rechazar es más
+simple y seguro que limpiar dentro de un Worker.
 
 ---
 
