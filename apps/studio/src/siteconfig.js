@@ -222,6 +222,97 @@ export function starterPages(config) {
   };
 }
 
-export function formatConfig(config) {
-  return `${JSON.stringify(config, null, 2)}\n`;
+// Configs are written by hand in a compact layout. A save keeps every part that did not change
+// exactly as it was written, and lays out only the parts that changed, so the history shows what
+// Pavel edited and nothing else. A config with no earlier text (a new site) gets the same compact
+// layout: one top-level key per line, short objects and lists on one line.
+const LINE_LIMIT = 110;
+
+function inline(value) {
+  if (Array.isArray(value)) return `[${value.map(inline).join(", ")}]`;
+  if (value && typeof value === "object") {
+    const parts = Object.entries(value).map(([key, item]) => `${JSON.stringify(key)}: ${inline(item)}`);
+    return parts.length ? `{ ${parts.join(", ")} }` : "{}";
+  }
+  return JSON.stringify(value);
+}
+
+// Where each value of an object sits in the original text: key -> [start, end).
+function valueSpans(text, open) {
+  const spans = new Map();
+  let i = open + 1;
+  const skipSpace = () => { while (/\s|,/.test(text[i] || "")) i += 1; };
+  const endOfString = (at) => {
+    let j = at + 1;
+    while (text[j] !== '"') j += text[j] === "\\" ? 2 : 1;
+    return j + 1;
+  };
+  const endOfValue = (at) => {
+    if (text[at] === '"') return endOfString(at);
+    if (text[at] !== "{" && text[at] !== "[") {
+      let j = at;
+      while (j < text.length && !/[\s,}\]]/.test(text[j])) j += 1;
+      return j;
+    }
+    let depth = 0;
+    let j = at;
+    while (j < text.length) {
+      const c = text[j];
+      if (c === '"') { j = endOfString(j); continue; }
+      if (c === "{" || c === "[") depth += 1;
+      if (c === "}" || c === "]") { depth -= 1; if (depth === 0) return j + 1; }
+      j += 1;
+    }
+    return j;
+  };
+  for (;;) {
+    skipSpace();
+    if (text[i] !== '"') break;
+    const keyEnd = endOfString(i);
+    const key = JSON.parse(text.slice(i, keyEnd));
+    i = keyEnd;
+    while (text[i] !== ":") i += 1;
+    i += 1;
+    while (/\s/.test(text[i])) i += 1;
+    const valueEnd = endOfValue(i);
+    spans.set(key, [i, valueEnd]);
+    i = valueEnd;
+  }
+  return spans;
+}
+
+function same(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function layout(value, indent, prefix, original) {
+  if (original !== undefined) {
+    let before;
+    try { before = JSON.parse(original); } catch { before = undefined; }
+    if (same(before, value)) return original;
+    if (!original.includes("\n") && value && typeof value === "object") return inline(value);
+  }
+  if (!value || typeof value !== "object") return JSON.stringify(value);
+  const flat = inline(value);
+  if (original === undefined && indent > 0 && indent + prefix + flat.length + 1 <= LINE_LIMIT) return flat;
+  const inner = " ".repeat(indent + 2);
+  const nested = original !== undefined && !Array.isArray(value) && original.trim().startsWith("{")
+    ? valueSpans(original, original.indexOf("{"))
+    : new Map();
+  const entries = Array.isArray(value)
+    ? value.map((item) => `${inner}${layout(item, indent + 2, 0)}`)
+    : Object.entries(value).map(([key, item]) => {
+      const label = `${JSON.stringify(key)}: `;
+      const span = nested.get(key);
+      const was = span ? original.slice(span[0], span[1]) : undefined;
+      return `${inner}${label}${layout(item, indent + 2, label.length, was)}`;
+    });
+  if (!entries.length) return Array.isArray(value) ? "[]" : "{}";
+  const [open, close] = Array.isArray(value) ? ["[", "]"] : ["{", "}"];
+  return `${open}\n${entries.join(",\n")}\n${" ".repeat(indent)}${close}`;
+}
+
+export function formatConfig(config, originalText) {
+  const original = typeof originalText === "string" ? originalText.trim() : undefined;
+  return `${layout(config, 0, 0, original)}\n`;
 }

@@ -1,3 +1,27 @@
+## 2026-09-25 · W-124 parte 1 revisada; Studio ya no reescribe todo el config al guardar
+
+**Quién:** Codex (template, `28a9550`), cowork (revisión y arreglo de Studio).
+
+**W-124, revisado contra el diff:** una sola línea en `BaseLayout.astro`,
+`main .page-content img { display: block; max-width: 100%; height: auto; }`. Aplica a todas las
+páginas (inicio incluido, porque también es `.page-content`) y no toca el logo, que vive en el
+header. `npm run check` y los dos builds pasaron, y CI quedó verde (run 36166209409). Aprobado.
+Quedan para después: opciones de tamaño desde Studio y reducir las fotos al subirlas.
+
+**Hallazgo al revisar la publicación de prueba de Vic en Example (`31a38e7`):** guardar Site
+settings reescribía todo `site.config.json` con un campo por línea. El commit decía +73 −14 cuando
+lo que cambió fueron dos líneas (el teléfono). En la historia no se habría visto qué editó Pavel.
+Arreglado en Studio: al guardar, lo que no cambió se queda con el texto exacto con el que estaba
+escrito, y solo se reescriben las partes que cambiaron, respetando si iban en una línea. Un sitio
+nuevo sale con el mismo formato compacto de los configs escritos a mano. Tres pruebas nuevas
+(95 en total). Example se queda con el formato largo; no vale la pena otro commit solo para eso.
+
+**Hallazgo para W-126:** las vistas previas de los PR y el demo de Stuart están en `workers.dev`
+sin `noindex`. Hoy lo mitiga el canonical al dominio real, pero el riesgo de contenido duplicado
+en Google existe. Queda como W-129.
+
+---
+
 ## 2026-09-25 · Junta de Vic con Pavel: siete pedidos para Studio y el template
 
 **Quién:** Vic (junta con Pavel), cowork (backlog).

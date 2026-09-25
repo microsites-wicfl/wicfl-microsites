@@ -410,7 +410,7 @@ export async function saveSettings(github, slug, input, email) {
   const ref = branchExists ? draftBranch(slug) : github.env.GITHUB_BASE_BRANCH;
   const file = await github.readFile(configPath(slug), ref);
   if (!file) throw new UserError("That site doesn't exist.", 404);
-  const next = formatConfig(applySettings(JSON.parse(file.text), input || {}));
+  const next = formatConfig(applySettings(JSON.parse(file.text), input || {}), file.text);
   if (JSON.stringify(JSON.parse(next)) === JSON.stringify(JSON.parse(file.text))) return { saved: false };
 
   const branch = await ensureDraftBranch(github, slug);
