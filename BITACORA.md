@@ -1,3 +1,13 @@
+## 2026-09-25 · Correo de Pavel confirmado
+
+**Quién:** Vic.
+
+Vic confirmó que `t.express.mrl@gmail.com`, que ya estaba en la política "Studio - Team" desde el
+23-sep, es el correo real de Pavel. Pavel ya puede entrar a Studio; no hace falta tocar Cloudflare.
+Se cae la "siguiente acción" del cierre de ayer.
+
+---
+
 ## 2026-09-24 (cierre del día) · Studio completo, guía nueva
 
 **Quién:** Vic + cowork (código de Studio bajo la excepción A1–A3 de `CLAUDE.md`), Codex (push y
