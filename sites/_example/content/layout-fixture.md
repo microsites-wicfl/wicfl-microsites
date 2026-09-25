@@ -7,6 +7,12 @@ showInNav: false
 
 ## Image with text
 
+Outside a column: "fixture quotes", ~~obsolete copy~~, https://example.com, and this table remains ordinary Markdown.
+
+| Fixture field | Placeholder value |
+| --- | --- |
+| Outside table | Preserved by the shared parser |
+
 :::columns
 
 ![Example WICFL logo](/images/wags-logo-big.png)
@@ -14,6 +20,12 @@ showInNav: false
 :::next
 
 **A visual companion.** This text column is vertically centered beside the image and supports ordinary [Markdown links](/about-fixture/).
+
+Inside a column: "fixture quotes", ~~obsolete copy~~, and https://example.com.
+
+| Column field | Placeholder value |
+| --- | --- |
+| Inside table | GFM survives reparsing |
 
 :::
 

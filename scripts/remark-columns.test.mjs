@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { rmSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
+import { validateColumns } from "../packages/template/src/lib/remark-columns.mjs";
 
 const repositoryRoot = process.cwd();
 const invalidFixture = resolve(repositoryRoot, "sites/_example/content/columns-invalid-fixture.md");
@@ -23,4 +24,8 @@ test("an unclosed columns block fails the site build with its file and line", ()
   } finally {
     rmSync(invalidFixture, { force: true });
   }
+});
+
+test("ignores markers in fenced code and accepts trailing marker spaces", () => {
+  assert.doesNotThrow(() => validateColumns(`\`\`\`md\n:::columns\n:::next\n:::\n\`\`\`\n\n:::columns   \nOne\n:::next  \nTwo\n:::   \n`, "fixture.md"));
 });
