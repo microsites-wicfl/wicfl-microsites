@@ -1,3 +1,16 @@
+## 2026-09-25 · W-123 branding por sitio: diseño decidido
+
+**Quién:** Vic (decisiones), cowork (propuesta).
+
+Vic eligió 4 colores por sitio (principal, secundario, fondo suave, footer; texto fijo oscuro) y
+tipografía de lista cerrada servida desde el propio sitio. Motivo del límite: cada sitio se siente
+propio, pero ninguno puede quedar ilegible, y el contraste se puede validar en CI y en Studio con
+las mismas reglas. Detalle y reglas de contraste en W-123. Orden: Codex hace schema, template,
+fuentes y el módulo de contraste; después cowork hace la pantalla de marca en Studio junto con el
+logo (W-130).
+
+---
+
 ## 2026-09-25 · W-124 parte 2: Studio achica las fotos al subirlas; manual v2.1
 
 **Quién:** cowork.
