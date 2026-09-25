@@ -17,4 +17,5 @@ text
 
 ![Describe this image](/images/wags-logo-big.png)
 
+<!-- Temporary PR used to verify the workers.dev noindex response header. -->
 
