@@ -53,6 +53,20 @@ export function imagesPanel() {
     </section>`;
 }
 
+export function columnsPanel() {
+  return `
+    <section class="panel layouts">
+      <div class="section-head">
+        <span class="label">${text.columnsTitle}</span>
+        <span class="buttons">
+          <button type="button" class="secondary small" data-columns="2">${text.twoColumns}</button>
+          <button type="button" class="secondary small" data-columns="3">${text.threeColumns}</button>
+        </span>
+      </div>
+      <p class="hint">${text.columnsHint}</p>
+    </section>`;
+}
+
 export function renderImageList(slug, images) {
   if (!images.length) return `<p class="muted small">${text.imagesEmpty}</p>`;
   return images
@@ -62,6 +76,7 @@ export function renderImageList(slug, images) {
         <img src="/api/sites/${encodeURIComponent(slug)}/images/${encodeURIComponent(image.name)}" alt="">
         <figcaption>${esc(image.name)}</figcaption>
         <button type="button" class="secondary small" data-insert="${esc(image.url)}">${text.insert}</button>
+        <button type="button" class="secondary small" data-beside="${esc(image.url)}">${text.withText}</button>
       </figure>`,
     )
     .join("");
@@ -80,6 +95,7 @@ export function renderPage(site, page) {
   const editor = page.fields
     ? `${fieldsForm(page.fields)}
        ${imagesPanel()}
+       ${columnsPanel()}
        <div class="split">
          <label class="field" for="content">
            <span class="label">${text.fieldBody}</span>

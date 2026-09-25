@@ -108,6 +108,7 @@ async function showPage(slug, path) {
   if (page.fields) {
     watchLivePreview(slug);
     wireImages(slug);
+    wireColumns();
   }
 
   const deleteButton = $("#delete");
@@ -249,12 +250,37 @@ function watchLivePreview(slug) {
   update();
 }
 
+// Blocks go in with one blank line around them, however many the text already has there.
 function insertAtCursor(textarea, snippet) {
   const { selectionStart: start, selectionEnd: end, value } = textarea;
-  textarea.value = `${value.slice(0, start)}${snippet}${value.slice(end)}`;
-  textarea.selectionStart = textarea.selectionEnd = start + snippet.length;
+  const before = value.slice(0, start);
+  const after = value.slice(end);
+  let piece = snippet;
+  if (/^\n/.test(piece)) {
+    const have = before.match(/\n*$/)[0].length;
+    piece = "\n".repeat(before ? Math.max(0, 2 - have) : 0) + piece.replace(/^\n+/, "");
+  }
+  if (/\n$/.test(piece)) {
+    const have = after.match(/^\n*/)[0].length;
+    piece = piece.replace(/\n+$/, "") + "\n".repeat(Math.max(0, 2 - have));
+  }
+  textarea.value = `${before}${piece}${after}`;
+  textarea.selectionStart = textarea.selectionEnd = start + piece.length;
   textarea.focus();
   textarea.dispatchEvent(new Event("input"));
+}
+
+// A block of columns as the site expects it; see columns.js on the server for the rules.
+function columnsSnippet(cells) {
+  return `\n\n:::columns\n${cells.join("\n:::next\n")}\n:::\n\n`;
+}
+
+function wireColumns() {
+  for (const button of document.querySelectorAll("[data-columns]")) {
+    const count = Number(button.dataset.columns);
+    button.onclick = () =>
+      insertAtCursor($("#content"), columnsSnippet(Array.from({ length: count }, (_, i) => text.columnSample(i + 1))));
+  }
 }
 
 async function wireImages(slug) {
@@ -263,6 +289,12 @@ async function wireImages(slug) {
     list.innerHTML = renderImageList(slug, images);
     for (const button of list.querySelectorAll("[data-insert]")) {
       button.onclick = () => insertAtCursor($("#content"), `\n\n![${text.imageAlt}](${button.dataset.insert})\n\n`);
+    }
+    for (const button of list.querySelectorAll("[data-beside]")) {
+      button.onclick = () => insertAtCursor($("#content"), columnsSnippet([
+        `![${text.imageAlt}](${button.dataset.beside})`,
+        text.besideSample,
+      ]));
     }
   };
   show(await api.images(slug).catch(() => []));

@@ -116,6 +116,29 @@ fields can't show. You can still edit it; tell Vic so he fixes that page.
    by screen readers and by Google.
 4. To reuse an image, click **Insert** under it.
 
+### Columns
+
+Put things side by side: an image with text next to it, or two or three columns of text.
+
+1. For an image with text beside it: under the image in **Images**, click **With text**.
+2. For text columns: in **Columns**, click **Two columns** or **Three columns**.
+3. Studio adds the block where your cursor is. Replace the sample text; the live preview shows
+   the columns side by side. On phones they show one under another, in the order you wrote them.
+
+In the page text a block looks like this. Keep the three marker lines as they are:
+
+```
+:::columns
+![Describe this image](/images/roof-photo.png)
+:::next
+The text that goes beside the image.
+:::
+```
+
+`:::columns` opens the block, each `:::next` starts a new column, and `:::` closes it. Use 2 or
+3 columns. If a block is left open or has a wrong number of columns, Studio says which line to
+fix when you save.
+
 ### Creating a page
 
 1. On the site, click **New page**.

@@ -1,3 +1,35 @@
+## 2026-09-25 · W-122: columnas en el template (Codex) y en Studio (cowork)
+
+**Quién:** Codex (template, `127bb4e` y `d979f54`), cowork (revisión, Studio).
+
+**Revisión del primer intento (`127bb4e`), contra el diff y con la página construida medida en
+Playwright:** la sintaxis y los errores con archivo y línea estaban bien, pero había dos bugs.
+(1) El bloque se centraba respecto al texto, y el texto está alineado a la izquierda, así que entre
+~800 y ~1300 px el bloque se salía por la izquierda de la pantalla (medido: −92 px a 1024 y 1100).
+(2) Para armar las columnas se volvía a leer la página con un lector de Markdown sin GFM, así que
+en páginas con columnas se perdían tablas, tachado, ligas escritas como texto y comillas
+tipográficas. La prueba de Codex no lo vio porque el fixture no traía nada de eso.
+
+**Segundo intento (`d979f54`), revisado igual:** alineado al borde del texto y hasta 60rem dentro
+de `.shell` (container units, sin `100vw`); GFM y comillas conservadas; marcadores dentro de
+bloques de código ignorados; espacios al final aceptados. Medido por cowork de 320 a 1920 px: el
+bloque empieza donde empieza el texto, nunca se sale y no hay scroll horizontal; el fixture trae 2
+tablas y 2 tachados. El HTML de Stuart sigue idéntico. Aprobado. Menor y previo a esto: la fila de
+encabezado de las tablas no llena todo el ancho de la tabla.
+
+**Studio (cowork):**
+- Panel **Columns** en el editor con **Two columns** y **Three columns**, y un botón **With
+  text** bajo cada imagen para armar imagen con texto al lado.
+- La vista en vivo muestra las columnas lado a lado.
+- Al guardar, Studio revisa los bloques con las mismas reglas que el build y dice qué línea
+  corregir, para que un bloque mal cerrado no tumbe la vista previa (la misma lección del
+  encabezado de la página).
+- Los bloques se insertan con un solo renglón en blanco alrededor.
+- 5 pruebas nuevas (103), probado en el Studio local con una imagen real. Guía actualizada
+  (sección Columns) y `CLAUDE.md` con la ampliación de la excepción de Studio.
+
+---
+
 ## 2026-09-25 · W-126 y W-129: versión publicada por sitio, botón en Studio y noindex
 
 **Quién:** Codex (CI, `19e8146`), cowork (revisión y Studio).

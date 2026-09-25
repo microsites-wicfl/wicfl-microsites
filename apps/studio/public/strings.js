@@ -108,6 +108,14 @@ export const text = {
   uploaded: "Image added to the draft.",
   insert: "Insert",
   imageAlt: "Describe this image",
+  columnsTitle: "Columns",
+  columnsHint: "Adds a block of columns where your cursor is; replace the sample text. " +
+    "For an image with text beside it, click With text under the image. On phones, columns show one under another.",
+  twoColumns: "Two columns",
+  threeColumns: "Three columns",
+  withText: "With text",
+  columnSample: (n) => `Text for column ${n}.`,
+  besideSample: "Text that goes beside the image.",
   fields: {
     brandName: ["Brand name", "The site's name, shown in the header and in Google."],
     domain: ["Domain", "The web address, like portsaintluciehomeinsurance.com."],

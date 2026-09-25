@@ -1,3 +1,4 @@
+import { validateColumns } from "./columns.js";
 import { validatePageHeader } from "./frontmatter.js";
 import { isLive } from "./live.js";
 import { composePage, pageRoute, parsePage } from "./pagefields.js";
@@ -227,6 +228,7 @@ export async function savePage(github, slug, relativePath, input, email) {
   const text = byFields ? composePage(current.text, input.fields, input.body) : input.content;
   if (current.text === text) return { saved: false };
   validatePageHeader(text, current.text);
+  validateColumns(byFields ? input.body : parsePage(text)?.body ?? text);
 
   const branch = await ensureDraftBranch(github, slug);
   try {
@@ -298,6 +300,7 @@ export async function createPage(github, slug, input, email) {
   if (await github.readFile(path, ref)) {
     throw new UserError(`A page at /${name}/ already exists. Change the title or open that page.`, 409);
   }
+  validateColumns(input?.body || "");
   const text = composePage("", fields, input?.body || "Write the page text here.");
   const branch = await ensureDraftBranch(github, slug);
   await github.writeFile(path, {

@@ -1,6 +1,6 @@
 // A small, safe Markdown renderer for the live preview next to the editor. It covers what the
-// site pages use (headings, paragraphs, lists, quotes, links, images, bold, italic, code) and
-// escapes everything else. The real preview of the site stays the reference for how it looks.
+// site pages use (headings, paragraphs, lists, quotes, links, images, bold, italic, code, and
+// column blocks) and escapes everything else. The real preview of the site stays the reference for how it looks.
 import { esc } from "./html.js";
 
 // Appends to a list. (Array's own method name is on the interface's forbidden-word list.)
@@ -21,7 +21,7 @@ function inline(text, resolveImage) {
     .replace(/`([^`]+)`/g, "<code>$1</code>");
 }
 
-export function renderMarkdown(source, resolveImage = (url) => url) {
+function renderFlow(source, resolveImage) {
   const lines = String(source || "").replace(/\r\n/g, "\n").split("\n");
   const html = [];
   let paragraph = [];
@@ -71,4 +71,47 @@ export function renderMarkdown(source, resolveImage = (url) => url) {
   flushParagraph();
   flushList();
   return html.join("\n");
+}
+
+// Column blocks: ":::columns" opens, ":::next" starts the next column, ":::" closes. The live
+// preview shows them side by side like the site does; a block left open still shows, and saving
+// says which line to fix.
+const isImageOnly = (lines) => {
+  const filled = lines.map((line) => line.trim()).filter(Boolean);
+  return filled.length === 1 && /^!\[[^\]]*\]\([^)\s]+\)$/.test(filled[0]);
+};
+
+function renderColumns(columns, resolveImage) {
+  const cells = columns.map((lines) => {
+    const kind = isImageOnly(lines) ? "column column-image" : "column";
+    return `<div class="${kind}">${renderFlow(lines.join("\n"), resolveImage)}</div>`;
+  });
+  return `<div class="columns columns-${columns.length}">${cells.join("")}</div>`;
+}
+
+export function renderMarkdown(source, resolveImage = (url) => url) {
+  const lines = String(source || "").replace(/\r\n/g, "\n").split("\n");
+  const html = [];
+  let normal = [];
+  let block = null;
+  for (const line of lines) {
+    const marker = line.trimEnd();
+    if (marker === ":::columns" && !block) {
+      add(html, renderFlow(normal.join("\n"), resolveImage));
+      normal = [];
+      block = [[]];
+    } else if (marker === ":::next" && block) {
+      add(block, []);
+    } else if (marker === ":::" && block) {
+      add(html, renderColumns(block, resolveImage));
+      block = null;
+    } else if (block) {
+      add(block[block.length - 1], line);
+    } else {
+      add(normal, line);
+    }
+  }
+  if (block) add(html, renderColumns(block, resolveImage));
+  add(html, renderFlow(normal.join("\n"), resolveImage));
+  return html.filter(Boolean).join("\n");
 }

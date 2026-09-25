@@ -46,6 +46,11 @@ alta de sitio), con el mismo reparto: cowork escribe y verifica; el ejecutor sub
 revisa. Motivo: sostener el 1-oct para el panel completo. Fuera de `apps/studio/` la regla
 general sigue igual.
 
+**Ampliación, 2026-09-25 — Studio después del lanzamiento del panel:** Vic autorizó que cowork
+siga escribiendo los cambios de Studio que salen del uso real (botón Sign out, formato del config,
+botón a la versión publicada, bloques de columnas en el editor, y los que vienen de la junta con
+Pavel: W-121 a W-130), con el mismo reparto. El template y CI siguen siendo del ejecutor.
+
 **Vic no ejecuta ningún comando, ni siquiera de lectura.** Ni `git status`, ni `ls`, ni `npm`.
 No existe "que Vic lo corra en su terminal": si un doc lo sugiere, ese doc está mal.
 
