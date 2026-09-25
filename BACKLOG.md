@@ -3,7 +3,7 @@
 Items priorizados. **Solo cowork crea items nuevos.** El agente ejecutor puede cerrar el
 item que su prompt cerraba, con refs a prompt/report/commit, pero no crea ni reprioriza.
 
-Formato de id: `W-NNN` · Última actualización: 2026-09-25 (W-114 cerrado; W-121 a W-129 abiertos; W-124 parte 1 hecha; W-126 y W-129 cerrados; W-130 abierto; W-122 base hecha a partir de la junta de Vic con Pavel — ver `BITACORA.md` 2026-09-25)
+Formato de id: `W-NNN` · Última actualización: 2026-09-25, cierre de semana (hechos hoy W-122, W-123, W-124 partes 1 y 2, W-126, W-129, W-130; `639282e` local sin subir; ver `BITACORA.md` 2026-09-25 cierre)
 
 ---
 

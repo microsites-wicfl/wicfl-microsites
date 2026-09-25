@@ -1,3 +1,95 @@
+## 2026-09-25 (cierre del día y de la semana) · Studio pasa de panel a herramienta de diseño
+
+**Quién:** Vic + cowork, con Codex hasta que se quedó sin tokens.
+
+### El día
+
+**19 commits.** La junta de Vic con Pavel dejó diez pedidos (W-121 a W-130). Seis quedaron hechos
+el mismo día:
+
+- Imágenes limitadas al ancho del texto, y fotos que Studio achica al subirlas quitándoles el GPS
+  (W-124).
+- Botón **View published version** con una copia publicada de cada sitio (W-126).
+- `noindex` en todo lo que vive en `workers.dev` (W-129).
+- Bloques de columnas en el template y en Studio (W-122).
+- Marca por sitio: estilo, 4 colores y 2 fuentes, con contraste validado (W-123).
+- Subida de logo con revisión estricta de SVG (W-130).
+
+Además: el guardado de Site settings ya no reescribe todo el config, y el manual v2.1 salió en
+inglés y español.
+
+**Estado exacto al cierre:**
+
+- `origin/main` en `512f841`.
+- **Un commit local sin subir: `639282e`** (editor de marca y logo en Studio, 112 pruebas). Codex
+  se quedó sin tokens y el prompt que lo subía se canceló. Hasta que se suba, Studio en vivo no
+  tiene la sección Brand.
+- También quedó pendiente, en el mismo prompt cancelado:
+  - `deploy-studio.yml` con el path de `theme.mjs`.
+  - Los mensajes del build para `surfaceColor` y `footerColor`.
+  - El logo de prueba de Example.
+
+### La semana (21 al 25 de septiembre)
+
+**~110 commits.** La semana empezó con un formulario de contenido que exponía git disfrazado y
+terminó con **WICFL Studio** completo y en vivo:
+
+- Login con Cloudflare Access.
+- Un borrador por sitio.
+- Editor con campos y vista en vivo.
+- Página nueva, borrar y restaurar.
+- Imágenes, columnas y marca.
+- Publicar y sitio nuevo.
+- Guía y manual ilustrado para Pavel.
+
+**Del lado del lanzamiento:**
+
+- Datos de contacto de Stuart cerrados (W-008): teléfono, email, sin dirección y sin licencia.
+- Formulario real de 3 pasos construido (W-118), a falta de que Vic dé de alta los servicios.
+- El ensayo de deploy (W-119) llegó a Cloudflare y se detuvo en el permiso de rutas del token.
+- Correo de Stuart funcionando (W-114).
+
+**Lo que vale conservar de la semana:**
+
+- **Invertir papeles funcionó.** El ejecutor no pudo escribir Studio en cinco intentos; cowork lo
+  escribió con pruebas y prueba en navegador, y el ejecutor quedó para subir, desplegar y hacer lo
+  del template. Eso sostuvo la fecha del panel.
+- **Una sola fuente de verdad para las reglas.** Tres veces esta semana (encabezado de página,
+  columnas y contraste de colores) Studio revisa con las mismas reglas que el build. El error
+  aparece al guardar, en palabras de Pavel, y no como una vista previa rota.
+- **Medir en el navegador real no es opcional.** Las pruebas unitarias no vieron la lentitud de la
+  vista del sitio, el parpadeo, las columnas saliéndose de la pantalla entre 800 y 1300 px ni las
+  tablas perdidas. Todo eso salió de probar en Chrome o de medir con Playwright.
+- **Los tokens de Codex son un recurso con límite.** Hoy se acabaron con un commit de producto sin
+  subir. Para la próxima: juntar en un mismo prompt el push con el trabajo, y priorizar lo que
+  bloquea el lanzamiento.
+
+**Riesgo principal para la semana que viene:** el 9-oct está a dos semanas, y todo lo que falta del
+lanzamiento depende de Vic y no ha arrancado:
+
+- Los dos tokens.
+- GA4 y GTM.
+- El alta de GHL, Google Places y R2.
+- El número de GoTo.
+- El ensayo de deploy.
+
+Studio ya no es el cuello de botella.
+
+**Lunes, en orden:**
+
+1. **Codex:** subir `639282e` y rehacer el prompt cancelado (path de `theme.mjs`, mensajes de
+   contraste, logo de Example).
+2. **Vic:** los dos tokens (Studio: Actions Read and write; Cloudflare: Workers Routes Edit en el
+   dominio de Stuart). Con eso, Codex corre el ensayo W-119.
+3. **Vic:** alta de GHL, Google Places y R2, y prueba de punta a punta del formulario. Después,
+   GA4 y GTM, y el número de GoTo.
+4. **Pavel:** capacitación el 2-oct con el manual; quitar "Demo" de Stuart; la plantilla (W-121);
+   la validación SEO de Port St. Lucie antes del 12-oct.
+5. **Kevin, sigue abierto:** los números de Gate B, Google Business Profile, el sitio en español,
+   dónde se compran los dominios y la respuesta a la revisión del plan.
+
+---
+
 ## 2026-09-25 · W-123 y W-130: marca por sitio (Codex) y editor de marca y logo en Studio (cowork)
 
 **Quién:** Codex (template, `22ff409` y `512f841`), cowork (revisión y Studio).
