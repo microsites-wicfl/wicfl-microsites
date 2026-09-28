@@ -63,19 +63,31 @@ async function ghlRequest(fetcher, env, path, init) {
     ...init,
     headers: { authorization: `Bearer ${env.GHL_API_TOKEN}`, version: "2021-07-28", "content-type": "application/json" }
   });
-  if (!response.ok) throw new Error("CRM_SERVICE_UNAVAILABLE");
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    const message = typeof data.message === "string" ? data.message : response.statusText;
+    console.warn("GHL contact request rejected", { status: response.status, message });
+    throw new Error("CRM_SERVICE_UNAVAILABLE");
+  }
   return response.json();
+}
+
+function hasContactMethod(body) {
+  const hasEmail = typeof body.email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email.trim());
+  const hasPhone = typeof body.phone === "string" && body.phone.replace(/\D/g, "").length >= 10;
+  return hasEmail || hasPhone;
 }
 
 async function saveLead(body, env, fetcher) {
   const site = requireSite(body, env);
+  if (!body.contactId && !hasContactMethod(body)) return { saved: false, contactId: null, uploadEligible: false, formId: site.formId };
   const payload = contactPayload(body, site);
   const contact = body.contactId
     ? await ghlRequest(fetcher, env, `/contacts/${encodeURIComponent(body.contactId)}`, { method: "PUT", body: JSON.stringify(payload) })
     : await ghlRequest(fetcher, env, "/contacts/upsert", { method: "POST", body: JSON.stringify({ locationId: env.GHL_LOCATION_ID, ...payload }) });
   const contactId = contact.contact?.id;
   if (typeof contactId !== "string" || !contactId) throw new Error("CRM_SERVICE_UNAVAILABLE");
-  return { contactId, uploadEligible: Boolean(body.email || body.phone), formId: site.formId };
+  return { saved: true, contactId, uploadEligible: hasContactMethod(body), formId: site.formId };
 }
 
 async function autocomplete(body, env, fetcher) {

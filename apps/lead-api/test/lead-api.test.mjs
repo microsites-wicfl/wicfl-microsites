@@ -11,14 +11,23 @@ const env = {
 };
 const request = (path, body) => new Request(`https://lead.example.test${path}`, { method: "POST", headers: { origin: "https://preview.example.test", "content-type": "application/json" }, body: JSON.stringify(body) });
 
-test("first progressive save upserts the partial contact", async () => {
+test("a progressive save without an email or phone stays local", async () => {
   const calls = [];
   const app = createLeadApi({ fetcher: async (url, init) => { calls.push({ url, init }); return Response.json({ new: true, contact: { id: "contact-123" } }); } });
   const response = await app(request("/v1/leads", { siteSlug: "stuart-homeowners", zip: "34994" }), env);
   assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { saved: false, contactId: null, uploadEligible: false, formId: "form-real" });
+  assert.equal(calls.length, 0);
+});
+
+test("a progressive save with a contact method upserts the partial contact", async () => {
+  const calls = [];
+  const app = createLeadApi({ fetcher: async (url, init) => { calls.push({ url, init }); return Response.json({ new: true, contact: { id: "contact-123" } }); } });
+  const response = await app(request("/v1/leads", { siteSlug: "stuart-homeowners", zip: "34994", phone: "772-555-0100" }), env);
+  assert.equal(response.status, 200);
   assert.equal((await response.json()).contactId, "contact-123");
   assert.match(calls[0].url, /contacts\/upsert$/);
-  assert.deepEqual(JSON.parse(calls[0].init.body), { locationId: "location-test", postalCode: "34994", source: "stuart-homeowners" });
+  assert.deepEqual(JSON.parse(calls[0].init.body), { locationId: "location-test", postalCode: "34994", phone: "772-555-0100", source: "stuart-homeowners" });
 });
 
 test("later save updates the returned contact id and maps configured custom fields", async () => {

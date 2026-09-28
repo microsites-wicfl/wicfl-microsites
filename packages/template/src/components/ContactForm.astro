@@ -32,7 +32,7 @@ const leadApiUrl = "https://wicfl-lead-api.wicfl-microsites.workers.dev";
     <fieldset data-step="3" hidden>
       <legend>How can we reach you?</legend>
       <div class="contact-form-grid"><label>First name<input name="firstName" autocomplete="given-name" required /></label><label>Last name<input name="lastName" autocomplete="family-name" required /></label></div>
-      <div class="contact-form-grid"><label>Phone<input name="phone" type="tel" autocomplete="tel" required /></label><label>Email<input name="email" type="email" autocomplete="email" required /></label></div>
+      <div class="contact-form-grid"><label>Phone<input name="phone" type="tel" autocomplete="tel" pattern="[0-9() .+-]{10,}" required /></label><label>Email<input name="email" type="email" autocomplete="email" required /></label></div>
       <label>When do you need coverage?
         <select name="timing" required><option value="">Choose one</option><option>As soon as possible</option><option>Within 30 days</option><option>More than 30 days from now</option></select>
       </label>
@@ -59,6 +59,7 @@ const leadApiUrl = "https://wicfl-lead-api.wicfl-microsites.workers.dev";
     const status = root.querySelector("[data-status]");
     const steps = [...root.querySelectorAll("fieldset[data-step]")];
     const state = { step: 1, contactId: null, addressSession: crypto.randomUUID() };
+    let saveInFlight;
     const read = () => Object.fromEntries(new FormData(form).entries());
     const api = async (path, body) => {
       const response = await fetch(`${root.dataset.api}${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ siteSlug: root.dataset.site, leadSource: root.dataset.source, formId: root.dataset.formId, contactId: state.contactId, ...body }) });
@@ -79,28 +80,38 @@ const leadApiUrl = "https://wicfl-lead-api.wicfl-microsites.workers.dev";
       firstInvalid.reportValidity();
       return false;
     };
+    const hasContactMethod = () => {
+      const phone = form.elements.phone;
+      const email = form.elements.email;
+      return (phone.value.trim() && phone.checkValidity()) || (email.value.trim() && email.checkValidity());
+    };
+    const saveContactInBackground = async () => {
+      if (state.contactId || !hasContactMethod() || saveInFlight) return saveInFlight;
+      saveInFlight = api("/v1/leads", read()).then((result) => { if (result.contactId) state.contactId = result.contactId; }).catch(() => {}).finally(() => { saveInFlight = null; });
+      return saveInFlight;
+    };
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (!valid()) return;
       const button = event.submitter;
       button.disabled = true;
-      status.textContent = "Saving your progress…";
+      if (state.step === 3) status.textContent = "Saving your request…";
       try {
+        if (state.step === 3 && saveInFlight) await saveInFlight;
         const result = await api("/v1/leads", read());
-        state.contactId = result.contactId;
+        if (result.contactId) state.contactId = result.contactId;
         if (state.step < 3) showStep(state.step + 1);
         else { form.hidden = true; root.querySelector("[data-confirmation]").hidden = false; status.textContent = ""; }
       } catch (error) {
         if (state.step < 3) {
-          status.textContent = `${error.message} You can continue while we retry after the next step.`;
           showStep(state.step + 1);
-          status.textContent = `${error.message} You can continue while we retry after the next step.`;
         } else {
           status.textContent = `${error.message} Your request has not been sent. Please try again shortly.`;
         }
       } finally { button.disabled = false; }
     });
     root.querySelectorAll("[data-back]").forEach((button) => button.addEventListener("click", () => showStep(state.step - 1)));
+    [form.elements.phone, form.elements.email].forEach((field) => field.addEventListener("blur", () => { void saveContactInBackground(); }));
     const address = form.elements.address;
     const suggestions = root.querySelector("[data-suggestions]");
     const attribution = root.querySelector("#google-attribution");
