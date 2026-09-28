@@ -24,6 +24,8 @@
 - **Otro arreglo al runbook:** el rollback decía que Vic corriera `npx wrangler rollback`. Vic no
   ejecuta comandos. Ahora el rollback es desde el dashboard (Deployments → Rollback) y, si alguna
   vez hace falta por línea de comandos, va a Codex.
+- Vic borró el token de usuario `wicfl-content-form-w111` (solo Workers Scripts, nunca usado),
+  pendiente desde W-111. Queda el "build token" del formulario viejo, que se va cuando se retire.
 
 ---
 
