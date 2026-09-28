@@ -1,3 +1,24 @@
+## 2026-09-28 · Arranque de semana: marca y logo en vivo; ajustes de contraste (`567310a`)
+
+**Quién:** Codex (push y ajustes), cowork (revisión).
+
+- Subidos `639282e` (editor de marca y logo) y `32f705b` (cierre de la semana pasada). El deploy
+  de Studio quedó verde (run 36453945192), así que la sección **Brand** ya está en vivo.
+- `567310a`, revisado contra el diff:
+  - `deploy-studio.yml` ahora se dispara también con `packages/config-schema/theme.mjs`.
+  - Los mensajes del build para `surfaceColor` y `footerColor` muestran el color del sitio y el
+    problema correcto, con prueba.
+  - El logo de prueba de Example pasó de 160×40 a 260×40. En el header se ve completo, escalado al
+    máximo de 220 px.
+  - CI, Publish site Workers y Deploy WICFL Studio quedaron verdes. Aprobado.
+- Plan de la semana acordado con Vic:
+  - Lunes: los dos tokens.
+  - Martes y miércoles: ensayo de deploy (W-119), formulario (W-118), GA4 y GTM, y GoTo (W-024).
+  - Jueves: manual y runbook.
+  - Viernes 2-oct: capacitación de Pavel.
+
+---
+
 ## 2026-09-25 (cierre del día y de la semana) · Studio pasa de panel a herramienta de diseño
 
 **Quién:** Vic + cowork, con Codex hasta que se quedó sin tokens.
