@@ -1,3 +1,65 @@
+## 2026-09-28 · W-118: formulario de cotización en vivo de punta a punta; plantilla de Pavel recibida
+
+**Quién:** Vic (GHL, R2 y Google en el navegador), Codex (`c902be2`, `d8207ed`, `712f85f`), cowork
+(guía y revisión).
+
+**W-118, alta de servicios:**
+- **GHL**, en la sub-account Walker Insurance: Private Integration `WICFL microsites lead form` con
+  View/Edit Contacts. Se le agregó View Custom Fields cuando Codex no pudo leer los IDs: fue error
+  de cowork dar solo los permisos de contactos y planear leer los IDs por API. También se crearon
+  4 campos de contacto en la carpeta Microsite Quote, con keys `microsite_*`.
+- **R2:** bucket privado `wicfl-policy-uploads` con CORS limitado a los 4 orígenes de Stuart y
+  solo `PUT`, y un token de R2 limitado a ese bucket.
+- **Google Places:** proyecto `wicfl-microsites` creado bajo la organización wicfl.com. No se
+  puede activar sin cuenta de facturación, y se le pidió a Kevin que ponga la tarjeta (mensaje
+  enviado). Mientras, la dirección funciona como texto normal.
+- **Secretos:** van en `apps/lead-api/.env`, que está en el gitignore. Vic los había guardado por
+  error en el `.env` del formulario viejo, y cowork los movió sin mostrarlos. Codex los carga a
+  GitHub y el workflow los pasa al Worker.
+
+**Revisión de Codex:**
+- `LEAD_SITES` (con los 4 IDs) y `ALLOWED_ORIGINS` quedan como vars en `wrangler.jsonc`.
+- `crm.formId` = `wicfl-quote-v1`: es nuestro formulario, no uno de GHL.
+- Workflow nuevo `deploy-lead-api.yml`, con los secretos cargados después del deploy (el primer
+  intento fallaba por el orden y por no pasar el token).
+- El letrero "Powered by Google" solo aparece cuando hay sugerencias.
+- El endpoint de R2 acepta el Account ID en formato URL.
+
+**Prueba de punta a punta en el sitio publicado:** el contacto llegó a GHL con source
+`stuart-homeowners` y los 4 campos, el PDF quedó en R2 y no hubo errores de CORS.
+
+**Hallazgo:** los guardados de avance de los pasos 1 y 2 dan 503. Probablemente GHL no crea un
+contacto sin email ni teléfono. El formulario le muestra al visitante "We could not save your
+progress…" en cada paso, y eso no puede salir en vivo. Plan enviado a Codex:
+- Sin email ni teléfono, no se llama a GHL y el formulario avanza en silencio.
+- Ningún error visible antes del envío final.
+- En el paso 3 se guarda en segundo plano en cuanto hay un teléfono o email válido; así se
+  capturan los abandonos, que era lo que Kevin quería con el guardado de avance.
+
+Vic borra los contactos de prueba al final.
+
+**Plantilla de Pavel (W-121):** Pavel entregó el diseño de la página de inicio, un PDF de una
+sola página. Tiene:
+- Hero con foto de fondo.
+- Tira de 3 íconos.
+- Texto con imagen.
+- 4 tarjetas de coberturas.
+- Sección oscura de retos con 3 tarjetas.
+- Zona de servicio.
+- FAQ en acordeón.
+- Banda final de cotización.
+- Footer de 4 columnas.
+
+Colores, fuentes, logo y columnas ya existen; el resto son bloques nuevos. Respuesta de Vic a
+Pavel: mantener el teléfono visible en el header (Gate B se mide en llamadas) y crear las
+páginas de Privacy Policy, Terms y Disclaimer (W-131).
+
+Corrección de Vic a cowork: la revisión de cowork marcaba el texto y las fotos de ejemplo como
+riesgo de sitios intercambiables, pero Pavel ya dice que la plantilla es estructura y que el
+contenido cambia por mercado. El punto no aplicaba y se quitó del mensaje.
+
+---
+
 ## 2026-09-28 · Tokens listos y W-119 cerrado: el ensayo de deploy llega a producción... en `preview.`
 
 **Quién:** Vic (tokens, en el navegador), Codex (ensayo), cowork (guía y revisión).
