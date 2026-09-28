@@ -1,3 +1,32 @@
+## 2026-09-28 · Tokens listos y W-119 cerrado: el ensayo de deploy llega a producción... en `preview.`
+
+**Quién:** Vic (tokens, en el navegador), Codex (ensayo), cowork (guía y revisión).
+
+- **Token de GitHub de Studio:** Actions pasó a Read and write. Publish ya puede actualizar
+  sitios en vivo.
+- **Token de Cloudflare:** el token de despliegue resultó ser un token de cuenta
+  (`cool-snowflake-1555`, el único, usado 29 min antes por el deploy de Codex), no de usuario. Se
+  le agregó **Workers Routes: Edit** solo en `stuarthomeownersinsurance.com`.
+  - Los dos tokens de usuario que hay son del formulario viejo:
+    - El "build token" lo creó Cloudflare para su integración con Git.
+    - El token de solo Workers Scripts nunca se usó; ya se puede borrar.
+- **Ensayo W-119, run 36458226291, verde (`target: rehearsal`):**
+  - `preview.stuarthomeownersinsurance.com`, `/flood-insurance/` y `/contact/` responden 200 con
+    `noindex, nofollow`.
+  - Apex y `www` siguen igual, sin el sitio nuevo.
+  - El gate W-103 marcó lo esperado (Demo, GA4/GTM, formulario de CRM) y en producción habría
+    bloqueado.
+- **Hallazgo para el 9-oct:** apex y `www` responden 200 a través de Cloudflare, así que los dos
+  tienen registros DNS hoy (el parking de GoDaddy detrás del proxy). Cloudflare no pone un custom
+  domain de Worker sobre un hostname con registro. El runbook solo mandaba borrar los del apex, y
+  con eso el deploy habría fallado en `www` el día del lanzamiento. Corregido: se borran los
+  registros del apex y de `www`, y no se toca nada más.
+- **Otro arreglo al runbook:** el rollback decía que Vic corriera `npx wrangler rollback`. Vic no
+  ejecuta comandos. Ahora el rollback es desde el dashboard (Deployments → Rollback) y, si alguna
+  vez hace falta por línea de comandos, va a Codex.
+
+---
+
 ## 2026-09-28 · Arranque de semana: marca y logo en vivo; ajustes de contraste (`567310a`)
 
 **Quién:** Codex (push y ajustes), cowork (revisión).

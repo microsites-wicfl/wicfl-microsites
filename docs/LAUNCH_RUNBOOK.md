@@ -12,12 +12,16 @@ Order matters: the rehearsal in step 3 cannot go green until steps 1 and 2 are d
    declares both custom domains as bare hostnames. Wrangler 4 rejects `/*` and paths on custom
    domains (found by the W-119 rehearsal, run 35764615432); the rehearsal config's hostname-only
    form passed Wrangler's validation in run 35764722059, which failed later only on permissions.
-2. **Vic updates the Cloudflare API token** behind the GitHub secret `CLOUDFLARE_API_TOKEN`: add
+2. ~~Token update~~ **Done 2026-09-28 (Vic).** Account API token `cool-snowflake-1555` (the only
+   account token; the one behind `CLOUDFLARE_API_TOKEN`) now also has **Workers Routes: Edit**
+   on `stuarthomeownersinsurance.com` only. Original instruction, kept for future zones: **Vic updates the Cloudflare API token** behind the GitHub secret `CLOUDFLARE_API_TOKEN`: add
    **Zone → Workers Routes → Edit**, scoped to the `stuarthomeownersinsurance.com` zone (add each
    future site's zone to the same token as it joins Cloudflare). Keep the existing Workers Scripts
    permission. Nothing broader. The current token uploads a Worker and assets but Cloudflare
    rejects `zones/.../workers/routes` with "No access to the specified resource."
-3. **Rehearsal run green.** GitHub Actions → **Deploy Cloudflare Workers** → `target: rehearsal`,
+3. ~~Rehearsal run green~~ **Done 2026-09-28**, run 36458226291: `preview.` and two inner pages
+   answer 200 with `noindex, nofollow`; apex and `www` unchanged; W-103 reported the expected
+   placeholders (Demo, GA4/GTM, CRM form) and would have blocked production. Original check: **Rehearsal run green.** GitHub Actions → **Deploy Cloudflare Workers** → `target: rehearsal`,
    `confirm: deploy`. `https://preview.stuarthomeownersinsurance.com/` serves Site #1 over valid
    HTTPS with `X-Robots-Tag: noindex, nofollow`; apex and `www` unchanged.
 4. Vic merges the approved, real Site #1 values into `sites/stuart-homeowners/site.config.json`.
@@ -30,7 +34,7 @@ Order matters: the rehearsal in step 3 cannot go green until steps 1 and 2 are d
 | Order | Owner | Action | Verify before continuing |
 |---|---|---|---|
 | 1 | Vic, Cloudflare dashboard | Set **SSL/TLS → Overview** to **Full (strict)**. | The zone is active and the certificate state is valid. |
-| 2 | Vic, Cloudflare dashboard | In **DNS**, delete the two apex `A` records that point to GoDaddy parking and the obsolete `_domainconnect` CNAME. | The old parked apex is gone. Do not leave hours between this and the next step: the apex will not resolve until the Worker deploy creates its record. |
+| 2 | Vic, Cloudflare dashboard | In **DNS → Records**, delete every record named `stuarthomeownersinsurance.com` (the apex `A` records to GoDaddy parking) **and every record named `www`**, plus the obsolete `_domainconnect` CNAME. Leave `preview`, the email-routing `MX`/`TXT` records and anything else untouched. | Only apex and `www` records are gone. Cloudflare refuses to attach a Worker custom domain to a hostname that already has a DNS record, so a leftover `www` record fails step 3. On 28-sep both apex and `www` still answered 200 through Cloudflare, so both have records today. Do not leave hours between this and step 3: the site does not resolve until the deploy creates its records. |
 | 3 | Vic, GitHub Actions | Open **Deploy Cloudflare Workers**, click **Run workflow**, choose `production`, enter exactly `deploy`, then run it. | `npm run check`, pod build, and every W-103 readiness check are green. Confirm the deploy log uses `wrangler.pod-1.toml`, not the rehearsal config. |
 | 4 | Vic | Check `https://stuarthomeownersinsurance.com/` and `https://www.stuarthomeownersinsurance.com/`. | Both return HTTPS 200 and neither response has `X-Robots-Tag`. Check `robots.txt` and `sitemap.xml` use the real domain. |
 | 5 | Vic | Make one tracking call and submit one test lead at `/contact/`. | The call is recorded in GoTo; the lead reaches GoHighLevel with the site tag. |
@@ -39,13 +43,10 @@ Order matters: the rehearsal in step 3 cannot go green until steps 1 and 2 are d
 ## Rollback
 
 An apex `A` record pointing back to GoDaddy parking is not a useful rollback: it removes the
-site rather than restoring the last known working version. If the Worker is unhealthy, first
-use Cloudflare's deployment history to identify the previous good version, then run from this
-repository with the production credentials available to the workflow:
-
-```sh
-npx wrangler rollback --config wrangler.pod-1.toml
-```
+site rather than restoring the last known working version. If the Worker is unhealthy, roll back
+from the browser: Cloudflare dashboard → **Workers & Pages** → `wicfl-pod-1` → **Deployments** →
+the last good version → **Rollback**. (Vic never runs commands; if a command-line rollback is
+ever needed, it goes to the executor as a prompt.)
 
 Confirm the selected prior deployment is healthy at both apex hosts and record the incident in
 `BITACORA.md` before trying another production deploy.
