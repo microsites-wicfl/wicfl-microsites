@@ -5,6 +5,9 @@ dist/
 .env
 .env.*
 !.env.example
+# Wrangler local secrets
+.dev.vars
+.dev.vars.*
 .DS_Store
 *.log
 .vercel/
