@@ -1,3 +1,29 @@
+## 2026-09-28 · W-118: guardado de avance arreglado (`0dd07b5`, `a8b7454`, `9f97161`)
+
+**Quién:** Codex (código y prueba), cowork (revisión).
+
+- **Causa confirmada:** GHL rechaza el upsert sin identidad ("Pass at least one of number,
+  email").
+- **Cambios revisados contra el diff:**
+  - Sin email ni teléfono válidos, el Worker no llama a GHL y responde `saved: false`.
+  - Los pasos 1 y 2 ya no muestran errores.
+  - En el paso 3 se guarda en segundo plano en cuanto hay un teléfono o email válido, con un
+    candado para que no salgan dos guardados a la vez. Una vez que existe el `contactId`, ya no se
+    vuelve a crear el contacto, y el envío final espera ese guardado y actualiza el mismo contacto.
+  - Los logs del Worker registran solo status y mensaje de GHL, sin datos personales.
+  - Pruebas nuevas; CI, Lead API y Publish en verde.
+- **Prueba en el sitio publicado:** los pasos 1 y 2 avanzan sin mensajes, queda un solo contacto
+  ("WICFL TEST 2") con source y los 4 campos, y aparece la confirmación. Aprobado.
+- **Menor, para después:** guardar en cada tecla (`input`) puede crear el contacto con un email a
+  medio escribir, si el patrón ya lo acepta como válido (`...@gmail.co`). El envío final lo
+  corrige por `contactId`, pero si la persona abandona justo ahí, queda mal. Conviene esperar
+  ~1 s sin teclear antes de guardar.
+
+Queda de W-118: la key de Google (espera la tarjeta de Kevin) y que Vic borre en GHL los dos
+contactos de prueba.
+
+---
+
 ## 2026-09-28 · W-118: formulario de cotización en vivo de punta a punta; plantilla de Pavel recibida
 
 **Quién:** Vic (GHL, R2 y Google en el navegador), Codex (`c902be2`, `d8207ed`, `712f85f`), cowork
