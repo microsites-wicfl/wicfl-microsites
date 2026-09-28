@@ -19,25 +19,30 @@ jobs:
           cache: npm
       - run: npm ci
       - run: node --test apps/lead-api/test/*.test.mjs
-      - name: Set Lead API secrets
-        env:
-          LEAD_API_GHL_API_TOKEN: ${{ secrets.LEAD_API_GHL_API_TOKEN }}
-          LEAD_API_GHL_LOCATION_ID: ${{ secrets.LEAD_API_GHL_LOCATION_ID }}
-          LEAD_API_R2_ACCOUNT_ID: ${{ secrets.LEAD_API_R2_ACCOUNT_ID }}
-          LEAD_API_R2_BUCKET_NAME: ${{ secrets.LEAD_API_R2_BUCKET_NAME }}
-          LEAD_API_R2_ACCESS_KEY_ID: ${{ secrets.LEAD_API_R2_ACCESS_KEY_ID }}
-          LEAD_API_R2_SECRET_ACCESS_KEY: ${{ secrets.LEAD_API_R2_SECRET_ACCESS_KEY }}
-        run: |
-          printf '%s' "$LEAD_API_GHL_API_TOKEN" | npx wrangler secret put GHL_API_TOKEN --config apps/lead-api/wrangler.jsonc
-          printf '%s' "$LEAD_API_GHL_LOCATION_ID" | npx wrangler secret put GHL_LOCATION_ID --config apps/lead-api/wrangler.jsonc
-          printf '%s' "$LEAD_API_R2_ACCOUNT_ID" | npx wrangler secret put R2_ACCOUNT_ID --config apps/lead-api/wrangler.jsonc
-          printf '%s' "$LEAD_API_R2_BUCKET_NAME" | npx wrangler secret put R2_BUCKET_NAME --config apps/lead-api/wrangler.jsonc
-          printf '%s' "$LEAD_API_R2_ACCESS_KEY_ID" | npx wrangler secret put R2_ACCESS_KEY_ID --config apps/lead-api/wrangler.jsonc
-          printf '%s' "$LEAD_API_R2_SECRET_ACCESS_KEY" | npx wrangler secret put R2_SECRET_ACCESS_KEY --config apps/lead-api/wrangler.jsonc
       - name: Deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: npx wrangler deploy --config apps/lead-api/wrangler.jsonc
+      - name: Set Lead API secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          LEAD_API_GHL_API_TOKEN: ${{ secrets.LEAD_API_GHL_API_TOKEN }}
+          LEAD_API_GHL_LOCATION_ID: ${{ secrets.LEAD_API_GHL_LOCATION_ID }}
+          LEAD_API_GOOGLE_PLACES_API_KEY: ${{ secrets.LEAD_API_GOOGLE_PLACES_API_KEY }}
+          LEAD_API_R2_ACCOUNT_ID: ${{ secrets.LEAD_API_R2_ACCOUNT_ID }}
+          LEAD_API_R2_BUCKET_NAME: ${{ secrets.LEAD_API_R2_BUCKET_NAME }}
+          LEAD_API_R2_ACCESS_KEY_ID: ${{ secrets.LEAD_API_R2_ACCESS_KEY_ID }}
+          LEAD_API_R2_SECRET_ACCESS_KEY: ${{ secrets.LEAD_API_R2_SECRET_ACCESS_KEY }}
+        run: |
+          put_secret() { if [ -n "$2" ]; then printf '%s' "$2" | npx wrangler secret put "$1" --config apps/lead-api/wrangler.jsonc; fi; }
+          put_secret GHL_API_TOKEN "$LEAD_API_GHL_API_TOKEN"
+          put_secret GHL_LOCATION_ID "$LEAD_API_GHL_LOCATION_ID"
+          put_secret GOOGLE_PLACES_API_KEY "$LEAD_API_GOOGLE_PLACES_API_KEY"
+          put_secret R2_ACCOUNT_ID "$LEAD_API_R2_ACCOUNT_ID"
+          put_secret R2_BUCKET_NAME "$LEAD_API_R2_BUCKET_NAME"
+          put_secret R2_ACCESS_KEY_ID "$LEAD_API_R2_ACCESS_KEY_ID"
+          put_secret R2_SECRET_ACCESS_KEY "$LEAD_API_R2_SECRET_ACCESS_KEY"
       - name: Record URL
         run: echo "https://wicfl-lead-api.wicfl-microsites.workers.dev" >> "$GITHUB_STEP_SUMMARY"

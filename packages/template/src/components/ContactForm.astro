@@ -25,7 +25,7 @@ const leadApiUrl = "https://wicfl-lead-api.wicfl-microsites.workers.dev";
       </label>
       <label>Property address<input name="address" autocomplete="street-address" required aria-describedby="google-attribution" /></label>
       <ul class="address-suggestions" data-suggestions hidden aria-label="Address suggestions"></ul>
-      <p id="google-attribution" class="google-attribution">Powered by Google</p>
+      <p id="google-attribution" class="google-attribution" hidden>Powered by Google</p>
       <div class="contact-form-actions"><button type="button" data-back>Back</button><button type="submit">Continue</button></div>
     </fieldset>
 
@@ -103,21 +103,23 @@ const leadApiUrl = "https://wicfl-lead-api.wicfl-microsites.workers.dev";
     root.querySelectorAll("[data-back]").forEach((button) => button.addEventListener("click", () => showStep(state.step - 1)));
     const address = form.elements.address;
     const suggestions = root.querySelector("[data-suggestions]");
+    const attribution = root.querySelector("#google-attribution");
     let addressTimer;
     address.addEventListener("input", () => {
       clearTimeout(addressTimer);
-      if (address.value.trim().length < 3) { suggestions.hidden = true; return; }
+      if (address.value.trim().length < 3) { suggestions.hidden = true; attribution.hidden = true; return; }
       addressTimer = setTimeout(async () => {
         try {
           const result = await api("/v1/addresses", { input: address.value, sessionToken: state.addressSession });
           suggestions.replaceChildren(...result.suggestions.map((suggestion) => {
             const item = document.createElement("li"); const button = document.createElement("button");
             button.type = "button"; button.textContent = suggestion.text;
-            button.onclick = () => { address.value = suggestion.text; suggestions.hidden = true; };
+            button.onclick = () => { address.value = suggestion.text; suggestions.hidden = true; attribution.hidden = true; };
             item.append(button); return item;
           }));
           suggestions.hidden = suggestions.childElementCount === 0;
-        } catch { suggestions.replaceChildren(); suggestions.hidden = true; }
+          attribution.hidden = suggestions.hidden;
+        } catch { suggestions.replaceChildren(); suggestions.hidden = true; attribution.hidden = true; }
       }, 300);
     });
     root.querySelector("[data-upload]").addEventListener("click", async () => {
