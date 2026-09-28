@@ -111,7 +111,9 @@ const leadApiUrl = "https://wicfl-lead-api.wicfl-microsites.workers.dev";
       } finally { button.disabled = false; }
     });
     root.querySelectorAll("[data-back]").forEach((button) => button.addEventListener("click", () => showStep(state.step - 1)));
-    [form.elements.phone, form.elements.email].forEach((field) => field.addEventListener("blur", () => { void saveContactInBackground(); }));
+    form.addEventListener("focusout", (event) => {
+      if (event.target === form.elements.phone || event.target === form.elements.email) void saveContactInBackground();
+    });
     const address = form.elements.address;
     const suggestions = root.querySelector("[data-suggestions]");
     const attribution = root.querySelector("#google-attribution");
