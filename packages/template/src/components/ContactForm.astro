@@ -117,7 +117,7 @@ const leadApiUrl = "https://wicfl-lead-api.wicfl-microsites.workers.dev";
             item.append(button); return item;
           }));
           suggestions.hidden = suggestions.childElementCount === 0;
-        } catch (error) { status.textContent = error.message; suggestions.hidden = true; }
+        } catch { suggestions.replaceChildren(); suggestions.hidden = true; }
       }, 300);
     });
     root.querySelector("[data-upload]").addEventListener("click", async () => {

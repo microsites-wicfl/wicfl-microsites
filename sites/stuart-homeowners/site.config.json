@@ -18,7 +18,7 @@
     "secondaryKeywords": ["waterfront homeowners insurance Stuart FL", "Martin County high value home insurance demo"]
   },
   "analytics": { "ga4": "G-PLACEHOLDER", "gtm": "GTM-PLACEHOLDER" },
-  "crm": { "formId": "PENDING_GHL_FORM_ID", "leadSource": "stuart-homeowners" },
+  "crm": { "formId": "wicfl-quote-v1", "leadSource": "stuart-homeowners" },
   "theme": { "variant": "coastal", "accentColor": "#0F6B75" },
   "differentiation": {
     "localProof": [

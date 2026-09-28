@@ -4,6 +4,8 @@
   "main": "src/index.js",
   "compatibility_date": "2026-09-21",
   "vars": {
-    "LEAD_API_VERSION": "1"
+    "LEAD_API_VERSION": "1",
+    "ALLOWED_ORIGINS": "https://stuarthomeownersinsurance.com,https://www.stuarthomeownersinsurance.com,https://preview.stuarthomeownersinsurance.com,https://wicfl-stuart-homeowners-published.wicfl-microsites.workers.dev",
+    "LEAD_SITES": "{\"stuart-homeowners\":{\"leadSource\":\"stuart-homeowners\",\"formId\":\"wicfl-quote-v1\",\"customFieldIds\":{\"purchaseReason\":\"9vP3DHkCghaS33ZoxQym\",\"timing\":\"PpKkYqdirHUFnbmtgrPz\",\"currentInsurer\":\"EALap8MLwYQdIcTQopEQ\",\"annualPremium\":\"FpkKAA8bIukQqIQzSaG3\"}}}"
   }
 }
