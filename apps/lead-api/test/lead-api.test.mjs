@@ -59,3 +59,10 @@ test("generates a short-lived PUT URL with the permitted content type signed", a
   assert.match(result.url, /X-Amz-Signature=/);
   assert.match(result.key, /^policy-declarations\/contact-123\//);
 });
+
+test("accepts an R2 endpoint URL as well as a bare account ID", async () => {
+  const app = createLeadApi();
+  const response = await app(request("/v1/uploads", { contactId: "contact-123", contentType: "application/pdf", size: 100 }), { ...env, R2_ACCOUNT_ID: "https://account-test.r2.cloudflarestorage.com", R2_BUCKET_NAME: "private-policies", R2_ACCESS_KEY_ID: "key-test", R2_SECRET_ACCESS_KEY: "secret-test" });
+  const body = await response.json();
+  assert.equal(new URL(body.url).hostname, "account-test.r2.cloudflarestorage.com");
+});

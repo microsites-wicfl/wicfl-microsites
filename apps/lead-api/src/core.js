@@ -97,7 +97,9 @@ async function uploadUrl(body, env) {
   if (!env.R2_ACCOUNT_ID || !env.R2_BUCKET_NAME || !env.R2_ACCESS_KEY_ID || !env.R2_SECRET_ACCESS_KEY) throw new Error("UPLOAD_SERVICE_UNAVAILABLE");
   const extension = { "application/pdf": "pdf", "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" }[body.contentType];
   const key = `policy-declarations/${body.contactId}/${crypto.randomUUID()}.${extension}`;
-  const endpoint = `https://${env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${env.R2_BUCKET_NAME}/${key}`;
+  const accountHost = env.R2_ACCOUNT_ID.startsWith("http") ? new URL(env.R2_ACCOUNT_ID).hostname : env.R2_ACCOUNT_ID;
+  const accountId = accountHost.replace(/\.r2\.cloudflarestorage\.com$/i, "").replace(/\/$/, "");
+  const endpoint = `https://${accountId}.r2.cloudflarestorage.com/${env.R2_BUCKET_NAME}/${key}`;
   const client = new AwsClient({ accessKeyId: env.R2_ACCESS_KEY_ID, secretAccessKey: env.R2_SECRET_ACCESS_KEY, service: "s3", region: "auto" });
   const signed = await client.sign(new Request(endpoint, { method: "PUT", headers: { "content-type": body.contentType } }), { aws: { signQuery: true, allHeaders: true, expires: 300 } });
   return { url: signed.url, key, expiresInSeconds: 300, contentType: body.contentType };
