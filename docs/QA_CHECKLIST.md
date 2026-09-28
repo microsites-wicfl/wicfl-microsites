@@ -46,6 +46,7 @@ right before it publishes:
 | NAP matches the Google Business Profile character for character | Manual |
 | No guaranteed or absolute coverage claims | Manual |
 | Entity naming matches Walker's approved brand assets (W-008) | Manual |
+| The logo is actually visible in the header on desktop and on a phone, not just present in the HTML | Manual — look at the rendered header. On 28 Sep 2026 the logo was in the HTML but rendered at 0×0 (W-132) |
 | No firm price/quote stated unless explicitly approved for that page | Manual |
 | Swap test run (`differentiation-audit` skill) | Manual, **while writing, not at the end** — see CONTENT_STANDARDS.md for why waiting three weeks makes this unfixable under launch pressure |
 | Nothing states a legal/coverage interpretation only a licensed agent should make | Manual |

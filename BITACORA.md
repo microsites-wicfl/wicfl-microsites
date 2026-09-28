@@ -1,3 +1,37 @@
+## 2026-09-28 (noche) · Capturas del update y W-132: el logo no se ve en el sitio publicado
+
+**Quién:** cowork.
+
+**Capturas para el update del equipo:** 4 imágenes del formulario de cotización (pasos 1, 2 y 3, y
+la pantalla de gracias con la carga de póliza), en `_drafts/update-2026-09-28/` (ignorado por git).
+Como workers.dev y los dominios de Stuart no abren desde el entorno de cowork, se construyó Stuart
+desde `HEAD` (mismo código que el publicado) y se capturó con Playwright, con la API del formulario
+simulada: datos de ejemplo, nada llegó a GHL.
+
+**Hallazgo, W-132:** la portada no se incluyó porque **el header sale sin logo**. Confirmado en el
+sitio publicado (pestaña del navegador de la app): el `img` carga pero mide 0×0. Causa: SVG sin
+`width`/`height` más `width:auto; height:auto` dentro de un flex. Arreglo probado en local (altura
+explícita de 2.75rem); el prompt para Codex se le dio a Vic. Bloquea el 9-oct.
+
+**Lo que vale conservar:**
+- **"En vivo" no es "se ve".** Hoy se dio por hecho "marca y logo en vivo" porque el HTML traía el
+  `img`; nadie miró el header renderizado. La verificación de marca tiene que medir la caja del
+  logo (o mirar una captura), no buscar la etiqueta.
+- **Las capturas del update sirven de QA visual.** Sacarlas encontró un bug que las pruebas y el
+  CI no ven. Vale la pena hacerlas en cada cierre de algo visible.
+
+**Otra cosa vista en las capturas (para W-121, no bloquea):** en celular (390 px) el header
+fijo ocupa cerca de la mitad de la pantalla porque el menú de 7 páginas se parte en 3 renglones, y
+tapa el título del formulario. El diseño de Pavel ya trae header nuevo; que resuelva el menú en
+celular (hamburguesa o menos ligas). Se agregó a `docs/QA_CHECKLIST.md` la revisión de que el logo
+se vea de verdad.
+
+**Pendientes que cambian:** antes del punto 3 de la lista del cierre va **Codex: W-132** (con
+`git push origin main`, que también sube los commits de docs locales). Después, cowork saca la
+captura de la portada para el update.
+
+---
+
 ## 2026-09-28 (cierre del día) · Lanzamiento destrabado: tokens, ensayo y formulario en vivo
 
 **Quién:** Vic, Codex, cowork.
