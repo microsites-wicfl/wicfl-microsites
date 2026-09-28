@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "apps/studio/**"
+      - "packages/config-schema/theme.mjs"
       - ".github/workflows/deploy-studio.yml"
   workflow_dispatch:
 

@@ -32,3 +32,22 @@ test("a theme with insufficient contrast fails build-site", () => {
     rmSync(invalidSite, { recursive: true, force: true });
   }
 });
+
+test("build diagnostics name the inaccessible surface and footer colors", () => {
+  const config = JSON.parse(readFileSync(resolve(root, "sites/_example/site.config.json"), "utf8"));
+  config.slug = "theme-contrast-invalid";
+  config.theme.accentColor = "#005F73";
+  config.theme.surfaceColor = "#12181F";
+  config.theme.footerColor = "#FFFFFF";
+  mkdirSync(resolve(invalidSite, "content"), { recursive: true });
+  writeFileSync(resolve(invalidSite, "site.config.json"), JSON.stringify(config));
+  writeFileSync(resolve(invalidSite, "content/index.md"), "---\ntitle: Theme fixture\npageType: home\n---\n\nFixture.\n");
+  try {
+    assert.throws(() => execFileSync(process.execPath, ["scripts/build-site.mjs", "_theme-contrast-invalid"], { cwd: root, encoding: "utf8", stdio: "pipe" }), (error) => {
+      const output = `${error.stdout}\n${error.stderr}`;
+      return output.includes("theme.surfaceColor #12181F is too dark for the text on it") && output.includes("theme.footerColor #FFFFFF is too light for the footer text");
+    });
+  } finally {
+    rmSync(invalidSite, { recursive: true, force: true });
+  }
+});

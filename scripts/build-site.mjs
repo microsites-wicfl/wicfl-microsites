@@ -29,7 +29,13 @@ const themeProblems = checkTheme(config.theme);
 if (themeProblems.length > 0) {
   console.error(`Theme contrast check failed for ${configPath}:`);
   for (const problem of themeProblems) {
-    console.error(`  - theme.${problem.field} ${problem.color} is too light for ${problem.description}: ${problem.contrast.toFixed(1)}:1, needs ${problem.minimum}:1`);
+    if (problem.field === "surfaceColor") {
+      console.error(`  - theme.surfaceColor ${config.theme.surfaceColor} is too dark for the text on it: ${problem.contrast.toFixed(1)}:1, needs ${problem.minimum}:1`);
+    } else if (problem.field === "footerColor") {
+      console.error(`  - theme.footerColor ${config.theme.footerColor} is too light for the footer text: ${problem.contrast.toFixed(1)}:1, needs ${problem.minimum}:1`);
+    } else {
+      console.error(`  - theme.${problem.field} ${problem.color} is too light for ${problem.description}: ${problem.contrast.toFixed(1)}:1, needs ${problem.minimum}:1`);
+    }
   }
   process.exit(1);
 }
