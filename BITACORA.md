@@ -1,3 +1,53 @@
+## 2026-09-28 (cierre del día) · Lanzamiento destrabado: tokens, ensayo y formulario en vivo
+
+**Quién:** Vic, Codex, cowork.
+
+**Hecho hoy:**
+- **Marca y logo en Studio, en vivo.** Mensajes de contraste corregidos (`567310a`).
+- **Tokens:** Studio con Actions: Read and write (Publish ya puede desplegar sitios en vivo).
+  Cloudflare con Workers Routes: Edit en la zona de Stuart. Se borró el token que nunca se usó.
+- **W-119 cerrado:** el ensayo de producción quedó verde en `preview.`. El runbook se corrigió en
+  dos puntos: el 9-oct se borran los registros DNS del apex **y** de `www`, y el rollback se hace
+  desde el dashboard.
+- **W-118, formulario de cotización en vivo de punta a punta:**
+  - GHL: integración, scopes y 4 campos.
+  - R2: bucket privado con CORS y su token.
+  - Worker `wicfl-lead-api` con su workflow.
+  - Lead en GHL con los 4 campos y la póliza en R2.
+  - Guardado de avance arreglado: sin errores visibles y el lead se guarda en el paso 3.
+- **Plantilla de Pavel** (diseño de la página de inicio) recibida y revisada. Se le pidió el
+  teléfono en el header y se abrió W-131 (Privacy, Terms, Disclaimer).
+- **Videos de Kevin** (Codie Sanchez y Hormozi): vamos alineados en lo principal. Se le
+  propusieron mejoras a la plantilla (título con el resultado, reseñas reales arriba, línea de
+  "free quote, no obligation" bajo el botón y "cómo funciona"), que se aplican si él las aprueba,
+  y la velocidad de respuesta a leads.
+
+**Lo que vale conservar:**
+- **Pedir los permisos mínimos es bueno, pero hay que pedir los que el plan necesita.** Cowork
+  dio solo los scopes de contactos y planeó leer los IDs por API: costó un ida y vuelta con Codex.
+  Antes de fijar los permisos, recorrer el plan paso por paso.
+- **Un error visible en el paso 1 de un formulario es peor que no tener guardado de avance.** La
+  prueba de punta a punta "pasaba" (el lead llegaba), pero el visitante habría visto un error en
+  cada paso. Leer lo que la prueba reporta como "esperado" y no solo el verde.
+- **El `dig` del ensayo evitó un lanzamiento fallido:** `www` también tiene registro DNS y el
+  runbook no lo contemplaba.
+
+**Estado al cierre:** `origin/main` en `9f97161`, más este cierre y la revisión de W-118 locales
+(sin subir).
+
+**Pendientes, en orden:**
+1. **Vic:** GA4 y GTM; número de GoTo (W-024); borrar en GHL los contactos WICFL TEST y WICFL
+   TEST 2.
+2. **Kevin:** tarjeta en Google Cloud para el autocompletado; respuesta sobre las mejoras a la
+   plantilla y sobre quién llama a los leads y en cuánto tiempo.
+3. **Codex + cowork:** bloques del diseño de Pavel (hero con fondo, íconos, tarjetas, FAQ, banda
+   de cotización, footer).
+4. **Pavel:** textos de las páginas legales (W-131), quitar "Demo" de Stuart y la validación de
+   Port St. Lucie.
+5. **Jueves:** manual y runbook. **Viernes 2-oct:** capacitación de Pavel.
+
+---
+
 ## 2026-09-28 · W-118: guardado de avance arreglado (`0dd07b5`, `a8b7454`, `9f97161`)
 
 **Quién:** Codex (código y prueba), cowork (revisión).
