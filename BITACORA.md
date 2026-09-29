@@ -1,3 +1,30 @@
+## 2026-09-29 · W-121/W-128: pulido visual de los bloques (prompt 027)
+
+**Quién:** Claude Code (ejecutor).
+
+Los seis detalles que cowork encontró en las capturas del 026b, corregidos: la imagen de las
+cards ya llena la tarjeta completa (el hueco lo causaba el `<p>` que Markdown pone alrededor de
+una imagen suelta, con su margen de párrafo por defecto, no el margen negativo); la rejilla de
+`features`/`cards` sigue el número real de ítems vía `data-items` en vez de 3 columnas fijas (los
+5 bloques de 4 íconos de `icons-fixture` ya no se parten 3+1); eyebrow, H2 e intro se envuelven en
+`.block-intro` para que sus márgenes colapsen como en cualquier página (dentro de un CSS grid no
+colapsan, que era la causa del hueco grande); el hero queda pegado al header y una sección oscura
+al final queda pegada al footer (había tres fuentes de hueco apiladas: el padding de `main`, el
+`margin-block` del propio bloque y el `margin-top` del footer); el divisor de features claro ya
+no aparece antes del primer ítem; y `eyebrow:`, la ruta de la imagen del hero y el nombre del
+ícono ahora escapan `&`, `<`, `>` y `"`, con prueba.
+
+`npm run check` (20 pruebas) y ambos builds verdes. Medido con Playwright contra el sitio
+construido en 390/768/1440 y `icons-fixture` en 1280 (capturas en
+`_drafts/review-2026-09-29/027/`, miradas antes de reportar). Solo tocó `BaseLayout.astro`,
+`remark-columns.mjs` y su archivo de pruebas, como pedía el prompt. Reporte completo:
+`reports/2026-09-29_027_pulido-bloques.md`.
+
+**Estado:** commit pendiente de push en el momento de escribir esta entrada; ver el reporte para
+el hash final y el resultado de Publish site Workers.
+
+---
+
 ## 2026-09-29 · W-121/W-128: render de hero, features y cards (prompt 026, etapa 2)
 
 **Quién:** Claude Code (ejecutor), relevando a Codex a la mitad de la etapa 2. Cowork ya había

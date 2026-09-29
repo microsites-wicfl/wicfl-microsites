@@ -96,8 +96,19 @@ function styleButtonLinks(node) {
   link.data = { ...link.data, hProperties: { ...link.data?.hProperties, className: ["button-link"] } };
 }
 
+// Block settings (eyebrow text, the hero image path, the icon name) become raw HTML
+// attributes/text below. They are content the team writes, not code, so a stray "&", "<",
+// ">" or '"' must not be able to break the markup around it.
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 function icon(name) {
-  return ICONS[name].replace("<svg", `<svg class="block-icon" data-icon="${name}"`);
+  return ICONS[name].replace("<svg", `<svg class="block-icon" data-icon="${escapeHtml(name)}"`);
 }
 
 // Every block/item segment carries its own lines, so this is the single place that turns
@@ -112,7 +123,7 @@ function settingValue(segment, key) {
 
 function eyebrowHtml(segment) {
   const value = settingValue(segment, "eyebrow");
-  return value ? `<p class="block-eyebrow">${value}</p>` : "";
+  return value ? `<p class="block-eyebrow">${escapeHtml(value)}</p>` : "";
 }
 
 function findFirst(nodes, type) {
@@ -141,13 +152,20 @@ function markCardImage(children) {
   image.data = { ...image.data, hProperties: { ...image.data?.hProperties, loading: "lazy" } };
 }
 
+// The lead image of a hero or a card is validated to stand alone as its own paragraph, so
+// it can always be pulled out and rendered apart from the rest of the segment's text.
+function splitLeadImage(lines) {
+  const [imageLine] = imageParagraphs(lines);
+  const textLines = lines.filter((entry) => entry !== imageLine);
+  return { imageLine, textLines };
+}
+
 function heroNode(block) {
   const body = contentLines(block.intro);
-  const [imageLine] = imageParagraphs(body);
-  const textLines = body.filter((entry) => entry !== imageLine);
+  const { imageLine, textLines } = splitLeadImage(body);
   const imageMatch = imageLine ? /^!\[[^\]]*]\(([^\s)]+)/.exec(imageLine.text.trim()) : null;
   const image = imageMatch
-    ? `<img src="${imageMatch[1]}" alt="" loading="eager" fetchpriority="high" decoding="async">`
+    ? `<img src="${escapeHtml(imageMatch[1])}" alt="" loading="eager" fetchpriority="high" decoding="async">`
     : "";
   const openHtml = `<section class="block-hero">${image}`
     + `<div class="block-hero-content">${eyebrowHtml(block.intro)}`;
@@ -164,23 +182,42 @@ function featureItemNode(item) {
 }
 
 function cardItemNode(item) {
-  const children = linesToChildren(contentLines(item));
-  markCardLink(children);
-  markCardImage(children);
+  // The card has no padding of its own so its image can reach every edge; the image and
+  // the padded text body are two separate boxes instead of one padded box with a negative
+  // margin trying to cancel that padding back out on three sides.
+  const { imageLine, textLines } = splitLeadImage(contentLines(item));
+  const imageChildren = imageLine ? linesToChildren([imageLine]) : [];
+  markCardImage(imageChildren);
+  const bodyChildren = linesToChildren(textLines);
+  markCardLink(bodyChildren);
   const open = { type: "html", value: '<article class="block-cards-item">' };
+  const bodyOpen = { type: "html", value: '<div class="block-cards-body">' };
+  const bodyClose = { type: "html", value: "</div>" };
   const close = { type: "html", value: "</article>" };
+  return [open, ...imageChildren, bodyOpen, ...bodyChildren, bodyClose, close];
+}
+
+// Eyebrow, heading and intro paragraph render as one wrapper so they can use normal
+// (collapsing) block-flow spacing; a bare CSS grid never collapses margins between its
+// items, which is what stretched the gaps between them.
+function introNode(segment) {
+  const eyebrow = eyebrowHtml(segment);
+  const children = linesToChildren(contentLines(segment));
+  if (!eyebrow && children.length === 0) return [];
+  const open = { type: "html", value: `<div class="block-intro">${eyebrow}` };
+  const close = { type: "html", value: "</div>" };
   return [open, ...children, close];
 }
 
 function sectionNode(block) {
   const dark = block.options.includes("dark");
   const className = `block-${block.name}${dark ? " block-dark" : ""}`;
-  const openHtml = `<section class="${className}"><div class="block-inner">${eyebrowHtml(block.intro)}`;
+  const openHtml = `<section class="${className}"><div class="block-inner" data-items="${block.items.length}">`;
   const open = { type: "html", value: openHtml };
   const close = { type: "html", value: "</div></section>" };
   const itemNode = block.name === "features" ? featureItemNode : cardItemNode;
   const items = block.items.flatMap((item) => itemNode(item));
-  return [open, ...linesToChildren(contentLines(block.intro)), ...items, close];
+  return [open, ...introNode(block.intro), ...items, close];
 }
 
 function columnsBlockNode(block) {

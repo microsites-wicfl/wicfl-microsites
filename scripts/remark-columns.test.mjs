@@ -42,3 +42,32 @@ test("turns a paragraph containing only a bold link into a themed button, includ
   const buttonParagraph = columnsTree.children.find((node) => node.type === "paragraph");
   assert.deepEqual(buttonParagraph.data.hProperties.className, ["button-link-wrap"]);
 });
+
+function renderedHtml(markdown, path) {
+  const plugin = remarkColumns();
+  const tree = { type: "root", children: [] };
+  plugin(tree, { value: markdown, path, data: {} });
+  return tree.children
+    .filter((node) => node.type === "html")
+    .map((node) => node.value)
+    .join("");
+}
+
+test("escapes HTML-significant characters in the eyebrow setting", () => {
+  const markdown = [
+    ":::hero",
+    'eyebrow: A <b>"test"</b> & more',
+    "![Decorative](/images/hero.jpg)",
+    "# Title",
+    ":::",
+  ].join("\n");
+  const html = renderedHtml(markdown, "escape-eyebrow.md");
+  assert.ok(html.includes("A &lt;b&gt;&quot;test&quot;&lt;/b&gt; &amp; more"));
+  assert.ok(!html.includes("<b>"));
+});
+
+test("escapes HTML-significant characters in the hero image path", () => {
+  const markdown = [":::hero", '![Decorative](/images/a"b<c>.jpg)', "# Title", ":::"].join("\n");
+  const html = renderedHtml(markdown, "escape-image.md");
+  assert.ok(html.includes('src="/images/a&quot;b&lt;c&gt;.jpg"'));
+});

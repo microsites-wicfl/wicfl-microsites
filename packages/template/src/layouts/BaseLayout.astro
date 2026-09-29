@@ -371,13 +371,32 @@ const headingFontPackage = headingFontDefinition.package;
   .block-features .block-inner,
   .block-cards .block-inner {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--s3);
     max-width: 68rem;
     margin: auto;
   }
-  .block-features .block-inner > :is(h2, p) {
+  /* The grid follows the real item count (2, 3 or 4) instead of a fixed column count, so
+     4 items never split into an awkward 3 + 1. */
+  .block-inner[data-items="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .block-inner[data-items="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .block-inner[data-items="4"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  /* .block-intro is one grid item that lays out its own children (eyebrow, heading, intro
+     paragraph) with normal block-flow margins, which collapse; a bare CSS grid never
+     collapses margins between its own items, which is what pushed these apart before. */
+  .block-intro {
     grid-column: 1 / -1;
+  }
+  .block-intro h2 {
+    margin: 0 0 var(--s2);
+  }
+  .block-intro p {
+    margin: 0;
   }
   .block-features-item,
   .block-cards-item {
@@ -386,6 +405,11 @@ const headingFontPackage = headingFontDefinition.package;
   }
   .block-features-item {
     padding: var(--s2);
+  }
+  /* The divider marks the space between items, so the first item does not carry one on
+     its own leading edge. :first-of-type is scoped to the <article> tag: block-intro (a
+     <div>) sits before the items, so a plain :first-child never matches any of them. */
+  .block-features:not(.block-dark) .block-features-item:not(:first-of-type) {
     border-left: 1px solid var(--line);
   }
   .block-features:not(.block-dark) .block-features-item {
@@ -417,21 +441,26 @@ const headingFontPackage = headingFontDefinition.package;
     background: transparent;
     padding-inline: 0;
   }
-  .block-cards .block-inner {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
   .block-cards-item {
     border: 1px solid var(--line);
     border-radius: var(--radius);
     overflow: hidden;
-    padding: var(--s2);
     box-shadow: var(--shadow);
   }
+  /* The card itself carries no padding, so its image (the renderer always puts it first,
+     wrapped in a <p> by Markdown) can reach every edge; the text lives in its own padded
+     .block-cards-body instead of a negative margin trying to cancel the card's padding
+     back out on three sides. */
+  .block-cards-item > p:first-child {
+    margin: 0;
+  }
   .block-cards-item img {
-    width: calc(100% + 2rem);
+    width: 100%;
     aspect-ratio: 16 / 10;
     object-fit: cover;
-    margin: calc(var(--s2) * -1) calc(var(--s2) * -1) var(--s2);
+  }
+  .block-cards-body {
+    padding: var(--s2);
   }
   .block-cards-item a {
     font-weight: 700;
@@ -443,6 +472,31 @@ const headingFontPackage = headingFontDefinition.package;
     content: "";
     position: absolute;
     inset: 0;
+  }
+  /* The hero always is the page's first content (the grammar rejects anything else), so it
+     always meets the header with no white gap: both main's own top padding and the hero's
+     own top margin have to go, or the second one alone still leaves a gap. */
+  main:has(> .page-content > .block-hero) {
+    padding-top: 0;
+  }
+  .block-hero {
+    margin-top: 0;
+  }
+  /* When the page's last thing is a full-bleed block, it should meet the footer with no
+     gap either: that takes main's bottom padding, the block's own bottom margin, and the
+     footer's own top margin. :last-child is true structural position, so real trailing
+     content (another paragraph, the contact form) keeps the normal spacing. */
+  main:has(> .page-content > section.block-hero:last-child),
+  main:has(> .page-content > section.block-features.block-dark:last-child) {
+    padding-bottom: 0;
+  }
+  section.block-hero:last-child,
+  section.block-features.block-dark:last-child {
+    margin-bottom: 0;
+  }
+  main:has(> .page-content > section.block-hero:last-child) ~ .site-footer,
+  main:has(> .page-content > section.block-features.block-dark:last-child) ~ .site-footer {
+    margin-top: 0;
   }
 
   /* Variant personalities: shape and depth differ, not only color, so the three
@@ -509,12 +563,10 @@ const headingFontPackage = headingFontDefinition.package;
     .block-cards .block-inner {
       grid-template-columns: 1fr;
     }
-    .block-features .block-inner > :is(h2, p) {
-      grid-column: auto;
-    }
   }
   @media (min-width: 42.001rem) and (max-width: 62rem) {
-    .block-cards .block-inner {
+    /* 4 items get 2 columns on tablet, for both features and cards; 2 and 3 stay as-is. */
+    .block-inner[data-items="4"] {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
