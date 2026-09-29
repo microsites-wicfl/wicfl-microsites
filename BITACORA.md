@@ -24,8 +24,8 @@ lleva `--force` para evitarlo.
 `npm run check` (23 pruebas) y ambos builds verdes. Reporte completo:
 `reports/2026-09-29_028_bloques-faq-cta-areas.md`.
 
-**Estado:** commit pendiente de push en el momento de escribir esta entrada; ver el reporte
-para el hash final y el resultado de Publish site Workers.
+**Estado:** `origin/main` en `06d2c4a`. Validate and build (`36627912837`) y Publish site
+Workers (`36627912844`) verdes.
 
 ---
 

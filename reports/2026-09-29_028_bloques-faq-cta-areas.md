@@ -285,5 +285,12 @@ Nada de los 5 puntos del objetivo quedó pendiente.
 
 ## Commits
 
-Pendiente de completar tras el push: hash, resultado de Validate and build y de Publish site
-Workers.
+- `06d2c4a` — `feat(template): faq, cta and areas page blocks with FAQPage schema (W-121 part
+  3)`. Incluye el código, la página de prueba nueva, este reporte y las entradas de
+  BITACORA/BACKLOG.
+- `git push origin main`: `5229b1f..06d2c4a`.
+- **Validate and build** (`ci.yml`), run `36627912837`: verde (Test WICFL Studio, Validate all
+  site configurations, Build `_example`, Build `stuart-homeowners`).
+- **Publish site Workers** (`publish-sites.yml`), run `36627912844`: verde (Discover sites to
+  publish, Publish `_example`, Publish `stuart-homeowners`). Mismas anotaciones de deprecación
+  de Node 20/Ubuntu de siempre, no relacionadas con este cambio.
