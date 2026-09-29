@@ -266,3 +266,36 @@ así lo dejó también la etapa 1).
 - **Publish site Workers** (`publish-sites.yml`), run `36618580787`: verde (Discover sites to
   publish, Publish `_example`, Publish `stuart-homeowners`). Ambas anotaciones son avisos de
   deprecación de Node 20/Ubuntu en los runners de GitHub, no relacionados con este cambio.
+
+## Revisión de cowork
+
+**Veredicto: aceptado.** Los detalles visuales pendientes van en el prompt 027, que es chico.
+
+**Bien:**
+- `parseDocument` queda como un solo parser para validar y para pintar. El render tiene una
+  función por bloque y reporta todos los problemas a la vez.
+- El diagnóstico del ancho completo fue correcto: la causa era el padding asimétrico de
+  `.page-content`, no la barra de scroll.
+- Íconos verificados contra `lucide-static` 1.48.0. En la captura de `icons-fixture` los 20 se
+  ven bien.
+- A 1280 px Stuart muestra "Get a Quote" en modo compacto, como se pidió.
+- El reporte está completo y marca bien sus dudas.
+
+**Detalles vistos en las capturas (van al 027):**
+1. **Cards:** la imagen no llena el ancho de la tarjeta. Queda un hueco arriba y a la derecha,
+   porque el margen negativo no coincide con el padding real.
+2. **Features con 4 ítems:** se parten en 3 + 1. La rejilla tiene fijas 3 columnas; debe seguir
+   el número de ítems (2, 3 o 4).
+3. **Espacios verticales:** entre eyebrow y H2, y entre H2 e intro, dentro de features y cards,
+   hay huecos de casi una pantalla de alto a 1440. El eyebrow tiene que ir pegado a su H2.
+4. **Hero:** si es lo primero de la página, debe ir pegado al header, sin el margen blanco de
+   arriba, como en el diseño de Pavel. Lo mismo para el hueco grande entre el último bloque
+   oscuro y el footer.
+5. **Features claro:** el primer ítem lleva divisor a la izquierda. El divisor va solo *entre*
+   ítems.
+6. **Escape de HTML:** el valor de `eyebrow:` y la ruta de la imagen del hero se insertan en el
+   HTML sin escapar. El contenido lo escribe el equipo, pero un `<` o unas comillas en el
+   eyebrow rompen el marcado. Hay que escaparlos.
+
+**Anotado, sin acción ahora:** `astro dev` falla con rutas con espacios (`Duplicate id
+"index"`). No afecta el build ni Studio. Queda para después del lanzamiento.
