@@ -217,3 +217,67 @@ feat(template): page blocks hero, features and cards with shared grammar (W-121 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01GBaoRL8uQWQ2D99CQnG7W1
 ```
+
+---
+
+## Adenda 2026-09-29: se ejecuta en dos etapas
+
+El primer intento se detuvo a la mitad sin commit, y eso estuvo bien. Dejó en el árbol de
+trabajo un `blocks.mjs` inicial, un render parcial y la página de prueba con sus imágenes. Para
+que cada avance quede revisable, el prompt se ejecuta en dos etapas. Cada etapa tiene su commit y
+su reporte, y cowork revisa entre una y otra.
+
+### Etapa 1: gramática, validación, íconos y pruebas (sin render)
+
+Parte del trabajo sin commit que ya existe. Termina:
+
+- **`packages/config-schema/blocks.mjs`** con **todas** las reglas de la tabla del punto 1:
+  - hero: primero, uno por página, exactamente una imagen y exactamente un `# H1`;
+  - `features`: `icon:` obligatorio y válido;
+  - `cards`: imagen, `###` y liga en cada item;
+  - `eyebrow:` e `icon:` solo donde aplican;
+  - `# H1` prohibido fuera del hero;
+  - conteo de items;
+  - opciones.
+- **Código legible:**
+  - una instrucción por línea;
+  - líneas de 120 caracteres o menos;
+  - funciones con nombre por regla;
+  - un comentario corto por cada regla que diga por qué existe.
+
+  El borrador actual está comprimido en líneas largas. Ese estilo no pasa la prueba de formato
+  de Studio, que va a importar este archivo.
+- **`ICON_NAMES`** y los SVG de Lucide como datos en `packages/config-schema/icons.mjs`, con
+  export `{ name: "<svg ...>" }`, más el aviso de licencia ISC en
+  `packages/config-schema/LICENSE-lucide`. Van en `config-schema` porque Studio los usará para
+  su vista en vivo.
+- **Pruebas completas** en `scripts/blocks.test.mjs` (lo pedido en el punto 5) dentro de
+  `npm run check`.
+- **Build:** `scripts/build-site.mjs` usa `blockProblems`.
+- **Grep:** confirma que ninguna página actual tiene `# H1` y repórtalo.
+
+**Para que el build siga verde sin el render:**
+
+- Mueve `sites/_example/content/blocks-fixture.md` a `_drafts/026/blocks-fixture.md` (en
+  gitignore) hasta la etapa 2.
+- Las imágenes de la página de prueba pueden quedarse sin commit.
+- Los cambios de render (`remark-columns.mjs`, `[...slug].astro`, `index.astro`,
+  `BaseLayout.astro`) **no** van en este commit: déjalos en un `git stash` con nombre
+  `026-render-wip` y dilo en el reporte.
+- Si alguno de esos archivos necesita un cambio mínimo para usar `blockProblems`, sí va.
+
+**Cierre de la etapa 1:**
+
+- Commit: `feat(config-schema): shared page block grammar, icons and tests (W-121 part 2a)`.
+- `git push origin main`, y espera a que los checks queden verdes.
+- Reporte: `reports/2026-09-29_026a_gramatica-bloques.md`, con el formato de TEMPLATE y la
+  sintaxis final de cada bloque.
+
+### Etapa 2: render, página de prueba y verificación visual
+
+Se ejecuta con un mensaje aparte, después de la revisión de cowork. Son los puntos 2, 3 y 4 y los
+pasos 3 a 6 del prompt, partiendo del stash `026-render-wip` y de la página de prueba en
+`_drafts/026/`.
+
+- Reporte: `reports/2026-09-29_026b_render-bloques.md`.
+- Commit: el mensaje original del prompt con "(W-121 part 2b)".
