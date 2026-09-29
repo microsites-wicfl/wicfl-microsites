@@ -45,7 +45,7 @@ Nada. El único archivo fuera de template/schema es este reporte solicitado.
 
 ## Lo que no pudiste verificar
 
-Nada pendiente de verificación local. La publicación remota se verificará al terminar el workflow solicitado.
+Nada. La publicación remota terminó correctamente para el hash de implementación `8e5bab0` en el run [36603812515](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/36603812515): Discover sites, Publish stuart-homeowners y Publish _example quedaron en verde.
 
 ## Dónde dudaste
 
@@ -66,4 +66,4 @@ No se cambió contenido de sitios ni Studio, conforme a la restricción. Ningún
 
 ## Commits
 
-Pendiente de crear al momento de redactar este reporte.
+- `8e5bab0` — `feat(template): new header, footer, button links and nav order (W-121 part 1)`
