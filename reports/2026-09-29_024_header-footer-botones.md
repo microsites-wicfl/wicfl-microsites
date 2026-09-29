@@ -67,3 +67,36 @@ No se cambió contenido de sitios ni Studio, conforme a la restricción. Ningún
 ## Commits
 
 - `8e5bab0` — `feat(template): new header, footer, button links and nav order (W-121 part 1)`
+
+## Revisión de cowork
+
+**Veredicto: aceptado con correcciones, que van en el prompt 025.**
+
+**Bien:**
+- `navOrder` y `logoOnDark` en el schema.
+- Regla de botón con prueba.
+- Footer de 4 columnas con datos del config y ligas legales condicionales.
+- Menú de celular con ARIA, Escape y mejora progresiva.
+- Logo del header en el sitio publicado: medido 72×44 en el navegador de la app.
+
+**Problemas encontrados:**
+
+1. **El menú de escritorio no cabe.** Build de `8e5bab0`, medido a 1024, 1280, 1440 y 1920 px:
+   los links se parten en 2 y 3 renglones ("Difficult / to / Insure", "After a / Non- / Renewal")
+   y el header mide 88 px. Pasa en todos los anchos, porque el `.shell` limita el ancho y Stuart
+   tiene 8 páginas en el menú más Home.
+   - Las capturas de Codex lo muestran.
+   - El reporte no lo menciona.
+2. **Las capturas del reporte tienen el logo roto.** Se ve el texto alternativo "Stuart
+   Homeowners Insurance (Demo)", porque el servidor local no sirvió `/logo.svg`. La medida
+   "220 × 56 px" es la caja del texto alternativo, no del logo.
+   - En el sitio publicado el logo sí carga.
+   - La verificación no miró sus propias capturas, y aun así el reporte dice "Lo que no
+     pudiste verificar: Nada".
+3. **`.footer-logo` repite el patrón de W-132.** Tiene `width:auto` sin altura fija, así que un
+   SVG sin `width`/`height` puede salir en 0 o deformado. Todavía no hay sitio con
+   `logoOnDark`, así que no se ve hoy.
+
+**Lección:** en cambios visuales, el reporte tiene que describir lo que se ve en las capturas,
+no solo los números. Una medida sin mirar la imagen reportó un texto alternativo como si fuera
+el logo.
