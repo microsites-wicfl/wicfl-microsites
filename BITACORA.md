@@ -22,8 +22,8 @@ checkout de Windows (`[glob-loader] Duplicate id "index"` para cada archivo, rut
 `astro build` no lo sufre. Se verificó sirviendo el build con un servidor estático propio y
 Playwright (la extensión de Claude in Chrome no estaba conectada en esta sesión).
 
-**Estado:** commit pendiente de push a `origin/main` en el momento de escribir esta entrada; ver
-el reporte para el hash final y el resultado de Publish site Workers.
+**Estado:** `origin/main` en `dd7ffe3`. Validate and build (`36618580601`) y Publish site Workers
+(`36618580787`) verdes.
 
 ---
 

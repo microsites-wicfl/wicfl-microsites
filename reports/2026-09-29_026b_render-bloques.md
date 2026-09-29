@@ -258,6 +258,11 @@ así lo dejó también la etapa 1).
 
 ## Commits
 
-Pendiente: se hace commit después de este reporte, con el mensaje de la adenda
-(`feat(template): page blocks hero, features and cards with shared grammar (W-121 part 2b)`), y se
-completa esta sección con el hash tras el push y el resultado de "Publish site Workers".
+- `dd7ffe3` — `feat(template): page blocks hero, features and cards with shared grammar (W-121
+  part 2b)`. Incluye el código, el fixture, este reporte y las entradas de BITACORA/BACKLOG.
+- `git push origin main`: `60997e8..dd7ffe3`.
+- **Validate and build** (`ci.yml`), run `36618580601`: verde (Test WICFL Studio, Validate all
+  site configurations, Build `_example`, Build `stuart-homeowners`).
+- **Publish site Workers** (`publish-sites.yml`), run `36618580787`: verde (Discover sites to
+  publish, Publish `_example`, Publish `stuart-homeowners`). Ambas anotaciones son avisos de
+  deprecación de Node 20/Ubuntu en los runners de GitHub, no relacionados con este cambio.
