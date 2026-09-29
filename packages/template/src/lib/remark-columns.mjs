@@ -2,6 +2,8 @@ import { fromMarkdown } from "mdast-util-from-markdown";
 import { gfm } from "micromark-extension-gfm";
 import { gfmFromMarkdown } from "mdast-util-gfm";
 import remarkSmartypants from "remark-smartypants";
+import { parseDocument, leadingSettings, contentLines, imageParagraphs } from "../../../config-schema/blocks.mjs";
+import { ICONS } from "../../../config-schema/icons.mjs";
 
 const MARKERS = new Set([":::columns", ":::next", ":::"]);
 const COLUMN_STYLES = `<style>
@@ -94,6 +96,127 @@ function styleButtonLinks(node) {
   link.data = { ...link.data, hProperties: { ...link.data?.hProperties, className: ["button-link"] } };
 }
 
+function icon(name) {
+  return ICONS[name].replace("<svg", `<svg class="block-icon" data-icon="${name}"`);
+}
+
+// Every block/item segment carries its own lines, so this is the single place that turns
+// a segment's markdown text into mdast nodes, shared by hero, features, cards and columns.
+function linesToChildren(lines) {
+  return markdownChildren(lines.map((entry) => entry.text).join("\n"));
+}
+
+function settingValue(segment, key) {
+  return leadingSettings(segment).find((setting) => setting.key === key)?.value;
+}
+
+function eyebrowHtml(segment) {
+  const value = settingValue(segment, "eyebrow");
+  return value ? `<p class="block-eyebrow">${value}</p>` : "";
+}
+
+function findFirst(nodes, type) {
+  for (const node of nodes) {
+    if (node.type === type) return node;
+    if (Array.isArray(node.children)) {
+      const found = findFirst(node.children, type);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+// The first link in a cards item is the destination for the whole card (W-128), so only
+// it gets the class the stylesheet stretches over the article; other links stay inline.
+function markCardLink(children) {
+  const link = findFirst(children, "link");
+  if (!link) return;
+  link.data = { ...link.data, hProperties: { ...link.data?.hProperties, className: ["card-link"] } };
+}
+
+// Cards sit further down the page than the hero, so their photo can load lazily.
+function markCardImage(children) {
+  const image = findFirst(children, "image");
+  if (!image) return;
+  image.data = { ...image.data, hProperties: { ...image.data?.hProperties, loading: "lazy" } };
+}
+
+function heroNode(block) {
+  const body = contentLines(block.intro);
+  const [imageLine] = imageParagraphs(body);
+  const textLines = body.filter((entry) => entry !== imageLine);
+  const imageMatch = imageLine ? /^!\[[^\]]*]\(([^\s)]+)/.exec(imageLine.text.trim()) : null;
+  const image = imageMatch
+    ? `<img src="${imageMatch[1]}" alt="" loading="eager" fetchpriority="high" decoding="async">`
+    : "";
+  const openHtml = `<section class="block-hero">${image}`
+    + `<div class="block-hero-content">${eyebrowHtml(block.intro)}`;
+  const open = { type: "html", value: openHtml };
+  const close = { type: "html", value: "</div></section>" };
+  return [open, ...linesToChildren(textLines), close];
+}
+
+function featureItemNode(item) {
+  const iconName = settingValue(item, "icon");
+  const open = { type: "html", value: `<article class="block-features-item">${iconName ? icon(iconName) : ""}` };
+  const close = { type: "html", value: "</article>" };
+  return [open, ...linesToChildren(contentLines(item)), close];
+}
+
+function cardItemNode(item) {
+  const children = linesToChildren(contentLines(item));
+  markCardLink(children);
+  markCardImage(children);
+  const open = { type: "html", value: '<article class="block-cards-item">' };
+  const close = { type: "html", value: "</article>" };
+  return [open, ...children, close];
+}
+
+function sectionNode(block) {
+  const dark = block.options.includes("dark");
+  const className = `block-${block.name}${dark ? " block-dark" : ""}`;
+  const openHtml = `<section class="${className}"><div class="block-inner">${eyebrowHtml(block.intro)}`;
+  const open = { type: "html", value: openHtml };
+  const close = { type: "html", value: "</div></section>" };
+  const itemNode = block.name === "features" ? featureItemNode : cardItemNode;
+  const items = block.items.flatMap((item) => itemNode(item));
+  return [open, ...linesToChildren(contentLines(block.intro)), ...items, close];
+}
+
+function columnsBlockNode(block) {
+  const columns = [block.intro, ...block.items].map((segment) => linesToChildren(contentLines(segment)));
+  return columnsNode(columns);
+}
+
+function segmentNode(segment) {
+  if (segment.type === "text") return linesToChildren(segment.lines);
+  if (segment.name === "hero") return heroNode(segment);
+  if (segment.name === "columns") return columnsBlockNode(segment);
+  return sectionNode(segment);
+}
+
+function renderBlocks(tree, file) {
+  const { segments, problems } = parseDocument(file.value);
+  // Every rule violation is reported at once: fixing them one at a time, rebuilding after
+  // each, was the slow part of authoring a page block.
+  if (problems.length) {
+    const path = file.path ?? "Markdown file";
+    const lines = problems.map((problem) => `${path}:${problem.line}: ${problem.message.replace(/^Line \d+: /, "")}`);
+    throw new Error(lines.join("\n"));
+  }
+  const children = [{ type: "html", value: COLUMN_STYLES }];
+  for (const segment of segments) children.push(...segmentNode(segment));
+  tree.children = children;
+  file.data.astro ??= {};
+  file.data.astro.frontmatter ??= {};
+  const blocks = segments.filter((segment) => segment.type === "block");
+  file.data.astro.frontmatter.hasHero = blocks.some((block) => block.name === "hero");
+  file.data.astro.frontmatter.hasFullBlock = blocks.some(
+    (block) => block.name === "hero" || (block.name === "features" && block.options.includes("dark"))
+  );
+  styleButtonLinks(tree);
+}
+
 export function validateColumns(markdown, path = "Markdown file") {
   const lines = String(markdown).replace(/\r\n/g, "\n").split("\n");
   const start = bodyStart(lines);
@@ -119,6 +242,7 @@ export function validateColumns(markdown, path = "Markdown file") {
 
 export default function remarkColumns() {
   return (tree, file) => {
+    if (/(^|\n):::(hero|features|cards)\b/.test(file.value ?? "")) return renderBlocks(tree, file);
     const lines = String(file.value ?? "").replace(/\r\n/g, "\n").split("\n");
     const start = bodyStart(lines);
     const body = lines.slice(start);

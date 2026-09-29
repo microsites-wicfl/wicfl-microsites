@@ -1,3 +1,32 @@
+## 2026-09-29 · W-121/W-128: render de hero, features y cards (prompt 026, etapa 2)
+
+**Quién:** Claude Code (ejecutor), relevando a Codex a la mitad de la etapa 2. Cowork ya había
+revisado el árbol de trabajo y dejado escrito en el prompt qué conservar y qué rehacer.
+
+`remark-columns.mjs` ya no re-parsea con regex propias: `packages/config-schema/blocks.mjs`
+exporta `parseDocument`, que ahora comparte validación y render en un solo recorrido. El error de
+build reporta todos los problemas del archivo, no solo el primero. Se arregló de raíz el bug de
+scroll horizontal del ancho completo (no era la barra de scroll de Windows como se pensaba, sino
+que `.page-content` no está centrado simétricamente; el cálculo del margen ahora reconstruye el
+desplazamiento real en vez de aproximarlo). El botón "Get a Quote" en modo compacto ya se ve
+también arriba de 64rem, cuando el header de Stuart entra en compacto por JS. Las tarjetas
+estiran solo su primera liga como destino de toda la card.
+
+`npm run check`, ambos builds y las medidas de `blocks-fixture` en 390/768/1280/1440 (sin scroll
+horizontal, un solo H1, AA del hero, cards clicables enteras) y de `icons-fixture` (20 íconos
+únicos) verdes. Los 20 SVG de `icons.mjs` se re-verificaron contra `lucide-static@1.48.0`:
+coinciden exactamente. Reporte completo: `reports/2026-09-29_026b_render-bloques.md`.
+
+**Encontrado, no bloqueante:** `astro dev` no sirve ninguna página que no sea la portada en este
+checkout de Windows (`[glob-loader] Duplicate id "index"` para cada archivo, ruta con espacios).
+`astro build` no lo sufre. Se verificó sirviendo el build con un servidor estático propio y
+Playwright (la extensión de Claude in Chrome no estaba conectada en esta sesión).
+
+**Estado:** commit pendiente de push a `origin/main` en el momento de escribir esta entrada; ver
+el reporte para el hash final y el resultado de Publish site Workers.
+
+---
+
 ## 2026-09-29 · W-132 cerrado: el logo ya se ve en el sitio publicado (`83778b5`)
 
 **Quién:** Codex (arreglo), cowork (revisión).

@@ -36,7 +36,7 @@ function hasLink(lines) {
   return lines.some((entry) => /(^|[^!])\[[^\]]+\]\([^)]*\)/.test(entry.text));
 }
 
-function leadingSettings(segment) {
+export function leadingSettings(segment) {
   const settings = [];
   for (const entry of segment.lines) {
     if (!entry.text.trim()) continue;
@@ -45,6 +45,13 @@ function leadingSettings(segment) {
     settings.push({ key: match[1], value: match[2], line: entry.line });
   }
   return settings;
+}
+
+// The renderer needs each segment's body without its own eyebrow/icon setting lines,
+// so it can turn the rest into markdown without printing "eyebrow: ..." as literal text.
+export function contentLines(segment) {
+  const settingLines = new Set(leadingSettings(segment).map((setting) => setting.line));
+  return segment.lines.filter((entry) => !settingLines.has(entry.line));
 }
 
 function settingsIn(segment) {
@@ -152,7 +159,9 @@ function validateOutsideH1(lines, problems) {
   }
 }
 
-function imageParagraphs(lines) {
+// Exported so the renderer can find the same image-only paragraph the validator already
+// confirmed exists, instead of re-detecting it with a second, possibly different rule.
+export function imageParagraphs(lines) {
   const paragraphs = [];
   let current = [];
   for (const entry of lines) {
@@ -173,13 +182,22 @@ function imageParagraphs(lines) {
     .filter((entry) => /^!\[[^\]]*\]\([^)]*\)$/.test(entry.text.trim()));
 }
 
-export function blockProblems(markdown) {
+// Shared by the CI check (blockProblems) and the Astro renderer, so both agree on exactly
+// where each block starts and ends instead of running two independent parsers that could drift.
+export function parseDocument(markdown) {
   const lines = String(markdown).replace(/\r\n/g, "\n").split("\n");
   const problems = [];
+  const segments = [];
   const outside = [];
+  let text = [];
   let block = null;
   let fence = false;
   let seenHero = false;
+
+  const flushText = () => {
+    if (text.length) segments.push({ type: "text", lines: text });
+    text = [];
+  };
 
   for (let index = bodyStart(lines); index < lines.length; index += 1) {
     const entry = { line: index + 1, text: lines[index] };
@@ -187,10 +205,12 @@ export function blockProblems(markdown) {
     if (isFence(entry.text)) {
       fence = !fence;
       if (block) block.current.lines.push(entry);
+      else text.push(entry);
       continue;
     }
     if (fence) {
       if (block) block.current.lines.push(entry);
+      else text.push(entry);
       continue;
     }
     const found = marker(entry.text);
@@ -199,6 +219,8 @@ export function blockProblems(markdown) {
       if (!block) addProblem(problems, entry.line, "::: appears outside a block.");
       else {
         validateBlock(block, problems);
+        const { current, ...closedBlock } = block;
+        segments.push({ type: "block", ...closedBlock });
         block = null;
       }
       continue;
@@ -240,14 +262,23 @@ export function blockProblems(markdown) {
         }
         seenHero = true;
       }
+      flushText();
       const intro = { line: entry.line, lines: [] };
-      block = { name, line: entry.line, intro, items: [], current: intro };
+      block = { name, options, line: entry.line, intro, items: [], current: intro };
       continue;
     }
     if (block) block.current.lines.push(entry);
-    else outside.push(entry);
+    else {
+      text.push(entry);
+      outside.push(entry);
+    }
   }
+  flushText();
   if (block) addProblem(problems, block.line, `a :::${block.name} block is not closed.`);
   validateOutsideH1(outside, problems);
-  return problems;
+  return { segments, problems };
+}
+
+export function blockProblems(markdown) {
+  return parseDocument(markdown).problems;
 }

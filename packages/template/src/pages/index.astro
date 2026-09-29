@@ -8,7 +8,9 @@ import { site, hreflangAlternatesFor, localeOfPageId } from "../lib/site-data.mj
 // [...slug].astro (e.g. "/es/"), never a duplicate of this page.
 const page = await getEntry("pages", "index");
 if (!page) throw new Error("Missing required content page: index.md");
-const { Content } = await render(page);
+const { Content, remarkPluginFrontmatter } = await render(page);
+const hasHero = remarkPluginFrontmatter.hasHero === true;
+const hasFullBlock = remarkPluginFrontmatter.hasFullBlock === true;
 const allPages = await getCollection("pages");
 const hreflangAlternates = hreflangAlternatesFor(page.id, allPages);
 ---
@@ -21,8 +23,8 @@ const hreflangAlternates = hreflangAlternatesFor(page.id, allPages);
   lang={localeOfPageId(page.id)}
   hreflangAlternates={hreflangAlternates}
 >
-  <article class="page-content">
-    <h1>{page.data.title}</h1>
+  <article class:list={["page-content", { "has-full-block": hasFullBlock }]}>
+    {!hasHero && <h1>{page.data.title}</h1>}
     <Content />
   </article>
 </BaseLayout>
