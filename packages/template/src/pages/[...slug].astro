@@ -2,7 +2,7 @@
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ContactForm from "../components/ContactForm.astro";
-import { routeForPageId, localeOfPageId, hreflangAlternatesFor, site } from "../lib/site-data.mjs";
+import { routeForPageId, localeOfPageId, hreflangAlternatesFor, faqPageJsonLd, site } from "../lib/site-data.mjs";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages");
@@ -18,6 +18,7 @@ const { page, hreflangAlternates } = Astro.props;
 const { Content, remarkPluginFrontmatter } = await render(page);
 const hasHero = remarkPluginFrontmatter.hasHero === true;
 const hasFullBlock = remarkPluginFrontmatter.hasFullBlock === true;
+const faqJsonLd = faqPageJsonLd(remarkPluginFrontmatter.faq);
 ---
 
 <BaseLayout
@@ -27,6 +28,7 @@ const hasFullBlock = remarkPluginFrontmatter.hasFullBlock === true;
   path={routeForPageId(page.id)}
   lang={localeOfPageId(page.id)}
   hreflangAlternates={hreflangAlternates}
+  faqJsonLd={faqJsonLd}
 >
   <article class:list={["page-content", { "has-full-block": hasFullBlock }]}>
     {!hasHero && <h1>{page.data.title}</h1>}

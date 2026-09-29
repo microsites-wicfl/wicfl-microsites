@@ -1,11 +1,6 @@
-import { readFileSync } from "node:fs";
+import { loadSiteConfig } from "./site-config.mjs";
 
-const configPath = process.env.WICFL_SITE_CONFIG;
-if (!configPath) {
-  throw new Error("Missing WICFL_SITE_CONFIG. Run npm run build:site -- <site-directory>.");
-}
-
-export const site = JSON.parse(readFileSync(configPath, "utf8"));
+export const site = loadSiteConfig();
 
 // W-022: bilingual routing. Only non-primary locales get a URL prefix, so a monolingual site
 // (both current pilots: locale.alternates is always []) keeps exactly the routes it has today,
@@ -41,6 +36,22 @@ function bareName(id) {
   const [first, ...rest] = id.split("/");
   if (!isAlternateLocale(first)) return id;
   return rest.length > 0 ? rest.join("/") : "index";
+}
+
+// FAQPage JSON-LD (W-125) from the faq entries a page's :::faq blocks collect in
+// remarkPluginFrontmatter.faq (see remark-columns.mjs). null when the page has none, so the
+// caller can skip the <script> tag entirely instead of emitting an empty FAQPage.
+export function faqPageJsonLd(faq) {
+  if (!faq || faq.length === 0) return null;
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map(({ question, answer }) => ({
+      "@type": "Question",
+      name: question,
+      acceptedAnswer: { "@type": "Answer", text: answer }
+    }))
+  }).replace(/</g, "\\u003c");
 }
 
 // hreflang alternates for one page, computed against the site's full page collection. Returns

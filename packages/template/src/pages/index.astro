@@ -1,7 +1,7 @@
 ---
 import { getEntry, getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { site, hreflangAlternatesFor, localeOfPageId } from "../lib/site-data.mjs";
+import { site, hreflangAlternatesFor, localeOfPageId, faqPageJsonLd } from "../lib/site-data.mjs";
 
 // W-022: the primary locale's content always lives flat at content/index.md (id "index"),
 // bilingual or not, so "/" always serves it. Alternate locales get their own prefixed home at
@@ -11,6 +11,7 @@ if (!page) throw new Error("Missing required content page: index.md");
 const { Content, remarkPluginFrontmatter } = await render(page);
 const hasHero = remarkPluginFrontmatter.hasHero === true;
 const hasFullBlock = remarkPluginFrontmatter.hasFullBlock === true;
+const faqJsonLd = faqPageJsonLd(remarkPluginFrontmatter.faq);
 const allPages = await getCollection("pages");
 const hreflangAlternates = hreflangAlternatesFor(page.id, allPages);
 ---
@@ -22,6 +23,7 @@ const hreflangAlternates = hreflangAlternatesFor(page.id, allPages);
   path="/"
   lang={localeOfPageId(page.id)}
   hreflangAlternates={hreflangAlternates}
+  faqJsonLd={faqJsonLd}
 >
   <article class:list={["page-content", { "has-full-block": hasFullBlock }]}>
     {!hasHero && <h1>{page.data.title}</h1>}

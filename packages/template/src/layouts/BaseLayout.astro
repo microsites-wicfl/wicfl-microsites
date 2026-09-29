@@ -11,13 +11,22 @@ interface Props {
   path: string;
   lang?: string;
   hreflangAlternates?: HreflangAlternate[];
+  faqJsonLd?: string | null;
 }
 
 import { getCollection } from "astro:content";
 import { routeForPageId, site } from "../lib/site-data.mjs";
 import { FONT_FAMILIES, textOnPrimary } from "../../../config-schema/theme.mjs";
 
-const { title, description = site.seo.description, pageType, path, lang = site.locale.primary, hreflangAlternates = [] } = Astro.props;
+const {
+  title,
+  description = site.seo.description,
+  pageType,
+  path,
+  lang = site.locale.primary,
+  hreflangAlternates = [],
+  faqJsonLd = null,
+} = Astro.props;
 const address = site.contact.address;
 const audience = site.niche?.audience;
 const product = site.niche?.product;
@@ -88,6 +97,7 @@ const headingFontPackage = headingFontDefinition.package;
     {headingFontPackage && <link rel="preload" href={`/fonts/${headingFontPackage}-latin-700-normal.woff2`} as="font" type="font/woff2" crossorigin="anonymous" />}
     {themeCss && <style is:inline set:html={themeCss}></style>}
     <script is:inline type="application/ld+json" set:html={structuredData}></script>
+    {faqJsonLd && <script is:inline type="application/ld+json" set:html={faqJsonLd}></script>}
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -307,7 +317,8 @@ const headingFontPackage = headingFontDefinition.package;
   .footer-bottom > p, .footer-legal { font-size: .85rem; color: rgba(238, 241, 245, .78); }
   .footer-legal { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); align-items: baseline; }
   .block-hero,
-  .block-features.block-dark {
+  .block-features.block-dark,
+  .block-cta {
     /* margin-left: calc(50% - 50dvw) only breaks out flush when its containing block sits
        exactly centered in the viewport. .page-content is not: .page-home adds a left-only
        padding for the accent bar, and its own max-width can be narrower than .shell's, so a
@@ -323,20 +334,29 @@ const headingFontPackage = headingFontDefinition.package;
     color: #fff;
     overflow: hidden;
   }
-  .block-hero {
+  .block-hero,
+  .block-cta {
     background: var(--ink);
     min-height: 30rem;
     display: grid;
     align-items: center;
   }
-  .block-hero > img {
+  /* Specificity is resolved per declaration, not per rule: main .page-content img's
+     height: auto (one class, two type selectors) still beat a plain .block-bleed-media
+     (one class) for the height property alone, even though position/inset came through
+     fine. :is(.block-hero, .block-cta) .block-bleed-media counts two classes on every
+     branch, which outranks it. Without this, the photo fell back to its intrinsic aspect
+     ratio and, at widths where width × ratio came in under the section's min-height, left
+     a bare strip at the bottom (seen at 768px). */
+  :is(.block-hero, .block-cta) .block-bleed-media {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  .block-hero::after {
+  .block-hero::after,
+  .block-cta:not(.block-cta-plain)::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -352,7 +372,9 @@ const headingFontPackage = headingFontDefinition.package;
   .block-hero p,
   .block-dark h2,
   .block-dark h3,
-  .block-dark p {
+  .block-dark p,
+  .block-cta h2,
+  .block-cta p {
     color: #fff;
   }
   .block-eyebrow {
@@ -473,29 +495,159 @@ const headingFontPackage = headingFontDefinition.package;
     position: absolute;
     inset: 0;
   }
-  /* The hero always is the page's first content (the grammar rejects anything else), so it
-     always meets the header with no white gap: both main's own top padding and the hero's
-     own top margin have to go, or the second one alone still leaves a gap. */
-  main:has(> .page-content > .block-hero) {
+  .block-cta-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s3);
+    max-width: 68rem;
+    margin: auto;
+    width: 100%;
+  }
+  .block-cta-text {
+    flex: 1 1 24rem;
+    min-width: 0;
+  }
+  .block-cta-actions {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .block-cta-fineprint {
+    margin-top: var(--s1);
+    font-size: .85rem;
+    opacity: .85;
+  }
+  /* Without a photo, the band would sit at the exact same color as the footer beneath it
+     (both var(--ink)) and the two would read as one shape. A slightly lighter tone plus a
+     hairline border keeps it a distinct block even when it lands right before the footer. */
+  .block-cta-plain {
+    background: color-mix(in srgb, var(--ink) 88%, white 6%);
+    border-block: 1px solid color-mix(in srgb, #fff 14%, transparent);
+  }
+  .block-faq {
+    margin-block: var(--s5);
+  }
+  .block-faq-inner {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 var(--s4);
+    max-width: 68rem;
+    margin: auto;
+  }
+  .block-faq-intro {
+    margin-bottom: var(--s3);
+  }
+  .block-faq-heading-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s2);
+  }
+  .block-faq-heading-row h2 {
+    margin: 0;
+  }
+  .block-faq-viewall {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .block-faq-item {
+    border-bottom: 1px solid var(--line);
+  }
+  .block-faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--s2);
+    padding-block: var(--s2);
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .block-faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  /* The "+"/"−" glyph is CSS-only: the [open] attribute details gets when expanded is
+     enough to flip it, no JS needed. */
+  .block-faq-item summary::after {
+    content: "+";
+    flex: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--site-accent);
+  }
+  .block-faq-item[open] summary::after {
+    content: "\2212";
+  }
+  .block-faq-item p {
+    margin: 0 0 var(--s2);
+  }
+  .block-areas {
+    margin-block: var(--s5);
+    padding: var(--s4);
+    background: var(--variant-surface);
+  }
+  .block-areas-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 var(--s3);
+    max-width: 68rem;
+    margin: auto;
+  }
+  /* The optional eyebrow/H2 always take their own row above the places, instead of
+     wrapping inline with them as just another flex item. */
+  .block-areas-inner .block-intro {
+    flex: 1 0 100%;
+    margin-bottom: var(--s2);
+  }
+  .block-areas-item {
+    display: inline-flex;
+    align-items: center;
+    gap: .4em;
+    padding: var(--s1) var(--s2);
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+  /* :first-of-type, not :first-child: block-intro (a <div>) can sit before the first
+     .block-areas-item <span>, same lesson as the features divider in the 027 pass. */
+  .block-areas-item:not(:first-of-type) {
+    border-left: 1px solid var(--line);
+  }
+  .block-areas-item .block-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-bottom: 0;
+    color: var(--site-secondary);
+  }
+  /* Hero always is the page's first content (the grammar rejects anything else); cta is
+     not required to be, so its top-flush treatment only applies when it genuinely is. */
+  main:has(> .page-content > .block-hero),
+  main:has(> .page-content > section.block-cta:first-of-type) {
     padding-top: 0;
   }
-  .block-hero {
+  .block-hero,
+  section.block-cta:first-of-type {
     margin-top: 0;
   }
   /* When the page's last thing is a full-bleed block, it should meet the footer with no
      gap either: that takes main's bottom padding, the block's own bottom margin, and the
      footer's own top margin. :last-child is true structural position, so real trailing
      content (another paragraph, the contact form) keeps the normal spacing. */
-  main:has(> .page-content > section.block-hero:last-child),
-  main:has(> .page-content > section.block-features.block-dark:last-child) {
+  main:has(> .page-content > :is(section.block-hero, section.block-features.block-dark, section.block-cta):last-child) {
     padding-bottom: 0;
   }
-  section.block-hero:last-child,
-  section.block-features.block-dark:last-child {
+  :is(section.block-hero, section.block-features.block-dark, section.block-cta):last-child {
     margin-bottom: 0;
   }
-  main:has(> .page-content > section.block-hero:last-child) ~ .site-footer,
-  main:has(> .page-content > section.block-features.block-dark:last-child) ~ .site-footer {
+  main:has(> .page-content > :is(section.block-hero, section.block-features.block-dark, section.block-cta):last-child)
+    ~ .site-footer {
     margin-top: 0;
   }
 
@@ -553,15 +705,33 @@ const headingFontPackage = headingFontDefinition.package;
     main { padding-block: var(--s4); }
     .page-home .page-content { padding-left: var(--s3); --content-inset: var(--s3); }
     .block-hero,
-    .block-features.block-dark {
+    .block-features.block-dark,
+    .block-cta {
       padding-inline: 1.25rem;
     }
-    .block-hero::after {
+    .block-hero::after,
+    .block-cta:not(.block-cta-plain)::after {
       background: color-mix(in srgb, var(--ink) 84%, transparent);
     }
     .block-features .block-inner,
     .block-cards .block-inner {
       grid-template-columns: 1fr;
+    }
+    .block-faq-inner {
+      grid-template-columns: 1fr;
+    }
+    .block-cta-content {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .block-areas-inner {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      justify-items: center;
+      gap: var(--s2);
+    }
+    .block-areas-item:not(:first-of-type) {
+      border-left: none;
     }
   }
   @media (min-width: 42.001rem) and (max-width: 62rem) {

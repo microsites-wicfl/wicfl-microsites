@@ -1,3 +1,34 @@
+## 2026-09-29 · W-121/W-125: bloques faq, cta y areas (prompt 028)
+
+**Quién:** Claude Code (ejecutor).
+
+Los tres bloques que faltaban del diseño de Pavel. `:::faq` es un acordeón de dos columnas
+con `<details>`/`<summary>` nativos (sin JS) cuyo JSON-LD `FAQPage` se arma en el mismo
+recorrido que el HTML visible, así que nunca pueden discrepar; verificado carácter a carácter
+contra `blocks-fixture` (6 preguntas, 6 entradas). `:::cta` es la banda de cotización, a todo
+lo ancho, con y sin foto (la línea chica bajo el botón sale de una regla exacta y documentada
+en `blocks.mjs`, no de un conteo de caracteres). `:::areas` saca la lista de lugares del
+`geo.serviceArea` del config (nunca de contenido de autor) y no pasa por el parser de
+Markdown, así que no puede volverse una liga por accidente.
+
+De paso: la franja oscura del hero a 768px que quedó pendiente del 027 resultó ser
+especificidad de CSS (`main .page-content img { height: auto }` le ganaba a la regla del hero
+en esa propiedad específica, aunque no en `position`); y el guardado en segundo plano del
+formulario de contacto ya espera 1s sin teclear antes de guardar.
+
+**Hallazgo importante para cualquier prompt futuro que toque el render:** el build de Astro
+tiene una caché de content-layer que sirve el render viejo cuando se edita
+`blocks.mjs`/`remark-columns.mjs` sin tocar el `.md` que los usa. `scripts/build-site.mjs` ya
+lleva `--force` para evitarlo.
+
+`npm run check` (23 pruebas) y ambos builds verdes. Reporte completo:
+`reports/2026-09-29_028_bloques-faq-cta-areas.md`.
+
+**Estado:** commit pendiente de push en el momento de escribir esta entrada; ver el reporte
+para el hash final y el resultado de Publish site Workers.
+
+---
+
 ## 2026-09-29 · W-121/W-128: pulido visual de los bloques (prompt 027)
 
 **Quién:** Claude Code (ejecutor).

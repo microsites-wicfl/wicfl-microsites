@@ -70,7 +70,19 @@ if (validation.status !== 0) {
   process.exit(validation.status ?? 1);
 }
 
-const build = spawnSync(process.execPath, [resolve(repositoryRoot, "node_modules/astro/astro.js"), "build", "--root", "packages/template", "--outDir", `../../dist/sites/${siteDirectory}`], {
+// --force: Astro's content-layer cache is keyed by each markdown file's own digest, not by
+// the remark plugin's code. Editing packages/config-schema/blocks.mjs or
+// packages/template/src/lib/remark-columns.mjs without touching the markdown that uses them
+// left a build silently serving a stale render from before the edit. One-shot builds here
+// gain nothing from that cache anyway, so it is never worth the risk.
+const buildArgs = [
+  resolve(repositoryRoot, "node_modules/astro/astro.js"),
+  "build",
+  "--root", "packages/template",
+  "--outDir", `../../dist/sites/${siteDirectory}`,
+  "--force"
+];
+const build = spawnSync(process.execPath, buildArgs, {
   cwd: repositoryRoot,
   encoding: "utf8",
   env: { ...process.env, WICFL_SITE_CONFIG: configPath, WICFL_SITE_CONTENT: contentPath }

@@ -15,7 +15,10 @@
     "county": "Martin",
     "state": "FL",
     "serviceArea": [
-      "Stuart"
+      "Stuart",
+      "Port Salerno",
+      "Palm City",
+      "Hobe Sound"
     ]
   },
   "locale": {

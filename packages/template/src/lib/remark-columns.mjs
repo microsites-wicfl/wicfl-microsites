@@ -2,8 +2,17 @@ import { fromMarkdown } from "mdast-util-from-markdown";
 import { gfm } from "micromark-extension-gfm";
 import { gfmFromMarkdown } from "mdast-util-gfm";
 import remarkSmartypants from "remark-smartypants";
-import { parseDocument, leadingSettings, contentLines, imageParagraphs } from "../../../config-schema/blocks.mjs";
+import {
+  parseDocument,
+  leadingSettings,
+  contentLines,
+  imageParagraphs,
+  buttonParagraphs,
+  linkParagraphs,
+  ctaFinePrint,
+} from "../../../config-schema/blocks.mjs";
 import { ICONS } from "../../../config-schema/icons.mjs";
+import { loadSiteConfig } from "./site-config.mjs";
 
 const MARKERS = new Set([":::columns", ":::next", ":::"]);
 const COLUMN_STYLES = `<style>
@@ -164,8 +173,9 @@ function heroNode(block) {
   const body = contentLines(block.intro);
   const { imageLine, textLines } = splitLeadImage(body);
   const imageMatch = imageLine ? /^!\[[^\]]*]\(([^\s)]+)/.exec(imageLine.text.trim()) : null;
-  const image = imageMatch
-    ? `<img src="${escapeHtml(imageMatch[1])}" alt="" loading="eager" fetchpriority="high" decoding="async">`
+  const src = imageMatch ? escapeHtml(imageMatch[1]) : null;
+  const image = src
+    ? `<img class="block-bleed-media" src="${src}" alt="" loading="eager" fetchpriority="high" decoding="async">`
     : "";
   const openHtml = `<section class="block-hero">${image}`
     + `<div class="block-hero-content">${eyebrowHtml(block.intro)}`;
@@ -220,6 +230,123 @@ function sectionNode(block) {
   return [open, ...introNode(block.intro), ...items, close];
 }
 
+function textValue(node) {
+  if (node.type === "text" || node.type === "inlineCode") return node.value;
+  if (Array.isArray(node.children)) return node.children.map(textValue).join("");
+  return "";
+}
+
+// Plain text for the FAQPage JSON-LD: no Markdown, links collapsed to their own text.
+function plainText(nodes) {
+  return nodes.map(textValue).join(" ").replace(/\s+/g, " ").trim();
+}
+
+// The question heading and the answer content, computed once and shared by the rendered
+// <details> markup and the FAQPage JSON-LD entry, so the two can never drift apart.
+function faqItemParts(item) {
+  const lines = contentLines(item);
+  const isQuestionLine = (entry) => /^###(?!#)\s+/.test(entry.text.trimStart());
+  const [questionHeading] = linesToChildren(lines.filter(isQuestionLine));
+  const answerChildren = linesToChildren(lines.filter((entry) => !isQuestionLine(entry)));
+  return { questionChildren: questionHeading?.children ?? [], answerChildren };
+}
+
+function faqItemNode(item) {
+  const { questionChildren, answerChildren } = faqItemParts(item);
+  const open = { type: "html", value: '<details class="block-faq-item">' };
+  const summaryOpen = { type: "html", value: "<summary>" };
+  const summaryClose = { type: "html", value: "</summary>" };
+  const close = { type: "html", value: "</details>" };
+  return [open, summaryOpen, ...questionChildren, summaryClose, ...answerChildren, close];
+}
+
+function faqItemEntry(item) {
+  const { questionChildren, answerChildren } = faqItemParts(item);
+  return { question: plainText(questionChildren), answer: plainText(answerChildren) };
+}
+
+function markFaqViewAll(children) {
+  const paragraph = children.find((node) => node.type === "paragraph");
+  if (!paragraph) return;
+  const hProperties = { ...paragraph.data?.hProperties, className: ["block-faq-viewall"] };
+  paragraph.data = { ...paragraph.data, hProperties };
+}
+
+// The FAQ intro gets its own wrapper (not the shared introNode) because its H2 and its
+// optional "View all questions" link sit side by side, not stacked like every other block.
+function faqIntroNode(segment) {
+  const eyebrow = eyebrowHtml(segment);
+  const lines = contentLines(segment);
+  if (!eyebrow && lines.length === 0) return [];
+  const isHeadingLine = (entry) => /^##(?!#)\s+/.test(entry.text.trimStart());
+  const headingLines = lines.filter(isHeadingLine);
+  const [linkLine] = linkParagraphs(lines);
+  const restLines = lines.filter((entry) => entry !== linkLine && !isHeadingLine(entry));
+  const headingChildren = linesToChildren(headingLines);
+  const linkChildren = linkLine ? linesToChildren([linkLine]) : [];
+  markFaqViewAll(linkChildren);
+  const open = { type: "html", value: `<div class="block-intro block-faq-intro">${eyebrow}` };
+  const rowOpen = { type: "html", value: '<div class="block-faq-heading-row">' };
+  const rowClose = { type: "html", value: "</div>" };
+  const close = { type: "html", value: "</div>" };
+  return [open, rowOpen, ...headingChildren, ...linkChildren, rowClose, ...linesToChildren(restLines), close];
+}
+
+function faqNode(block) {
+  const open = { type: "html", value: '<section class="block-faq"><div class="block-faq-inner">' };
+  const close = { type: "html", value: "</div></section>" };
+  const items = block.items.flatMap((item) => faqItemNode(item));
+  return [open, ...faqIntroNode(block.intro), ...items, close];
+}
+
+function markFinePrint(children) {
+  const paragraph = children.find((node) => node.type === "paragraph");
+  if (!paragraph) return;
+  const hProperties = { ...paragraph.data?.hProperties, className: ["block-cta-fineprint"] };
+  paragraph.data = { ...paragraph.data, hProperties };
+}
+
+function ctaNode(block) {
+  const content = contentLines(block.intro);
+  const { imageLine, textLines } = splitLeadImage(content);
+  const [buttonLine] = buttonParagraphs(textLines);
+  const finePrintLine = ctaFinePrint(textLines);
+  const excluded = new Set([buttonLine, finePrintLine].filter(Boolean));
+  const bodyLines = textLines.filter((entry) => !excluded.has(entry));
+  const imageMatch = imageLine ? /^!\[[^\]]*]\(([^\s)]+)/.exec(imageLine.text.trim()) : null;
+  const hasImage = Boolean(imageMatch);
+  const ctaSrc = hasImage ? escapeHtml(imageMatch[1]) : null;
+  const image = ctaSrc ? `<img class="block-bleed-media" src="${ctaSrc}" alt="" loading="lazy">` : "";
+  const sectionClass = `block-cta${hasImage ? "" : " block-cta-plain"}`;
+  const open = { type: "html", value: `<section class="${sectionClass}">${image}<div class="block-cta-content">` };
+  const textOpen = { type: "html", value: `<div class="block-cta-text">${eyebrowHtml(block.intro)}` };
+  const textClose = { type: "html", value: "</div>" };
+  const actionsOpen = { type: "html", value: '<div class="block-cta-actions">' };
+  const actionsClose = { type: "html", value: "</div>" };
+  const close = { type: "html", value: "</div></section>" };
+  const bodyChildren = linesToChildren(bodyLines);
+  const buttonChildren = buttonLine ? linesToChildren([buttonLine]) : [];
+  const finePrintChildren = finePrintLine ? linesToChildren([finePrintLine]) : [];
+  markFinePrint(finePrintChildren);
+  return [
+    open,
+    textOpen, ...bodyChildren, textClose,
+    actionsOpen, ...buttonChildren, ...finePrintChildren, actionsClose,
+    close,
+  ];
+}
+
+function areasNode(block) {
+  const { geo } = loadSiteConfig();
+  const items = geo.serviceArea.map((place) => ({
+    type: "html",
+    value: `<span class="block-areas-item">${icon("map-pin")}${escapeHtml(place)}</span>`,
+  }));
+  const open = { type: "html", value: '<section class="block-areas"><div class="block-areas-inner">' };
+  const close = { type: "html", value: "</div></section>" };
+  return [open, ...introNode(block.intro), ...items, close];
+}
+
 function columnsBlockNode(block) {
   const columns = [block.intro, ...block.items].map((segment) => linesToChildren(contentLines(segment)));
   return columnsNode(columns);
@@ -229,7 +356,14 @@ function segmentNode(segment) {
   if (segment.type === "text") return linesToChildren(segment.lines);
   if (segment.name === "hero") return heroNode(segment);
   if (segment.name === "columns") return columnsBlockNode(segment);
+  if (segment.name === "faq") return faqNode(segment);
+  if (segment.name === "cta") return ctaNode(segment);
+  if (segment.name === "areas") return areasNode(segment);
   return sectionNode(segment);
+}
+
+function isFullBlock(block) {
+  return block.name === "hero" || block.name === "cta" || (block.name === "features" && block.options.includes("dark"));
 }
 
 function renderBlocks(tree, file) {
@@ -248,9 +382,13 @@ function renderBlocks(tree, file) {
   file.data.astro.frontmatter ??= {};
   const blocks = segments.filter((segment) => segment.type === "block");
   file.data.astro.frontmatter.hasHero = blocks.some((block) => block.name === "hero");
-  file.data.astro.frontmatter.hasFullBlock = blocks.some(
-    (block) => block.name === "hero" || (block.name === "features" && block.options.includes("dark"))
-  );
+  file.data.astro.frontmatter.hasFullBlock = blocks.some(isFullBlock);
+  // Collected in document order across every :::faq on the page (there can be more than
+  // one), from the exact same nodes the <details> markup renders, so the FAQPage JSON-LD
+  // always matches what a visitor actually sees.
+  file.data.astro.frontmatter.faq = blocks
+    .filter((block) => block.name === "faq")
+    .flatMap((block) => block.items.map(faqItemEntry));
   styleButtonLinks(tree);
 }
 
@@ -279,7 +417,7 @@ export function validateColumns(markdown, path = "Markdown file") {
 
 export default function remarkColumns() {
   return (tree, file) => {
-    if (/(^|\n):::(hero|features|cards)\b/.test(file.value ?? "")) return renderBlocks(tree, file);
+    if (/(^|\n):::(hero|features|cards|faq|cta|areas)\b/.test(file.value ?? "")) return renderBlocks(tree, file);
     const lines = String(file.value ?? "").replace(/\r\n/g, "\n").split("\n");
     const start = bodyStart(lines);
     const body = lines.slice(start);

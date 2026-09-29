@@ -6,7 +6,10 @@ export const BLOCKS = {
   columns: { options: [], separator: "next" },
   hero: { options: [], separator: null },
   features: { options: ["dark"], separator: "item" },
-  cards: { options: [], separator: "item" }
+  cards: { options: [], separator: "item" },
+  faq: { options: [], separator: "item" },
+  cta: { options: [], separator: null },
+  areas: { options: [], separator: null }
 };
 
 function addProblem(problems, line, message) {
@@ -71,7 +74,7 @@ function validateSettings(block, problems) {
         continue;
       }
       const allowed = setting.key === "eyebrow"
-        ? segment === block.intro && ["hero", "features", "cards"].includes(block.name)
+        ? segment === block.intro && ["hero", "features", "cards", "faq", "cta", "areas"].includes(block.name)
         : block.name === "features" && segment !== block.intro;
       if (!allowed) {
         addProblem(problems, setting.line, `${setting.key}: does not apply in this ${block.name} content.`);
@@ -101,17 +104,17 @@ function validateHero(block, problems) {
   }
 }
 
-function validateItemCount(block, problems) {
-  // Fixed item counts prevent incomplete or visually unbalanced section layouts.
+function validateItemCount(block, problems, min, max) {
+  // Item counts are bounded so layouts stay a known, visually balanced shape.
   const count = block.items.length;
-  if (count < 2 || count > 4) {
-    addProblem(problems, block.line, `a :::${block.name} block needs 2 to 4 items, found ${count}.`);
+  if (count < min || count > max) {
+    addProblem(problems, block.line, `a :::${block.name} block needs ${min} to ${max} items, found ${count}.`);
   }
 }
 
 function validateFeatures(block, problems) {
   // Feature icons are a closed vocabulary shared with Studio's future live preview.
-  validateItemCount(block, problems);
+  validateItemCount(block, problems, 2, 4);
   for (const item of block.items) {
     const icon = leadingSettings(item).find((setting) => setting.key === "icon");
     if (!icon) {
@@ -127,7 +130,7 @@ function validateFeatures(block, problems) {
 
 function validateCards(block, problems) {
   // Cards need a predictable image, heading, and destination for a clickable whole card.
-  validateItemCount(block, problems);
+  validateItemCount(block, problems, 2, 4);
   for (const item of block.items) {
     const imageLines = imageParagraphs(item.lines);
     if (imageLines.length !== 1) {
@@ -142,12 +145,56 @@ function validateCards(block, problems) {
   }
 }
 
+function validateFaq(block, problems) {
+  // 12 is the cap Pavel asked for: past that, the two-column accordion stops reading as a
+  // short FAQ and needs its own page instead.
+  validateItemCount(block, problems, 2, 12);
+  for (const item of block.items) {
+    if (headings(item.lines, 3).length !== 1) {
+      addProblem(problems, item.line, "each :::faq item needs one ### question.");
+    }
+    const answerLines = item.lines.filter((entry) => !/^###(?!#)\s+/.test(entry.text.trimStart()));
+    if (!answerLines.some((entry) => entry.text.trim())) {
+      addProblem(problems, item.line, "each :::faq item needs at least one paragraph answer.");
+    }
+  }
+}
+
+function validateCta(block, problems) {
+  const content = block.intro.lines;
+  // The H2 and the button are the two things the band cannot render without.
+  if (headings(content, 2).length !== 1) {
+    addProblem(problems, block.line, "a :::cta block needs exactly one ## H2.");
+  }
+  if (imageParagraphs(content).length > 1) {
+    addProblem(problems, block.line, "a :::cta block allows at most one background image.");
+  }
+  if (buttonParagraphs(content).length !== 1) {
+    addProblem(problems, block.line, "a :::cta block needs exactly one button (a bold link on its own line).");
+  }
+}
+
+function validateAreas(block, problems) {
+  // The place list always comes from the site config, never from what someone typed here,
+  // so anything beyond an optional eyebrow and H2 is rejected before it looks like content
+  // the block will actually use.
+  const remaining = contentLines(block.intro).filter((entry) => entry.text.trim());
+  const headingLine = remaining.find((entry) => /^##(?!#)\s+/.test(entry.text.trimStart()));
+  for (const entry of remaining) {
+    if (entry === headingLine) continue;
+    addProblem(problems, entry.line, "the list of places comes from Site settings → Service area.");
+  }
+}
+
 function validateBlock(block, problems) {
   validateSettings(block, problems);
   if (block.name === "columns") validateColumns(block, problems);
   if (block.name === "hero") validateHero(block, problems);
   if (block.name === "features") validateFeatures(block, problems);
   if (block.name === "cards") validateCards(block, problems);
+  if (block.name === "faq") validateFaq(block, problems);
+  if (block.name === "cta") validateCta(block, problems);
+  if (block.name === "areas") validateAreas(block, problems);
 }
 
 function validateOutsideH1(lines, problems) {
@@ -159,27 +206,64 @@ function validateOutsideH1(lines, problems) {
   }
 }
 
-// Exported so the renderer can find the same image-only paragraph the validator already
-// confirmed exists, instead of re-detecting it with a second, possibly different rule.
-export function imageParagraphs(lines) {
-  const paragraphs = [];
+// Groups lines into Markdown paragraphs: settings, headings and blank lines all break a
+// group. Shared by every "is this a lone image / button / link paragraph?" check below, so
+// they all agree on where one paragraph ends and the next begins.
+function paragraphGroups(lines) {
+  const groups = [];
   let current = [];
   for (const entry of lines) {
     const text = entry.text.trim();
     if (/^(eyebrow|icon):\s*/.test(text) || /^#{1,6}\s+/.test(text)) {
-      if (current.length) paragraphs.push(current);
+      if (current.length) groups.push(current);
       current = [];
     } else if (text) current.push(entry);
     else if (current.length) {
-      paragraphs.push(current);
+      groups.push(current);
       current = [];
     }
   }
-  if (current.length) paragraphs.push(current);
-  return paragraphs
-    .filter((paragraph) => paragraph.length === 1)
+  if (current.length) groups.push(current);
+  return groups;
+}
+
+function loneParagraphs(lines, pattern) {
+  return paragraphGroups(lines)
+    .filter((group) => group.length === 1)
     .flat()
-    .filter((entry) => /^!\[[^\]]*\]\([^)]*\)$/.test(entry.text.trim()));
+    .filter((entry) => pattern.test(entry.text.trim()));
+}
+
+// Exported so the renderer can find the same image-only paragraph the validator already
+// confirmed exists, instead of re-detecting it with a second, possibly different rule.
+export function imageParagraphs(lines) {
+  return loneParagraphs(lines, /^!\[[^\]]*\]\([^)]*\)$/);
+}
+
+const BUTTON_LINE = /^\*\*\[[^\]]+\]\([^)]*\)\*\*$/;
+
+// A paragraph that is only a bold link is the button the renderer turns into a styled
+// button-link (see styleButtonLinks); cta needs to find that same paragraph to validate it
+// and, later, to place it apart from the rest of the text.
+export function buttonParagraphs(lines) {
+  return loneParagraphs(lines, BUTTON_LINE);
+}
+
+// A paragraph that is only a plain (non-bold) link, as opposed to a button paragraph.
+// :::faq's optional "View all questions" link is one of these.
+export function linkParagraphs(lines) {
+  return loneParagraphs(lines, /^\[[^\]]+\]\([^)]*\)$/);
+}
+
+// The cta's small print under the button: the last paragraph in its content, only if it
+// comes after the button and is short enough to be one line on its own. Exported so the
+// renderer classifies it exactly the way this rule defines it, nowhere else.
+export function ctaFinePrint(lines) {
+  const groups = paragraphGroups(lines);
+  const buttonIndex = groups.findIndex((group) => group.length === 1 && BUTTON_LINE.test(group[0].text.trim()));
+  if (buttonIndex === -1 || buttonIndex === groups.length - 1) return null;
+  const last = groups.at(-1);
+  return last.length === 1 ? last[0] : null;
 }
 
 // Shared by the CI check (blockProblems) and the Astro renderer, so both agree on exactly
