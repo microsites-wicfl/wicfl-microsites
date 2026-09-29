@@ -1,3 +1,25 @@
+## 2026-09-29 · W-132 cerrado: el logo ya se ve en el sitio publicado (`83778b5`)
+
+**Quién:** Codex (arreglo), cowork (revisión).
+
+Una línea en `BaseLayout.astro`: `.wordmark-logo` pasa a `height: 2.75rem; width: auto;
+max-width: 220px`. Codex midió 72×44 px a 1440 y 390 px; `npm run check` y builds de Stuart y
+`_example` verdes; Publish site Workers run 36599978486 verde.
+
+**Revisión de cowork:** diff de una línea, sin otros cambios. Medido en el sitio publicado desde
+el navegador de la app: el logo mide 72×44 y la regla nueva está servida. Capturas de la portada
+(desktop y celular) agregadas a `_drafts/update-2026-09-28/` para completar el update de ayer.
+
+**Queda anotado, sin acción:** `_example` también tiene `brand.logo`, así que ningún fixture
+prueba el wordmark de texto. No es riesgo para este cambio (la regla solo toca el `img`), pero
+cuando se construyan los bloques de W-121 conviene que el header se pruebe con y sin logo. Con
+44 px de alto el subtítulo del logo de Stuart ("Homeowners Insurance") casi no se lee; el header
+nuevo de la plantilla de Pavel decide el tamaño.
+
+**Estado:** `origin/main` en `83778b5`; esta entrada queda local hasta el siguiente push.
+
+---
+
 ## 2026-09-28 (noche) · Capturas del update y W-132: el logo no se ve en el sitio publicado
 
 **Quién:** cowork.
