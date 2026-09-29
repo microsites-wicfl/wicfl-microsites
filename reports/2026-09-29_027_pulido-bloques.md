@@ -161,5 +161,13 @@ Nada de los 6 puntos quedó pendiente.
 
 ## Commits
 
-Pendiente de completar después de commit/push (ver instrucciones del prompt): hash, resultado de
-Validate and build y de Publish site Workers.
+- `8f858be` — `fix(template): polish page blocks spacing, grid and card images; escape block
+  settings (W-121 part 2c)`. Incluye el código, la prueba de escape, este reporte y la entrada
+  de BITACORA. Trae consigo `76f2e9a` (commit de cowork con la revisión del 026b y el prompt
+  027, hecho vía el bridge del escritorio, que aún no se había subido).
+- `git push origin main`: `97cd740..8f858be`.
+- **Validate and build** (`ci.yml`), run `36622325381`: verde (Validate all site configurations,
+  Test WICFL Studio, Build `_example`, Build `stuart-homeowners`).
+- **Publish site Workers** (`publish-sites.yml`), run `36622325601`: verde (Discover sites to
+  publish, Publish `stuart-homeowners`, Publish `_example`). Mismas anotaciones de deprecación
+  de Node 20/Ubuntu de siempre, no relacionadas con este cambio.

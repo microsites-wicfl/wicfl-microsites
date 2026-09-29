@@ -20,8 +20,8 @@ construido en 390/768/1440 y `icons-fixture` en 1280 (capturas en
 `remark-columns.mjs` y su archivo de pruebas, como pedía el prompt. Reporte completo:
 `reports/2026-09-29_027_pulido-bloques.md`.
 
-**Estado:** commit pendiente de push en el momento de escribir esta entrada; ver el reporte para
-el hash final y el resultado de Publish site Workers.
+**Estado:** `origin/main` en `8f858be`. Validate and build (`36622325381`) y Publish site Workers
+(`36622325601`) verdes.
 
 ---
 
