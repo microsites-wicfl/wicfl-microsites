@@ -1,3 +1,60 @@
+## 2026-09-29 (cierre del día) · El diseño de Pavel ya se puede armar: header, footer y nueve bloques
+
+**Quién:** Vic, Codex (hasta quedarse sin cuota), Claude Code (ejecutor desde el 026b), cowork.
+
+**Hecho hoy:**
+- **W-132 cerrado:** el logo de Stuart vuelve a verse en el sitio publicado (`83778b5`).
+- **Header y footer nuevos (024, 025):**
+  - Menú de un renglón que pasa solo a modo compacto cuando no cabe.
+  - "Get a Quote" y teléfono siempre visibles.
+  - Menú de celular accesible.
+  - Footer de 4 columnas desde el config.
+  - `navOrder` y `logoOnDark`.
+- **Bloques del diseño de Pavel (026a, 026b, 027, 028):**
+  - hero con foto, fila de íconos (normal y oscura), tarjetas con foto, FAQ con schema FAQPage
+    (W-125), zona de servicio desde el config y banda de cotización;
+  - una sola gramática compartida (`packages/config-schema/blocks.mjs`) para el build y para
+    Studio;
+  - 20 íconos de Lucide 1.48.0.
+- **Studio (cowork):**
+  - Campo "Menu position" y logo para fondo oscuro.
+  - Panel "Page sections" con 9 botones (el hero siempre arriba).
+  - Lista de íconos con su dibujo.
+  - La vista en vivo dibuja los bloques.
+  - Al guardar valida con la misma gramática que el sitio, lista todos los problemas y
+    selecciona la línea mala.
+- **W-118:** el guardado en segundo plano del formulario tiene debounce de 1 s.
+- **Repo:** limpieza de ramas; el borrador de prueba de Studio con "Bla bla" se descartó.
+
+**Lo que vale conservar:**
+- **Un prompt grande falla entero; dos etapas con commit en medio, no.** El 026 de una sola
+  pasada se detuvo a la mitad dos veces. Partido en gramática (026a) y render (026b), cada
+  etapa se revisó y quedó guardada.
+- **Las capturas son la prueba, no los números.** Hoy encontraron cuatro cosas que los checks no
+  vieron: el logo en 0×0, el menú partido en tres renglones, las capturas del 024 con el logo
+  roto (un texto alternativo medido como si fuera el logo) y la imagen de las tarjetas que no
+  llenaba el ancho. Desde el 025, cada reporte describe qué se ve en cada captura.
+- **Cambiar de ejecutor no costó nada** porque el estado vivía en el repo: prompt, reporte y
+  relevo por escrito. Claude Code arrancó del texto de relevo sin preguntar nada.
+- **Los prompts vuelven a vivir en `prompts/`** (del 024 en adelante). Del 23 al 28 de septiembre
+  se pegaron en el chat y se perdió el rastro.
+
+**Estado al cierre:** `origin/main` en `96b6e15`; todo subido.
+
+**Pendientes, en orden:**
+1. **Pavel, para el lunes 5:** fotos de la portada (hero, 4 tarjetas, zona, banda), logo blanco,
+   lista de lugares de la zona de servicio, textos legales (W-131) y quitar "Demo" de Stuart.
+2. **Cowork, jueves:** manual con la sección de bloques, marca y logo; repaso del runbook.
+3. **Viernes 2:** capacitación de Pavel con los bloques.
+4. **Lunes 5 y martes 6:** Pavel arma la portada de Stuart. El 6 se decide si sale con el diseño
+   nuevo.
+5. **Vic:** GA4 y GTM; número de GoTo (W-024); borrar los contactos de prueba de GHL.
+6. **Kevin:** tarjeta de Google Cloud (autocompletado); OK a las mejoras de la plantilla.
+7. **Menores, sin prompt:** hueco entre eyebrow y H2 en `:::cta`; `astro dev` falla con rutas
+   con espacios.
+
+---
+
 ## 2026-09-29 · W-121/W-125: bloques faq, cta y areas (prompt 028)
 
 **Quién:** Claude Code (ejecutor).
