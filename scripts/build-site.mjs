@@ -2,7 +2,7 @@ import { existsSync, cpSync, copyFileSync, mkdirSync, readdirSync, readFileSync 
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
-import { validateColumns } from "../packages/template/src/lib/remark-columns.mjs";
+import { blockProblems } from "../packages/config-schema/blocks.mjs";
 import { checkTheme, FONT_FAMILIES } from "../packages/config-schema/theme.mjs";
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -50,7 +50,8 @@ function markdownFiles(directory) {
 
 try {
   for (const markdownPath of markdownFiles(contentPath)) {
-    validateColumns(readFileSync(markdownPath, "utf8"), markdownPath);
+    const problems = blockProblems(readFileSync(markdownPath, "utf8"));
+    if (problems.length) throw new Error(`${markdownPath}:${problems[0].line}: ${problems[0].message}`);
   }
 } catch (error) {
   console.error(error.message);
