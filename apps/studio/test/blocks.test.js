@@ -72,9 +72,19 @@ test("the live preview draws hero, icon rows and cards; settings lines are not s
 });
 
 test("a block the preview has no drawing for still shows, labeled", () => {
-  const html = renderMarkdown(":::faq\n:::item\n### Question?\nAnswer.\n:::");
-  assert.match(html, /pv-other"><span class="pv-label">faq<\/span>/);
-  assert.match(html, /Question\?/);
+  const html = renderMarkdown(":::gallery\n:::item\n### Picture\nText.\n:::");
+  assert.match(html, /pv-other"><span class="pv-label">gallery<\/span>/);
+  assert.match(html, /Picture/);
+});
+
+test("the live preview draws questions, the quote band and the service area note", () => {
+  const faq = renderMarkdown(text.blockSamples.faq.join("\n"));
+  assert.equal((faq.match(/<details class="pv-faq-item"><summary>/g) || []).length, 3);
+  assert.match(faq, /<summary>Second question\?<\/summary><p>A short, direct answer/);
+  const cta = renderMarkdown(text.blockSamples.cta.join("\n"));
+  assert.match(cta, /pv-hero pv-cta/);
+  const areas = renderMarkdown(text.blockSamples.areas.join("\n"));
+  assert.match(areas, /Site settings/);
 });
 
 test("text in blocks stays escaped", () => {

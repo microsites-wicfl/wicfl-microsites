@@ -405,6 +405,26 @@ main {
   color: #b3261e;
   font-weight: 700;
 }
+.rendered .pv-cta {
+  min-height: 8rem;
+}
+.rendered .pv-faq-list {
+  display: grid;
+  gap: 0 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+.rendered .pv-faq-item {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.rendered .pv-faq-item summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+.rendered .pv-note {
+  color: var(--muted);
+  font-style: italic;
+}
 .rendered .pv-label {
   display: inline-block;
   margin-bottom: 0.4rem;

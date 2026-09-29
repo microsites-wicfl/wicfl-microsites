@@ -294,3 +294,30 @@ Nada de los 5 puntos del objetivo quedó pendiente.
 - **Publish site Workers** (`publish-sites.yml`), run `36627912844`: verde (Discover sites to
   publish, Publish `_example`, Publish `stuart-homeowners`). Mismas anotaciones de deprecación
   de Node 20/Ubuntu de siempre, no relacionadas con este cambio.
+
+## Revisión de cowork
+
+**Veredicto: aceptado.**
+
+Revisé las capturas de `blocks-fixture` a 1440, de `cta-plain-fixture` y del FAQ abierto.
+
+**Bien:**
+- FAQ a dos columnas, sin JS, con "View all questions →" alineado al H2.
+- JSON-LD armado desde los mismos nodos que se pintan. Es la mejor forma de que no se separen.
+- `areas` sale del config y va como texto.
+- La banda de cotización funciona con y sin foto, y la versión sin foto tiene un tono distinto
+  del footer.
+- Encontró la causa real de la franja del hero (especificidad de `height: auto`) y un bug de
+  caché de Astro que habría hecho perder tiempo en cada cambio del plugin (`--force`).
+- Debounce del formulario probado con el API simulado.
+
+**Detalles menores, sin prompt por ahora:**
+- En `:::cta` queda un hueco grande entre el eyebrow y el H2, el mismo tipo de hueco que el 027
+  corrigió en features y cards.
+- A 1440, el botón de la banda queda más arriba que el H2.
+
+Se revisan cuando Pavel arme la portada real de Stuart con fotos, porque con contenido real
+pueden cambiar.
+
+**Studio:** cowork agregó los botones "Questions (FAQ)", "Service area" y "Quote band", con su
+dibujo en la vista en vivo. Mismo commit de docs.

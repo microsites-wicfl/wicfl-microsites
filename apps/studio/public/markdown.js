@@ -146,9 +146,37 @@ function renderItems(name, options, parts, resolveImage, icons) {
     `<div class="pv-items pv-items-${cells.length}">${cells.join("")}</div></section>`;
 }
 
+// Questions show as the site shows them: closed, the question visible, the answer one click away.
+function renderFaq(parts, resolveImage) {
+  const [intro, ...items] = parts;
+  const head = splitSettings(intro);
+  const questions = items.map((part) => {
+    const lines = splitSettings(part).lines;
+    const index = lines.findIndex((line) => /^###\s+/.test(line.trim()));
+    const question = index === -1 ? "" : lines[index].trim().replace(/^###\s+/, "");
+    const answer = lines.filter((line, position) => position !== index).join("\n");
+    return `<details class="pv-faq-item"><summary>${inline(question, resolveImage)}</summary>` +
+      `${renderFlow(answer, resolveImage)}</details>`;
+  });
+  return `<section class="pv-block pv-faq">${eyebrow(head.settings)}` +
+    `${renderFlow(head.lines.join("\n"), resolveImage)}<div class="pv-faq-list">${questions.join("")}</div></section>`;
+}
+
+// The places come from Site settings when the site is built, so the preview only says so.
+function renderAreas(parts, resolveImage) {
+  const head = splitSettings(parts[0]);
+  return `<section class="pv-block pv-areas">${eyebrow(head.settings)}` +
+    `${renderFlow(head.lines.join("\n"), resolveImage)}<p class="pv-note">${AREAS_NOTE}</p></section>`;
+}
+
+const AREAS_NOTE = "The places from Site settings → Service area show here, in a row with a pin each.";
+
 function renderBlock(block, resolveImage, icons) {
   if (block.name === "columns") return renderColumns(block.parts, resolveImage);
   if (block.name === "hero") return renderHero(block.parts[0], resolveImage);
+  if (block.name === "cta") return renderHero(block.parts[0], resolveImage).replace("pv-hero", "pv-hero pv-cta");
+  if (block.name === "faq") return renderFaq(block.parts, resolveImage);
+  if (block.name === "areas") return renderAreas(block.parts, resolveImage);
   return renderItems(block.name, block.options, block.parts, resolveImage, icons);
 }
 

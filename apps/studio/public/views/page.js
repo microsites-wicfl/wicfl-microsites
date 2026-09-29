@@ -66,6 +66,9 @@ export function columnsPanel() {
     ["features", text.blockFeatures],
     ["features-dark", text.blockFeaturesDark],
     ["cards", text.blockCards],
+    ["faq", text.blockFaq],
+    ["areas", text.blockAreas],
+    ["cta", text.blockCta],
   ];
   const blockButtons = blocks
     .map(([kind, label]) => `<button type="button" class="secondary small" data-block="${kind}">${label}</button>`)
