@@ -81,3 +81,28 @@ No se agregó ni cambió contenido, schema ni Studio. La copia de prueba de `log
 ## Commits
 
 - `851fd1d` — `fix(template): collapse header nav when it does not fit; size footer logo (W-121 part 1b)`
+
+## Revisión de cowork
+
+**Veredicto: aceptado.**
+
+- Revisé las capturas de 1440 y 1280 y el footer temporal:
+  - 1440: completo en un renglón, sin palabras partidas.
+  - 1280: compacto.
+  - El logo carga en todas.
+- La tabla por ancho y la descripción de cada captura resuelven el problema del reporte 024.
+- Ampliar solo el `.shell` del header a 100rem fue una buena decisión.
+
+**Pendientes (no bloquean):**
+
+- **Directorios vacíos:** las copias temporales dejaron `sites/_draft_stuart_footer_logo/` y
+  `sites/_draft_stuart_no_logo/` sin archivos. Git no los ve, pero `Discover sites` en local sí
+  podría encontrarlos. Cowork los borró.
+- **Botón "Get a Quote" en el modo compacto:** a 1024–1280 px, que son laptops comunes, el
+  botón queda escondido dentro del menú. En modo compacto con 40rem o más de ancho debería
+  seguir visible junto al teléfono. Va como agregado en el siguiente prompt.
+- **Menú de Stuart:** a 1280 px Stuart ya cae en modo compacto porque tiene 8 ligas. El diseño
+  de Pavel trae 6. Recortarlo es decisión de contenido de Pavel, con `navOrder` y
+  `showInNav`.
+- **Alineación a 1440:** el logo queda en x=20 y el contenido en x=176. Se revisa con el header
+  del diseño de Pavel, que es de ancho completo.
