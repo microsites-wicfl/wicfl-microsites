@@ -87,3 +87,24 @@ fixture guardado bajo `_drafts/026/`.
 
 Cowork debe revisar este commit y reporte. Si se aprueba, la etapa 2 puede aplicar el stash,
 migrar el render a los bloques compartidos, restaurar el fixture, y hacer la verificación visual.
+
+## Revisión de cowork
+
+**Veredicto: aceptado. Pasa a la etapa 2 con una corrección de íconos.**
+
+- **`blocks.mjs`:** legible, con una función por regla y un comentario que dice por qué existe
+  cada una. Cubre todas las reglas de la tabla. Los marcadores dentro de bloques de código no
+  cuentan, y el H1 dentro de un bloque de código tampoco.
+- **Sintaxis:** la sintaxis final del reporte es la que cowork usará para los botones de Studio y
+  para el manual.
+- **Íconos (corrección):** `icons.mjs` dice que son copias de Lucide, pero los trazos no coinciden
+  con los de Lucide actual. Por ejemplo, `house` y `shield-check` tienen otras rutas. Parecen
+  reconstruidos de memoria. Hay que resolverlo por dos razones:
+  - atribuimos a Lucide algo que no es suyo;
+  - todavía no sabemos cómo se ven.
+
+  En la etapa 2 se reemplazan por los SVG exactos del paquete `lucide-static`. Se baja con
+  `npm pack` a un directorio temporal, sin agregarlo como dependencia, y la versión queda anotada
+  en `LICENSE-lucide`.
+- **Reporte:** le faltaron las secciones "Dónde dudaste", "Qué te sorprendió del repo" y "Lo que
+  tocaste fuera de lo pedido" de TEMPLATE. Van en el de la etapa 2.

@@ -281,3 +281,18 @@ pasos 3 a 6 del prompt, partiendo del stash `026-render-wip` y de la página de 
 
 - Reporte: `reports/2026-09-29_026b_render-bloques.md`.
 - Commit: el mensaje original del prompt con "(W-121 part 2b)".
+
+### Etapa 2: agregado después de la revisión de la etapa 1
+
+- **Íconos exactos de Lucide.** Reemplaza los trazos de `packages/config-schema/icons.mjs` por los
+  SVG exactos de Lucide:
+  - Descarga `lucide-static` con `npm pack lucide-static` en un directorio temporal. No es una
+    dependencia del repo.
+  - Copia el contenido interior de `icons/<name>.svg` de los 20 nombres de `ICON_NAMES`.
+  - Anota en `LICENSE-lucide` la versión del paquete usado.
+  - Si algún nombre no existe en esa versión, cámbialo por el equivalente actual y actualiza
+    `ICON_NAMES` y las pruebas.
+  - Incluye en las capturas los 20 íconos. Como `features` acepta 2 a 4 ítems, usa una página
+    aparte, `sites/_example/content/icons-fixture.md` (`showInNav: false`), con 5 bloques
+    `features` de 4 ítems cada uno.
+- **Reporte completo:** el de la etapa 2 lleva todas las secciones de `prompts/TEMPLATE.md`.
