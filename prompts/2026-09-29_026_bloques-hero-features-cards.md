@@ -296,3 +296,60 @@ pasos 3 a 6 del prompt, partiendo del stash `026-render-wip` y de la página de 
     aparte, `sites/_example/content/icons-fixture.md` (`showInNav: false`), con 5 bloques
     `features` de 4 ítems cada uno.
 - **Reporte completo:** el de la etapa 2 lleva todas las secciones de `prompts/TEMPLATE.md`.
+
+### Relevo a Claude Code (2026-09-29): estado de la etapa 2
+
+Codex se quedó sin cuota a la mitad de la etapa 2. Continúa Claude Code como ejecutor, con las
+mismas reglas de `CLAUDE.md`.
+
+Cowork revisó el árbol de trabajo. **No hay commit de la etapa 2**; todo está sin commit, y el
+stash ya se aplicó (`git stash list` está vacío).
+
+**Se conserva (revisado por cowork):**
+
+- `packages/config-schema/icons.mjs` y `LICENSE-lucide`: íconos tomados de `lucide-static`
+  1.48.0. Confirma con un diff contra el paquete que el contenido interior de cada SVG coincide
+  exactamente.
+- `[...slug].astro` e `index.astro`: usan `remarkPluginFrontmatter` para `hasHero` y
+  `hasFullBlock`, y omiten el `<h1>` si hay hero. Es la idea correcta.
+- `sites/_example/content/blocks-fixture.md`, `icons-fixture.md` y las 5 imágenes de fixture.
+
+**Se rehace (no pasa revisión):**
+
+1. **`renderBlocks` en `remark-columns.mjs`.**
+   - Está comprimido en líneas largas con varias instrucciones.
+   - Hace su propio parse con regex en lugar de apoyarse en la estructura de
+     `blockProblems`/`blocks.mjs`. Hoy hay dos parsers que pueden discrepar.
+   - Solo reporta el primer problema.
+
+   Reescríbelo legible: una instrucción por línea, 120 caracteres o menos. Idealmente
+   `blocks.mjs` exporta una función que devuelva la estructura de bloques ya separada (intro,
+   items, ajustes, líneas), y el plugin solo la convierte en nodos. Si hay errores, falla con
+   **todos** los problemas, no solo el primero.
+2. **Cards: la liga estirada.**
+   - `.block-cards-item a::after` estira **todas** las ligas de la tarjeta. Solo la primera liga
+     del item (la del destino) lleva la clase que se estira.
+   - La flecha va **después** del texto ("Learn more →"), no antes.
+3. **Ancho completo.** `100dvw` con `margin-left: calc(50% - 50dvw)` provoca scroll horizontal
+   cuando hay barra de scroll vertical en Windows. Usa una técnica sin ese problema; por ejemplo,
+   que el bloque salga del `main.shell` con un contenedor de ancho completo, o que
+   `overflow-x: clip` quede en el lugar correcto. Mide `scrollWidth === clientWidth` con barra de
+   scroll visible.
+4. **Botón "Get a Quote" en modo compacto.**
+   - La regla nueva solo aplica entre 40rem y 64rem.
+   - El modo compacto también se activa por JS arriba de 64rem cuando el menú no cabe (Stuart a
+     1280 px).
+   - Debe verse en modo compacto siempre que la ventana mida 40rem o más.
+5. **Estilos.** Una declaración por línea en el CSS nuevo, como el resto de `BaseLayout.astro`.
+
+Después sigue los pasos 2 a 6 del prompt:
+
+- checks y builds;
+- servidor que entregue `public/`;
+- medidas a 390, 768, 1280 y 1440;
+- capturas **revisadas** en `_drafts/review-2026-09-29/026/`, más el header de Stuart a 1024 y a
+  1280;
+- reporte completo `reports/2026-09-29_026b_render-bloques.md`;
+- commit `feat(template): page blocks hero, features and cards with shared grammar (W-121 part
+  2b)`;
+- push y Publish en verde.
