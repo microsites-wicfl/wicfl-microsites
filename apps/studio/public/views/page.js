@@ -58,18 +58,40 @@ export function imagesPanel() {
     </section>`;
 }
 
+// Page sections Pavel can add: each button puts a skeleton where the cursor is (the hero, at the
+// top). The icon names for the icon rows are listed with their pictures, folded away.
 export function columnsPanel() {
+  const blocks = [
+    ["hero", text.blockHero],
+    ["features", text.blockFeatures],
+    ["features-dark", text.blockFeaturesDark],
+    ["cards", text.blockCards],
+  ];
+  const blockButtons = blocks
+    .map(([kind, label]) => `<button type="button" class="secondary small" data-block="${kind}">${label}</button>`)
+    .join("");
   return `
     <section class="panel layouts">
       <div class="section-head">
-        <span class="label">${text.columnsTitle}</span>
-        <span class="buttons">
-          <button type="button" class="secondary small" data-columns="2">${text.twoColumns}</button>
-          <button type="button" class="secondary small" data-columns="3">${text.threeColumns}</button>
-        </span>
+        <span class="label">${text.sectionsTitle}</span>
       </div>
-      <p class="hint">${text.columnsHint}</p>
+      <div class="buttons wrap">
+        ${blockButtons}
+        <button type="button" class="secondary small" data-columns="2">${text.twoColumns}</button>
+        <button type="button" class="secondary small" data-columns="3">${text.threeColumns}</button>
+      </div>
+      <p class="hint">${text.sectionsHint}</p>
+      <details class="icon-names">
+        <summary>${text.iconNamesTitle}</summary>
+        <div id="icon-list" class="icon-list"><p class="muted small">${text.iconNamesLoading}</p></div>
+      </details>
     </section>`;
+}
+
+export function renderIconList(icons) {
+  return Object.entries(icons)
+    .map(([name, svg]) => `<span class="icon-name">${svg}<code>${esc(name)}</code></span>`)
+    .join("");
 }
 
 export function renderImageList(slug, images) {

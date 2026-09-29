@@ -1,6 +1,7 @@
 import { requireUser } from "./access.js";
 import { UserError, json } from "./errors.js";
 import { GitHub } from "./github.js";
+import { ICONS } from "../../../packages/config-schema/icons.mjs";
 import {
   createPage,
   createSite,
@@ -37,6 +38,7 @@ import {
 //   GET    /api/sites/:slug/images/<name>        (the image itself, from the draft if there is one)
 //   GET    /api/sites/:slug/logo                 (the site's logo, from the draft if there is one)
 //   POST   /api/sites/:slug/logo                 body: { "name": "logo.svg", "data": "<base64>" }
+//   GET    /api/icons                            (the icons page blocks can use, name -> SVG)
 //   GET    /api/sites/:slug/logo/dark            (the logo for the dark footer)
 //   POST   /api/sites/:slug/logo/dark            body: same as /logo
 //   POST   /api/sites                           body: new site form            (new site, as a draft)
@@ -62,6 +64,8 @@ async function route(request, github, user, web) {
   const method = request.method;
 
   if (resource === "me" && method === "GET") return { email: user.email };
+  // The icons page blocks can use, so the live preview draws the same pictures as the site.
+  if (resource === "icons" && !slug && method === "GET") return ICONS;
   if (resource !== "sites") throw new UserError("Not found.", 404);
   if (!slug && method === "GET") return listSites(github, web);
   if (!slug && method === "POST") return createSite(github, await request.json().catch(() => ({})), user.email);

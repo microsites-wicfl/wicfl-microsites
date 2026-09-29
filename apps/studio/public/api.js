@@ -15,6 +15,7 @@ const pagePath = (slug, path) =>
 
 export const api = {
   me: () => request("/me"),
+  icons: () => request("/icons"),
   sites: () => request("/sites"),
   site: (slug) => request(`/sites/${encodeURIComponent(slug)}`),
   page: (slug, path) => request(pagePath(slug, path)),

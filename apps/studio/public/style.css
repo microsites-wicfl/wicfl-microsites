@@ -250,6 +250,7 @@ dialog::backdrop {
   background: rgba(10, 20, 30, 0.45);
 }
 .toast {
+  white-space: pre-line;
   position: fixed;
   bottom: 1.5rem;
   left: 50%;
@@ -336,8 +337,108 @@ main {
   width: 100%;
   border-radius: 6px;
 }
+/* Page sections in the live preview: an approximation of the site's blocks, outlined like the
+   columns so Pavel can see where each one starts and ends. */
+.rendered .pv-block {
+  position: relative;
+  margin: 1rem 0;
+  padding: 0.8rem;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+}
+.rendered .pv-hero {
+  min-height: 12rem;
+  overflow: hidden;
+  background: #12181f;
+  color: #fff;
+}
+.rendered .pv-hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.45;
+}
+.rendered .pv-hero-text {
+  position: relative;
+}
+.rendered .pv-hero :is(h1, h2, p, a) {
+  color: #fff;
+}
+.rendered .pv-dark {
+  background: #12181f;
+  color: #fff;
+}
+.rendered .pv-dark :is(h2, h3, p, a) {
+  color: #fff;
+}
+.rendered .pv-eyebrow {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.rendered .pv-items {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+}
+.rendered .pv-item {
+  min-width: 0;
+  padding: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.rendered .pv-item img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.rendered .pv-icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.rendered .pv-icon-unknown {
+  color: #b3261e;
+  font-weight: 700;
+}
+.rendered .pv-label {
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--line);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
 .layouts {
   margin: 1rem 0;
+}
+.layouts .buttons.wrap {
+  margin-bottom: 0.4rem;
+}
+.icon-names summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.icon-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  margin-top: 0.5rem;
+}
+.icon-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+}
+.icon-name svg {
+  width: 1.2rem;
+  height: 1.2rem;
 }
 .layouts .section-head {
   margin-top: 0;

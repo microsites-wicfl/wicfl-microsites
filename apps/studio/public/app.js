@@ -7,7 +7,7 @@ import { confirmDialog, toast } from "./ui.js";
 import { renderDashboard } from "./views/dashboard.js";
 import { renderMarkdown } from "./markdown.js";
 import { shrinkImage } from "./resize.js";
-import { renderImageList, renderNewPage, renderPage } from "./views/page.js";
+import { renderIconList, renderImageList, renderNewPage, renderPage } from "./views/page.js";
 import { renderSite } from "./views/site.js";
 
 const app = $("#app");
@@ -145,10 +145,27 @@ async function showPage(slug, path) {
       location.hash = siteLink(slug);
     } catch (error) {
       toast(error.message);
+      jumpToLine(error.message);
       saveButton.disabled = false;
       saveButton.textContent = text.save;
     }
   };
+}
+
+// When saving names a line to fix ("Line 12: ..."), select that line in the text so Pavel doesn't
+// have to count. Only with the page's fields shown: then the text box holds exactly the lines the
+// server counted.
+function jumpToLine(message) {
+  const found = String(message).match(/^Line (\d+):/);
+  const editor = $("#content");
+  if (!found || !editor || !$("#field-title")) return;
+  const lines = editor.value.split("\n");
+  const index = Math.min(Number(found[1]), lines.length) - 1;
+  const start = lines.slice(0, index).reduce((total, line) => total + line.length + 1, 0);
+  editor.focus();
+  editor.setSelectionRange(start, start + lines[index].length);
+  const lineHeight = parseFloat(getComputedStyle(editor).lineHeight) || 20;
+  editor.scrollTop = Math.max(0, index * lineHeight - editor.clientHeight / 3);
 }
 
 function formValues(form) {
@@ -332,11 +349,19 @@ function watchLivePreview(slug) {
   const output = $("#live-preview");
   const resolve = (url) =>
     url.startsWith("/images/") ? `/api/sites/${encodeURIComponent(slug)}/images/${url.slice(8)}` : url;
+  let icons = {};
   const update = () => {
-    output.innerHTML = renderMarkdown(editor.value, resolve);
+    output.innerHTML = renderMarkdown(editor.value, resolve, icons);
   };
   editor.addEventListener("input", update);
   update();
+  // Icons arrive once per page; until then the preview names them instead of drawing them.
+  api.icons().then((loaded) => {
+    icons = loaded;
+    update();
+    const list = $("#icon-list");
+    if (list) list.innerHTML = renderIconList(loaded);
+  }).catch(() => {});
 }
 
 // Blocks go in with one blank line around them, however many the text already has there.
@@ -359,9 +384,22 @@ function insertAtCursor(textarea, snippet) {
   textarea.dispatchEvent(new Event("input"));
 }
 
-// A block of columns as the site expects it; see columns.js on the server for the rules.
+// A block of columns as the site expects it; the grammar is packages/config-schema/blocks.mjs.
 function columnsSnippet(cells) {
   return `\n\n:::columns\n${cells.join("\n:::next\n")}\n:::\n\n`;
+}
+
+// The other blocks go in as a skeleton whose sample lines say what belongs there, never finished
+// copy: text reused across sites would make them copies of each other (W-121).
+function blockSnippet(kind) {
+  const lines = text.blockSamples[kind];
+  return `\n\n${lines.join("\n")}\n\n`;
+}
+
+// The hero has to be the first thing on the page, so it always goes in at the top.
+function insertAtTop(textarea, snippet) {
+  textarea.selectionStart = textarea.selectionEnd = 0;
+  insertAtCursor(textarea, snippet.replace(/^\n+/, ""));
 }
 
 function wireColumns() {
@@ -369,6 +407,14 @@ function wireColumns() {
     const count = Number(button.dataset.columns);
     button.onclick = () =>
       insertAtCursor($("#content"), columnsSnippet(Array.from({ length: count }, (_, i) => text.columnSample(i + 1))));
+  }
+  for (const button of document.querySelectorAll("[data-block]")) {
+    const kind = button.dataset.block;
+    button.onclick = () => {
+      const snippet = blockSnippet(kind);
+      if (kind === "hero") insertAtTop($("#content"), snippet);
+      else insertAtCursor($("#content"), snippet);
+    };
   }
 }
 

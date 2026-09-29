@@ -1,6 +1,6 @@
 // A small, safe Markdown renderer for the live preview next to the editor. It covers what the
 // site pages use (headings, paragraphs, lists, quotes, links, images, bold, italic, code, and
-// column blocks) and escapes everything else. The real preview of the site stays the reference for how it looks.
+// page blocks) and escapes everything else. The real preview of the site stays the reference for how it looks.
 import { esc } from "./html.js";
 
 // Appends to a list. (Array's own method name is on the interface's forbidden-word list.)
@@ -73,9 +73,10 @@ function renderFlow(source, resolveImage) {
   return html.join("\n");
 }
 
-// Column blocks: ":::columns" opens, ":::next" starts the next column, ":::" closes. The live
-// preview shows them side by side like the site does; a block left open still shows, and saving
-// says which line to fix.
+// Page blocks. The site's grammar lives in packages/config-schema/blocks.mjs and the server checks
+// it when a page is saved; this only draws an approximation next to the editor while Pavel types.
+// A line ":::name" (with optional words after it) opens a block, ":::next" (columns) or ":::item"
+// (the other blocks) starts the next part, and ":::" closes it. A block left open still shows.
 const isImageOnly = (lines) => {
   const filled = lines.map((line) => line.trim()).filter(Boolean);
   return filled.length === 1 && /^!\[[^\]]*\]\([^)\s]+\)$/.test(filled[0]);
@@ -89,29 +90,92 @@ function renderColumns(columns, resolveImage) {
   return `<div class="columns columns-${columns.length}">${cells.join("")}</div>`;
 }
 
-export function renderMarkdown(source, resolveImage = (url) => url) {
+// "eyebrow: ..." and "icon: ..." lines at the start of a part are settings, not text.
+function splitSettings(lines) {
+  const settings = {};
+  let index = 0;
+  for (; index < lines.length; index += 1) {
+    const line = lines[index].trim();
+    if (!line) continue;
+    const match = line.match(/^(eyebrow|icon):\s*(.*)$/);
+    if (!match) break;
+    settings[match[1]] = match[2];
+  }
+  return { settings, lines: lines.slice(index) };
+}
+
+const IMAGE_LINE = /^!\[[^\]]*\]\(([^)\s]+)\)$/;
+
+function eyebrow(settings) {
+  return settings.eyebrow ? `<p class="pv-eyebrow">${esc(settings.eyebrow)}</p>` : "";
+}
+
+function renderHero(part, resolveImage) {
+  const { settings, lines } = splitSettings(part);
+  const imageLine = lines.find((line) => IMAGE_LINE.test(line.trim()));
+  const image = imageLine
+    ? `<img class="pv-hero-image" alt="" src="${esc(resolveImage(safeUrl(imageLine.trim().match(IMAGE_LINE)[1])))}">`
+    : "";
+  const text = lines.filter((line) => line !== imageLine).join("\n");
+  return `<section class="pv-block pv-hero">${image}<div class="pv-hero-text">${eyebrow(settings)}` +
+    `${renderFlow(text, resolveImage)}</div></section>`;
+}
+
+function renderIcon(name, icons) {
+  if (!name) return "";
+  // Icons are the site's own SVG markup, served by Studio; an unknown name shows as a warning.
+  return icons[name]
+    ? `<span class="pv-icon">${icons[name]}</span>`
+    : `<span class="pv-icon pv-icon-unknown">${esc(name)}?</span>`;
+}
+
+function renderItems(name, options, parts, resolveImage, icons) {
+  const [intro, ...items] = parts;
+  const head = splitSettings(intro);
+  const cells = items.map((part) => {
+    const { settings, lines } = splitSettings(part);
+    const body = renderFlow(lines.join("\n"), resolveImage);
+    return `<div class="pv-item">${renderIcon(settings.icon, icons)}${body}</div>`;
+  });
+  const dark = options.includes("dark") ? " pv-dark" : "";
+  const known = ["features", "cards"].includes(name);
+  // Blocks the preview has no drawing for yet still show, labeled, so nothing typed disappears.
+  const label = known ? "" : `<span class="pv-label">${esc(name)}</span>`;
+  return `<section class="pv-block pv-${known ? esc(name) : "other"}${dark}">${label}${eyebrow(head.settings)}` +
+    `${renderFlow(head.lines.join("\n"), resolveImage)}` +
+    `<div class="pv-items pv-items-${cells.length}">${cells.join("")}</div></section>`;
+}
+
+function renderBlock(block, resolveImage, icons) {
+  if (block.name === "columns") return renderColumns(block.parts, resolveImage);
+  if (block.name === "hero") return renderHero(block.parts[0], resolveImage);
+  return renderItems(block.name, block.options, block.parts, resolveImage, icons);
+}
+
+export function renderMarkdown(source, resolveImage = (url) => url, icons = {}) {
   const lines = String(source || "").replace(/\r\n/g, "\n").split("\n");
   const html = [];
   let normal = [];
   let block = null;
   for (const line of lines) {
     const marker = line.trimEnd();
-    if (marker === ":::columns" && !block) {
+    const open = marker.match(/^:::([a-z]+)(?:\s+(.*))?$/);
+    if (open && !block && open[1] !== "next" && open[1] !== "item") {
       add(html, renderFlow(normal.join("\n"), resolveImage));
       normal = [];
-      block = [[]];
-    } else if (marker === ":::next" && block) {
-      add(block, []);
+      block = { name: open[1], options: (open[2] || "").split(/\s+/).filter(Boolean), parts: [[]] };
+    } else if ((marker === ":::next" || marker === ":::item") && block) {
+      add(block.parts, []);
     } else if (marker === ":::" && block) {
-      add(html, renderColumns(block, resolveImage));
+      add(html, renderBlock(block, resolveImage, icons));
       block = null;
     } else if (block) {
-      add(block[block.length - 1], line);
+      add(block.parts[block.parts.length - 1], line);
     } else {
       add(normal, line);
     }
   }
-  if (block) add(html, renderColumns(block, resolveImage));
+  if (block) add(html, renderBlock(block, resolveImage, icons));
   add(html, renderFlow(normal.join("\n"), resolveImage));
   return html.filter(Boolean).join("\n");
 }

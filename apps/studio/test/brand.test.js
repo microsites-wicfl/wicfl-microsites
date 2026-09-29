@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 import { checkTheme } from "../../../packages/config-schema/theme.mjs";
+import { ICONS as ICONS_FOR_TEST } from "../../../packages/config-schema/icons.mjs";
 import { brandProblems } from "../public/brand.js";
 import { applyBrand, brandOf, checkSvg } from "../src/brand.js";
 import { createHandler } from "../src/index.js";
@@ -166,4 +167,11 @@ test("the light logo for the dark footer is its own file and config field", asyn
   assert.equal((await call(github, "POST", "/api/sites/stuart-homeowners/logo/other", {
     name: "logo.png", data: `data:image/png;base64,${png.toString("base64")}`,
   })).status, 404);
+});
+
+test("Studio serves the icons page blocks can use, the same ones the site draws", async () => {
+  const response = await call(repository(), "GET", "/api/icons");
+  assert.equal(response.status, 200);
+  assert.deepEqual(Object.keys(response.body), Object.keys(ICONS_FOR_TEST));
+  assert.match(response.body["map-pin"], /^<svg/);
 });
