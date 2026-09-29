@@ -136,3 +136,34 @@ test("a logo upload goes to the draft and is served so it can't run code", async
   assert.equal(svg.status, 200);
   assert.equal(svg.body.logo, "/logo.svg");
 });
+
+test("the light logo for the dark footer is its own file and config field", async () => {
+  const github = repository();
+  const png = Buffer.from("89504e470d0a1a0a0000000d49484452", "hex");
+  const upload = await call(github, "POST", "/api/sites/stuart-homeowners/logo/dark", {
+    name: "White Logo.png", data: `data:image/png;base64,${png.toString("base64")}`,
+  });
+  assert.equal(upload.status, 200);
+  assert.equal(upload.body.logoOnDark, "/logo-on-dark.png");
+  assert.equal(upload.body.logo, "/logo.svg");
+  const draft = github.branches.get("draft/stuart-homeowners").files;
+  const config = JSON.parse(draft["sites/stuart-homeowners/site.config.json"]);
+  assert.equal(config.brand.logoOnDark, "/logo-on-dark.png");
+  assert.equal(config.brand.logo, "/logo.svg");
+  assert.deepEqual(Buffer.from(draft["sites/stuart-homeowners/public/logo-on-dark.png"]), png);
+
+  const served = await call(github, "GET", "/api/sites/stuart-homeowners/logo/dark");
+  assert.equal(served.headers.get("content-type"), "image/png");
+  assert.match(served.headers.get("content-security-policy"), /sandbox/);
+
+  const shown = await call(github, "GET", "/api/sites/stuart-homeowners/settings");
+  assert.equal(shown.body.brand.logoOnDark, "/logo-on-dark.png");
+
+  const bad = await call(github, "POST", "/api/sites/stuart-homeowners/logo/dark", {
+    name: "logo.svg", data: svgData('<svg onload="steal()"></svg>'),
+  });
+  assert.equal(bad.status, 400);
+  assert.equal((await call(github, "POST", "/api/sites/stuart-homeowners/logo/other", {
+    name: "logo.png", data: `data:image/png;base64,${png.toString("base64")}`,
+  })).status, 404);
+});

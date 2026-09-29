@@ -115,12 +115,16 @@ h2 {
   gap: 0.9rem;
 }
 input[type="text"],
+input[type="number"],
 select {
   font: inherit;
   padding: 0.55rem 0.7rem;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--paper);
+}
+#field-navOrder {
+  max-width: 8rem;
 }
 textarea.short {
   min-height: 4.5rem;
@@ -559,8 +563,10 @@ input[type="email"] {
   gap: 1rem;
   flex-wrap: wrap;
 }
+/* Fixed height, not max-height: an SVG logo without width/height collapses to 0 otherwise (W-132). */
 .logo-current {
-  max-height: 3rem;
+  height: 3rem;
+  width: auto;
   max-width: 220px;
   background: #fff;
   border: 1px solid var(--line);
@@ -591,7 +597,8 @@ input[type="email"] {
   font-size: 1.15rem;
 }
 .mock-logo {
-  max-height: 2.2rem;
+  height: 2.2rem;
+  width: auto;
   max-width: 160px;
 }
 .mock-phone {

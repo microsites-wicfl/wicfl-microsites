@@ -34,8 +34,8 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ name, data }),
     }),
-  uploadLogo: (slug, name, data) =>
-    request(`/sites/${encodeURIComponent(slug)}/logo`, {
+  uploadLogo: (slug, name, data, kind = "main") =>
+    request(`/sites/${encodeURIComponent(slug)}/logo${kind === "dark" ? "/dark" : ""}`, {
       method: "POST",
       body: JSON.stringify({ name, data }),
     }),

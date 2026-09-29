@@ -32,6 +32,11 @@ export function fieldsForm(fields, { allowHome = true } = {}) {
         ${field("field-pageType", text.fieldPageType, "",
           `<select id="field-pageType"${locked}>${types}</select>`)}
       </div>
+      <div class="row">
+        ${field("field-navOrder", text.fieldNavOrder, text.fieldNavOrderHint,
+          `<input id="field-navOrder" type="number" min="0" max="999" step="1" inputmode="numeric"
+            value="${esc(fields.navOrder ?? "")}">`)}
+      </div>
       <label class="check">
         <input id="field-showInNav" type="checkbox"${fields.showInNav ? " checked" : ""}>
         ${text.fieldShowInNav}
@@ -123,7 +128,7 @@ export function renderPage(site, page) {
 }
 
 export function renderNewPage(site) {
-  const blank = { title: "", description: "", navLabel: "", showInNav: true, pageType: "content" };
+  const blank = { title: "", description: "", navLabel: "", showInNav: true, pageType: "content", navOrder: "" };
   return `
     <a class="back" href="${siteLink(site.slug)}">${esc(text.backToSite(site.brandName))}</a>
     <h1>${text.newPageTitle}</h1>

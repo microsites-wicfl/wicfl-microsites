@@ -37,6 +37,8 @@ import {
 //   GET    /api/sites/:slug/images/<name>        (the image itself, from the draft if there is one)
 //   GET    /api/sites/:slug/logo                 (the site's logo, from the draft if there is one)
 //   POST   /api/sites/:slug/logo                 body: { "name": "logo.svg", "data": "<base64>" }
+//   GET    /api/sites/:slug/logo/dark            (the logo for the dark footer)
+//   POST   /api/sites/:slug/logo/dark            body: same as /logo
 //   POST   /api/sites                           body: new site form            (new site, as a draft)
 //   GET    /api/sites/:slug/settings
 //   PUT    /api/sites/:slug/settings            body: settings form
@@ -80,9 +82,11 @@ async function route(request, github, user, web) {
     const image = await readImage(github, slug, decodeURIComponent(rest[0]));
     return fileResponse(image);
   }
-  if (section === "logo" && rest.length === 0 && method === "GET") return fileResponse(await readLogo(github, slug));
-  if (section === "logo" && rest.length === 0 && method === "POST") {
-    return uploadLogo(github, slug, await request.json().catch(() => ({})), user.email);
+  if (section === "logo" && rest.length <= 1 && method === "GET") {
+    return fileResponse(await readLogo(github, slug, rest[0] || "main"));
+  }
+  if (section === "logo" && rest.length <= 1 && method === "POST") {
+    return uploadLogo(github, slug, await request.json().catch(() => ({})), user.email, rest[0] || "main");
   }
   if (section === "pages" && rest.length === 0 && method === "POST") {
     return createPage(github, slug, await request.json().catch(() => ({})), user.email);

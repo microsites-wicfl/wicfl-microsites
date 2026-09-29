@@ -3,8 +3,8 @@ import { UserError } from "./errors.js";
 // Studio shows a page as separate fields plus its text, so nobody edits the "---" header by hand.
 // Only these fields are editable; any other line in the header is kept exactly as it was.
 export const PAGE_TYPES = ["home", "content", "coverage"];
-const FIELDS = ["title", "description", "navLabel", "showInNav", "pageType"];
-const OPTIONAL = new Set(["description", "navLabel"]);
+const FIELDS = ["title", "description", "navLabel", "showInNav", "pageType", "navOrder"];
+const OPTIONAL = new Set(["description", "navLabel", "navOrder"]);
 
 function split(text) {
   const lines = text.replace(/\r\n/g, "\n").split("\n");
@@ -34,7 +34,7 @@ function unquote(raw) {
 export function parsePage(text) {
   const parts = split(text);
   if (!parts) return null;
-  const fields = { title: "", description: "", navLabel: "", showInNav: true, pageType: "content" };
+  const fields = { title: "", description: "", navLabel: "", showInNav: true, pageType: "content", navOrder: "" };
   for (let index = 0; index < parts.header.length; index += 1) {
     const match = parts.header[index].match(/^\s*([A-Za-z_][\w-]*):(.*)$/);
     if (!match || !FIELDS.includes(match[1])) continue;
@@ -49,7 +49,7 @@ export function parsePage(text) {
 }
 
 function format(key, value) {
-  if (key === "showInNav" || key === "pageType") return String(value);
+  if (key === "showInNav" || key === "pageType" || key === "navOrder") return String(value);
   return JSON.stringify(value);
 }
 
@@ -58,12 +58,22 @@ function clean(fields) {
   if (!title) throw new UserError("The page needs a title.", 400);
   const pageType = String(fields?.pageType ?? "");
   if (!PAGE_TYPES.includes(pageType)) throw new UserError("Choose a page type.", 400);
+  // Menu position: empty, or a whole number. The site menu lists numbered pages first, lowest
+  // number first, then the rest by page address (the template's navOrder rule).
+  const navOrder = String(fields?.navOrder ?? "").trim();
+  if (navOrder && !/^\d{1,3}$/.test(navOrder)) {
+    throw new UserError(
+      "Menu position must be a whole number, like 1, 2 or 3. Leave it empty to list the page after the numbered ones.",
+      400,
+    );
+  }
   return {
     title,
     description: String(fields?.description ?? "").replace(/\s+/g, " ").trim(),
     navLabel: String(fields?.navLabel ?? "").trim(),
     showInNav: fields?.showInNav !== false,
     pageType,
+    navOrder: navOrder ? String(Number(navOrder)) : "",
   };
 }
 

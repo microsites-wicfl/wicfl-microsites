@@ -22,6 +22,7 @@ test("a real page reads as fields plus text", () => {
       navLabel: "Flood Insurance",
       showInNav: true,
       pageType: "coverage",
+      navOrder: "",
     },
     body: "Living in Stuart.\n",
   });
@@ -86,4 +87,21 @@ test("page routes follow the site template", () => {
   assert.equal(pageRoute("flood-insurance.md"), "/flood-insurance/");
   assert.equal(pageRoute("es/index.md"), "/es/");
   assert.equal(pageRoute("es/seguro-de-casa.md"), "/es/seguro-de-casa/");
+});
+
+test("menu position: read, written as a bare number, removed when emptied, refused when not a number", () => {
+  const withOrder = flood.replace("pageType: coverage", "pageType: coverage\nnavOrder: 3");
+  const { fields, body } = parsePage(withOrder);
+  assert.equal(fields.navOrder, "3");
+  assert.equal(composePage(withOrder, fields, body), withOrder);
+
+  const parsed = parsePage(flood);
+  const numbered = composePage(flood, { ...parsed.fields, navOrder: "02" }, parsed.body);
+  assert.match(numbered, /\nnavOrder: 2\n---/);
+  const emptied = composePage(numbered, { ...parsePage(numbered).fields, navOrder: "" }, parsed.body);
+  assert.doesNotMatch(emptied, /navOrder/);
+
+  for (const bad of ["first", "-1", "1.5", "1000"]) {
+    assert.throws(() => composePage(flood, { ...parsed.fields, navOrder: bad }, parsed.body), /whole number/);
+  }
 });

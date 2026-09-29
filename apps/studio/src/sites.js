@@ -515,14 +515,26 @@ export async function publishDraft(github, slug, email, web = null) {
 }
 
 // The logo lives next to the site's other public files as logo.svg, logo.png or logo.webp, and
-// brand.logo points at it. Uploading replaces it in the draft like any other change.
+// brand.logo points at it. The version for the dark footer is the same idea: logo-on-dark.<ext>,
+// pointed at by brand.logoOnDark. Uploading replaces either one in the draft like any other change.
+const LOGO_KINDS = {
+  main: { file: "logo", key: "logo", label: "logo" },
+  dark: { file: "logo-on-dark", key: "logoOnDark", label: "logo for dark backgrounds" },
+};
+
+function logoKind(kind) {
+  const found = LOGO_KINDS[kind || "main"];
+  if (!found) throw new UserError("Not found.", 404);
+  return found;
+}
 function logoTypeOf(name) {
   const extension = String(name || "").toLowerCase().split(".").pop();
   if (!LOGO_TYPES[extension]) throw new UserError("A logo must be an SVG, PNG or WebP file.", 400);
   return extension;
 }
 
-export async function uploadLogo(github, slug, input, email) {
+export async function uploadLogo(github, slug, input, email, kind = "main") {
+  const target = logoKind(kind);
   const extension = logoTypeOf(input?.name);
   const base64 = String(input?.data || "").replace(/^data:[^,]*,/, "");
   if (!base64) throw new UserError("The logo didn't arrive.", 400);
@@ -538,36 +550,40 @@ export async function uploadLogo(github, slug, input, email) {
   const configFile = await github.readFile(configPath(slug), ref);
   if (!configFile) throw new UserError("That site doesn't exist.", 404);
   const branch = await ensureDraftBranch(github, slug);
-  const path = `sites/${slug}/public/logo.${extension}`;
+  const path = `sites/${slug}/public/${target.file}.${extension}`;
   const existing = await github.readFile(path, branch);
   await github.writeBinary(path, {
     base64,
     sha: existing?.sha,
     branch,
-    message: `content(${slug}): new logo\n\nEdited-by: ${email}`,
+    message: `content(${slug}): new ${target.label}\n\nEdited-by: ${email}`,
   });
 
-  const config = JSON.parse(configFile.text);
-  const logo = `/logo.${extension}`;
-  if (config.brand.logo !== logo) {
-    config.brand.logo = logo;
-    const inDraft = await github.readFile(configPath(slug), branch);
+  // Read the config from the draft, not from where the site was when the upload started: the
+  // draft may already hold other changes (a new main logo, new colors) that must survive.
+  const inDraft = await github.readFile(configPath(slug), branch);
+  const config = JSON.parse(inDraft.text);
+  const logo = `/${target.file}.${extension}`;
+  if (config.brand[target.key] !== logo) {
+    config.brand[target.key] = logo;
     await github.writeFile(configPath(slug), {
       text: formatConfig(config, inDraft.text),
       sha: inDraft.sha,
       branch,
-      message: `content(${slug}): use the new logo\n\nEdited-by: ${email}`,
+      message: `content(${slug}): use the new ${target.label}\n\nEdited-by: ${email}`,
     });
   }
   await ensurePull(github, slug);
-  return { logo };
+  return { [target.key]: logo, logo: kind === "main" ? logo : config.brand.logo || null };
 }
 
-export async function readLogo(github, slug) {
+export async function readLogo(github, slug, kind = "main") {
+  const target = logoKind(kind);
   const ref = await currentRef(github, slug);
   const config = await readConfigAt(github, slug, ref);
-  const logo = config?.brand?.logo;
-  if (!/^\/logo\.(svg|png|webp)$/.test(logo || "")) throw new UserError("This site has no logo yet.", 404);
+  const logo = config?.brand?.[target.key];
+  const pattern = new RegExp(`^/${target.file}\\.(svg|png|webp)$`);
+  if (!pattern.test(logo || "")) throw new UserError("This site has no logo yet.", 404);
   const extension = logoTypeOf(logo);
   const bytes = await github.readBinary(`sites/${slug}/public${logo}`, ref);
   if (!bytes) throw new UserError("This site has no logo yet.", 404);

@@ -231,8 +231,8 @@ function wireBrand(slug, form, brand, saveButton) {
   form.addEventListener("change", update);
   update();
 
-  const wireLogo = () => {
-    const input = $("#logo-file");
+  const wireLogo = (kind = "main") => {
+    const input = $(kind === "dark" ? "#logo-dark-file" : "#logo-file");
     input.onchange = async () => {
       const file = input.files[0];
       if (!file) return;
@@ -244,11 +244,15 @@ function wireBrand(slug, form, brand, saveButton) {
           reader.onerror = () => reject(reader.error);
           reader.readAsDataURL(file);
         });
-        const result = await api.uploadLogo(slug, file.name, data);
+        const result = await api.uploadLogo(slug, file.name, data, kind);
         const version = Date.now();
-        logoUrl = `/api/sites/${encodeURIComponent(slug)}/logo?v=${version}`;
-        $("#logo-slot").innerHTML = logoBlock(slug, { logo: result.logo }, version);
-        wireLogo();
+        if (kind === "dark") {
+          $("#logo-dark-slot").innerHTML = logoBlock(slug, result, version, "dark", field("footerColor").value);
+        } else {
+          logoUrl = `/api/sites/${encodeURIComponent(slug)}/logo?v=${version}`;
+          $("#logo-slot").innerHTML = logoBlock(slug, result, version);
+        }
+        wireLogo(kind);
         update();
         toast(text.logoSaved);
       } catch (error) {
@@ -258,6 +262,7 @@ function wireBrand(slug, form, brand, saveButton) {
     };
   };
   wireLogo();
+  wireLogo("dark");
 }
 
 function showNewSite() {
@@ -419,6 +424,7 @@ function readFields() {
       navLabel: $("#field-navLabel").value,
       showInNav: $("#field-showInNav").checked,
       pageType: $("#field-pageType").value,
+      navOrder: $("#field-navOrder").value,
     },
     body: $("#content").value,
   };

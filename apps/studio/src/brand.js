@@ -37,6 +37,7 @@ export function brandOf(config) {
     headingFont: theme.headingFont || "georgia",
     bodyFont: theme.bodyFont || "system-sans",
     logo: config.brand?.logo || null,
+    logoOnDark: config.brand?.logoOnDark || null,
   };
 }
 

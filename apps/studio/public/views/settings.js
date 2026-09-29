@@ -69,20 +69,34 @@ function brandColor(name, value) {
     </label>`;
 }
 
-export function logoBlock(slug, brand, version = "") {
-  const img = brand.logo
-    ? `<img class="logo-current" src="/api/sites/${encodeURIComponent(slug)}/logo?v=${esc(version)}" alt="">`
-    : `<p class="muted small">${text.noLogo}</p>`;
+// Two logo slots: the main one (header) and the light version for the dark footer ("dark").
+const LOGO_SLOTS = {
+  main: { key: "logo", path: "logo", input: "logo-file", label: "logoLabel", hint: "logoHint", none: "noLogo" },
+  dark: {
+    key: "logoOnDark", path: "logo/dark", input: "logo-dark-file",
+    label: "logoDarkLabel", hint: "logoDarkHint", none: "noLogoDark",
+  },
+};
+
+export function logoBlock(slug, brand, version = "", kind = "main", footerColor = "") {
+  const slot = LOGO_SLOTS[kind];
+  const has = Boolean(brand[slot.key]);
+  // The light logo is previewed on the site's footer color, where it will actually sit.
+  const background = kind === "dark" ? ` style="background:${esc(footerColor || "#111827")}"` : "";
+  const img = has
+    ? `<img class="logo-current"${background}
+        src="/api/sites/${encodeURIComponent(slug)}/${slot.path}?v=${esc(version)}" alt="">`
+    : `<p class="muted small">${text[slot.none]}</p>`;
   return `
     <div class="logo-block">
-      <span class="label">${text.logoLabel}</span>
+      <span class="label">${text[slot.label]}</span>
       <div class="logo-row">
         ${img}
-        <label class="button small secondary">${brand.logo ? text.replaceLogo : text.uploadLogo}
-          <input id="logo-file" type="file" accept=".svg,.png,.webp,image/svg+xml,image/png,image/webp" hidden>
+        <label class="button small secondary">${has ? text.replaceLogo : text.uploadLogo}
+          <input id="${slot.input}" type="file" accept=".svg,.png,.webp,image/svg+xml,image/png,image/webp" hidden>
         </label>
       </div>
-      <span class="hint">${text.logoHint}</span>
+      <span class="hint">${text[slot.hint]}</span>
     </div>`;
 }
 
@@ -94,6 +108,7 @@ export function brandPanel(site, brand) {
       <div class="brand-grid">
         <div class="brand-controls">
           <div id="logo-slot">${logoBlock(site.slug, brand)}</div>
+          <div id="logo-dark-slot">${logoBlock(site.slug, brand, "", "dark", brand.footerColor)}</div>
           ${brandSelect("style", STYLES, brand.style)}
           <div class="row">
             ${brandColor("accentColor", brand.accentColor)}
