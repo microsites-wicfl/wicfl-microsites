@@ -162,9 +162,30 @@ const headingFontPackage = headingFontDefinition.package;
       const header = document.querySelector(".site-header");
       const toggle = document.querySelector(".menu-toggle");
       const menu = document.querySelector("#site-menu");
-      if (header && toggle && menu) {
+      const headerContent = header?.querySelector(".header-content");
+      const wordmark = header?.querySelector(".wordmark");
+      const actions = header?.querySelector(".header-actions");
+      if (header && toggle && menu && headerContent && wordmark && actions) {
         document.documentElement.classList.add("js");
         const closeMenu = () => { header.classList.remove("menu-open"); toggle.setAttribute("aria-expanded", "false"); };
+        let naturalWidth = 0;
+        const calculateNaturalWidth = () => {
+          const wasCompact = header.classList.contains("is-compact");
+          header.classList.remove("is-compact");
+          const gap = Number.parseFloat(getComputedStyle(headerContent).gap) || 0;
+          naturalWidth = wordmark.scrollWidth + menu.scrollWidth + actions.scrollWidth + (gap * 2);
+          if (wasCompact) header.classList.add("is-compact");
+        };
+        const updateMode = () => {
+          const narrowScreen = window.matchMedia("(max-width: 63.999rem)").matches;
+          const compact = narrowScreen || naturalWidth > headerContent.clientWidth;
+          header.classList.toggle("is-compact", compact);
+          if (!compact) closeMenu();
+        };
+        calculateNaturalWidth();
+        updateMode();
+        new ResizeObserver(updateMode).observe(headerContent);
+        document.fonts?.ready.then(() => { calculateNaturalWidth(); updateMode(); });
         toggle.addEventListener("click", () => {
           const open = header.classList.toggle("menu-open");
           toggle.setAttribute("aria-expanded", String(open));
@@ -197,6 +218,7 @@ const headingFontPackage = headingFontDefinition.package;
   a:hover { text-decoration-thickness: 2px; }
   a:focus-visible { outline: 3px solid var(--site-accent); outline-offset: 3px; border-radius: 2px; }
   .shell { width: min(100% - 2.5rem, 68rem); margin-inline: auto; }
+  .site-header .shell { width: min(100% - 2.5rem, 100rem); }
   .skip-link { position: absolute; left: -9999px; }
   .skip-link:focus { left: 1rem; top: 1rem; z-index: 10; background: #fff; padding: var(--s2); border-radius: var(--radius-sm); box-shadow: var(--shadow); }
 
@@ -209,13 +231,13 @@ const headingFontPackage = headingFontDefinition.package;
     border-bottom: 1px solid var(--line);
     box-shadow: var(--shadow);
   }
-  .header-content { display: flex; align-items: center; gap: var(--s3); min-height: 5.2rem; }
+  .header-content { display: flex; align-items: center; gap: var(--s3); min-height: 5.2rem; flex-wrap: wrap; }
   .wordmark { display: flex; flex-direction: column; gap: .1rem; color: var(--ink); text-decoration: none; line-height: 1.15; }
   .wordmark-name { font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; font-size: 1.4rem; font-weight: 700; letter-spacing: -.01em; }
   .wordmark-logo { height: 3.5rem; width: auto; max-width: 220px; display: block; }
   .wordmark-kicker { font-size: .72rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--site-accent); }
   .site-nav { display: flex; align-items: center; flex: 1; justify-content: center; gap: .2rem; min-width: 0; }
-  .site-nav a { border-radius: 999px; color: var(--ink-soft); font-size: .88rem; font-weight: 700; line-height: 1.25; padding: .35rem .65rem; text-decoration: none; }
+  .site-nav a { border-radius: 999px; color: var(--ink-soft); font-size: .88rem; font-weight: 700; line-height: 1.25; padding: .35rem .65rem; text-decoration: none; white-space: nowrap; }
   .site-nav a:hover { background: rgba(15, 23, 33, .08); }
   .site-nav a[aria-current="page"] { background: var(--site-accent); color: var(--text-on-primary); }
   .header-actions { display: flex; align-items: center; gap: var(--s1); }
@@ -270,7 +292,7 @@ const headingFontPackage = headingFontDefinition.package;
   .site-footer a:hover { text-decoration-thickness: 2px; }
   .footer-grid { display: grid; gap: var(--s4); grid-template-columns: 1.2fr repeat(3, 1fr); }
   .footer-brand { font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; font-size: 1.2rem; font-weight: 700; margin: 0 0 var(--s1); }
-  .footer-logo { width: auto; max-width: 220px; max-height: 3.5rem; display: block; }
+  .footer-logo { height: 3.5rem; width: auto; max-width: 220px; display: block; }
   .footer-label { text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; color: rgba(238, 241, 245, .6); margin: 0 0 var(--s2); font-weight: 700; }
   .site-footer p { margin: 0 0 .5rem; color: rgba(238, 241, 245, .88); }
   address { font-style: normal; }
@@ -285,6 +307,23 @@ const headingFontPackage = headingFontDefinition.package;
   .variant-civic .site-header { border-top-width: .45rem; border-bottom-width: 2px; }
   .variant-civic .phone-link { border-radius: .3rem; }
   .variant-warm { --variant-surface: #fbf1e5; --radius: .7rem; --radius-sm: .45rem; --shadow: 0 20px 40px -28px rgba(120, 72, 24, .35); }
+
+  .site-header.is-compact .header-content { min-height: 4rem; justify-content: space-between; gap: var(--s1); }
+  .site-header.is-compact .wordmark-logo { height: 2.75rem; }
+  .site-header.is-compact .wordmark { min-width: 0; }
+  .site-header.is-compact .wordmark-name { font-size: 1.15rem; }
+  .site-header.is-compact .wordmark-kicker { font-size: .6rem; }
+  .site-header.is-compact .header-actions { margin-left: auto; }
+  .site-header.is-compact .phone-link { padding: .45rem; }
+  .site-header.is-compact .phone-link .icon { width: 1.25rem; height: 1.25rem; margin: 0; }
+  .site-header.is-compact .phone-text,
+  .site-header.is-compact .quote-link-desktop { display: none; }
+  .site-header.is-compact .menu-toggle { display: inline-flex; align-items: center; justify-content: center; min-width: 2.5rem; min-height: 2.5rem; cursor: pointer; }
+  .site-header.is-compact .site-nav { width: 100%; flex: 0 0 100%; align-items: stretch; flex-direction: column; gap: .25rem; order: 3; padding-bottom: var(--s2); }
+  .site-header.is-compact .site-nav a { padding: .6rem .75rem; }
+  .site-header.is-compact .site-nav .quote-link-menu { display: flex; width: 100%; margin-top: var(--s1); }
+  .js .site-header.is-compact .site-nav { display: none; }
+  .js .site-header.is-compact.menu-open .site-nav { display: flex; }
 
   @media (max-width: 63.999rem) {
     .header-content { min-height: 4rem; justify-content: space-between; gap: var(--s1); flex-wrap: wrap; }
