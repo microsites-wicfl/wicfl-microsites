@@ -171,3 +171,26 @@ Nada de los 6 puntos quedó pendiente.
 - **Publish site Workers** (`publish-sites.yml`), run `36622325601`: verde (Discover sites to
   publish, Publish `stuart-homeowners`, Publish `_example`). Mismas anotaciones de deprecación
   de Node 20/Ubuntu de siempre, no relacionadas con este cambio.
+
+## Revisión de cowork
+
+**Veredicto: aceptado.** Revisé las capturas de 1440 y 768 y los seis puntos quedaron
+resueltos:
+
+- La imagen llena la tarjeta.
+- Con 4 ítems caben 4 columnas en desktop y 2 en tablet.
+- Eyebrow, H2 e intro se leen como un grupo.
+- El hero va pegado al header.
+- Ya no hay divisor antes del primer ítem.
+- Hay escape de HTML, con su prueba.
+
+Buen diagnóstico de las causas: el `<p>` alrededor de la imagen y los márgenes que no colapsan
+en grid.
+
+**Dos detalles menores (van como agregado al 028):**
+
+1. A 768 px, la foto del hero no llega al borde inferior de la sección y queda una franja oscura
+   de unos 30 px.
+2. Cuando `features dark` es lo último antes del footer, los dos comparten color y no hay
+   separación visual. En Stuart, el último bloque será la banda de cotización (`:::cta`, que
+   trae el 028); allí hay que revisar que se distinga del footer.
