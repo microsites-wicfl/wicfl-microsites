@@ -83,6 +83,17 @@ function columnsNode(columns) {
   return children;
 }
 
+function styleButtonLinks(node) {
+  if (!node || !Array.isArray(node.children)) return;
+  for (const child of node.children) styleButtonLinks(child);
+  if (node.type !== "paragraph" || node.children.length !== 1) return;
+  const [strong] = node.children;
+  if (strong.type !== "strong" || strong.children?.length !== 1 || strong.children[0].type !== "link") return;
+  const link = strong.children[0];
+  node.data = { ...node.data, hProperties: { ...node.data?.hProperties, className: ["button-link-wrap"] } };
+  link.data = { ...link.data, hProperties: { ...link.data?.hProperties, className: ["button-link"] } };
+}
+
 export function validateColumns(markdown, path = "Markdown file") {
   const lines = String(markdown).replace(/\r\n/g, "\n").split("\n");
   const start = bodyStart(lines);
@@ -113,7 +124,10 @@ export default function remarkColumns() {
     const body = lines.slice(start);
     let hasMarker = false;
     eachMarker(body, 0, () => { hasMarker = true; });
-    if (!hasMarker) return;
+    if (!hasMarker) {
+      styleButtonLinks(tree);
+      return;
+    }
     validateColumns(file.value, file.path);
     const children = [{ type: "html", value: COLUMN_STYLES }];
     let normalStart = 0;
@@ -140,5 +154,6 @@ export default function remarkColumns() {
     if (block) fail(file, block.line, ":::columns block is not closed");
     flushNormal(body.length);
     tree.children = children;
+    styleButtonLinks(tree);
   };
 }

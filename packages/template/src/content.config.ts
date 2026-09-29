@@ -14,6 +14,7 @@ const pages = defineCollection({
     description: z.string().min(1).optional(),
     pageType: z.enum(["home", "content", "coverage"]),
     navLabel: z.string().min(1).optional(),
+    navOrder: z.number().int().min(0).optional(),
     showInNav: z.boolean().default(true)
   })
 });
