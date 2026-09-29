@@ -58,7 +58,7 @@ Nada. Solo se cambió `packages/template/src/layouts/BaseLayout.astro` y este re
 
 ## Lo que no pudiste verificar
 
-Nada localmente. El resultado remoto se añadirá después de esperar el workflow solicitado.
+Nada. Publish site Workers terminó en verde para `851fd1d`: [run 36605937334](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/36605937334). Discover sites, Publish stuart-homeowners y Publish _example terminaron correctamente.
 
 ## Dónde dudaste
 
@@ -80,4 +80,4 @@ No se agregó ni cambió contenido, schema ni Studio. La copia de prueba de `log
 
 ## Commits
 
-Pendiente de crear al momento de redactar este reporte.
+- `851fd1d` — `fix(template): collapse header nav when it does not fit; size footer logo (W-121 part 1b)`
