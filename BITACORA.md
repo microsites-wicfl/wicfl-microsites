@@ -1,3 +1,47 @@
+## 2026-09-30 (cierre del día) · Analítica lista para el launch; Places espera a Kevin; el número de PSL no sirve
+
+**Quién:** Vic, Claude Code, cowork.
+
+**Hecho hoy:**
+- **Analítica (Gate B, prompt 030):** Claude Code (`957d6ae`, `e0e593e`, [run 36762944717](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/36762944717) verde).
+  - El template carga GTM **solo** cuando el hostname es `site.domain` o `www.`; sin `gtag.js` directo ni `<noscript>`.
+  - Eventos al `dataLayer` sin PII: `quote_start`, `quote_step`, `generate_lead` (una vez), `policy_upload`, `phone_click` (con `link_location`).
+  - Stuart con `G-YBYQXRCBLN` y `GTM-TV5RN2DB`.
+  - Revisión de cowork (`1f5cec1`), verificado en vivo en workers.dev: no se carga GTM, `phone_click` sale correcto.
+- **GA4 (Vic):**
+  - Cuenta "WICFL Microsites", propiedad "Stuart Homeowners Insurance" (zona horaria de Nueva York), stream "Stuart website", Form interactions apagado.
+  - Accesos: Kevin Administrator, Pavel Editor, `microsites@wicfl.com` Administrator.
+  - Dimensiones personalizadas `link_location` y `site_slug`.
+- **GTM (Vic):** contenedor `stuarthomeownersinsurance.com`, **versión 3 "Conversion events" publicada**:
+  - "GA4 - Google tag" en Initialization;
+  - "GA4 events" (GA4 Event, nombre `{{Event}}`, 5 parámetros) con el trigger "WICFL events" (Custom Event por regex de los cinco eventos);
+  - 5 Data Layer Variables.
+  - Kevin invitado con Publish en el contenedor.
+- **Key events:** GA4 ya no deja crearlos antes de que llegue el evento. Paso 7 nuevo en `docs/LAUNCH_RUNBOOK.md` (`04d4be9`): el 9-oct, después del lead y la llamada de prueba, estrella a `generate_lead` y `phone_click`.
+- **Studio y manual:** guía de operador v2.2 (`2ff4fc8`) y manual en artifact v2.2 con "Page sections", "Brand and logo" y "Menu position".
+- **Google Places (W-118):** Kevin puso la tarjeta, pero en otra cuenta de Google. Pedido a Kevin: rol **Billing Account User** para `microsites@wicfl.com`. El prompt 029 está listo (`81c6efe`) y espera la llave.
+- **GoTo (W-024):** revisado con el reporte de solo lectura de ovas-internal del 16-sep, que ve la misma cuenta de GoTo (66 números).
+  - **Stuart `+17722470106`:** cero llamadas hasta el 16-sep. Limpio.
+  - **PSL `+17723354779`:** 22 llamadas desde el 24-jul, antes de que existiera el dominio (22-sep). Es una línea existente de Walker y **no sirve como número de tracking**. Pedirle a Kevin un DID nuevo antes del 12-oct.
+
+**Lo que vale conservar:**
+- **La analítica se prueba de verdad solo en el dominio real.** Todo lo verificable antes del 9-oct ya se verificó: el HTML, el guard de hostname, los pushes y la configuración de GTM. Lo que queda (GTM Preview, Realtime, key events) está en el runbook con dueño.
+- **ovas-internal ya tiene los datos de llamadas de toda la cuenta de GoTo.** Contestó en minutos lo que por chat habría tardado días, y es la fuente natural para el conteo semanal de llamadas de Gate B. Falta decidir si WICFL lee de ahí o tiene su propia credencial. Por ahora, solo lectura y sin tocar su producción sin OK de Vic.
+
+**Estado al cierre:** `origin/main` en `e0e593e`. Quedan locales `1f5cec1`, `04d4be9` y este cierre; los sube el siguiente push de Claude Code.
+
+**Pendientes, en orden:**
+1. **Kevin:** Billing Account User para `microsites@wicfl.com` (Places); número nuevo de GoTo para PSL.
+2. **Viernes 2:** capacitación de Pavel. Cowork propone una página de ejemplo con su portada (textos de su PDF, fotos de muestra).
+3. **Pavel, para el lunes 5:** fotos, logo blanco, lugares de la zona de servicio, textos legales (W-131), quitar "Demo".
+4. **Lunes 5 y martes 6:** Pavel arma la portada de Stuart; el 6 se decide si sale con el diseño nuevo.
+5. **Vic:** borrar los contactos de prueba "WICFL TEST" y "WICFL TEST 2" en GHL.
+6. **Con la llave de Places:** Vic la guarda en `apps/lead-api/.env` y Claude Code corre el 029.
+7. **9-oct:** runbook completo, incluido el paso 7 (key events) y confirmar la grabación con la llamada de prueba.
+8. **Menores, sin prompt:** hueco entre eyebrow y H2 en `:::cta`; `astro dev` falla con rutas con espacios.
+
+---
+
 ## 2026-09-29 (cierre del día) · El diseño de Pavel ya se puede armar: header, footer y nueve bloques
 
 **Quién:** Vic, Codex (hasta quedarse sin cuota), Claude Code (ejecutor desde el 026b), cowork.
