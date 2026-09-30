@@ -58,10 +58,14 @@ const leadApiUrl = "https://wicfl-lead-api.wicfl-microsites.workers.dev";
     const form = root.querySelector("form");
     const status = root.querySelector("[data-status]");
     const steps = [...root.querySelectorAll("fieldset[data-step]")];
-    const state = { step: 1, contactId: null, addressSession: crypto.randomUUID() };
+    const state = { step: 1, contactId: null, addressSession: crypto.randomUUID(), leadGenerated: false };
     let saveInFlight;
     let saveDebounce;
     const read = () => Object.fromEntries(new FormData(form).entries());
+    const pushAnalyticsEvent = (event, parameters) => {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event, ...parameters });
+    };
     const api = async (path, body) => {
       const response = await fetch(`${root.dataset.api}${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ siteSlug: root.dataset.site, leadSource: root.dataset.source, formId: root.dataset.formId, contactId: state.contactId, ...body }) });
       const data = await response.json().catch(() => ({}));
@@ -102,8 +106,21 @@ const leadApiUrl = "https://wicfl-lead-api.wicfl-microsites.workers.dev";
         if (state.step === 3 && saveInFlight) await saveInFlight;
         const result = await api("/v1/leads", read());
         if (result.contactId) state.contactId = result.contactId;
-        if (state.step < 3) showStep(state.step + 1);
-        else { form.hidden = true; root.querySelector("[data-confirmation]").hidden = false; status.textContent = ""; }
+        if (state.step === 1) {
+          pushAnalyticsEvent("quote_start", { form_id: root.dataset.formId, site_slug: root.dataset.site });
+          showStep(2);
+        } else if (state.step === 2) {
+          pushAnalyticsEvent("quote_step", { form_id: root.dataset.formId, site_slug: root.dataset.site, step: 3 });
+          showStep(3);
+        } else {
+          form.hidden = true;
+          root.querySelector("[data-confirmation]").hidden = false;
+          status.textContent = "";
+          if (!state.leadGenerated) {
+            pushAnalyticsEvent("generate_lead", { form_id: root.dataset.formId, site_slug: root.dataset.site, lead_source: root.dataset.source });
+            state.leadGenerated = true;
+          }
+        }
       } catch (error) {
         if (state.step < 3) {
           showStep(state.step + 1);
@@ -155,6 +172,7 @@ const leadApiUrl = "https://wicfl-lead-api.wicfl-microsites.workers.dev";
         const response = await fetch(signed.url, { method: "PUT", headers: { "content-type": file.type }, body: file });
         if (!response.ok) throw Error("Your declaration could not be uploaded. Please try again.");
         uploadStatus.textContent = "Your declaration was uploaded securely.";
+        pushAnalyticsEvent("policy_upload", { form_id: root.dataset.formId, site_slug: root.dataset.site });
       } catch (error) { uploadStatus.textContent = error.message; }
     });
   })();

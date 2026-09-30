@@ -76,6 +76,8 @@ const themeCss = [
 ].join("");
 const headingFontDefinition = FONT_FAMILIES[headingFont];
 const headingFontPackage = headingFontDefinition.package;
+const gtmId = site.analytics.gtm;
+const hasGtm = /^GTM-[A-Z0-9]+$/.test(gtmId) && !gtmId.includes("PLACEHOLDER");
 ---
 
 <!doctype html>
@@ -85,6 +87,18 @@ const headingFontPackage = headingFontDefinition.package;
   style={`--site-accent: ${site.theme.accentColor}; --site-secondary: ${site.theme.secondaryColor ?? site.theme.accentColor}; --text-on-primary: ${accentText};`}
 >
   <head>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+    </script>
+    {hasGtm && <script is:inline define:vars={{ gtmId, domain: site.domain }}>
+      if (location.hostname === domain || location.hostname === `www.${domain}`) {
+        window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtm.js?id=${gtmId}`;
+        document.head.append(script);
+      }
+    </script>}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content={site.theme.accentColor} />
@@ -168,7 +182,21 @@ const headingFontPackage = headingFontDefinition.package;
         </div>
       </div>
     </footer>
-    <script is:inline>
+    <script is:inline define:vars={{ analyticsSiteSlug: site.slug }}>
+      const pushAnalyticsEvent = (event, parameters) => {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event, ...parameters });
+      };
+      document.addEventListener("click", (event) => {
+        const phoneLink = event.target.closest("a[href^=\"tel:\"]");
+        if (!phoneLink) return;
+        const location = phoneLink.closest("header")
+          ? "header"
+          : phoneLink.closest("footer")
+            ? "footer"
+            : "content";
+        pushAnalyticsEvent("phone_click", { site_slug: analyticsSiteSlug, link_location: location });
+      });
       const header = document.querySelector(".site-header");
       const toggle = document.querySelector(".menu-toggle");
       const menu = document.querySelector("#site-menu");
