@@ -91,6 +91,8 @@ site. Nothing there reaches the public.
    - **Description:** shown under the title in Google. Aim for 120 to 160 characters.
    - **Menu name:** the short name in the site menu. Empty means the title is used.
    - **Page type:** *Content page* or *Coverage page*. The home page is fixed.
+   - **Menu position:** the page's place in the site menu. 1 goes first after Home; pages
+     without a number come after the numbered ones.
    - **Show this page in the site menu:** untick for pages that shouldn't be in the menu.
 3. **Page text** is on the left and the **Live preview** on the right, updating as you type.
    The text uses Markdown:
@@ -116,6 +118,32 @@ fields can't show. You can still edit it; tell Vic so he fixes that page.
 3. Replace **Describe this image** with a real description of what it shows. That text is read
    by screen readers and by Google.
 4. To reuse an image, click **Insert** under it.
+
+### Page sections
+
+A page can be built from ready-made sections, the ones in the homepage design. Each is a block in
+the page text, like columns, and Studio writes it for you from **Page sections**:
+
+| Button | What it is | What it needs |
+|---|---|---|
+| **Hero with photo** | Big photo at the top with the page's main title, subtitle, a sentence and a button | One per page, first. One photo and one `#` title (the page's main title) |
+| **Icon row** | 2 to 4 short points with an icon each | Each point: `icon:`, a `###` title, one or two sentences |
+| **Dark icon cards** | The same points as cards on a dark full-width band, with a title and intro | Same as the icon row |
+| **Cards with photos** | 2 to 4 cards with photo, title, text and a link; the whole card is clickable | Each card: one photo, a `###` title, text, one link |
+| **Questions (FAQ)** | 2 to 12 questions that open with a click; Google gets them as FAQ data automatically | Each question: a `###` line with the question, then the answer |
+| **Service area** | A row of places, each with a pin | Nothing to write: places come from **Site settings → Service area** |
+| **Quote band** | Full-width band with an optional photo, title, sentence, button and a short line under it | One `##` title and one button; usually last |
+
+1. Place the cursor where the section goes (the hero always goes at the top; Studio puts it there).
+2. Click the button, then replace every sample line: they only say what goes there.
+3. Where it says `replace-with-your-image`, use your own image from **Images** (`/images/name.jpg`).
+
+Lines like `eyebrow: ...` (small label above a title) and `icon: ...` at the start of a part are
+settings, not text. The icon names are listed with their pictures under **Icon names for icon
+rows**. A line that is only a bold link, like `**[Get a Quote](/contact/)**`, shows as a button.
+
+A page has one main title: the hero's `#` line, or the page Title when there's no hero. Don't use
+`#` anywhere else. When saving, Studio lists every line to fix and selects the first one.
 
 ### Columns
 
@@ -197,6 +225,8 @@ right redraws as you change anything.
 
 - **Logo:** SVG, PNG or WebP, up to 1 MB. It's saved to the draft as soon as you upload it. An SVG
   that carries code (not just a drawing) is refused; export it again as a plain SVG, or use a PNG.
+- **Logo for dark backgrounds:** a white or light version of the logo for the dark footer. Without
+  it the footer shows the brand name as text. Never upload the dark logo here.
 - **Style:** Rounded, Square or Soft (corners and shadows).
 - **Four colors:** main (buttons, links, the bar at the top), second (small details only, never
   text), soft background (header, quotes, tables) and footer (must be dark). The text color stays
