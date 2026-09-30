@@ -94,3 +94,24 @@ No se modificaron `apps/studio/` ni `apps/lead-api/`, y no se agregaron dependen
 - Publish site Workers para `957d6ae`: run
   [`36762944717`](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/36762944717),
   **success**. Publicó `_example` y `stuart-homeowners`.
+
+## Revisión de cowork
+
+**Veredicto: aprobado.** El diff hace exactamente lo pedido y nada más.
+
+Revisado contra el diff de `957d6ae`:
+
+- GTM se inyecta solo si el ID es válido y no es placeholder, y solo corre cuando `location.hostname` es `stuarthomeownersinsurance.com` o `www.`. No hay `gtag.js`. Sin CSP en los sitios que bloquee `googletagmanager.com`.
+- Los cinco eventos llevan solo IDs (`form_id`, `site_slug`, `lead_source`, `step`, `link_location`). Sin PII.
+- `generate_lead` protegido con `state.leadGenerated`, solo en éxito final.
+- De acuerdo con omitir el `<noscript>`.
+
+Verificado en vivo (navegador integrado, `wicfl-stuart-homeowners-published…/contact/`): `dataLayer` existe y vacío, cero scripts de `googletagmanager`, snippet `GTM-TV5RN2DB` presente, sin `gtag/js`. Clic simulado al teléfono del header → `{"event":"phone_click","site_slug":"stuart-homeowners","link_location":"header"}`.
+
+Observaciones menores, sin acción ahora:
+
+1. Si `/v1/leads` falla en el paso 1 o 2, el formulario avanza igual (comportamiento previo) pero no empuja `quote_start`/`quote_step`. Subconteo aceptable del embudo; el lead se cuenta por `generate_lead`.
+2. En el click listener, `const location` sombrea `window.location` dentro del callback. Inofensivo; renombrar si se vuelve a tocar.
+3. El trailer del commit tiene una línea en blanco entre `Co-Authored-By` y `Claude-Session`. Cosmético.
+
+Pendiente fuera del código: la prueba real (GTM Preview + DebugView de GA4) solo es posible cuando el dominio apunte al pod el día del launch. Queda en el runbook. Siguiente paso: Vic crea en GTM el trigger y el tag de eventos, y en GA4 los key events `generate_lead` y `phone_click`.
