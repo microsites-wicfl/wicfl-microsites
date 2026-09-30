@@ -63,8 +63,11 @@ la prueba requerida, el script de check y este reporte.
 
 ## Lo que no pude verificar
 
-El publish todavía se verifica después del push. La inspección del HTML de workers.dev y su run
-de Publish se agregan a este reporte cuando terminen.
+Nada pendiente de este prompt. Después del push se consultó
+`https://wicfl-stuart-homeowners-published.wicfl-microsites.workers.dev/contact/`: el HTML
+publicado incluye `GTM-TV5RN2DB` y la comprobación `location.hostname === domain`, y no contiene
+`gtag/js?id=G-`. Por ello workers.dev conserva el snippet visible para auditoría, pero no inserta
+ni solicita GTM en ese hostname.
 
 ## Dónde dudé
 
@@ -87,4 +90,7 @@ No se modificaron `apps/studio/` ni `apps/lead-api/`, y no se agregaron dependen
 
 ## Commits
 
-Pendiente de commit y push.
+- `957d6ae` — `feat(template): load GTM on the production domain and push conversion events (Gate B)`.
+- Publish site Workers para `957d6ae`: run
+  [`36762944717`](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/36762944717),
+  **success**. Publicó `_example` y `stuart-homeowners`.
