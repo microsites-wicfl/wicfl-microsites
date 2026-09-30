@@ -39,6 +39,7 @@ Order matters: the rehearsal in step 3 cannot go green until steps 1 and 2 are d
 | 4 | Vic | Check `https://stuarthomeownersinsurance.com/` and `https://www.stuarthomeownersinsurance.com/`. | Both return HTTPS 200 and neither response has `X-Robots-Tag`. Check `robots.txt` and `sitemap.xml` use the real domain. |
 | 5 | Vic | Make one tracking call and submit one test lead at `/contact/`. | The call is recorded in GoTo; the lead reaches GoHighLevel with the site tag. |
 | 6 | Vic | Confirm measurement and discovery. | GA4 shows the visit in real time; create/verify Search Console property and submit the sitemap manually. Search Console automation is Phase 7 work. |
+| 7 | Vic, GA4 | Mark the conversions. GTM container `GTM-TV5RN2DB` (version 3, "Conversion events") and the GA4 custom dimensions `link_location` and `site_slug` are already live since 30-sep. GA4 only lets you star an event after it has arrived once, so this waits for the test lead and call in step 5. In **Admin → Data display → Events → Recent events**, star `generate_lead` and `phone_click`. | Both appear under **Key events**. Optional: run GTM **Preview** on the real domain and confirm `GA4 events` fires on `quote_start`, `generate_lead` and `phone_click`. |
 
 ## Rollback
 
