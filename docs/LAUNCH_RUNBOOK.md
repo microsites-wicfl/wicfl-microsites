@@ -28,6 +28,7 @@ Order matters: the rehearsal in step 3 cannot go green until steps 1 and 2 are d
 5. Rehearsal run again: green, and this time the W-103 output is **clean** (no findings). That
    is the signal production will pass the gate.
 6. Pavel completes the content and conversion checks in `docs/QA_CHECKLIST.md`.
+7. The test pages `about-demo` and `coverage-demo` are deleted from `sites/stuart-homeowners/content/` (Pavel, in Studio). They are not in the menu, but they would go live and into the sitemap. Checklist for Pavel: `docs/OPERATOR_GUIDE.md`, *Getting Stuart ready to launch*.
 
 ## Launch sequence, 9 October
 

@@ -168,6 +168,28 @@ The text that goes beside the image.
 3 columns. If a block is left open or has a wrong number of columns, Studio says which line to
 fix when you save.
 
+### Your first homepage
+
+There is a finished example to copy from: the Stuart homepage built with every page section,
+at [https://wicfl-_example-published.wicfl-microsites.workers.dev/stuart-home-demo/](https://wicfl-_example-published.wicfl-microsites.workers.dev/stuart-home-demo/). In Studio it lives under **Practice sites → Example Flood Insurance →
+Stuart homepage demo**, where you can see how each section is written. Nothing on a practice
+site is ever live, so it is also the place to try things.
+
+1. Keep the example open in one tab and the site's **Home** page in another.
+2. Build from top to bottom with the **Page sections** buttons. The hero always goes first.
+3. Add photos in **Images**, then place each one in its section.
+4. Save; Studio points at the line to fix if a section is off. Check the preview on a phone too,
+   then publish.
+
+Photos: hero and closing banner are wide landscape photos, at least 1600 px wide, with the
+subject toward the right because the text sits on the left. Cards and photos next to text are
+landscape, at least 900 px wide, with what matters in the center because cards trim the edges.
+Describe every photo in its text.
+
+The example uses drawings marked *Sample image*, and the short lines under its icons were
+written only to show the layout. Replace both with your own photos and words: no AI-written text
+ships. Alternate light and dark sections so two with the same background don't sit together.
+
 ### Creating a page
 
 1. On the site, click **New page**.
@@ -268,6 +290,22 @@ right redraws as you change anything.
    `docs/CONTENT_STANDARDS.md` and the launch checklist in `docs/QA_CHECKLIST.md`.
 5. **Clear the settings blockers** that are yours.
 6. **Publish.** For a site that isn't live yet, tell Vic it's ready to launch.
+
+### Getting Stuart ready to launch
+
+Stuart launches Friday 9 October; Vic reviews on Tuesday 6 October. All of it is done in Studio:
+
+1. **Site settings:** take *(Demo)* out of the brand name and *demo* out of the SEO title,
+   description and keywords.
+2. **Site settings → Service area:** one place per line: Stuart, Sewall's Point, Sailfish Point,
+   Hutchinson Island, Palm City, Rocky Point, Martin County.
+3. **Brand and logo:** the white logo in **Logo for dark backgrounds**.
+4. **Home:** as in *Your first homepage*.
+5. **Legal pages:** three pages titled exactly *Privacy Policy*, *Terms of Use* and *Disclaimer*;
+   the footer links them by itself. Kevin approves the text before publishing (W-131).
+6. **Delete the old test pages** *About this demo* and *Homeowners coverage, demo layout*.
+7. **Before this site can go live** shows none of your items.
+8. **Publish** and tell Vic Stuart is ready.
 
 ## Part 4 — Reference documents, and when to open each
 
