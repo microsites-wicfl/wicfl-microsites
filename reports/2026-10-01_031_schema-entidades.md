@@ -192,7 +192,9 @@ No contiene `Service`, porque la página no declara `serviceName`.
 
 ## Lo que no pude verificar
 
-El Rich Results Test externo lo corre Pavel como pidió el prompt. Publish se agrega después del push.
+El Rich Results Test externo lo corre Pavel como pidió el prompt. Publish site Workers sí quedó
+verificado en verde para `3212244`:
+[`36923565874`](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/36923565874).
 
 ## Dónde dudé
 
@@ -212,4 +214,5 @@ No se modificaron `apps/studio/`, `apps/lead-api/` ni el contenido de Stuart. St
 
 ## Commits
 
-Pendiente de commit y Publish.
+- `3212244` — `feat(template): connected schema graph, breadcrumbs and per-page Service (W-125)`.
+- Publish site Workers run `36923565874` — success, con `_example` y `stuart-homeowners` publicados.
