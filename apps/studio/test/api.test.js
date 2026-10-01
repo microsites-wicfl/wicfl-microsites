@@ -281,6 +281,7 @@ test("the editor reads a page as fields and saves it back through them", async (
   const opened = await call(github, "GET", "/api/sites/stuart/pages/flood.md");
   assert.deepEqual(opened.body.fields, {
     title: "Flood", description: "", navLabel: "", showInNav: true, pageType: "content", navOrder: "",
+    serviceName: "",
   });
   assert.equal(opened.body.route, "/flood/");
   const fields = { ...opened.body.fields, title: "Flood insurance", pageType: "coverage" };

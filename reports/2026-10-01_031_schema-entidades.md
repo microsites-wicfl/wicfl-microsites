@@ -216,3 +216,23 @@ No se modificaron `apps/studio/`, `apps/lead-api/` ni el contenido de Stuart. St
 
 - `3212244` — `feat(template): connected schema graph, breadcrumbs and per-page Service (W-125)`.
 - Publish site Workers run `36923565874` — success, con `_example` y `stuart-homeowners` publicados.
+
+## Revisión de cowork
+
+**Veredicto: aprobado.** El grafo coincide con lo pedido y con lo que pidió Pavel.
+
+Revisado contra el diff de `3212244`:
+
+- Una sola función pura (`siteGraphJsonLd`) arma el grafo; `BaseLayout.astro` ya no construye schema por su cuenta. Sin datos inventados: todo sale del config o del frontmatter.
+- `@id` estables (`/#website`, `/#agency`, `<agency.url>/#organization`, `<página>#breadcrumb`, `<página>#service`); `parentOrganization` y `provider` referencian por `@id`.
+- Bien visto lo de las pruebas de build en serie: tres pruebas compartían `dist/`.
+
+Verificado en vivo (navegador integrado, `wicfl-stuart-homeowners-published…/flood-insurance/`): un solo script con `WebSite`, las dos `InsuranceAgency` y `BreadcrumbList`; sin `Service`, como debe.
+
+Hallazgos:
+
+1. **La agencia del micrositio de Stuart sale sin `address`** porque el config no trae `contact.address`. Google exige `address` en `LocalBusiness`/`InsuranceAgency`, así que el Rich Results Test lo va a marcar. No es un bug del prompt: es una decisión de negocio pendiente (¿el micrositio usa la dirección de la oficina de Walker en Stuart, que además debe coincidir con su Google Business Profile, W-006?). Se le pregunta a Pavel.
+2. **Portada del idioma alterno:** la condición es `page.path !== "/"`, así que `/es/` recibiría una miga "Home → sí misma". Solo afecta al fixture bilingüe; Stuart y PSL son monolingües. La miga dice "Home" también en páginas en español. Arreglar cuando exista el primer sitio bilingüe (W-031).
+3. El nombre del sitio sigue con "(Demo)" en el schema hasta que Pavel lo quite en Site settings.
+
+Studio (cowork, mismo día): campo **Service name** en los datos de la página (`serviceName`, opcional, 2 a 80 caracteres), con pruebas; 121 pruebas de Studio en verde.

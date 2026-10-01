@@ -471,6 +471,7 @@ function readFields() {
       showInNav: $("#field-showInNav").checked,
       pageType: $("#field-pageType").value,
       navOrder: $("#field-navOrder").value,
+      serviceName: $("#field-serviceName").value,
     },
     body: $("#content").value,
   };

@@ -33,6 +33,8 @@ export function fieldsForm(fields, { allowHome = true } = {}) {
           `<select id="field-pageType"${locked}>${types}</select>`)}
       </div>
       <div class="row">
+        ${field("field-serviceName", text.fieldServiceName, text.fieldServiceNameHint,
+          `<input id="field-serviceName" type="text" maxlength="80" value="${esc(fields.serviceName ?? "")}">`)}
         ${field("field-navOrder", text.fieldNavOrder, text.fieldNavOrderHint,
           `<input id="field-navOrder" type="number" min="0" max="999" step="1" inputmode="numeric"
             value="${esc(fields.navOrder ?? "")}">`)}
@@ -153,7 +155,8 @@ export function renderPage(site, page) {
 }
 
 export function renderNewPage(site) {
-  const blank = { title: "", description: "", navLabel: "", showInNav: true, pageType: "content", navOrder: "" };
+  const blank = { title: "", description: "", navLabel: "", showInNav: true, pageType: "content", navOrder: "",
+    serviceName: "" };
   return `
     <a class="back" href="${siteLink(site.slug)}">${esc(text.backToSite(site.brandName))}</a>
     <h1>${text.newPageTitle}</h1>

@@ -93,6 +93,11 @@ site. Nothing there reaches the public.
    - **Page type:** *Content page* or *Coverage page*. The home page is fixed.
    - **Menu position:** the page's place in the site menu. 1 goes first after Home; pages
      without a number come after the numbered ones.
+   - **Service name:** only for a page about one service, like *Flood Insurance*. The site then
+     tells search engines that the page is that service (Service schema). Leave it empty on
+     every other page, Contact included. The rest of the search-engine data (the agency, Walker
+     Insurance Agency behind it, breadcrumbs, FAQ) is added by the site itself; nobody writes
+     it by hand.
    - **Show this page in the site menu:** untick for pages that shouldn't be in the menu.
 3. **Page text** is on the left and the **Live preview** on the right, updating as you type.
    The text uses Markdown:
@@ -303,9 +308,11 @@ Stuart launches Friday 9 October; Vic reviews on Tuesday 6 October. All of it is
 4. **Home:** as in *Your first homepage*.
 5. **Legal pages:** three pages titled exactly *Privacy Policy*, *Terms of Use* and *Disclaimer*;
    the footer links them by itself. Kevin approves the text before publishing (W-131).
-6. **Delete the old test pages** *About this demo* and *Homeowners coverage, demo layout*.
-7. **Before this site can go live** shows none of your items.
-8. **Publish** and tell Vic Stuart is ready.
+6. **Service name** filled in on each coverage page (high-value, waterfront, coastal,
+   difficult-to-insure, after nonrenewal, flood).
+7. **Delete the old test pages** *About this demo* and *Homeowners coverage, demo layout*.
+8. **Before this site can go live** shows none of your items.
+9. **Publish** and tell Vic Stuart is ready.
 
 ## Part 4 — Reference documents, and when to open each
 

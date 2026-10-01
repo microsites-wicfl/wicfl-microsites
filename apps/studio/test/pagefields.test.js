@@ -23,6 +23,7 @@ test("a real page reads as fields plus text", () => {
       showInNav: true,
       pageType: "coverage",
       navOrder: "",
+      serviceName: "",
     },
     body: "Living in Stuart.\n",
   });
@@ -103,5 +104,18 @@ test("menu position: read, written as a bare number, removed when emptied, refus
 
   for (const bad of ["first", "-1", "1.5", "1000"]) {
     assert.throws(() => composePage(flood, { ...parsed.fields, navOrder: bad }, parsed.body), /whole number/);
+  }
+});
+
+test("service name is optional, trimmed, and limited to 2 to 80 characters", () => {
+  const parsed = parsePage(flood);
+  const named = composePage(flood, { ...parsed.fields, serviceName: "  Flood   Insurance " }, parsed.body);
+  assert.match(named, /\nserviceName: "Flood Insurance"\n---/);
+  assert.equal(parsePage(named).fields.serviceName, "Flood Insurance");
+  const emptied = composePage(named, { ...parsePage(named).fields, serviceName: "" }, parsed.body);
+  assert.doesNotMatch(emptied, /serviceName/);
+  assert.equal(emptied, composePage(flood, parsed.fields, parsed.body));
+  for (const bad of ["F", "x".repeat(81)]) {
+    assert.throws(() => composePage(flood, { ...parsed.fields, serviceName: bad }, parsed.body), /Service name/);
   }
 });

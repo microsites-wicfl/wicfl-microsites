@@ -98,6 +98,9 @@ export const text = {
   fieldShowInNav: "Show this page in the site menu",
   fieldNavOrder: "Menu position",
   fieldNavOrderHint: "1 goes first after Home. Pages without a number come after the numbered ones.",
+  fieldServiceName: "Service name",
+  fieldServiceNameHint:
+    "Only for a page about one service, like Flood Insurance. Search engines read it. Otherwise leave it empty.",
   fieldPageType: "Page type",
   pageTypes: { home: "Home page", content: "Content page", coverage: "Coverage page" },
   fieldBody: "Page text",

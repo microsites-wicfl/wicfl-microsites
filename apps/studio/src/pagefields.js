@@ -3,8 +3,8 @@ import { UserError } from "./errors.js";
 // Studio shows a page as separate fields plus its text, so nobody edits the "---" header by hand.
 // Only these fields are editable; any other line in the header is kept exactly as it was.
 export const PAGE_TYPES = ["home", "content", "coverage"];
-const FIELDS = ["title", "description", "navLabel", "showInNav", "pageType", "navOrder"];
-const OPTIONAL = new Set(["description", "navLabel", "navOrder"]);
+const FIELDS = ["title", "description", "navLabel", "showInNav", "pageType", "navOrder", "serviceName"];
+const OPTIONAL = new Set(["description", "navLabel", "navOrder", "serviceName"]);
 
 function split(text) {
   const lines = text.replace(/\r\n/g, "\n").split("\n");
@@ -34,7 +34,8 @@ function unquote(raw) {
 export function parsePage(text) {
   const parts = split(text);
   if (!parts) return null;
-  const fields = { title: "", description: "", navLabel: "", showInNav: true, pageType: "content", navOrder: "" };
+  const fields = { title: "", description: "", navLabel: "", showInNav: true, pageType: "content", navOrder: "",
+    serviceName: "" };
   for (let index = 0; index < parts.header.length; index += 1) {
     const match = parts.header[index].match(/^\s*([A-Za-z_][\w-]*):(.*)$/);
     if (!match || !FIELDS.includes(match[1])) continue;
@@ -67,6 +68,12 @@ function clean(fields) {
       400,
     );
   }
+  // Service name: empty, or the insurance service this page is about. The site adds a Service
+  // entry to the page's search-engine data only when it is filled (the template's serviceName).
+  const serviceName = String(fields?.serviceName ?? "").replace(/\s+/g, " ").trim();
+  if (serviceName && (serviceName.length < 2 || serviceName.length > 80)) {
+    throw new UserError("Service name must be between 2 and 80 characters, like Flood Insurance.", 400);
+  }
   return {
     title,
     description: String(fields?.description ?? "").replace(/\s+/g, " ").trim(),
@@ -74,6 +81,7 @@ function clean(fields) {
     showInNav: fields?.showInNav !== false,
     pageType,
     navOrder: navOrder ? String(Number(navOrder)) : "",
+    serviceName,
   };
 }
 
