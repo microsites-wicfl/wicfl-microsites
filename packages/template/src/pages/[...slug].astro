@@ -23,10 +23,13 @@ const faqJsonLd = faqPageJsonLd(remarkPluginFrontmatter.faq);
 
 <BaseLayout
   title={`${page.data.title} | ${site.brand.name}`}
+  pageTitle={page.data.title}
   description={page.data.description ?? site.seo.description}
   pageType={page.data.pageType}
   path={routeForPageId(page.id)}
   lang={localeOfPageId(page.id)}
+  navLabel={page.data.navLabel}
+  serviceName={page.data.serviceName}
   hreflangAlternates={hreflangAlternates}
   faqJsonLd={faqJsonLd}
 >

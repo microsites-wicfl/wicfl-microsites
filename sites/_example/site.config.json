@@ -6,6 +6,17 @@
     "parent": "WICFL",
     "logo": "/logo.svg"
   },
+  "agency": {
+    "name": "Example Licensed Insurance Agency",
+    "url": "https://example-agency.invalid/",
+    "telephone": "+15305550199",
+    "address": {
+      "street": "456 Fixture Avenue",
+      "city": "Stuart",
+      "state": "FL",
+      "zip": "34994"
+    }
+  },
   "niche": {
     "product": "flood",
     "audience": "homeowner"

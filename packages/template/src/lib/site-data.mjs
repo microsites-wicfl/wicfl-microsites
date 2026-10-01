@@ -54,6 +54,89 @@ export function faqPageJsonLd(faq) {
   }).replace(/</g, "\\u003c");
 }
 
+function absoluteUrl(origin, path) {
+  return new URL(path, `${origin}/`).toString();
+}
+
+function postalAddress(address) {
+  if (!address) return undefined;
+  return {
+    "@type": "PostalAddress",
+    streetAddress: address.street,
+    addressLocality: address.city,
+    addressRegion: address.state,
+    postalCode: address.zip
+  };
+}
+
+// Shared page-level schema graph. The config supplies business entities; page frontmatter only
+// decides whether the page represents a concrete service. No author writes JSON-LD by hand.
+export function siteGraphJsonLd(config, page) {
+  const origin = `https://${config.domain}`;
+  const pageUrl = absoluteUrl(origin, page.path);
+  const agencyId = `${origin}/#agency`;
+  const websiteId = `${origin}/#website`;
+  const associatedAgencyId = config.agency
+    ? `${config.agency.url.replace(/\/+$/, "")}/#organization`
+    : undefined;
+  const graph = [
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      url: `${origin}/`,
+      name: config.brand.name,
+      inLanguage: config.locale.primary,
+      publisher: { "@id": agencyId }
+    },
+    {
+      "@type": "InsuranceAgency",
+      "@id": agencyId,
+      name: config.brand.name,
+      url: `${origin}/`,
+      telephone: config.contact.trackingPhone,
+      email: config.contact.email,
+      ...(config.geo.serviceArea ? { areaServed: config.geo.serviceArea } : {}),
+      ...(config.contact.address ? { address: postalAddress(config.contact.address) } : {}),
+      ...(config.brand.logo ? { logo: absoluteUrl(origin, config.brand.logo) } : {}),
+      ...(associatedAgencyId ? { parentOrganization: { "@id": associatedAgencyId } } : {})
+    }
+  ];
+  if (config.agency) {
+    graph.push({
+      "@type": "InsuranceAgency",
+      "@id": associatedAgencyId,
+      name: config.agency.name,
+      url: config.agency.url,
+      ...(config.agency.telephone ? { telephone: config.agency.telephone } : {}),
+      ...(config.agency.address ? { address: postalAddress(config.agency.address) } : {})
+    });
+  }
+  if (page.path !== "/") {
+    const homePath = page.lang === config.locale.primary ? "/" : `/${page.lang}/`;
+    graph.push({
+      "@type": "BreadcrumbList",
+      "@id": `${pageUrl}#breadcrumb`,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl(origin, homePath) },
+        { "@type": "ListItem", position: 2, name: page.navLabel ?? page.title, item: pageUrl }
+      ]
+    });
+  }
+  if (page.serviceName) {
+    graph.push({
+      "@type": "Service",
+      "@id": `${pageUrl}#service`,
+      name: page.serviceName,
+      serviceType: page.serviceName,
+      url: pageUrl,
+      ...(page.description ? { description: page.description } : {}),
+      provider: { "@id": agencyId },
+      ...(config.geo.serviceArea ? { areaServed: config.geo.serviceArea } : {})
+    });
+  }
+  return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");
+}
+
 // hreflang alternates for one page, computed against the site's full page collection. Returns
 // [] for a monolingual site, since there is nothing to point at: docs/SCHEDULE.md is explicit
 // that this routing is built and exercised (by the bilingual sites/_example fixture in CI) but

@@ -19,6 +19,25 @@
         "logoOnDark": { "type": "string", "description": "Root-relative path to the version of the site's logo intended for the dark footer, served from sites/<slug>/public/. Optional: without it the footer renders the brand name as text.", "pattern": "^/[^\\s]+$" }
       }
     },
+    "agency": {
+      "type": "object", "description": "Optional licensed agency behind this microsite. It is emitted as the associated InsuranceAgency in generated schema.", "additionalProperties": false,
+      "required": ["name", "url"],
+      "properties": {
+        "name": { "type": "string", "description": "Licensed agency's approved legal or public name.", "minLength": 2, "maxLength": 100 },
+        "url": { "type": "string", "description": "Canonical HTTPS URL for the licensed agency.", "pattern": "^https://[^\\s]+$", "maxLength": 2048 },
+        "telephone": { "type": "string", "description": "Optional licensed agency phone number in E.164 form.", "pattern": "^\\+[1-9][0-9]{1,14}$" },
+        "address": {
+          "type": "object", "description": "Optional approved street address for the licensed agency.", "additionalProperties": false,
+          "required": ["street", "city", "state", "zip"],
+          "properties": {
+            "street": { "type": "string", "description": "Street address including suite when applicable.", "minLength": 5, "maxLength": 120 },
+            "city": { "type": "string", "description": "USPS city for the approved address.", "minLength": 2, "maxLength": 80 },
+            "state": { "type": "string", "description": "USPS state code for the address.", "const": "FL" },
+            "zip": { "type": "string", "description": "Five-digit or ZIP+4 code.", "pattern": "^[0-9]{5}(?:-[0-9]{4})?$" }
+          }
+        }
+      }
+    },
     "niche": {
       "type": "object", "description": "The primary insurance need and intended customer for the site.", "additionalProperties": false,
       "required": ["product", "audience"],

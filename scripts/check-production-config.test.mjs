@@ -28,3 +28,6 @@ test("rejects existing markers and accepts clean config", () => {
   assert.equal(run("clean", config()).status, 0);
   assert.equal(run("_fixture", config({ brand: { name: "Demo" } })).status, 0);
 });
+test("checks placeholder markers inside the associated agency", () => {
+  assert.notEqual(run("agency", config({ agency: { name: "PLACEHOLDER Agency" } })).status, 0);
+});

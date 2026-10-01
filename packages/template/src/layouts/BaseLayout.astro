@@ -6,23 +6,29 @@ interface HreflangAlternate {
 
 interface Props {
   title: string;
+  pageTitle?: string;
   description?: string;
   pageType: "home" | "content" | "coverage";
   path: string;
+  navLabel?: string;
+  serviceName?: string;
   lang?: string;
   hreflangAlternates?: HreflangAlternate[];
   faqJsonLd?: string | null;
 }
 
 import { getCollection } from "astro:content";
-import { routeForPageId, site } from "../lib/site-data.mjs";
+import { routeForPageId, site, siteGraphJsonLd } from "../lib/site-data.mjs";
 import { FONT_FAMILIES, textOnPrimary } from "../../../config-schema/theme.mjs";
 
 const {
   title,
+  pageTitle = title,
   description = site.seo.description,
   pageType,
   path,
+  navLabel,
+  serviceName,
   lang = site.locale.primary,
   hreflangAlternates = [],
   faqJsonLd = null,
@@ -47,18 +53,7 @@ const navPages = (await getCollection("pages"))
 const legalPages = (await getCollection("pages"))
   .filter((page) => ["privacy-policy", "terms-of-use", "disclaimer"].includes(page.id))
   .sort((a, b) => ["privacy-policy", "terms-of-use", "disclaimer"].indexOf(a.id) - ["privacy-policy", "terms-of-use", "disclaimer"].indexOf(b.id));
-const structuredData = JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "InsuranceAgency",
-  name: site.brand.name,
-  telephone: site.contact.trackingPhone,
-  email: site.contact.email,
-  ...(address ? { address: {
-    "@type": "PostalAddress", streetAddress: address.street, addressLocality: address.city,
-    addressRegion: address.state, postalCode: address.zip
-  } } : {}),
-  ...(site.geo.serviceArea ? { areaServed: site.geo.serviceArea } : {})
-}).replace(/</g, "\\u003c");
+const structuredData = siteGraphJsonLd(site, { title: pageTitle, description, path, lang, navLabel, serviceName });
 type FontKey = keyof typeof FONT_FAMILIES;
 const headingFont = (site.theme.headingFont ?? "georgia") as FontKey;
 const bodyFont = (site.theme.bodyFont ?? "system-sans") as FontKey;
