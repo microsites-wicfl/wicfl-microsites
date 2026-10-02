@@ -69,3 +69,27 @@ No se hicieron commits en `draft/stuart-homeowners` ni `draft/testville-umbrella
 ## Commits
 
 - `7185cb6 fix(ci): npm run check no longer needs a browser; browser tests get their own job`
+
+## Revisión de cowork
+
+**Veredicto: aprobado.** `main` vuelve a verde y las vistas previas funcionan.
+
+- Causa confirmada por el ejecutor con la reproducción limpia: `playwright` fuera de `npm ci`.
+- La prueba de navegador vive en `scripts/analytics.browser.test.mjs`, con su job "Browser tests";
+  `npm run check` ya no importa `playwright`; `playwright` 1.63.0 en `devDependencies`.
+- `CLAUDE.md` ahora exige verificar todos los workflows de un push.
+
+**El bloqueo de los re-runs no era un problema real:** un re-run reutiliza el merge viejo. Un
+commit nuevo en la rama del borrador recalcula el merge contra `main`. Comprobado por cowork en
+Studio con el sitio de prueba `testville-umbrella`: un guardado nuevo y la vista previa pasó a
+**ready** (`wicfl-pr20-testville-umbrella…workers.dev`). Para `draft/stuart-homeowners` basta el
+siguiente guardado de Pavel.
+
+**De paso, W-121 quedó probado de punta a punta:** el sitio nuevo se construye con el esqueleto
+de la portada (hero, tarjetas, filas de íconos, zona de servicio, banda), las tres imágenes de
+muestra cargan, no hay desborde horizontal y Studio lista los avisos de imágenes de muestra y
+texto de arranque.
+
+**Lección, que es de cowork:** del 030 al 034 revisé solo "Publish site Workers". "Validate and
+build" estuvo en rojo tres días y cada vista previa de Studio falló sin que nadie lo viera. La
+revisión de cowork incluye desde hoy el estado de todos los workflows del commit.

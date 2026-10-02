@@ -73,3 +73,13 @@ No se modificaron `apps/studio/`, `packages/template/` ni contenido de ningún s
 ## Commits
 
 Pendiente al momento de redactar el reporte: se creará con el mensaje solicitado por el prompt.
+
+## Revisión de cowork
+
+**Veredicto: aprobado.** El gate usa los mismos tres patrones que `starterLeftovers` en Studio
+(`/images/sample-`, la nota de arranque y las instrucciones entre corchetes), recorre
+`sites/<slug>/content/**/*.md` y falla junto con los placeholders del config. Corrido contra
+Stuart por cowork: solo los cuatro hallazgos de "Demo" del config, ninguno nuevo de contenido.
+
+Nota: este commit (`6cdee81`) salió con "Validate and build" en rojo, igual que todos desde el
+030. La causa y el arreglo están en el reporte 035.
