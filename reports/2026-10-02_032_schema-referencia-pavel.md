@@ -94,3 +94,22 @@ No se modificaron páginas visibles, `apps/studio/`, `apps/lead-api/` ni el cont
 ## Commits
 
 Pendiente al momento de redactar el reporte: se creará con el mensaje solicitado por el prompt.
+
+## Revisión de cowork
+
+**Veredicto: aprobado.** El grafo coincide con la referencia v2 de Pavel.
+
+Revisado contra el diff de `785be5f` y verificado en vivo (navegador integrado, `wicfl-stuart-homeowners-published…`):
+
+- `/contact/`: `WebSite`, un solo `InsuranceAgency`, `Organization` (Walker, solo nombre y URL), `BreadcrumbList` y `ContactPage`. Cero referencias colgando.
+- Portada: `WebSite`, `InsuranceAgency`, `Organization`, `WebPage`; sin migas. `inLanguage` `en-US`.
+- Agencia: teléfono `+17722470106`, correo del sitio, logo absoluto, **sin `address`**, `areaServed` con tipo (`Stuart` City; `Port Salerno` y `Palm City` Place).
+
+Publicado: `785be5f` en `origin/main`, Publish site Workers [run 37042207694](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/37042207694) verde. Las secciones "Lo que no pude verificar" y "Commits" del reporte se escribieron antes del push y quedaron desactualizadas; este es el dato real.
+
+Pendientes fuera del código:
+
+1. **Dirección:** Kevin decidió el 2026-09-23 que los sitios no la muestran. Vic le preguntó el 2-oct si quiere reconsiderarlo para Stuart; si dice que sí, basta `contact.address` en el config.
+2. **Pavel:** llenar **Service name** en las páginas de cobertura, elegir un solo nombre de marca (su referencia usa "Stuart Florida Homeowners Insurance" y "Stuart Homeowners Insurance"), quitar "(Demo)" y completar la zona de servicio. Luego Rich Results Test.
+3. `/homeowners-insurance/` está en la referencia de Pavel y no existe en Stuart.
+4. Aviso de Astro por el ID `index` duplicado en `_example` (portadas `index.md` y `es/index.md`): preexistente, sin efecto en el build. Se deja anotado.
