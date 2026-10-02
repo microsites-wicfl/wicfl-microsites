@@ -1,0 +1,42 @@
+{
+  "slug": "testville-umbrella",
+  "domain": "testville-umbrella-test.invalid",
+  "brand": { "name": "Testville Test Site", "parent": "WICFL" },
+  "niche": { "product": "umbrella", "audience": "homeowner" },
+  "geo": {
+    "city": "Testville",
+    "county": "Martin",
+    "state": "FL",
+    "serviceArea": ["Testville", "Sampletown"]
+  },
+  "locale": { "primary": "en", "alternates": [] },
+  "contact": {
+    "trackingPhone": "+10000000000",
+    "displayPhone": "Phone pending",
+    "email": "pending_email@testville-umbrella-test.invalid"
+  },
+  "products": ["umbrella"],
+  "seo": {
+    "title": "Umbrella Insurance in Testville, FL",
+    "description": "Temporary test site to check the new site starter pages. It will be discarded right after the test.",
+    "primaryKeyword": "Testville umbrella insurance",
+    "secondaryKeywords": []
+  },
+  "analytics": { "ga4": "G-PLACEHOLDER", "gtm": "GTM-PLACEHOLDER" },
+  "crm": { "formId": "PENDING_GHL_FORM_ID", "leadSource": "testville-umbrella" },
+  "theme": { "variant": "coastal", "accentColor": "#0F6B75" },
+  "differentiation": {
+    "localProof": [
+      {
+        "type": "market-data",
+        "summary": "Temporary test entry used only to check that a new site builds with its starter pages."
+      }
+    ],
+    "uniqueSections": [
+      {
+        "title": "Temporary test section",
+        "rationale": "Temporary test entry, used only to check the starter pages of a new site."
+      }
+    ]
+  }
+}
