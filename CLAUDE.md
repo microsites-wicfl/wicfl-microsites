@@ -95,6 +95,10 @@ una terminal local que no existe.
    backlog se cierran con refs a prompt, report y commit. Todavía no hay remoto: el push a
    GitHub llega con W-012.
 
+   **Después de cada push, verifica todos los workflows que el commit disparó en GitHub, no
+   sólo uno. Como mínimo: "Validate and build" y "Publish site Workers"; añade "Deploy WICFL
+   Studio" si el cambio tocó `apps/studio/`. El reporte lista cada run y su conclusión.**
+
 10. **`BITACORA.md` y `BACKLOG.md` se mantienen solos, sin que Vic los pida.** Es trabajo de
     cowork, no de Vic. Se actualizan **conforme pasan las cosas**, no al final: al cerrar una
     decisión, al leer un reporte del ejecutor, al descubrir un hueco, al reasignar un dueño.
