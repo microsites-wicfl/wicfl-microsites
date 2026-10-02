@@ -7,10 +7,15 @@ import test from "node:test";
 
 const root = mkdtempSync(join(tmpdir(), "wicfl-gate-"));
 const script = join(import.meta.dirname, "check-production-config.mjs");
-function run(name, config) {
+function run(name, config, pages = {}) {
   const directory = join(root, name);
   mkdirSync(directory, { recursive: true });
   writeFileSync(join(directory, "site.config.json"), JSON.stringify(config));
+  for (const [path, text] of Object.entries(pages)) {
+    const file = join(directory, "content", path);
+    mkdirSync(join(file, ".."), { recursive: true });
+    writeFileSync(file, text);
+  }
   return spawnSync(process.execPath, [script, name], { env: { ...process.env, WICFL_SITES_ROOT: root }, encoding: "utf8" });
 }
 function config(value = {}) { return { brand: { name: "Clean Brand" }, seo: { title: "Clean title" }, contact: { trackingPhone: "+17722470106" }, ...value }; }
@@ -30,4 +35,25 @@ test("rejects existing markers and accepts clean config", () => {
 });
 test("checks placeholder markers inside the associated agency", () => {
   assert.notEqual(run("agency", config({ agency: { name: "PLACEHOLDER Agency" } })).status, 0);
+});
+test("rejects starter sample images and text in content pages", () => {
+  assert.notEqual(run("sample-image", config(), { "index.md": "![x](/images/sample-hero.jpg)" }).status, 0);
+  assert.notEqual(run("starter-instruction", config(), { "index.md": "[Write the headline]" }).status, 0);
+  assert.notEqual(run("starter-note", config(), { "contact.md": "Replace this text with the real page before publishing." }).status, 0);
+  const combined = run("starter-content", config(), {
+    "index.md": "![x](/images/sample-hero.jpg)\n\n[Write the headline]",
+    "contact.md": "Replace this text with the real page before publishing."
+  });
+  assert.match(combined.stderr, /content\/index\.md: sample image/);
+  assert.match(combined.stderr, /content\/index\.md: starter text/);
+  assert.match(combined.stderr, /content\/contact\.md: starter text/);
+});
+test("accepts real content and keeps fixtures exempt", () => {
+  const realContent = { "index.md": "[our guide](/flood/)\n\n![A real home](/images/home.jpg)" };
+  assert.equal(run("real-content", config(), realContent).status, 0);
+  assert.equal(run("_starter-fixture", config({ brand: { name: "Demo" } }), { "index.md": "[Write the headline]" }).status, 0);
+});
+test("does not add content findings to Stuart", () => {
+  const result = spawnSync(process.execPath, [script, "stuart-homeowners"], { cwd: join(import.meta.dirname, ".."), encoding: "utf8" });
+  assert.doesNotMatch(result.stderr, /sample image|starter text/);
 });

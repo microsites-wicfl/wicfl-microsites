@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 
 // W-103: the JSON schema validates *shape*, not *readiness*. A config can be schema-valid and
@@ -72,12 +72,36 @@ function walk(value, path) {
 
 walk(config, "");
 
-if (findings.length > 0) {
-  console.error(`Production-readiness check failed for sites/${siteDirectory}/site.config.json:`);
+const contentFindings = [];
+const contentRoot = resolve(sitesRoot, siteDirectory, "content");
+const starterText = /\[(?:Write|Name|Explain) [^\]\n]*\](?!\()/;
+
+function markdownFiles(directory) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = resolve(directory, entry.name);
+    if (entry.isDirectory()) return markdownFiles(path);
+    return entry.isFile() && entry.name.endsWith(".md") ? [path] : [];
+  });
+}
+
+if (existsSync(contentRoot)) {
+  for (const path of markdownFiles(contentRoot)) {
+    const text = readFileSync(path, "utf8");
+    const relativePath = path.slice(sitesRoot.length + 1).replaceAll("\\", "/");
+    if (text.includes("/images/sample-")) contentFindings.push({ path: relativePath, type: "sample image" });
+    if (text.includes("Replace this text with the real page before publishing.") || starterText.test(text)) {
+      contentFindings.push({ path: relativePath, type: "starter text" });
+    }
+  }
+}
+
+if (findings.length > 0 || contentFindings.length > 0) {
+  console.error(`Production-readiness check failed for sites/${siteDirectory}/:`);
   for (const finding of findings) {
     console.error(`  - ${finding.path}: "${finding.value}" looks like a ${finding.pattern}`);
   }
-  console.error("\nThis config still carries placeholder data. It cannot go to a real production deploy.");
+  for (const finding of contentFindings) console.error(`  - ${finding.path}: ${finding.type}`);
+  console.error("\nThis site still carries placeholder data or starter content. It cannot go to a real production deploy.");
   process.exit(1);
 }
 

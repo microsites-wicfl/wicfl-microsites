@@ -22,6 +22,7 @@ not before it. Do not wait on those to start writing.
 | `site.config.json` validates against the schema | Automatic — `npm run check`, also runs in CI on every push |
 | Site builds cleanly from config + markdown | Automatic — `npm run build:site -- <slug>`, also runs in CI |
 | No placeholder data (unset tracking phone, unprovisioned analytics ID) in the config going to production | Automatic — the W-103 gate, runs right before deploy |
+| No image marked "SAMPLE IMAGE" and no bracketed starter text remains in the published site | Automatic: the W-103 gate scans every content page right before deploy |
 | Every internal link resolves (no 404s within the site) | Manual — click through the built site once before requesting launch |
 | Site renders correctly in the theme variant it's assigned | Manual — open the built site, compare against the other pilot to confirm they read as distinct |
 
