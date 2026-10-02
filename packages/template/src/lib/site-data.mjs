@@ -65,8 +65,22 @@ function postalAddress(address) {
     streetAddress: address.street,
     addressLocality: address.city,
     addressRegion: address.state,
-    postalCode: address.zip
+    postalCode: address.zip,
+    addressCountry: "US"
   };
+}
+
+export function serviceAreaEntities(config) {
+  const county = config.geo.county.toLowerCase();
+  const city = config.geo.city.toLowerCase();
+  return config.geo.serviceArea.map((name) => {
+    const normalized = name.toLowerCase();
+    if (normalized === city) return { "@type": "City", name };
+    if (normalized === county || normalized === `${county} county`) {
+      return { "@type": "AdministrativeArea", name };
+    }
+    return { "@type": "Place", name };
+  });
 }
 
 // Shared page-level schema graph. The config supplies business entities; page frontmatter only
@@ -74,7 +88,7 @@ function postalAddress(address) {
 export function siteGraphJsonLd(config, page) {
   const origin = `https://${config.domain}`;
   const pageUrl = absoluteUrl(origin, page.path);
-  const agencyId = `${origin}/#agency`;
+  const agencyId = `${origin}/#insurance-agency`;
   const websiteId = `${origin}/#website`;
   const associatedAgencyId = config.agency
     ? `${config.agency.url.replace(/\/+$/, "")}/#organization`
@@ -85,7 +99,7 @@ export function siteGraphJsonLd(config, page) {
       "@id": websiteId,
       url: `${origin}/`,
       name: config.brand.name,
-      inLanguage: config.locale.primary,
+      inLanguage: `${config.locale.primary}-US`,
       publisher: { "@id": agencyId }
     },
     {
@@ -95,7 +109,7 @@ export function siteGraphJsonLd(config, page) {
       url: `${origin}/`,
       telephone: config.contact.trackingPhone,
       email: config.contact.email,
-      ...(config.geo.serviceArea ? { areaServed: config.geo.serviceArea } : {}),
+      ...(config.geo.serviceArea ? { areaServed: serviceAreaEntities(config) } : {}),
       ...(config.contact.address ? { address: postalAddress(config.contact.address) } : {}),
       ...(config.brand.logo ? { logo: absoluteUrl(origin, config.brand.logo) } : {}),
       ...(associatedAgencyId ? { parentOrganization: { "@id": associatedAgencyId } } : {})
@@ -103,35 +117,50 @@ export function siteGraphJsonLd(config, page) {
   ];
   if (config.agency) {
     graph.push({
-      "@type": "InsuranceAgency",
+      "@type": "Organization",
       "@id": associatedAgencyId,
       name: config.agency.name,
-      url: config.agency.url,
-      ...(config.agency.telephone ? { telephone: config.agency.telephone } : {}),
-      ...(config.agency.address ? { address: postalAddress(config.agency.address) } : {})
+      url: config.agency.url
     });
   }
-  if (page.path !== "/") {
+  const isHomePage = page.path === "/" || page.path === `/${page.lang}/`;
+  const breadcrumbId = `${pageUrl}#breadcrumb`;
+  if (!isHomePage) {
     const homePath = page.lang === config.locale.primary ? "/" : `/${page.lang}/`;
     graph.push({
       "@type": "BreadcrumbList",
-      "@id": `${pageUrl}#breadcrumb`,
+      "@id": breadcrumbId,
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl(origin, homePath) },
+        { "@type": "ListItem", position: 1, name: page.lang === "es" ? "Inicio" : "Home", item: absoluteUrl(origin, homePath) },
         { "@type": "ListItem", position: 2, name: page.navLabel ?? page.title, item: pageUrl }
       ]
     });
   }
+  graph.push({
+    "@type": page.id === "contact" || page.id?.endsWith("/contact") ? "ContactPage" : "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: page.title,
+    ...(page.description ? { description: page.description } : {}),
+    inLanguage: `${page.lang}-US`,
+    isPartOf: { "@id": websiteId },
+    about: { "@id": agencyId },
+    ...(!isHomePage ? { breadcrumb: { "@id": breadcrumbId } } : {})
+  });
   if (page.serviceName) {
     graph.push({
       "@type": "Service",
       "@id": `${pageUrl}#service`,
-      name: page.serviceName,
+      name: `${page.serviceName} in ${config.geo.city}`,
       serviceType: page.serviceName,
       url: pageUrl,
       ...(page.description ? { description: page.description } : {}),
       provider: { "@id": agencyId },
-      ...(config.geo.serviceArea ? { areaServed: config.geo.serviceArea } : {})
+      areaServed: {
+        "@type": "City",
+        name: config.geo.city,
+        containedInPlace: { "@type": "AdministrativeArea", name: `${config.geo.county} County` }
+      }
     });
   }
   return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");

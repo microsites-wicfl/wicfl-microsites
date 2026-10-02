@@ -2,7 +2,7 @@
   "slug": "stuart-homeowners",
   "domain": "stuarthomeownersinsurance.com",
   "brand": { "name": "Stuart Homeowners Insurance (Demo)", "parent": "WICFL", "logo": "/logo.svg" },
-  "agency": { "name": "Walker Insurance Agency", "url": "https://www.walkerinsuranceagency.com/", "telephone": "+14079777100", "address": { "street": "789 SW Federal Highway, Suite 201", "city": "Stuart", "state": "FL", "zip": "34994" } },
+  "agency": { "name": "Walker Insurance Agency", "url": "https://www.walkerinsuranceagency.com/" },
   "niche": { "product": "homeowners", "audience": "homeowner" },
   "geo": { "city": "Stuart", "county": "Martin", "state": "FL", "serviceArea": ["Stuart", "Port Salerno", "Palm City"] },
   "locale": { "primary": "en", "alternates": [] },

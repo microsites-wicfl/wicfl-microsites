@@ -10,6 +10,7 @@ interface Props {
   description?: string;
   pageType: "home" | "content" | "coverage";
   path: string;
+  pageId?: string;
   navLabel?: string;
   serviceName?: string;
   lang?: string;
@@ -27,6 +28,7 @@ const {
   description = site.seo.description,
   pageType,
   path,
+  pageId,
   navLabel,
   serviceName,
   lang = site.locale.primary,
@@ -53,7 +55,7 @@ const navPages = (await getCollection("pages"))
 const legalPages = (await getCollection("pages"))
   .filter((page) => ["privacy-policy", "terms-of-use", "disclaimer"].includes(page.id))
   .sort((a, b) => ["privacy-policy", "terms-of-use", "disclaimer"].indexOf(a.id) - ["privacy-policy", "terms-of-use", "disclaimer"].indexOf(b.id));
-const structuredData = siteGraphJsonLd(site, { title: pageTitle, description, path, lang, navLabel, serviceName });
+const structuredData = siteGraphJsonLd(site, { id: pageId, title: pageTitle, description, path, lang, navLabel, serviceName });
 type FontKey = keyof typeof FONT_FAMILIES;
 const headingFont = (site.theme.headingFont ?? "georgia") as FontKey;
 const bodyFont = (site.theme.bodyFont ?? "system-sans") as FontKey;

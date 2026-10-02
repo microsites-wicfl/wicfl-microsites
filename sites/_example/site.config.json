@@ -8,14 +8,7 @@
   },
   "agency": {
     "name": "Example Licensed Insurance Agency",
-    "url": "https://example-agency.invalid/",
-    "telephone": "+15305550199",
-    "address": {
-      "street": "456 Fixture Avenue",
-      "city": "Stuart",
-      "state": "FL",
-      "zip": "34994"
-    }
+    "url": "https://example-agency.invalid/"
   },
   "niche": {
     "product": "flood",
