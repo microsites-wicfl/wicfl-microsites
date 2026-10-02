@@ -20,6 +20,8 @@ import {
   applySettings,
   formatConfig,
   launchBlockers,
+  SAMPLE_IMAGES,
+  starterLeftovers,
   newSiteConfig,
   settingsOf,
   starterPages,
@@ -107,6 +109,25 @@ async function findPull(github, slug) {
   return pulls[0] || null;
 }
 
+// A site created from the homepage skeleton can't go live while a page still uses a sample image
+// or still has starter text. Only sites that carry the sample images are read page by page, so
+// every other site view costs nothing extra.
+async function starterBlockers(github, slug, paths, ref) {
+  if (slug.startsWith("_")) return [];
+  const images = imagesRoot(slug);
+  if (!paths.some((path) => SAMPLE_IMAGES.some((name) => path === `${images}${name}`))) return [];
+  const pages = paths.filter((path) => path.startsWith(contentRoot(slug)) && path.endsWith(".md"));
+  const texts = await Promise.all(pages.map((path) => github.readFile(path, ref)));
+  const found = [];
+  pages.forEach((path, index) => {
+    const { sampleImages, starterText } = starterLeftovers(texts[index]?.text);
+    const route = pageRoute(relativePage(slug, path));
+    if (sampleImages) found.push(`Page ${route} still uses sample images.`);
+    if (starterText) found.push(`Page ${route} still has starter text to replace.`);
+  });
+  return found;
+}
+
 // Everything the site view needs, fetched in as few sequential rounds as possible: each GitHub
 // call is ~0.3-0.6 s, and doing them one after another made this view take ~7 s.
 export async function getSite(github, slug, web = null) {
@@ -151,15 +172,16 @@ export async function getSite(github, slug, web = null) {
     )
     .sort((left, right) => left.path.localeCompare(right.path));
 
-  const [preview, site] = await Promise.all([
+  const [preview, site, leftovers] = await Promise.all([
     previewStatus(github, slug, { headSha: draftSha, pull }),
     summary(slug, config, published, edited.size, web),
+    starterBlockers(github, slug, paths, draftSha ? draftBranch(slug) : base),
   ]);
   return {
     ...site,
     isNew: !baseConfig,
     publishedUrl: baseConfig ? publishedUrl(github.env, slug) : null,
-    blockers: slug.startsWith("_") ? [] : launchBlockers(config),
+    blockers: slug.startsWith("_") ? [] : [...launchBlockers(config), ...leftovers],
     canPublish: preview.state === "ready",
     pages,
     preview,
@@ -448,7 +470,19 @@ export async function saveSettings(github, slug, input, email) {
   return { saved: true, blockers: launchBlockers(JSON.parse(next)) };
 }
 
-// A new site is born as a draft: its settings plus three starter pages, all inside sites/<slug>/.
+const SAMPLES_ROOT = "apps/studio/samples/";
+
+function bytesToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = "";
+  for (let index = 0; index < bytes.length; index += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
+  }
+  return btoa(binary);
+}
+
+// A new site is born as a draft: its settings, three starter pages and the sample images of the
+// homepage skeleton, all inside sites/<slug>/.
 // It is not wired to any domain; going live the first time stays with Vic.
 export async function createSite(github, input, email) {
   const config = newSiteConfig(input || {});
@@ -457,13 +491,28 @@ export async function createSite(github, input, email) {
   if ((await github.readFile(configPath(slug), base)) || (await github.branchSha(draftBranch(slug)))) {
     throw new UserError(`A site for ${config.geo.city} and ${config.niche.product} already exists.`, 409);
   }
+  // The homepage skeleton needs its sample images. If Studio's copies are missing, the site still
+  // gets created, with the plain starter home instead.
+  const samples = await Promise.all(
+    SAMPLE_IMAGES.map((name) => github.readBinary(`${SAMPLES_ROOT}${name}`, base)),
+  );
+  const sections = samples.every(Boolean);
   const branch = await ensureDraftBranch(github, slug);
   await github.writeFile(configPath(slug), {
     text: formatConfig(config),
     branch,
     message: `content(${slug}): create site\n\nEdited-by: ${email}`,
   });
-  for (const [name, text] of Object.entries(starterPages(config))) {
+  if (sections) {
+    for (const [index, name] of SAMPLE_IMAGES.entries()) {
+      await github.writeBinary(`${imagesRoot(slug)}${name}`, {
+        base64: bytesToBase64(samples[index]),
+        branch,
+        message: `content(${slug}): add ${name}\n\nEdited-by: ${email}`,
+      });
+    }
+  }
+  for (const [name, text] of Object.entries(starterPages(config, { sections }))) {
     await github.writeFile(pageFile(slug, name), {
       text,
       branch,

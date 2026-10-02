@@ -270,8 +270,15 @@ right redraws as you change anything.
 3. **Local proof** and **Unique section** are required, and they are the heart of the
    differentiation rule: a real local fact you can back up in the content, and a section only
    this market needs, with why. If you can't fill them honestly, the site isn't ready to exist.
-4. Click **Create site**. Studio creates it as a draft with three starter pages (home, contact
-   and one coverage page) that say "Replace this text". Replace them all.
+4. Click **Create site**. Studio creates it as a draft with three starter pages:
+   - **Home** comes with the sections of the homepage design already in place (hero, cards, icon
+     rows, service area, quote band), sample images marked *SAMPLE IMAGE*, and an instruction in
+     [square brackets] wherever your words go. It gives you the structure, never the text: write
+     every bracket in your own words for this market, and swap every sample image for a real photo.
+   - **Contact** and one **coverage page** say "Replace this text". Replace them, and add the
+     other coverage pages this market needs.
+   While any page still has a sample image, a bracket instruction or "Replace this text", the
+   site shows it under **Before this site can go live**.
 5. Phone, email, analytics and CRM start as placeholders, so the site can't go live with fake
    data. Publishing a new site makes it official; Vic puts it on its domain the first time.
 

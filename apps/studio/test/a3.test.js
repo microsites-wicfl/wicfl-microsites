@@ -5,7 +5,10 @@ import { join } from "node:path";
 import test from "node:test";
 import { createHandler } from "../src/index.js";
 import { resetLiveCache } from "../src/live.js";
-import { launchBlockers, newSiteConfig, phoneFrom, starterPages } from "../src/siteconfig.js";
+import { validateBlocks } from "../src/blocks.js";
+import {
+  launchBlockers, newSiteConfig, phoneFrom, SAMPLE_IMAGES, starterLeftovers, starterPages,
+} from "../src/siteconfig.js";
 import { env, offline, pavel, sampleRepository } from "./fake-github.js";
 
 function call(github, method, path, { body, web = offline } = {}) {
@@ -70,13 +73,41 @@ test("a new site starts blocked from launch until the real phone, email, analyti
 });
 
 test("starter pages are English, valid pages, and say they must be replaced", () => {
-  const pages = starterPages(newSiteConfig(newSite));
+  const pages = starterPages(newSiteConfig(newSite), { sections: false });
   assert.deepEqual(Object.keys(pages), ["index.md", "contact.md", "homeowners-insurance.md"]);
   for (const text of Object.values(pages)) {
     assert.match(text, /^---\ntitle: ".+"\n/);
     assert.match(text, /Replace this text/);
+    assert.equal(starterLeftovers(text).starterText, true);
   }
   assert.match(pages["index.md"], /pageType: home/);
+});
+
+test("the starter home page is the homepage design as a skeleton: valid sections, instructions, no copy", () => {
+  const pages = starterPages(newSiteConfig(newSite));
+  const home = pages["index.md"];
+  const body = home.replace(/^---[\s\S]*?---\n/, "");
+  validateBlocks(body);
+  for (const block of [":::hero", ":::cards", ":::features dark", ":::areas", ":::features\n", ":::cta"]) {
+    assert.ok(home.includes(block), block);
+  }
+  assert.match(home, /^# Homeowners Insurance in Port St\. Lucie, FL$/m);
+  assert.deepEqual(starterLeftovers(home), { sampleImages: true, starterText: true });
+  // Every image in the skeleton is one of the sample images that get copied into the site.
+  const used = [...home.matchAll(/\(\/images\/([^)]+)\)/g)].map((match) => match[1]);
+  assert.ok(used.length > 0 && used.every((name) => SAMPLE_IMAGES.includes(name)));
+  // Outside headings Studio derives from the settings, every sentence is an instruction in brackets.
+  const prose = body.split("\n").filter((line) =>
+    line && !/^(:::|eyebrow:|icon:|!\[|# |\*\*\[)/.test(line) && !line.startsWith("## Serving "));
+  assert.ok(prose.every((line) => /\[(Write|Name|Explain) /.test(line)), prose.join(" | "));
+});
+
+test("finished text clears the starter markers; a normal link in brackets is not an instruction", () => {
+  assert.deepEqual(
+    starterLeftovers("## Flood insurance in Stuart\n\nRead [our guide](/flood/).\n![Dock](/images/dock.jpg)"),
+    { sampleImages: false, starterText: false },
+  );
+  assert.equal(starterLeftovers("[Write the headline]").starterText, true);
 });
 
 test("phones are normalized for the site", () => {
@@ -196,3 +227,54 @@ test("launch blockers use plain field names, also inside lists", () => {
   assert.doesNotMatch(text, /\[\d\]/);
 });
 
+
+function repositoryWithSamples() {
+  const github = sampleRepository();
+  for (const name of SAMPLE_IMAGES) {
+    github.branches.get("main").files[`apps/studio/samples/${name}`] = Buffer.from(`bytes of ${name}`);
+  }
+  return github;
+}
+
+test("a new site gets the homepage skeleton and its sample images, and can't go live with them", async () => {
+  const github = repositoryWithSamples();
+  const created = await call(github, "POST", "/api/sites", { body: newSite });
+  const slug = created.body.slug;
+  const draft = github.branches.get(`draft/${slug}`);
+  const written = Object.keys(draft.files).filter((file) => !(file in github.branches.get("main").files));
+  assert.equal(written.length, 7);
+  assert.ok(written.every((file) => file.startsWith(`sites/${slug}/`)));
+  for (const name of SAMPLE_IMAGES) {
+    assert.deepEqual(draft.files[`sites/${slug}/public/images/${name}`], Buffer.from(`bytes of ${name}`));
+  }
+  assert.match(draft.files[`sites/${slug}/content/index.md`], /^:::hero$/m);
+
+  const site = await call(github, "GET", `/api/sites/${slug}`);
+  assert.ok(site.body.blockers.includes("Page / still uses sample images."));
+  assert.ok(site.body.blockers.includes("Page / still has starter text to replace."));
+  assert.ok(site.body.blockers.includes("Page /contact/ still has starter text to replace."));
+
+  // Pavel rewrites the home page with his own photo: its two lines go away, the others stay.
+  const page = await call(github, "GET", `/api/sites/${slug}/pages/index.md`);
+  const saved = await call(github, "PUT", `/api/sites/${slug}/pages/index.md`, {
+    body: { fields: page.body.fields, body: "## Home insurance in Port St. Lucie\n\nReal words.", sha: page.body.sha },
+  });
+  assert.equal(saved.status, 200, JSON.stringify(saved.body));
+  const after = await call(github, "GET", `/api/sites/${slug}`);
+  assert.ok(!after.body.blockers.some((line) => line.startsWith("Page / ")));
+  assert.ok(after.body.blockers.includes("Page /contact/ still has starter text to replace."));
+});
+
+test("without Studio's sample images a new site still gets created, with the plain home page", async () => {
+  const github = sampleRepository();
+  const created = await call(github, "POST", "/api/sites", { body: newSite });
+  const draft = github.branches.get(`draft/${created.body.slug}`);
+  assert.doesNotMatch(draft.files[`sites/${created.body.slug}/content/index.md`], /:::hero/);
+  assert.ok(!Object.keys(draft.files).some((file) => file.includes("/public/images/")));
+});
+
+test("a site without the sample images is never read page by page for starter leftovers", async () => {
+  const github = sampleRepository();
+  await call(github, "GET", "/api/sites/stuart");
+  assert.ok(!github.calls.some((item) => item.path.includes("/contents/sites/stuart/content/")));
+});

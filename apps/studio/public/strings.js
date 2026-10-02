@@ -71,9 +71,12 @@ export const text = {
   blockersNone: "Nothing blocks the launch in the site settings.",
   newSite: "New site",
   newSiteTitle: "New site",
-  newSiteHint: "The site starts as a draft with three starter pages. Nothing goes live until Vic launches it.",
+  newSiteHint:
+    "The site starts as a draft: a home page with the design's sections, a contact page and one coverage page. " +
+    "Nothing goes live until Vic launches it.",
   createSite: "Create site",
-  siteCreated: "Site created as a draft. Replace the starter pages, then publish.",
+  siteCreated:
+    "Site created as a draft. Replace the text in [brackets] and the sample images, then publish.",
   newSiteBadge: "New site, not published yet",
 
   previewTitle: "Preview",

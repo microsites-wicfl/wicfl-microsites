@@ -195,8 +195,93 @@ export function newSiteConfig(input) {
   };
 }
 
-// Three starter pages: home, contact and one coverage page, each with a clear note to replace it.
-export function starterPages(config) {
+// Sample images a new site starts with, so the home page shows the whole design from the first
+// preview. They are drawings marked "SAMPLE IMAGE", copied from apps/studio/samples/ into the
+// site's own images folder; the site can't go live while a page still uses one.
+export const SAMPLE_IMAGES = ["sample-hero.jpg", "sample-photo-1.jpg", "sample-photo-2.jpg"];
+export const SAMPLE_IMAGE_PATH = "/images/sample-";
+const STARTER_NOTE = "Replace this text with the real page before publishing.";
+// Instructions in a starter page are written in square brackets. A page that still has one, or
+// the starter note, or a sample image, shows under "Before this site can go live".
+const STARTER_TEXT = /\[(?:Write|Name|Explain) [^\]\n]*\](?!\()/;
+
+export function starterLeftovers(text) {
+  const body = String(text || "");
+  return {
+    sampleImages: body.includes(SAMPLE_IMAGE_PATH),
+    starterText: body.includes(STARTER_NOTE) || STARTER_TEXT.test(body),
+  };
+}
+
+// The home page of a new site: the sections of the homepage design, in order, with instructions
+// where the words go. It carries structure, never copy: two sites that kept the same sentences
+// would fail the swap test, so every line Pavel must write says so in square brackets.
+function starterHome(config, label, where) {
+  const city = config.geo.city;
+  const coverage = `/${config.niche.product}-insurance/`;
+  const item = (icon) => `:::item\nicon: ${icon}\n### [Name one point]\n[Write one sentence about it.]`;
+  const card = (image) =>
+    `:::item\n![Describe this photo](${SAMPLE_IMAGE_PATH}${image}.jpg)\n### [Name a coverage or a type of home]\n` +
+    `[Write one or two sentences about it.] [Learn more →](${coverage})`;
+  return [
+    ":::hero",
+    `eyebrow: ${where.toUpperCase()} ${label.toUpperCase()} INSURANCE`,
+    `![Describe this photo](${SAMPLE_IMAGE_PATH}hero.jpg)`,
+    `# ${label} Insurance in ${where}`,
+    "## [Write the headline: who this site helps, and with what]",
+    `[Write two or three sentences about insuring a property in ${city}: the local risks and who this is for.]`,
+    "",
+    "**[Get a Quote](/contact/)**",
+    ":::",
+    "",
+    `## [Write a heading about ${label.toLowerCase()} insurance in ${city}]`,
+    "",
+    `[Explain what makes insurance different in ${city}. Use the local proof from Site settings.]`,
+    "",
+    ":::cards",
+    card("photo-1"),
+    card("photo-2"),
+    card("photo-1"),
+    ":::",
+    "",
+    ":::features dark",
+    "eyebrow: WHAT TO LOOK AT",
+    `## [Write a heading for what people in ${city} should consider]`,
+    "[Write one sentence that introduces the points below.]",
+    item("wind"),
+    item("waves"),
+    item("house"),
+    ":::",
+    "",
+    ":::areas",
+    "eyebrow: WHERE WE WORK",
+    `## Serving ${city} and nearby communities`,
+    ":::",
+    "",
+    ":::features",
+    "eyebrow: WHY WORK WITH US",
+    "## [Write a heading for how the agency works with its customers]",
+    "[Write one sentence that introduces the points below.]",
+    item("shield-check"),
+    item("clipboard-check"),
+    item("users"),
+    ":::",
+    "",
+    ":::cta",
+    "eyebrow: GET STARTED",
+    `![Describe this photo](${SAMPLE_IMAGE_PATH}hero.jpg)`,
+    `## [Write the closing invitation for ${city}]`,
+    "",
+    "[Write one or two sentences inviting the visitor to ask for a quote.]",
+    "",
+    "**[Get a Quote](/contact/)**",
+    ":::",
+  ].join("\n");
+}
+
+// Three starter pages: home, contact and one coverage page. With `sections` the home page is the
+// homepage design as a skeleton (it needs the sample images); without, a plain note to replace.
+export function starterPages(config, { sections = true } = {}) {
   const label = productLabel(config.niche.product);
   const where = `${config.geo.city}, FL`;
   const page = (fields, body) => {
@@ -204,11 +289,13 @@ export function starterPages(config) {
       `${key}: ${key === "pageType" ? value : JSON.stringify(value)}`);
     return `---\n${header.join("\n")}\n---\n\n${body}\n`;
   };
-  const note = "Replace this text with the real page before publishing.";
+  const note = STARTER_NOTE;
   return {
     "index.md": page(
       { title: `${label} Insurance in ${where}`, pageType: "home" },
-      `${note}\n\nIntroduce ${config.brand.name} and who it helps in ${config.geo.city}.`,
+      sections
+        ? starterHome(config, label, where)
+        : `${note}\n\nIntroduce ${config.brand.name} and who it helps in ${config.geo.city}.`,
     ),
     "contact.md": page(
       { title: `Get a ${label} Insurance Quote in ${where}`, pageType: "content", navLabel: "Contact" },
