@@ -1,5 +1,8 @@
 # Guía global de ejecución — WICFL Microsites
 
+> **Nota del 2026-10-02:** el ejecutor es **Claude Code** desde el 29 de septiembre. Donde esta
+> guía dice "Codex", léelo como "el ejecutor". El proceso no cambió.
+
 Léeme antes de ejecutar cualquier prompt de esta carpeta.
 
 ## Cómo funciona el flujo
@@ -65,7 +68,7 @@ cowork le da a Vic para pegar en el ejecutor es una instrucción corta que refer
 archivo, **nunca el contenido del prompt pegado en el chat**:
 
 ```
-Ejecuta el prompt prompts/YYYY-MM-DD_NNN_slug.md
+Read CLAUDE.md, then execute prompts/YYYY-MM-DD_NNN_slug.md. Write the report it asks for in reports/, commit, push and wait for every workflow the push triggers.
 ```
 
 El ejecutor tiene acceso al repo completo y lee el archivo directo desde ahí. Pegar el prompt
@@ -159,6 +162,6 @@ de ejecutar:
 
 ## Estado del repo
 
-Al 2026-08-25 este repo **no tiene código todavía**. Solo documentación y sistema de
-trabajo. El código arranca con la Fase 1 del backlog. Si tu prompt asume que existe un
-`packages/template`, verifica primero.
+Al 2026-10-02 la fábrica está construida: template (`packages/template`), contrato
+(`packages/config-schema`), Studio (`apps/studio`), API de leads (`apps/lead-api`), sitios en
+`sites/` y los workflows de `.github/workflows/`. El estado y lo pendiente están en `RELEVO.md`.

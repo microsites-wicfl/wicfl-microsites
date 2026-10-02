@@ -1,3 +1,30 @@
+## 2026-10-02 (cierre de la semana) · Relevo del arquitecto
+
+**Quién:** Vic, cowork.
+
+El lunes 5 de octubre entra un agente nuevo como arquitecto. Lo que se dejó para él:
+
+- **`RELEVO.md`** en la raíz: estado, fechas de la semana del lanzamiento, pendientes por dueño,
+  cómo se verifica, decisiones cerradas, lo que quedó sin hacer y las trampas del entorno.
+- **`CLAUDE.md`** al día: estado, ejecutor (Claude Code), remoto, bloqueadores actuales y la liga
+  del manual. Antes describía el proyecto como estaba el 26 de agosto.
+- **`prompts/00_GUIA_GLOBAL.md`:** nota del ejecutor, estado del repo y la línea real que se le
+  pasa a Claude Code.
+- **Copia de la fuente del manual** (v2.5 y sus 25 capturas) en `_drafts/handbook/`. Hasta hoy
+  solo existía en el espacio de trabajo del agente, que no sobrevive a la sesión.
+
+**Lo que se dice tal cual:**
+- El master file del equipo, el tracker `.xlsx` y `docs/SCHEDULE.md` no se actualizan desde el
+  24 de septiembre. Queda como decisión para Vic si se actualizan o se retiran.
+- **El repositorio de GitHub es público.** No expone secretos, pero sí la bitácora, el backlog y
+  los reportes. Queda como pregunta para Vic.
+- El borrador de prueba `testville-umbrella` sigue en Studio hasta que Vic lo descarte.
+
+**La siguiente acción (lunes):** comprobar en Studio que la vista previa de Stuart está lista
+después del último guardado de Pavel.
+
+---
+
 ## 2026-10-02 (cierre del día) · Schema a la medida de Pavel, sitio nuevo con su diseño, y tres días de vistas previas rotas
 
 **Quién:** Vic, Pavel, Kevin, Claude Code, cowork.
