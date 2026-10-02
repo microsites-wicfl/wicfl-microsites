@@ -1,3 +1,80 @@
+## 2026-10-02 (cierre del día) · Schema a la medida de Pavel, sitio nuevo con su diseño, y tres días de vistas previas rotas
+
+**Quién:** Vic, Pavel, Kevin, Claude Code, cowork.
+
+**Hecho hoy:**
+- **Schema ajustado a la referencia de Pavel (W-125, prompt 032, `785be5f`):**
+  - un solo `InsuranceAgency` por sitio, con el teléfono y el correo del micrositio;
+  - Walker como `Organization` (solo nombre y URL);
+  - `areaServed` con tipo (City, AdministrativeArea, Place);
+  - `WebPage` en cada página y `ContactPage` en contacto;
+  - `Service` con nombre "X in <ciudad>" y `containedInPlace`;
+  - `inLanguage` `en-US`.
+  - La referencia de Pavel está en `_drafts/microsite-1-structure/` (v1 y v2), fuera de git.
+- **Dirección: Kevin confirmó "No address on any site"** (2-oct, Zoom). El schema sale sin `address`. El Rich Results Test puede marcarlo; es esperado y no se corrige.
+- **Sitio nuevo con el diseño de Pavel (W-121, cowork, `b706f4c`):**
+  - **New site** crea la portada con el esqueleto de secciones;
+  - instrucciones entre corchetes donde va el texto, nunca copy;
+  - tres imágenes de muestra copiadas desde `apps/studio/samples/`;
+  - Studio lista en "Before this site can go live" cada página con imagen de muestra o texto de arranque;
+  - 126 pruebas de Studio.
+- **Gate de producción (prompt 034, `6cdee81`):** `check-production-config.mjs` también falla con imágenes de muestra o texto de arranque en el contenido.
+- **Deploy automático a producción (prompt 033):** escrito, **sin ejecutar**. Se corre el 9-oct después del paso 7 del runbook, o el 10. Su primer paso comprueba que el sitio ya esté en vivo.
+- **CI arreglado (prompt 035, `7185cb6`):** ver abajo.
+- **Manual v2.5**, con la captura real del sitio nuevo.
+
+**El incidente: vistas previas rotas del 30-sep al 2-oct.**
+- **Qué pasó:** el prompt 030 metió en `npm run check` una prueba que importa `playwright`, que no estaba en `package.json`. En la máquina de Vic pasaba; en GitHub, `npm ci` no lo instala. `ci.yml` y `preview.yml` corren `npm run check`, así que "Validate and build" y "Preview deploy" fallaron en `main` y en cada borrador durante siete commits.
+- **A quién afectó:** a Pavel el 2-oct: ocho guardados seguidos en Stuart sin vista previa y sin poder publicar.
+- **Cómo se encontró:** al probar W-121 en Studio con un sitio de prueba (`testville-umbrella`); la vista previa falló y la lista de runs mostró el rojo desde `957d6ae`.
+- **Arreglo:** la prueba de navegador pasó a `scripts/analytics.browser.test.mjs` con su propio job; `npm run check` ya no necesita navegador; `playwright` en `devDependencies`.
+- **Por qué no se vio:** los reportes del 030 al 034 y las revisiones de cowork solo miraron "Publish site Workers", que no corre `npm run check`.
+
+**Lo que vale conservar:**
+- **Después de un push se verifican todos los workflows del commit,** no uno. Ya está en `CLAUDE.md` y en la revisión de cowork.
+- **"Pasa en mi máquina" no es verificación** cuando la máquina tiene paquetes que el repo no declara. La reproducción válida es `npm ci` en una copia limpia.
+- **Un re-run de un PR reutiliza el merge viejo.** Para que un borrador tome un arreglo de `main` hace falta un commit nuevo en la rama: en Studio, cualquier guardado.
+- **Probar en el Studio real encontró lo que 126 pruebas no podían ver.** La prueba de punta a punta de una función nueva es parte de terminarla.
+- **Antes de recomendar revertir algo, buscar si ya se decidió.** Cowork recomendó mostrar la dirección sin ver que Kevin la había quitado el 23-sep.
+
+**Estado al cierre:** `origin/main` en `bac62c3` más este cierre. "Validate and build" verde en `7185cb6`.
+
+**Pendientes, en orden:**
+1. **Pavel, para el martes 6:**
+   - guardar en Stuart para recuperar su vista previa;
+   - **Service name** en las páginas de cobertura;
+   - un solo nombre de marca, sin "(Demo)", y zona de servicio;
+   - portada con fotos y logo blanco;
+   - política de privacidad (W-131), para que Kevin la apruebe;
+   - borrar las dos páginas de prueba;
+   - Rich Results Test sobre la dirección de workers.dev.
+2. **Vic:** descartar el borrador `testville-umbrella` en Studio.
+3. **Kevin:** aprobar la política de privacidad; número nuevo de GoTo para PSL; acceso de facturación de Google Cloud.
+4. **Martes 6:** revisión de Stuart y decisión del diseño. **Miércoles 7:** ensayo final. **Viernes 9:** lanzamiento y prompt 033.
+5. **Lunes 12:** Pavel arranca PSL con **New site**.
+6. **Menores:** miga "Home" en sitios bilingües (hecho en 032); aviso de Astro por `index` duplicado en `_example`; hueco eyebrow/H2 en `:::cta`.
+
+---
+
+## 2026-10-01 (cierre del día) · Todo listo para que Pavel trabaje solo; schema conectado
+
+**Quién:** Vic, Pavel, Claude Code, cowork.
+
+**Hecho:**
+- **Página de ejemplo** de la portada de Pavel con sus textos y las secciones nuevas: `sites/_example/content/stuart-home-demo.md` (`a43948a`), publicada en workers.dev, con ilustraciones marcadas "SAMPLE IMAGE".
+- **Manual y guía de operador v2.3 y v2.4:** "Your first homepage", "Getting Stuart ready to launch" y el campo Service name.
+- **Runbook revisado (`ff1a416`):** fechas por paso; política de privacidad como requisito; el lead de prueba se verifica por **Contact source**, no por tag; paso 8 para reactivar el deploy automático; Places no bloquea el lanzamiento.
+- **Hallazgo:** Stuart tiene dos páginas de prueba (`about-demo`, `coverage-demo`) que habrían salido en vivo y en el sitemap. Están en la lista de Pavel y en el runbook.
+- **Schema conectado (W-125, prompt 031, `3212244`):** un `@graph` por página con `WebSite`, la agencia, Walker, `BreadcrumbList` y `Service` por `serviceName`.
+- **Studio (cowork, `54f2414`):** campo **Service name** en los datos de la página.
+- **GHL:** Vic borró los contactos de prueba. El formulario marca el sitio en **Contact source**; no pone tags.
+
+**Lo que vale conservar:**
+- **Pavel pregunta bien cuando tiene una referencia concreta.** Su documento de schema cerró en una vuelta lo que por chat habría tomado varias.
+- **El schema se genera, no se escribe:** lo único que decide el operador es qué página es un servicio.
+
+---
+
 ## 2026-09-30 (cierre del día) · Analítica lista para el launch; Places espera a Kevin; el número de PSL no sirve
 
 **Quién:** Vic, Claude Code, cowork.
