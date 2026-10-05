@@ -27,6 +27,12 @@ Prompt escrito: `prompts/2026-10-05_036_gate-huecos-lanzamiento.md` (solo el scr
 
 **Prompt 036 ejecutado y revisado (Codex, `262a770`, reporte `56369fb`):** el gate ya rechaza la descripción SEO interna, las páginas de prueba por nombre o frontmatter y la ausencia de `privacy-policy.md` (título, 1,500 caracteres mínimos, sin texto de arranque). Sobre Stuart hoy reporta once hallazgos. "Validate and build" y "Publish site Workers" en verde, verificados en la API. Revisión en el reporte. Pendiente: que Studio muestre las mismas tres reglas en "Before this site can go live" (cowork).
 
+**Tarde (decisiones de Vic, las tres con "sí"):**
+- **Testville descartado** desde Studio con el Chrome de Vic: ya no aparece en la lista de sitios; su PR (#20) se cerró con el borrador.
+- **Quitar "(Demo)" del nombre de Stuart desde Studio:** no se pudo desde la automatización del navegador (el guardado cuenta como cambio en una app conectada y quedó bloqueado). Lo hace Vic a mano: Site settings → Brand name → quitar "(Demo)" → Save. Ese guardado también recupera la vista previa.
+- **Master file y tracker retirados.** La página publicada ahora es un aviso que manda al manual (versión 7 del artifact); `docs/master-file-source.html` se commitea con el mismo contenido; `docs/SCHEDULE.md` lleva nota de que es el plan original. El `.xlsx` se queda como historia.
+- **Studio alineado con el gate** (`9af6a44`, cowork, 129 pruebas): "Before this site can go live" lista texto interno en SEO, páginas de prueba por nombre y la política de privacidad faltante o corta. Subido por Codex ("Validate and build" 37360255454 y "Deploy WICFL Studio" 37360255453, verdes, verificados en la API) y **visto en el Studio real:** Stuart lista ocho bloqueos, incluidas las dos páginas de prueba y la política de privacidad faltante.
+
 **Siguiente acción:** cowork alinea Studio con el gate; Pavel guarda en Stuart para recuperar la vista previa y sigue su lista (ahora con la política de privacidad y las páginas de prueba como bloqueos visibles).
 
 ---

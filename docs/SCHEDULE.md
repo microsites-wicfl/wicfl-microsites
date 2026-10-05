@@ -1,5 +1,7 @@
 # Schedule
 
+> **Status note, 5 October 2026.** This is the original plan from August and is kept as history. What changed since: Site #2 is Port St. Lucie in English (`portsaintluciehomeinsurance.com`), not a Spanish site; the Spanish site is an open question for Kevin (W-031). Current status lives in `BACKLOG.md` and `RELEVO.md`; the team works from the WICFL Studio handbook.
+
 **v1.3 · updated 26 Aug 2026. Gate A now has command-verifiable criteria instead of a stopwatch, Phase 2 Block A gains branch previews and the QA list, and the differentiation gate gets its two correct anchors.**
 
 Ten phases plus one parallel track. The tracked version with every activity, owner and

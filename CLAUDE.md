@@ -164,13 +164,10 @@ calificada está aprobada (`docs/QUALIFIED_CALL_DEFINITION.md`).
 - **Manual de Pavel para Studio (el documento vivo que el equipo sí usa):**
   https://claude.ai/artifact/5ebz5VQL1Q7iFrLv9zJ6B5. Su texto de referencia es
   `docs/OPERATOR_GUIDE.md`; se actualizan juntos.
-- **Master file (página web publicada), sin actualizar desde el 24-sep-2026:** https://claude.ai/code/artifact/b1c34949-479b-48f6-a269-8522d4b2aa82
-  La página vive hospedada en claude.ai, no en este repo. Lo que sí vive aquí es su fuente:
-  `docs/master-file-source.html`.
-
-  **Regla: cada vez que se republique la página, la fuente se commitea aquí en el mismo movimiento.**
-  Se desincronizó tres versiones entre el 25 y el 26 de agosto porque se publicaba sin commitear.
-  Si la versión del `<title>`/sidebar del archivo no coincide con la de la página publicada,
-  el repo está atrasado y hay que sincronizarlo antes de editar nada más.
-- **Calendario de actividades:** `WICFL-microsite-schedule.xlsx` (tracker semanal, sin actualizar desde el 24-sep-2026; ver `RELEVO.md`, sección 9)
+- **Master file y tracker: retirados el 2026-10-05 (decisión de Vic).** La página publicada
+  (https://claude.ai/code/artifact/b1c34949-479b-48f6-a269-8522d4b2aa82) ahora solo dice que se
+  retiró y manda al manual; su fuente sigue siendo `docs/master-file-source.html` y la última
+  versión completa (v1.6) vive en el historial de git. `WICFL-microsite-schedule.xlsx` se queda
+  como historia y no se actualiza. `docs/SCHEDULE.md` es el plan original (sitio #2 en español):
+  historia, no estado; el estado vive en `BACKLOG.md` y `RELEVO.md`.
 - Proyecto hermano: `../Walker Insurance Agency` (WAGS, Next.js, no comparte código con este)
