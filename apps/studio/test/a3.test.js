@@ -7,7 +7,8 @@ import { createHandler } from "../src/index.js";
 import { resetLiveCache } from "../src/live.js";
 import { validateBlocks } from "../src/blocks.js";
 import {
-  launchBlockers, newSiteConfig, phoneFrom, SAMPLE_IMAGES, starterLeftovers, starterPages,
+  isTestPage, launchBlockers, newSiteConfig, phoneFrom, privacyPolicyProblem, SAMPLE_IMAGES, starterLeftovers,
+  starterPages,
 } from "../src/siteconfig.js";
 import { env, offline, pavel, sampleRepository } from "./fake-github.js";
 
@@ -277,4 +278,36 @@ test("a site without the sample images is never read page by page for starter le
   const github = sampleRepository();
   await call(github, "GET", "/api/sites/stuart");
   assert.ok(!github.calls.some((item) => item.path.includes("/contents/sites/stuart/content/")));
+});
+
+test("internal copy blocks only where visitors read it, like the production gate", () => {
+  const config = newSiteConfig(newSite);
+  config.seo.description = "Internal preview of the microsite template. Not published content.";
+  config.differentiation = { localProof: [{ type: "market-data", summary: "Internal note about the demo." }] };
+  // One line per field: the first rule that matches speaks for the field.
+  const text = launchBlockers(config).join(" ");
+  assert.match(text, /SEO description still says "internal"/);
+  assert.doesNotMatch(text, /differentiation/);
+  config.seo.description = "Not published content.";
+  assert.match(launchBlockers(config).join(" "), /SEO description still says "not published"/);
+  config.seo.description = "A preview of the microsite template.";
+  assert.match(launchBlockers(config).join(" "), /SEO description still describes the template/);
+});
+
+test("test pages are known by their file name; index and real pages are not", () => {
+  for (const name of ["about-demo.md", "coverage-demo.md", "test-page.md", "sample.md", "my-fixture.md"]) {
+    assert.equal(isTestPage(name), true, name);
+  }
+  for (const name of ["index.md", "flood-insurance.md", "contest-winners.md", "privacy-policy.md"]) {
+    assert.equal(isTestPage(name), false, name);
+  }
+});
+
+test("the Privacy Policy needs to exist, have a title, and be real text", () => {
+  const real = `---\ntitle: "Privacy Policy"\n---\n\n${"We explain how we handle your quote request. ".repeat(40)}`;
+  assert.match(privacyPolicyProblem(null), /no Privacy Policy page yet/);
+  assert.match(privacyPolicyProblem("---\ndescription: x\n---\n\nbody"), /needs a title/);
+  assert.match(privacyPolicyProblem("---\ntitle: Privacy Policy\n---\n\nShort."), /too short/);
+  assert.match(privacyPolicyProblem(real.replace("We explain", "[Write the policy] We explain")), /starter text/);
+  assert.equal(privacyPolicyProblem(real), null);
 });

@@ -19,11 +19,14 @@ import { previewStatus } from "./preview.js";
 import {
   applySettings,
   formatConfig,
+  isTestPage,
   launchBlockers,
-  SAMPLE_IMAGES,
-  starterLeftovers,
   newSiteConfig,
+  PRIVACY_POLICY_PAGE,
+  privacyPolicyProblem,
+  SAMPLE_IMAGES,
   settingsOf,
+  starterLeftovers,
   starterPages,
 } from "./siteconfig.js";
 
@@ -115,16 +118,29 @@ async function findPull(github, slug) {
 async function starterBlockers(github, slug, paths, ref) {
   if (slug.startsWith("_")) return [];
   const images = imagesRoot(slug);
-  if (!paths.some((path) => SAMPLE_IMAGES.some((name) => path === `${images}${name}`))) return [];
   const pages = paths.filter((path) => path.startsWith(contentRoot(slug)) && path.endsWith(".md"));
-  const texts = await Promise.all(pages.map((path) => github.readFile(path, ref)));
   const found = [];
-  pages.forEach((path, index) => {
-    const { sampleImages, starterText } = starterLeftovers(texts[index]?.text);
-    const route = pageRoute(relativePage(slug, path));
-    if (sampleImages) found.push(`Page ${route} still uses sample images.`);
-    if (starterText) found.push(`Page ${route} still has starter text to replace.`);
-  });
+  if (paths.some((path) => SAMPLE_IMAGES.some((name) => path === `${images}${name}`))) {
+    const texts = await Promise.all(pages.map((path) => github.readFile(path, ref)));
+    pages.forEach((path, index) => {
+      const { sampleImages, starterText } = starterLeftovers(texts[index]?.text);
+      const route = pageRoute(relativePage(slug, path));
+      if (sampleImages) found.push(`Page ${route} still uses sample images.`);
+      if (starterText) found.push(`Page ${route} still has starter text to replace.`);
+    });
+  }
+  // Test pages are known by their file name alone, so they cost no extra reads; the Privacy
+  // Policy is one read, and only when the page exists.
+  for (const path of pages) {
+    const page = relativePage(slug, path);
+    if (isTestPage(page)) {
+      found.push(`Page ${pageRoute(page)} looks like a test page: it would go live and into the sitemap. Delete it.`);
+    }
+  }
+  const privacyPath = pageFile(slug, PRIVACY_POLICY_PAGE);
+  const privacy = pages.includes(privacyPath) ? await github.readFile(privacyPath, ref) : null;
+  const problem = privacyPolicyProblem(privacy ? privacy.text : null);
+  if (problem) found.push(problem);
   return found;
 }
 

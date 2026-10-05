@@ -16,12 +16,21 @@ const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
 // Same patterns as scripts/check-production-config.mjs, so Studio shows exactly what would stop
 // a launch, before anyone tries.
+// Words that only matter where visitors and Google read them: the brand name and the SEO fields.
+const visibleField = (path) => path === "brand.name" || path.startsWith("seo.");
 const BLOCKERS = [
   { regex: /placeholder/i, why: "is still a placeholder" },
   { regex: /^pending_/i, why: "is still pending" },
   { regex: /0000000$/, why: "is still a placeholder phone" },
   { regex: /(?:\+1\d{3}55501\d{2}|(?:\(\d{3}\)|\b\d{3}\b)[ .-]*555[ .-]*01\d{2}\b)/, why: "is a fictional 555 phone" },
-  { regex: /\bdemo\b/i, why: 'still says "demo"', only: (path) => path === "brand.name" || path.startsWith("seo.") },
+  { regex: /\bdemo\b/i, why: 'still says "demo"', only: visibleField },
+  { regex: /\binternal\b/i, why: 'still says "internal"', only: visibleField },
+  { regex: /\bnot published\b/i, why: 'still says "not published"', only: visibleField },
+  {
+    regex: /\btemplate preview\b|\bmicrosite template\b/i,
+    why: "still describes the template, not the site",
+    only: visibleField,
+  },
 ];
 const LABELS = {
   "brand.name": "Brand name",
@@ -204,6 +213,34 @@ const STARTER_NOTE = "Replace this text with the real page before publishing.";
 // Instructions in a starter page are written in square brackets. A page that still has one, or
 // the starter note, or a sample image, shows under "Before this site can go live".
 const STARTER_TEXT = /\[(?:Write|Name|Explain) [^\]\n]*\](?!\()/;
+
+// A page whose file name says it is a test (about-demo, coverage-demo, sample-page) would still be
+// built, served and listed in the sitemap. Same rule as scripts/check-production-config.mjs.
+const TEST_PAGE_NAME = /(?:^|[-_])(demo|test|sample|fixture|placeholder)(?:[-_]|$)/i;
+export function isTestPage(relativePath) {
+  const name = String(relativePath || "").split("/").at(-1).replace(/\.md$/, "");
+  return name !== "index" && TEST_PAGE_NAME.test(name);
+}
+
+// The quote form collects personal data, so a site can't go live without a Privacy Policy page
+// with real text. Same thresholds as scripts/check-production-config.mjs.
+export const PRIVACY_POLICY_PAGE = "privacy-policy.md";
+export const PRIVACY_POLICY_MIN_CHARACTERS = 1500;
+export function privacyPolicyProblem(text) {
+  if (text === null || text === undefined) {
+    return 'The site has no Privacy Policy page yet. Create a page titled exactly "Privacy Policy".';
+  }
+  const source = String(text);
+  const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+  const front = match ? match[1] : "";
+  const body = match ? match[2] : source;
+  if (!/^title:\s*\S/m.test(front)) return "The Privacy Policy page needs a title.";
+  if (body.trim().length < PRIVACY_POLICY_MIN_CHARACTERS) {
+    return "The Privacy Policy page is too short to be the real text.";
+  }
+  if (starterLeftovers(body).starterText) return "The Privacy Policy page still has starter text to replace.";
+  return null;
+}
 
 export function starterLeftovers(text) {
   const body = String(text || "");
