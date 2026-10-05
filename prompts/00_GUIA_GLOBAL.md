@@ -1,7 +1,8 @@
 # Guía global de ejecución — WICFL Microsites
 
-> **Nota del 2026-10-02:** el ejecutor es **Claude Code** desde el 29 de septiembre. Donde esta
-> guía dice "Codex", léelo como "el ejecutor". El proceso no cambió.
+> **Nota del 2026-10-05:** el ejecutor vuelve a ser **Codex**; Claude Code queda de respaldo si
+> Codex se queda sin tokens (lo fue del 29-sep al 2-oct). Donde esta guía dice "Codex", léelo
+> como "el ejecutor". El proceso no cambió.
 
 Léeme antes de ejecutar cualquier prompt de esta carpeta.
 

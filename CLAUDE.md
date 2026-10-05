@@ -31,7 +31,7 @@ entorno están en `RELEVO.md`.
 |---|---|
 | **Vic** | Arquitecto de negocio. Decide, prioriza, habla con Kevin y Pavel. NO ejecuta comandos. |
 | **Cowork (agente arquitecto)** | Piensa, decide arquitectura, mantiene docs, escribe prompts, opera el repo |
-| **Agente ejecutor** (Claude Code desde el 29-sep-2026; antes Codex) | Recibe prompts de `/prompts`, ejecuta, reporta en `/reports`, y hace todos los push |
+| **Agente ejecutor** (Codex de nuevo desde el 5-oct-2026; Claude Code de respaldo si Codex se queda sin tokens; Claude Code del 29-sep al 2-oct) | Recibe prompts de `/prompts`, ejecuta, reporta en `/reports`, y hace todos los push |
 | **Pavel** | Lead del proyecto WICFL. Opera la fábrica desde Fase 3 |
 | **Kevin** | Owner. Dirección de negocio, nichos, presupuesto, decisión de Gate B |
 

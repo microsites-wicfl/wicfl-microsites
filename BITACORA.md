@@ -1,3 +1,34 @@
+## 2026-10-05 · Relevo recibido: la vista previa de Stuart sigue rota, tres huecos en el gate y el borrador de la política de privacidad
+
+**Quién:** Vic, cowork (arquitecto nuevo desde hoy).
+
+**Estado real al llegar, comprobado contra GitHub y Studio (no contra el relevo):**
+- `origin/main` = `main` = `64c0225`. El relevo decía que ese commit estaba solo local; se subió hoy a las 12:07 (hora de Vic). Repo limpio, solo `.agents/` sin rastrear, sin candados.
+- **La vista previa de Stuart sigue en rojo.** El último guardado de Pavel es `93b8734`, viernes 2-oct 13:44 (hora de Vic), quince minutos antes del arreglo `7185cb6`. Ninguno de sus ocho guardados tomó el arreglo, y no hay guardados nuevos desde entonces. Studio muestra "The preview failed" y Publish deshabilitado. Se corrige con cualquier guardado nuevo en Studio.
+- **Avance de Pavel desde el viernes:** solo el Service name en las seis páginas de cobertura (más `navOrder` en dos) y una página nueva, `homeowners-insurance-stuart-fl.md`, con la misma palabra clave que la portada. Nada del resto de su lista: portada, nombre sin "(Demo)", zona de servicio, política de privacidad, páginas de prueba.
+- Ejecutor: **Codex** de nuevo (decisión de Vic hoy); Claude Code queda de respaldo si Codex se queda sin tokens. La línea para Vic sigue siendo la de `prompts/00_GUIA_GLOBAL.md`.
+
+**Tres huecos en el gate de producción (`check-production-config.mjs`),** que harían que el ensayo del miércoles saliera limpio con un sitio que no lo está:
+1. `seo.description` dice "Internal preview... Not published content" y no contiene "demo".
+2. `about-demo.md` y `coverage-demo.md` se construyen, se sirven y entran al sitemap; el gate no mira nombres ni títulos de páginas.
+3. No existe `privacy-policy.md` y nada lo exige, aunque el runbook lo pone como precondición.
+Prompt escrito: `prompts/2026-10-05_036_gate-huecos-lanzamiento.md` (solo el script y sus pruebas). Studio se alinea aparte, en código de cowork, cuando el 036 esté revisado.
+
+**Riesgo nuevo que encontré:** la página nueva de Pavel (`/homeowners-insurance-stuart-fl/`, "Homeowners Insurance Stuart, FL") apunta a la misma palabra clave que la portada ("Stuart Homeowners Insurance"). Son dos páginas compitiendo por lo mismo en un sitio de nueve páginas. Se revisa con Pavel el martes: o la portada es la página de la palabra clave principal y la nueva se fusiona, o la nueva toma un ángulo distinto.
+
+**Riesgo del formulario, para Kevin junto con la política:** el formulario no tiene ninguna casilla ni línea de consentimiento para llamadas o mensajes de texto. Si GoHighLevel manda SMS a esos leads, hace falta consentimiento expreso (TCPA). La política lo cubre en parte ("puedes pedirnos que paremos"); la línea de consentimiento bajo el botón es trabajo del template y se decide con Kevin.
+
+**Política de privacidad:** borrador escrito por cowork en inglés a partir de lo que de verdad pasa con los datos (formulario → GoHighLevel; declaración de póliza → R2 privado; GA4/GTM en el dominio real; Google Places cuando se active; GoTo con posible grabación). Está en `_drafts/legal/privacy-policy-stuart.md` (fuera de git). Pavel lo revisa y lo crea en Studio como página "Privacy Policy"; Kevin lo aprueba. Dos cosas que Kevin tiene que confirmar: la entidad legal que opera el sitio (quedó "Walker Insurance Agency", como dice la confirmación del formulario) y si las llamadas se graban.
+
+**Decisiones de Vic hoy:**
+- **El repo de GitHub pasa a privado, después del lanzamiento del viernes** (W-113). Efectos: Actions limitado a 2,000 minutos al mes en plan free, y cowork deja de poder leer el estado de los workflows por la API pública (lo hará con el Chrome de Vic).
+- Mensajes al equipo: un update al final del día con lo avanzado y el recordatorio de lo que falta de su lado; lo urgente (la política para Kevin) sale en cuanto esté listo, no espera al cierre.
+- Pendientes de respuesta: qué hacer con el master file publicado y el tracker `.xlsx` (cowork recomienda retirarlos), y descartar `testville-umbrella` en Studio (cowork lo hace con el Chrome de Vic cuando Vic confirme el borrado).
+
+**Siguiente acción:** Vic pega la línea del prompt 036 en Codex. Mientras, Pavel guarda en Stuart para recuperar la vista previa.
+
+---
+
 ## 2026-10-02 (cierre de la semana) · Relevo del arquitecto
 
 **Quién:** Vic, cowork.
