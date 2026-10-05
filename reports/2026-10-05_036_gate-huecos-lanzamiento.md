@@ -57,3 +57,13 @@ La revisión deja visible que dos páginas de demostración podían formar parte
 ## Próximos pasos
 
 Pavel debe, desde Studio, reemplazar los textos demo e internos de Stuart, eliminar las páginas de prueba y crear una página con título exacto `Privacy Policy` y contenido legal final. Después, el gate debe volver a ejecutarse antes del próximo lanzamiento real.
+
+## Revisión de cowork
+
+**Veredicto: aceptado.** Revisado contra el diff de `262a770` y `56369fb`, no contra el reporte.
+
+- El diff toca solo `scripts/check-production-config.mjs` y su prueba; el reporte va en su propio commit. Nada fuera de lo pedido, verificado con `git show --stat`.
+- Reproducido en el shell del dispositivo: `node scripts/check-production-config.mjs stuart-homeowners` sale con los cuatro "demo" de siempre más la descripción interna (tres patrones, como pide el prompt), las dos páginas de prueba y la política ausente, con los mensajes exactos del prompt; `_example` sigue exento; `node --test scripts/check-production-config.test.mjs` 10/10.
+- Workflows del push de `262a770`, verificados directo en la API de GitHub, no solo en el reporte: "Validate and build" 37357878577 success, "Publish site Workers" 37357878722 success. El push del reporte (`56369fb`) no toca rutas vigiladas y por eso no disparó nada: correcto.
+- Detalle que acepto: el `seo.title` de Stuart ahora cae dos veces (demo e internal). Es ruido, no error, y desaparece cuando Pavel corrija el título.
+- Lo que sigue, fuera de este prompt: Studio muestra su propia copia de estas reglas en "Before this site can go live" (`apps/studio/src/siteconfig.js`, `sites.js`) y hoy no ve las tres reglas nuevas. Lo alinea cowork en código de Studio.

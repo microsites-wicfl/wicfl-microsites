@@ -25,7 +25,9 @@ Prompt escrito: `prompts/2026-10-05_036_gate-huecos-lanzamiento.md` (solo el scr
 - Mensajes al equipo: un update al final del día con lo avanzado y el recordatorio de lo que falta de su lado; lo urgente (la política para Kevin) sale en cuanto esté listo, no espera al cierre.
 - Pendientes de respuesta: qué hacer con el master file publicado y el tracker `.xlsx` (cowork recomienda retirarlos), y descartar `testville-umbrella` en Studio (cowork lo hace con el Chrome de Vic cuando Vic confirme el borrado).
 
-**Siguiente acción:** Vic pega la línea del prompt 036 en Codex. Mientras, Pavel guarda en Stuart para recuperar la vista previa.
+**Prompt 036 ejecutado y revisado (Codex, `262a770`, reporte `56369fb`):** el gate ya rechaza la descripción SEO interna, las páginas de prueba por nombre o frontmatter y la ausencia de `privacy-policy.md` (título, 1,500 caracteres mínimos, sin texto de arranque). Sobre Stuart hoy reporta once hallazgos. "Validate and build" y "Publish site Workers" en verde, verificados en la API. Revisión en el reporte. Pendiente: que Studio muestre las mismas tres reglas en "Before this site can go live" (cowork).
+
+**Siguiente acción:** cowork alinea Studio con el gate; Pavel guarda en Stuart para recuperar la vista previa y sigue su lista (ahora con la política de privacidad y las páginas de prueba como bloqueos visibles).
 
 ---
 
