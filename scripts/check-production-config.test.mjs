@@ -7,11 +7,13 @@ import test from "node:test";
 
 const root = mkdtempSync(join(tmpdir(), "wicfl-gate-"));
 const script = join(import.meta.dirname, "check-production-config.mjs");
+const privacyPolicy = `---\ntitle: "Privacy Policy"\n---\n\n${"This Privacy Policy explains how the site handles quote requests and personal information. ".repeat(25)}`;
 function run(name, config, pages = {}) {
   const directory = join(root, name);
   mkdirSync(directory, { recursive: true });
   writeFileSync(join(directory, "site.config.json"), JSON.stringify(config));
-  for (const [path, text] of Object.entries(pages)) {
+  for (const [path, text] of Object.entries({ "privacy-policy.md": privacyPolicy, ...pages })) {
+    if (text === null) continue;
     const file = join(directory, "content", path);
     mkdirSync(join(file, ".."), { recursive: true });
     writeFileSync(file, text);
@@ -53,7 +55,24 @@ test("accepts real content and keeps fixtures exempt", () => {
   assert.equal(run("real-content", config(), realContent).status, 0);
   assert.equal(run("_starter-fixture", config({ brand: { name: "Demo" } }), { "index.md": "[Write the headline]" }).status, 0);
 });
-test("does not add content findings to Stuart", () => {
+test("rejects internal SEO markers but allows internal differentiation notes", () => {
+  assert.notEqual(run("internal-seo", config({ seo: { description: "Internal preview of the microsite template." } })).status, 0);
+  assert.equal(run("internal-differentiation", config({ differentiation: { localProof: [{ summary: "Internal demo history is not rendered." }] } })).status, 0);
+});
+test("rejects test pages but allows ordinary body copy", () => {
+  assert.notEqual(run("about-demo", config(), { "about-demo.md": "---\ntitle: About\n---\n\nReal body" }).status, 0);
+  assert.notEqual(run("coverage-demo", config(), { "coverage-demo.md": "---\ntitle: Coverage\ndescription: Placeholder coverage page\n---\n\nReal body" }).status, 0);
+  assert.equal(run("ordinary-demo-mention", config(), { "index.md": "Our agency has never called this a demo." }).status, 0);
+});
+test("requires a substantive privacy policy", () => {
+  assert.notEqual(run("missing-privacy", config(), { "privacy-policy.md": null }).status, 0);
+  assert.notEqual(run("short-privacy", config(), { "privacy-policy.md": "---\ntitle: Privacy Policy\n---\n\nShort policy.".repeat(10) }).status, 0);
+  assert.equal(run("valid-privacy", config()).status, 0);
+});
+test("reports Stuart's internal copy, test pages, and missing privacy policy", () => {
   const result = spawnSync(process.execPath, [script, "stuart-homeowners"], { cwd: join(import.meta.dirname, ".."), encoding: "utf8" });
-  assert.doesNotMatch(result.stderr, /sample image|starter text/);
+  assert.match(result.stderr, /seo\.description: .*internal marker/);
+  assert.match(result.stderr, /content\/about-demo\.md: looks like a test page/);
+  assert.match(result.stderr, /content\/coverage-demo\.md: looks like a test page/);
+  assert.match(result.stderr, /content\/privacy-policy\.md: missing/);
 });
