@@ -39,6 +39,12 @@ saltos permitidos son los que separan párrafos y los de una lista real.
    equipo, "we". Hablar de Vic en tercera persona delata que el copy lo escribió
    alguien más y le quita autoridad al mensaje.
 
+7. **Cada cosa hecha va como título breve más descripción.** Regla de Vic, 2026-10-05. En
+   "what we did", cada avance se presenta en dos partes: un título corto que diga de qué va
+   (por ejemplo "Launch check tightened") y debajo una o dos frases que lo expliquen en
+   lenguaje de negocio. Nunca un párrafo corrido donde los avances se mezclan. Lo mismo para
+   los pendientes: título con el dueño, y la descripción con qué se necesita y para cuándo.
+
 ## Estructura por defecto
 
 Como es chat, el caso normal es el corto: **sin encabezados, pero con las dos ideas**. Una o
@@ -50,14 +56,19 @@ verdad, por ejemplo un resumen de fin de fase o algo que Kevin va a reenviar. En
 ```
 <Una o dos frases con el resultado. Nada de preámbulo.>
 
-<Cuerpo: lo que importa, en párrafos o bullets según el contenido.>
+What we did
+<Título breve del avance 1>
+<Una o dos frases: qué es y qué cambia para el equipo.>
+<Título breve del avance 2>
+<Descripción.>
 
-## What we did
-- ...
-
-## What's needed
-- <quién>: <qué>, <qué bloquea>
+What's needed
+<Quién: título breve del pedido>
+<Qué se necesita, para cuándo y qué bloquea.>
 ```
+
+En el chat de Zoom no hay encabezados reales: el título va en su propia línea, en negritas si
+el chat lo permite, y la descripción debajo. Cada bloque título + descripción es una idea.
 
 ## Longitud
 
