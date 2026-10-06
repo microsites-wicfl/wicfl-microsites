@@ -1,3 +1,15 @@
+## 2026-10-06 (mediodía) · Día de la revisión de Stuart: Pavel sigue sin guardar; Kevin dice que ya puso la facturación
+
+**Quién:** Vic, cowork.
+
+**Estado comprobado a las 10:50 (hora de Vic), en GitHub y en Studio:**
+- **Pavel no ha guardado nada desde el viernes 2-oct.** El borrador de Stuart sigue en `d73eb72`, que es el guardado de cowork de ayer. Studio lista los mismos siete bloqueos: SEO title, SEO description, las dos palabras clave, las dos páginas de prueba y la política de privacidad ausente. Hoy era su fecha.
+- **La vista previa sigue en rojo** por los runs que GitHub canceló ayer. El incidente de Actions ya cerró (estado: operational), así que un re-run debe pasar.
+- **Hallazgo de Studio:** ante un run cancelado, Studio le dice a Pavel "The site's settings didn't pass the automatic checks" y "Validate all site configurations: cancelled". Es falso: no falló ninguna revisión, GitHub canceló el run. Pendiente de cowork: que un run cancelado se muestre como "couldn't run, save again" y no como culpa del contenido.
+- **Facturación de Google Cloud:** Vic reporta que Kevin ya puso la tarjeta en la cuenta de microsites. Cowork no lo pudo comprobar: el Chrome de la automatización está en la cuenta personal de Vic, que no tiene acceso al proyecto. La llave de Places todavía no está en `apps/lead-api/.env`.
+
+---
+
 ## 2026-10-05 · Relevo recibido: la vista previa de Stuart sigue rota, tres huecos en el gate y el borrador de la política de privacidad
 
 **Quién:** Vic, cowork (arquitecto nuevo desde hoy).
