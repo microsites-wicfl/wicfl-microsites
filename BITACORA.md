@@ -12,7 +12,11 @@
 
 **Arreglo:** `prompts/2026-10-06_037_pruebas-desacopladas-de-sitios-reales.md` (Codex). Incluye una guardia que falla si un test nombra un sitio real, y una simulación de la lista completa de Pavel que debe pasar `npm run check` y el gate.
 
-**Siguiente acción:** Vic pega la línea del 037 en Codex. Después de revisarlo, cowork hace un guardado en Studio para que el borrador tome el arreglo.
+**Prompt 037 ejecutado y revisado (Codex, `866319b`):** el log confirmó el diagnóstico (`schema.test.mjs:140`). Ninguna prueba nombra ya un sitio real; hay una guardia que lo impide; las afirmaciones del template viven en `_example`. `npm run check` pasa en `main`, con el contenido del PR #19 y con la lista completa de Pavel simulada, donde el gate de producción sale en 0. Workflows 37515762443 y 37515762440 en verde. Revisión en el reporte.
+
+**Studio (cowork):** un run cancelado o interrumpido ya no se le presenta a Pavel como "the site's settings didn't pass": ahora dice que la vista previa se interrumpió, que no hay nada mal en sus cambios y que guarde de nuevo. Y el mensaje de una falla real de las revisiones ya no da por hecho que la culpa es de la configuración. 131 pruebas.
+
+**Siguiente acción:** un guardado en Studio sobre Stuart para que el borrador tome el arreglo y salga la vista previa.
 
 ---
 

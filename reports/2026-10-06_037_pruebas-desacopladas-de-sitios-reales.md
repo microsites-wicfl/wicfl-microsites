@@ -126,3 +126,21 @@ La nueva página de contacto del fixture hace que Astro emita advertencias de ID
 
 - `866319b fix(tests): npm run check no longer asserts a real site's content`
 
+
+## Revisión de cowork
+
+**Veredicto: aceptado.** Revisado contra el diff de `866319b`, no contra el reporte.
+
+- **Diagnóstico confirmado con el log real:** `AssertionError true !== false` en `scripts/schema.test.mjs:140`, la aserción que prohibía `Service` en la página de inundación. Era la hipótesis del prompt.
+- El diff toca solo `scripts/*.test.mjs` (cuatro archivos) y `sites/_example/` (config y una página `contact.md` nueva). Nada del template, de Studio, de los workflows ni de Stuart.
+- `grep -n "stuart" scripts/*.test.mjs` no devuelve nada. La guardia existe (`test scripts do not name real sites`) y descubre los slugs leyendo `sites/`.
+- El test genérico sobre sitios reales deriva todo del config y del frontmatter de cada página: un `InsuranceAgency`, teléfono, correo, zona de servicio, sin `address`, y `Service` si y solo si hay `serviceName`.
+- Los tres escenarios del paso 6 en verde con `npm ci` en copia limpia, incluida la lista completa de Pavel simulada, donde además el gate de producción sale en 0. Es la primera vez que se comprueba que Stuart **puede** pasar el gate.
+- Workflows del push, verificados en la API: "Validate and build" 37515762443 y "Publish site Workers" 37515762440, success.
+
+**Lo que se perdió o cambió, aceptado y anotado:**
+- Ya no hay una aserción de que un sitio con GTM de relleno no emite `gtm.js`: `_example` pasó de `GTM-PLACEHOLDER` a `GTM-TEST123`. El GTM sigue cargando solo cuando el host es el dominio del sitio, y eso sí se prueba.
+- `_example` perdió `contact.address` y `licenseNumber`. Ningún sitio los usa (decisión de Kevin), así que el camino que los pinta queda sin ejercitar. Si algún día vuelven, hace falta un fixture.
+- El sitio de práctica que ve Pavel en Studio ahora tiene una página "Contact fixture" y a Walker como agencia. Es de práctica y no se publica; no se le avisa.
+
+**Lo que sigue:** el borrador de Stuart toma el arreglo con el siguiente guardado en Studio (un re-run reutiliza el merge viejo).
