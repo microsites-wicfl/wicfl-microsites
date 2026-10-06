@@ -90,6 +90,11 @@ node scripts/check-production-config.mjs stuart-homeowners
 Production-readiness check passed for sites/stuart-homeowners/site.config.json.
 ```
 
+### Workflows del push
+
+- [Validate and build, run 37515762443](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/37515762443): `success`.
+- [Publish site Workers, run 37515762440](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/37515762440): `success`.
+
 ## Lo que toqué fuera de lo pedido
 
 Nada. Los cambios versionados se limitan a `scripts/*.test.mjs` y `sites/_example/`, además de este reporte.
