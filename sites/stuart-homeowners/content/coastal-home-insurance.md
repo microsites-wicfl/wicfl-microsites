@@ -3,6 +3,8 @@
   description: "Explore coastal home insurance in Stuart, FL for properties near the Atlantic coast, rivers and coastal communities. Find coverage options based on your home's location and needs."
   pageType: content
   navLabel: "Coastal"
+  navOrder: 1
+  serviceName: "Coastal Home Insurance in Stuart, FL"
 ---
 
   Living near Florida's coast comes with benefits that make Stuart a desirable place to call home. But coastal properties can also face insurance considerations related to wind, hurricanes, flooding, construction and location.
