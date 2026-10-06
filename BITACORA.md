@@ -1,3 +1,21 @@
+## 2026-10-06 (13:00) · La vista previa de Stuart falla de verdad: las pruebas afirman el contenido del demo
+
+**Quién:** Vic, Codex, cowork.
+
+**Qué pasó:** con GitHub ya sano, Codex relanzó los runs del borrador de Stuart (intento 3) y los dos fallaron en `npm run check`, a los 12 s de 13 que tarda en `main`: cae en `scripts/schema.test.mjs`.
+
+**Causa (pendiente de confirmar con el log, que pide sesión de GitHub):** las pruebas afirman el contenido que Stuart tenía como demo. La de hoy: `schema.test.mjs` exige que `flood-insurance` **no** emita `Service`, y el borrador de Pavel ya le puso Service name el viernes, que es justo lo que se le pidió. Hay más del mismo tipo esperando: la zona de servicio fija, el logo `.svg`, y el test del prompt 036 que afirma que existen las páginas de prueba, la descripción interna y que falta la política. **Cada tarea de la lista de Pavel pone CI en rojo.** Con esto, Pavel no puede tener vista previa ni publicar aunque haga todo bien.
+
+**Por qué no se vio antes:** el viernes lo tapó el incidente de `playwright`; el lunes, el de GitHub. Y `main` siempre pasa, porque `main` todavía tiene el demo.
+
+**Error mío:** acepté en la revisión del 036 un test que corre el gate contra el Stuart real. Revisé que detectara los tres huecos, no que siguiera pasando cuando Pavel los cerrara. Lo que vale conservar: **una prueba que afirma el contenido de un sitio real se rompe el día que el operador hace su trabajo.** Las pruebas van contra fixtures; sobre los sitios reales, solo invariantes derivadas de su propio config.
+
+**Arreglo:** `prompts/2026-10-06_037_pruebas-desacopladas-de-sitios-reales.md` (Codex). Incluye una guardia que falla si un test nombra un sitio real, y una simulación de la lista completa de Pavel que debe pasar `npm run check` y el gate.
+
+**Siguiente acción:** Vic pega la línea del 037 en Codex. Después de revisarlo, cowork hace un guardado en Studio para que el borrador tome el arreglo.
+
+---
+
 ## 2026-10-06 (mediodía) · Día de la revisión de Stuart: Pavel sigue sin guardar; Kevin dice que ya puso la facturación
 
 **Quién:** Vic, cowork.
