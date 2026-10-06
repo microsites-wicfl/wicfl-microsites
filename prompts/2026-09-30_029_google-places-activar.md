@@ -21,6 +21,20 @@ Kevin ya agregó la tarjeta al proyecto de Google Cloud `wicfl-microsites`. Vic 
 El workflow `.github/workflows/deploy-lead-api.yml` carga cada secreto al Worker solo si su
 valor en GitHub no está vacío. El de Google viene de `LEAD_API_GOOGLE_PLACES_API_KEY`.
 
+## Nota del 2026-10-06, antes de ejecutar
+
+- La facturación del proyecto quedó ligada hoy (cuenta de prueba gratuita de Google Cloud). Vic
+  activó Places API (New) y restringió la llave a esa sola API. El tope diario y la alerta de
+  presupuesto **no** están puestos: Google no deja editar cuotas en la prueba gratuita. No es un
+  motivo para detenerte.
+- **`apps/lead-api/.env` tiene dos líneas `GOOGLE_PLACES_API_KEY=`:** una vacía (la de relleno)
+  y más abajo la real, **entre comillas**. Usa la **última línea no vacía** y **quítale las
+  comillas de los extremos** antes de pasarla a `gh secret set`. Una llave de Google mide 39
+  caracteres y empieza con `AIza`: comprueba esas dos cosas (sin mostrar nada más) y repórtalas.
+  Si no se cumplen, detente y repórtalo. No edites el `.env`.
+- El ejecutor es Codex. Ignora las líneas `Co-Authored-By` y `Claude-Session` del mensaje de
+  commit de abajo: son de una sesión anterior.
+
 ## Objetivo
 
 La dirección del paso 2 del formulario publicado de Stuart muestra sugerencias de Google con
