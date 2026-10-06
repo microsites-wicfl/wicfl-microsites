@@ -50,3 +50,14 @@ Fecha de ejecución: 2026-10-06
 ## Commits
 
 - Pendiente al momento de redactar este reporte: `docs: report 029, Google address autocomplete enabled (W-118)`.
+
+## Revisión de cowork
+
+**Veredicto: aceptado.** Revisado contra el diff de `664764f` y contra el resultado real.
+
+- El único archivo versionado es este reporte. Sin cambios de código, config ni workflows.
+- **La llave no aparece en ningún lado:** busqué el patrón completo de una llave de Google en los archivos de `origin/main` y en los diffs de los últimos doce commits: cero coincidencias. `apps/lead-api/.env` sigue ignorado por git. Las dos menciones de "AIza" son el prefijo, citado en el prompt y en este reporte.
+- **Probado por cowork, no solo leído:** desde la página `/contact/` de la copia publicada de Stuart, `POST /v1/addresses` respondió 200 con cinco sugerencias para "123 SE Ocean Blvd Stuart" (la primera, "123 SE Ocean Blvd, Stuart, FL, USA").
+- "Deploy WICFL Lead API" 37528103998: success, verificado en la API.
+
+**Pendiente que deja abierto:** la cuenta de Google Cloud es de prueba gratuita y vence hacia el 4-ene-2027 (ver `BACKLOG.md`, W-118). Sin upgrade, el autocompletado deja de responder ese día y el campo vuelve a ser texto normal.

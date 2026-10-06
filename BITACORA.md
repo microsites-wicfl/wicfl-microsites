@@ -1,3 +1,15 @@
+## 2026-10-06 (15:00) · Stuart publicado a la copia de revisión y autocompletado de Google encendido
+
+**Quién:** Vic, Codex, cowork.
+
+- **Vic publicó el borrador de Stuart desde Studio** (`79ebefa`, "publish from Studio"). Es la primera publicación de Stuart desde que se arreglaron las revisiones: "Publish site Workers" 37528831735 y "Validate and build" 37528831962 en verde; el borrador y su vista previa se limpiaron solos ("Preview cleanup"). La copia de revisión ya muestra el nombre sin "(Demo)" y las siete zonas. **No toca el dominio real:** `deploy.yml` sigue siendo manual hasta el lanzamiento.
+- Con esto, `main` ya tiene el trabajo de Pavel del viernes (Service name en seis páginas y la página `homeowners-insurance-stuart-fl`), que es lo que leerá el ensayo de mañana.
+- **Autocompletado de direcciones encendido (prompt 029, Codex, `664764f`):** secreto cargado sin exponer la llave, Lead API desplegada (37528103998), 200 con cinco sugerencias, "Powered by Google" visible. Cowork lo probó aparte desde la página de contacto publicada y revisó que la llave no esté en ningún archivo ni diff. Revisión en el reporte. El formulario de Kevin queda completo (W-118).
+- **Siguen en la lista de "Before this site can go live", los siete de siempre:** SEO title, SEO description, las dos palabras clave, las dos páginas de prueba y la política de privacidad. Pavel sigue sin guardar nada desde el viernes.
+- **Anotado para mañana (Studio, cowork):** espacio debajo del botón New page, reportado por Vic; y el Service name con ciudad duplicada.
+
+---
+
 ## 2026-10-06 (14:45) · La vista previa de Stuart vuelve a funcionar, por primera vez desde el 30 de septiembre
 
 **Quién:** Vic, cowork.
