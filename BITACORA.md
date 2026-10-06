@@ -7,6 +7,7 @@
 - **Autocompletado de direcciones encendido (prompt 029, Codex, `664764f`):** secreto cargado sin exponer la llave, Lead API desplegada (37528103998), 200 con cinco sugerencias, "Powered by Google" visible. Cowork lo probó aparte desde la página de contacto publicada y revisó que la llave no esté en ningún archivo ni diff. Revisión en el reporte. El formulario de Kevin queda completo (W-118).
 - **Siguen en la lista de "Before this site can go live", los siete de siempre:** SEO title, SEO description, las dos palabras clave, las dos páginas de prueba y la política de privacidad. Pavel sigue sin guardar nada desde el viernes.
 - **Anotado para mañana (Studio, cowork):** espacio debajo del botón New page, reportado por Vic; y el Service name con ciudad duplicada.
+- **Política de privacidad: el borrador llegó a Pavel hasta hoy por la tarde.** Cowork lo escribió el 5-oct y lo dejó en `_drafts/legal/privacy-policy-stuart.md`, pero nadie se lo había mandado; cowork llegó a escribir "I sent you a draft" en un copy para el equipo sin confirmarlo con Vic. Vic se lo mandó hoy por su chat privado, con la instrucción de crear la página "Privacy Policy" en Studio y desmarcar "Show this page in the site menu". **Lección:** un entregable para alguien del equipo no está entregado hasta que Vic confirma que lo mandó; cowork no lo da por hecho en ningún copy.
 
 ---
 
