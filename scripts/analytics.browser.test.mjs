@@ -1,12 +1,15 @@
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import { extname, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
 import { chromium } from "playwright";
 
 const repositoryRoot = resolve(import.meta.dirname, "..");
+const fixtureSlug = "_example";
+const fixtureConfig = JSON.parse(readFileSync(resolve(repositoryRoot, "sites", fixtureSlug, "site.config.json"), "utf8"));
 const mimeTypes = { ".css": "text/css", ".html": "text/html", ".js": "text/javascript", ".svg": "image/svg+xml", ".woff2": "font/woff2" };
 
 function buildSite(slug) {
@@ -35,10 +38,10 @@ function serveSite(slug) {
 }
 
 test("GTM only loads on the production host and conversion events exclude form data", { timeout: 20000 }, async () => {
-  buildSite("stuart-homeowners");
-  const server = await serveSite("stuart-homeowners");
+  buildSite(fixtureSlug);
+  const server = await serveSite(fixtureSlug);
   const port = server.address().port;
-  const browser = await chromium.launch({ args: ["--host-resolver-rules=MAP stuarthomeownersinsurance.com 127.0.0.1", "--proxy-server=direct://", "--proxy-bypass-list=*"] });
+  const browser = await chromium.launch({ args: [`--host-resolver-rules=MAP ${fixtureConfig.domain} 127.0.0.1`, "--proxy-server=direct://", "--proxy-bypass-list=*"] });
   try {
     const page = await browser.newPage();
     await page.addInitScript(() => { crypto.randomUUID ??= () => "test-address-session"; });
@@ -50,7 +53,7 @@ test("GTM only loads on the production host and conversion events exclude form d
       await route.fulfill({ contentType: "application/json", body: JSON.stringify({ contactId: "test-contact" }) });
     });
     await page.route("https://uploads.example.test/**", (route) => route.fulfill({ status: 200 }));
-    await page.goto(`http://stuarthomeownersinsurance.com:${port}/contact/`);
+    await page.goto(`http://${fixtureConfig.domain}:${port}/contact/`);
     const submitStep = (step) => page.evaluate((currentStep) => document.querySelector(`fieldset[data-step="${currentStep}"] button[type="submit"]`).click(), step);
     await page.locator("input[name=zip]").fill("34994");
     await submitStep(1);
@@ -75,11 +78,11 @@ test("GTM only loads on the production host and conversion events exclude form d
     const pushes = await page.evaluate(() => window.dataLayer.map(({ "gtm.start": ignored, ...event }) => event));
     assert.equal(gtmRequests, 1);
     assert.deepEqual(pushes.slice(1), [
-      { event: "quote_start", form_id: "wicfl-quote-v1", site_slug: "stuart-homeowners" },
-      { event: "quote_step", form_id: "wicfl-quote-v1", site_slug: "stuart-homeowners", step: 3 },
-      { event: "generate_lead", form_id: "wicfl-quote-v1", site_slug: "stuart-homeowners", lead_source: "stuart-homeowners" },
-      { event: "policy_upload", form_id: "wicfl-quote-v1", site_slug: "stuart-homeowners" },
-      { event: "phone_click", site_slug: "stuart-homeowners", link_location: "header" }
+      { event: "quote_start", form_id: fixtureConfig.crm.formId, site_slug: fixtureConfig.slug },
+      { event: "quote_step", form_id: fixtureConfig.crm.formId, site_slug: fixtureConfig.slug, step: 3 },
+      { event: "generate_lead", form_id: fixtureConfig.crm.formId, site_slug: fixtureConfig.slug, lead_source: fixtureConfig.crm.leadSource },
+      { event: "policy_upload", form_id: fixtureConfig.crm.formId, site_slug: fixtureConfig.slug },
+      { event: "phone_click", site_slug: fixtureConfig.slug, link_location: "header" }
     ]);
     assert.doesNotMatch(JSON.stringify(pushes), /Test Street|test@example\.test|7722470106/);
     const preview = await browser.newPage();

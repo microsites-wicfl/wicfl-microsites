@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 import test from "node:test";
 
 const repositoryRoot = resolve(import.meta.dirname, "..");
+const fixtureSlug = "_example";
 
 function buildSite(slug) {
   const build = spawnSync(process.execPath, [resolve(repositoryRoot, "scripts/build-site.mjs"), slug], {
@@ -12,6 +13,10 @@ function buildSite(slug) {
     encoding: "utf8"
   });
   assert.equal(build.status, 0, build.stderr || build.stdout);
+}
+
+function configFor(slug) {
+  return JSON.parse(readFileSync(resolve(repositoryRoot, "sites", slug, "site.config.json"), "utf8"));
 }
 
 function schemaScripts(slug, path) {
@@ -55,78 +60,57 @@ function insuranceAgency(graph) {
   return agencies[0];
 }
 
-test("site schema graphs connect entities and preserve FAQPage", async () => {
-  buildSite("_example");
-  buildSite("stuart-homeowners");
+function realSiteSlugs() {
+  return readdirSync(resolve(repositoryRoot, "sites"), { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && !entry.name.startsWith("_"))
+    .map((entry) => entry.name);
+}
 
-  for (const slug of ["_example", "stuart-homeowners"]) {
-    for (const path of pagePaths(slug)) {
-      const graph = graphFor(slug, path);
-      assertConnectedGraph(graph);
-      insuranceAgency(graph);
-      const pageEntities = graph.filter((entity) => ["WebPage", "ContactPage"].includes(entity["@type"]));
-      assert.equal(pageEntities.length, 1, `Expected one page entity in ${slug}/${path}`);
-      assert.ok(pageEntities[0].isPartOf["@id"].endsWith("/#website"));
-      assert.ok(pageEntities[0].about["@id"].endsWith("/#insurance-agency"));
-    }
+function sourceForRoute(slug, route, config) {
+  if (route === ".") return resolve(repositoryRoot, "sites", slug, "content/index.md");
+  const [locale] = route.split("/");
+  if (config.locale.alternates.includes(locale) && !route.includes("/")) {
+    return resolve(repositoryRoot, "sites", slug, "content", route, "index.md");
   }
+  return resolve(repositoryRoot, "sites", slug, "content", `${route}.md`);
+}
 
-  const exampleHome = graphFor("_example", ".");
-  assertConnectedGraph(exampleHome);
-  assert.equal(exampleHome.some((entity) => entity["@type"] === "BreadcrumbList"), false);
-  assert.equal(insuranceAgency(exampleHome).address.addressCountry, "US");
-  assert.equal(exampleHome.find((entity) => entity["@type"] === "WebPage").inLanguage, "en-US");
+function hasServiceName(slug, route, config) {
+  return /^\s*serviceName:\s*\S/m.test(readFileSync(sourceForRoute(slug, route, config), "utf8"));
+}
 
-  const coverage = graphFor("_example", "coverage-fixture");
-  assertConnectedGraph(coverage);
-  const breadcrumb = coverage.find((entity) => entity["@type"] === "BreadcrumbList");
-  assert.deepEqual(breadcrumb.itemListElement.map((item) => item.item), [
-    "https://example-flood.invalid/",
-    "https://example-flood.invalid/coverage-fixture/"
-  ]);
-  assert.equal(breadcrumb.itemListElement[1].name, "Coverage page fixture");
-  const service = coverage.find((entity) => entity["@type"] === "Service");
-  assert.equal(service.name, "Fixture coverage in Stuart");
-  assert.equal(service.serviceType, "Fixture coverage");
-  assert.deepEqual(service.areaServed, {
-    "@type": "City",
-    name: "Stuart",
-    containedInPlace: { "@type": "AdministrativeArea", name: "Martin County" }
-  });
-  assert.equal(service.provider["@id"], "https://example-flood.invalid/#insurance-agency");
-  assert.equal(graphFor("_example", "about-fixture").some((entity) => entity["@type"] === "Service"), false);
+test("schema fixture covers agency, service, breadcrumb, and FAQ contracts", async () => {
+  buildSite(fixtureSlug);
+  const fixtureConfig = configFor(fixtureSlug);
 
-  const spanishPage = graphFor("_example", "es/about-fixture");
-  const spanishBreadcrumb = spanishPage.find((entity) => entity["@type"] === "BreadcrumbList");
-  assert.deepEqual(spanishBreadcrumb.itemListElement.map((item) => item.item), [
-    "https://example-flood.invalid/es/",
-    "https://example-flood.invalid/es/about-fixture/"
-  ]);
-  assert.equal(spanishBreadcrumb.itemListElement[0].name, "Inicio");
-  const spanishHome = graphFor("_example", "es");
-  assert.equal(spanishHome.some((entity) => entity["@type"] === "BreadcrumbList"), false);
-
-  for (const graph of [exampleHome, coverage, graphFor("_example", "about-fixture"), spanishPage, spanishHome]) {
-    assert.ok(graph.some((entity) => ["WebPage", "ContactPage"].includes(entity["@type"])));
+  for (const path of pagePaths(fixtureSlug)) {
+    const graph = graphFor(fixtureSlug, path);
+    assertConnectedGraph(graph);
     insuranceAgency(graph);
+    const pageEntities = graph.filter((entity) => ["WebPage", "ContactPage"].includes(entity["@type"]));
+    assert.equal(pageEntities.length, 1, `Expected one page entity in ${fixtureSlug}/${path}`);
+    assert.ok(pageEntities[0].isPartOf["@id"].endsWith("/#website"));
+    assert.ok(pageEntities[0].about["@id"].endsWith("/#insurance-agency"));
   }
 
-  const stuartHome = graphFor("stuart-homeowners", ".");
-  assertConnectedGraph(stuartHome);
-  const stuartAgency = insuranceAgency(stuartHome);
-  assert.equal(stuartAgency["@id"], "https://stuarthomeownersinsurance.com/#insurance-agency");
-  assert.equal(stuartAgency.url, "https://stuarthomeownersinsurance.com/");
-  assert.equal(stuartAgency.logo, "https://stuarthomeownersinsurance.com/logo.svg");
-  assert.equal(stuartAgency.parentOrganization["@id"], "https://www.walkerinsuranceagency.com/#organization");
-  assert.equal(stuartAgency.address, undefined);
-  assert.equal(stuartAgency.telephone, "+17722470106");
-  assert.equal(stuartAgency.email, "info@stuarthomeownersinsurance.com");
-  assert.deepEqual(stuartAgency.areaServed, [
-    { "@type": "City", name: "Stuart" },
+  const exampleHome = graphFor(fixtureSlug, ".");
+  assert.equal(exampleHome.some((entity) => entity["@type"] === "BreadcrumbList"), false);
+  const agency = insuranceAgency(exampleHome);
+  assert.equal(agency["@id"], `https://${fixtureConfig.domain}/#insurance-agency`);
+  assert.equal(agency.url, `https://${fixtureConfig.domain}/`);
+  assert.equal(agency.logo, `https://${fixtureConfig.domain}${fixtureConfig.brand.logo}`);
+  assert.equal(agency.parentOrganization["@id"], "https://www.walkerinsuranceagency.com/#organization");
+  assert.equal(agency.address, undefined);
+  assert.equal(agency.telephone, fixtureConfig.contact.trackingPhone);
+  assert.equal(agency.email, fixtureConfig.contact.email);
+  assert.deepEqual(agency.areaServed, [
+    { "@type": "City", name: fixtureConfig.geo.city },
+    { "@type": "AdministrativeArea", name: "Martin County" },
     { "@type": "Place", name: "Port Salerno" },
-    { "@type": "Place", name: "Palm City" }
+    { "@type": "Place", name: "Palm City" },
+    { "@type": "Place", name: "Hobe Sound" }
   ]);
-  const walker = stuartHome.find((entity) => entity["@id"] === "https://www.walkerinsuranceagency.com/#organization");
+  const walker = exampleHome.find((entity) => entity["@id"] === "https://www.walkerinsuranceagency.com/#organization");
   assert.deepEqual({ "@type": walker["@type"], name: walker.name, url: walker.url, telephone: walker.telephone, address: walker.address }, {
     "@type": "Organization",
     name: "Walker Insurance Agency",
@@ -134,18 +118,44 @@ test("site schema graphs connect entities and preserve FAQPage", async () => {
     telephone: undefined,
     address: undefined
   });
-  const stuartContact = graphFor("stuart-homeowners", "contact");
-  assert.equal(stuartContact.find((entity) => entity["@type"] === "ContactPage").url, "https://stuarthomeownersinsurance.com/contact/");
-  assert.equal(stuartContact.some((entity) => entity["@type"] === "Service"), false);
-  assert.equal(graphFor("stuart-homeowners", "flood-insurance").some((entity) => entity["@type"] === "Service"), false);
 
-  const faqScripts = schemaScripts("_example", "blocks-fixture").filter((script) => script.data["@type"] === "FAQPage");
+  const coverage = graphFor(fixtureSlug, "coverage-fixture");
+  const breadcrumb = coverage.find((entity) => entity["@type"] === "BreadcrumbList");
+  assert.deepEqual(breadcrumb.itemListElement.map((item) => item.item), [
+    `https://${fixtureConfig.domain}/`,
+    `https://${fixtureConfig.domain}/coverage-fixture/`
+  ]);
+  assert.equal(breadcrumb.itemListElement[1].name, "Coverage page fixture");
+  const service = coverage.find((entity) => entity["@type"] === "Service");
+  assert.equal(service.name, `Fixture coverage in ${fixtureConfig.geo.city}`);
+  assert.equal(service.serviceType, "Fixture coverage");
+  assert.deepEqual(service.areaServed, {
+    "@type": "City",
+    name: fixtureConfig.geo.city,
+    containedInPlace: { "@type": "AdministrativeArea", name: `${fixtureConfig.geo.county} County` }
+  });
+  assert.equal(service.provider["@id"], `https://${fixtureConfig.domain}/#insurance-agency`);
+  assert.equal(graphFor(fixtureSlug, "about-fixture").some((entity) => entity["@type"] === "Service"), false);
+
+  const spanishPage = graphFor(fixtureSlug, "es/about-fixture");
+  const spanishBreadcrumb = spanishPage.find((entity) => entity["@type"] === "BreadcrumbList");
+  assert.deepEqual(spanishBreadcrumb.itemListElement.map((item) => item.item), [
+    `https://${fixtureConfig.domain}/es/`,
+    `https://${fixtureConfig.domain}/es/about-fixture/`
+  ]);
+  assert.equal(spanishBreadcrumb.itemListElement[0].name, "Inicio");
+  assert.equal(graphFor(fixtureSlug, "es").some((entity) => entity["@type"] === "BreadcrumbList"), false);
+
+  const contact = graphFor(fixtureSlug, "contact");
+  assert.equal(contact.find((entity) => entity["@type"] === "ContactPage").url, `https://${fixtureConfig.domain}/contact/`);
+
+  const faqScripts = schemaScripts(fixtureSlug, "blocks-fixture").filter((script) => script.data["@type"] === "FAQPage");
   assert.equal(faqScripts.length, 1);
   assert.equal(faqScripts[0].data.mainEntity.length, 6);
 
   process.env.WICFL_SITE_CONFIG = resolve(repositoryRoot, "sites/_example/site.config.json");
   const { serviceAreaEntities, siteGraphJsonLd } = await import(`../packages/template/src/lib/site-data.mjs?without-agency=${Date.now()}`);
-  const configWithoutAgency = JSON.parse(readFileSync(resolve(repositoryRoot, "sites/_example/site.config.json"), "utf8"));
+  const configWithoutAgency = structuredClone(fixtureConfig);
   delete configWithoutAgency.agency;
   const withoutAgency = JSON.parse(siteGraphJsonLd(configWithoutAgency, { id: "about", title: "About", path: "/about/", lang: "en" }));
   assert.equal(withoutAgency["@graph"].some((entity) => entity.parentOrganization), false);
@@ -157,4 +167,32 @@ test("site schema graphs connect entities and preserve FAQPage", async () => {
     { "@type": "AdministrativeArea", name: "Martin County" },
     { "@type": "AdministrativeArea", name: "Martin" }
   ]);
+});
+
+test("real sites retain only schema invariants derived from their own config and content", () => {
+  for (const slug of realSiteSlugs()) {
+    const config = configFor(slug);
+    buildSite(slug);
+    for (const route of pagePaths(slug)) {
+      const graph = graphFor(slug, route);
+      assertConnectedGraph(graph);
+      const agency = insuranceAgency(graph);
+      assert.equal(agency.telephone, config.contact.trackingPhone);
+      assert.equal(agency.email, config.contact.email);
+      assert.deepEqual(agency.areaServed.map((area) => area.name), config.geo.serviceArea);
+      assert.equal(agency.address, undefined);
+      assert.equal(graph.some((entity) => entity["@type"] === "Service"), hasServiceName(slug, route, config));
+    }
+  }
+});
+
+test("test scripts do not name real sites", () => {
+  const testFiles = readdirSync(resolve(repositoryRoot, "scripts"))
+    .filter((file) => file.endsWith(".test.mjs"));
+  for (const slug of realSiteSlugs()) {
+    for (const file of testFiles) {
+      const text = readFileSync(resolve(repositoryRoot, "scripts", file), "utf8");
+      assert.equal(text.includes(slug), false, `Tests must not depend on a real site's content: ${file} mentions "${slug}". Use sites/_example or a temporary _fixture.`);
+    }
+  }
 });

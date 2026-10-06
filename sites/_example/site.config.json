@@ -7,8 +7,8 @@
     "logo": "/logo.svg"
   },
   "agency": {
-    "name": "Example Licensed Insurance Agency",
-    "url": "https://example-agency.invalid/"
+    "name": "Walker Insurance Agency",
+    "url": "https://www.walkerinsuranceagency.com/"
   },
   "niche": {
     "product": "flood",
@@ -20,6 +20,7 @@
     "state": "FL",
     "serviceArea": [
       "Stuart",
+      "Martin County",
       "Port Salerno",
       "Palm City",
       "Hobe Sound"
@@ -34,14 +35,7 @@
   "contact": {
     "trackingPhone": "+15305152668",
     "displayPhone": "(530) 515-2668",
-    "email": "hello@example-flood.invalid",
-    "address": {
-      "street": "123 Placeholder Avenue",
-      "city": "Stuart",
-      "state": "FL",
-      "zip": "34994"
-    },
-    "licenseNumber": "PLACEHOLDER-FL-LICENSE"
+    "email": "hello@example-flood.invalid"
   },
   "products": [
     "flood",
@@ -57,10 +51,10 @@
   },
   "analytics": {
     "ga4": "G-PLACEHOLDER",
-    "gtm": "GTM-PLACEHOLDER"
+    "gtm": "GTM-TEST123"
   },
   "crm": {
-    "formId": "PENDING_GHL_FORM_ID",
+    "formId": "fixture-quote-v1",
     "leadSource": "example-flood"
   },
   "theme": {

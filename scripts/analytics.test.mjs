@@ -14,13 +14,13 @@ function buildSite(slug) {
   assert.equal(build.status, 0, build.stderr || build.stdout);
 }
 
+const fixtureSlug = "_example";
+const fixtureConfig = JSON.parse(readFileSync(resolve(repositoryRoot, "sites", fixtureSlug, "site.config.json"), "utf8"));
+
 test("GTM markup is limited to the production host", () => {
-  buildSite("stuart-homeowners");
-  buildSite("_example");
-  const stuartHtml = readFileSync(resolve(repositoryRoot, "dist/sites/stuart-homeowners/contact/index.html"), "utf8");
-  const exampleHtml = readFileSync(resolve(repositoryRoot, "dist/sites/_example/index.html"), "utf8");
-  assert.match(stuartHtml, /GTM-TV5RN2DB/);
-  assert.match(stuartHtml, /location\.hostname === domain/);
-  assert.doesNotMatch(stuartHtml, /gtag\/js\?id=G-/);
-  assert.doesNotMatch(exampleHtml, /googletagmanager\.com\/gtm\.js/);
+  buildSite(fixtureSlug);
+  const fixtureHtml = readFileSync(resolve(repositoryRoot, "dist/sites", fixtureSlug, "contact/index.html"), "utf8");
+  assert.match(fixtureHtml, new RegExp(fixtureConfig.analytics.gtm));
+  assert.match(fixtureHtml, /location\.hostname === domain/);
+  assert.doesNotMatch(fixtureHtml, /gtag\/js\?id=G-/);
 });

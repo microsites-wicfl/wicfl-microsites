@@ -69,9 +69,15 @@ test("requires a substantive privacy policy", () => {
   assert.notEqual(run("short-privacy", config(), { "privacy-policy.md": "---\ntitle: Privacy Policy\n---\n\nShort policy.".repeat(10) }).status, 0);
   assert.equal(run("valid-privacy", config()).status, 0);
 });
-test("reports Stuart's internal copy, test pages, and missing privacy policy", () => {
-  const result = spawnSync(process.execPath, [script, "stuart-homeowners"], { cwd: join(import.meta.dirname, ".."), encoding: "utf8" });
+test("reports internal copy, test pages, and missing privacy policy", () => {
+  const result = run("all-production-markers", config({ seo: { description: "Internal preview that is not published in this microsite template." } }), {
+    "about-demo.md": "---\ntitle: About\n---\n\nReal body",
+    "coverage-demo.md": "---\ntitle: Coverage\n---\n\nReal body",
+    "privacy-policy.md": null
+  });
   assert.match(result.stderr, /seo\.description: .*internal marker/);
+  assert.match(result.stderr, /seo\.description: .*unpublished-content marker/);
+  assert.match(result.stderr, /seo\.description: .*template marker/);
   assert.match(result.stderr, /content\/about-demo\.md: looks like a test page/);
   assert.match(result.stderr, /content\/coverage-demo\.md: looks like a test page/);
   assert.match(result.stderr, /content\/privacy-policy\.md: missing/);
