@@ -4,7 +4,7 @@
   "brand": { "name": "Stuart Homeowners Insurance", "parent": "WICFL", "logo": "/logo.svg" },
   "agency": { "name": "Walker Insurance Agency", "url": "https://www.walkerinsuranceagency.com/" },
   "niche": { "product": "homeowners", "audience": "homeowner" },
-  "geo": { "city": "Stuart", "county": "Martin", "state": "FL", "serviceArea": ["Stuart", "Port Salerno", "Palm City"] },
+  "geo": { "city": "Stuart", "county": "Martin", "state": "FL", "serviceArea": ["Stuart", "Sewall's Point", "Sailfish Point", "Hutchinson Island", "Palm City", "Rocky Point", "Martin County"] },
   "locale": { "primary": "en", "alternates": [] },
   "contact": {
     "trackingPhone": "+17722470106",
