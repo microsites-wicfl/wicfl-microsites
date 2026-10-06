@@ -1,3 +1,18 @@
+## 2026-10-06 (cierre del día) · Pavel volvió: SEO listo y política aprobada; quedan tres avisos
+
+**Quién:** Vic, Pavel, cowork.
+
+- **Pavel guardó a las 15:30** (`fccdd2d` en el borrador): SEO title "Stuart Homeowners Insurance | Florida Coverage", descripción real, palabra clave principal sin "demo" y ocho secundarias. Cowork corrió el gate contra su borrador: de siete hallazgos quedan tres (`about-demo.md`, `coverage-demo.md` y la política ausente).
+- **Pavel revisó el borrador de la política de privacidad y lo aprobó sin cambios.** Falta que la cree en Studio como página "Privacy Policy"; después va a Kevin.
+- Pavel preguntó dónde se hace cada cosa de la lista: señal de que la lista del update no le bastó. La respuesta sale mañana a primera hora (hoy ya terminó su día): crear la política, borrar las dos páginas de prueba y dejar el Service name sin la ciudad.
+- **Portada:** sin tocar desde el 9-sep. Se decide mañana con Vic si Stuart sale el viernes con la portada actual o con el diseño nuevo de Pavel.
+
+**Estado al cierre:** `origin/main` en `79ebefa`; en local, dos commits de docs sin subir (`0fb94ae`, `10841a8`) más este. Vista previa, publicación y autocompletado funcionando. Update del día entregado a Vic.
+
+**Mañana, en orden:** (1) Pavel: política, borrar páginas de prueba, Service name; (2) mensaje a Kevin con la política para aprobar; (3) decisión de la portada; (4) ensayo final de publicación (runbook, precondición 5), que debe salir limpio; (5) cowork: espacio del botón New page y prompt del Service name duplicado; (6) Vic: número de PSL en GoTo.
+
+---
+
 ## 2026-10-06 (15:00) · Stuart publicado a la copia de revisión y autocompletado de Google encendido
 
 **Quién:** Vic, Codex, cowork.
