@@ -53,7 +53,9 @@ test("a failed check on the latest commit: failed, with the reason in one line",
   ]);
   assert.deepEqual(await preview(github), {
     state: "failed",
-    help: "The site's settings didn't pass the automatic checks. Send Vic the message below.",
+    help:
+      "The automatic checks didn't pass. If you just changed Site settings, look at them again; " +
+      "otherwise it's on our side. Either way, send Vic the message below.",
     reason: "Validate all site configurations: failure",
     url,
   });
@@ -75,6 +77,30 @@ test("a failed preview publish says it is on our side", async () => {
     { name: "Preview stuart", status: "completed", conclusion: "failure" },
   ]);
   assert.match((await preview(github)).help, /on our side/);
+});
+
+test("an interrupted check is not blamed on the site: save again", async () => {
+  const github = await withDraft();
+  github.setCheckRuns(github.headOf("draft/stuart"), [
+    { name: "Validate all site configurations", status: "completed", conclusion: "cancelled" },
+    { name: "Preview stuart", status: "completed", conclusion: "cancelled" },
+  ]);
+  const status = await preview(github);
+  assert.equal(status.state, "failed");
+  assert.match(status.help, /interrupted before it could finish/);
+  assert.match(status.help, /Nothing is wrong with your changes/);
+  assert.equal(status.reason, "Validate all site configurations: cancelled");
+});
+
+test("a real failure is reported ahead of an interruption on the same commit", async () => {
+  const github = await withDraft();
+  github.setCheckRuns(github.headOf("draft/stuart"), [
+    { name: "Preview stuart", status: "completed", conclusion: "cancelled" },
+    { name: "Build stuart", status: "completed", conclusion: "failure" },
+  ]);
+  const status = await preview(github);
+  assert.match(status.help, /Check the page you edited last/);
+  assert.equal(status.reason, "Build stuart: failure");
 });
 
 test("new commit still building: preparing, keeping the previous URL reachable", async () => {
