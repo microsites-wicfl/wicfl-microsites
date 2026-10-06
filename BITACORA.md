@@ -1,3 +1,19 @@
+## 2026-10-06 (14:45) · La vista previa de Stuart vuelve a funcionar, por primera vez desde el 30 de septiembre
+
+**Quién:** Vic, cowork.
+
+- **Vic guardó la zona de servicio en Studio** (Site settings → Service area, los siete lugares del manual). El guardado creó `e799e99` en el borrador, que por fin tomó los arreglos de `main`.
+- **"Preview deploy" 37528130909 y "Validate and build" 37528130995: success.** Studio muestra "Preview ready" y el botón Open preview. Cowork abrió la vista previa (`wicfl-pr19-stuart-homeowners`): nombre sin "(Demo)", y el schema con las siete zonas, Martin County como `AdministrativeArea`.
+- La automatización del navegador de cowork no pudo hacer ese guardado (bloqueada por su control de seguridad, igual que el primer intento del 5-oct); por eso lo hizo Vic. Para lo que queda del lanzamiento: los guardados en Studio los hace una persona.
+
+**Hallazgo al revisar la vista previa: el nombre del servicio sale duplicado en el schema.** La página de inundación emite `Service.name` = "Flood Insurance in Stuart, FL in Stuart". Pavel escribió el Service name con la ciudad incluida ("Flood Insurance in Stuart, FL") y el template le agrega " in <ciudad>" (`site-data.mjs:154`). Pasa en las siete páginas con Service name. El manual sí dice que va solo el servicio ("like *Flood Insurance*"), pero el campo no lo impide. Dos arreglos posibles, no excluyentes: que Pavel deje solo el servicio en cada página, y que el template no agregue la ciudad cuando el nombre ya la trae. Pendiente de decidir con Vic; no bloquea la vista previa.
+
+**También visto:** el menú del borrador tiene nueve entradas más Get a Quote, en un orden que mezcla las dos con `navOrder` y el resto alfabético; "Homeowners Insurance" (la página nueva) y la portada compiten por la misma palabra clave. Va a la revisión de contenido con Pavel.
+
+**Google Cloud:** la facturación quedó ligada como prueba gratuita (ver `BACKLOG.md`, W-118). Vic activó Places API (New), restringió la llave y la guardó en `apps/lead-api/.env`. El prompt 029 quedó ajustado a ese estado. Pendiente: que Vic pegue la línea en Codex.
+
+---
+
 ## 2026-10-06 (13:00) · La vista previa de Stuart falla de verdad: las pruebas afirman el contenido del demo
 
 **Quién:** Vic, Codex, cowork.
