@@ -70,6 +70,41 @@ function postalAddress(address) {
   };
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function stateNames(state) {
+  const normalized = state.trim();
+  if (normalized.toUpperCase() === "FL") return [normalized, "Florida"];
+  return [normalized];
+}
+
+// Operators may include the location in serviceName even though the template supplies it in the
+// Service schema. Normalize only a trailing location, so a meaningful city elsewhere in the
+// service name (for example, "Stuart Flood Insurance") stays intact.
+export function serviceNames(serviceName, geo) {
+  const original = serviceName.trim();
+  const city = geo.city.trim();
+  const states = stateNames(geo.state)
+    .sort((left, right) => right.length - left.length)
+    .map(escapeRegExp)
+    .join("|");
+  const escapedCity = escapeRegExp(city);
+  const locationSuffix = new RegExp(
+    `(?:^|\\s)(?:in\\s+)?${escapedCity}(?:\\s*,\\s*(?:${states}))?\\.?$`,
+    "i"
+  );
+  const withoutLocation = original.replace(locationSuffix, "").trim();
+  const serviceType = withoutLocation || original;
+  const cityElsewhere = new RegExp(`(?:^|[^\\p{L}\\p{N}])${escapedCity}(?=$|[^\\p{L}\\p{N}])`, "iu");
+
+  return {
+    serviceType,
+    name: cityElsewhere.test(serviceType) ? serviceType : `${serviceType} in ${city}`
+  };
+}
+
 export function serviceAreaEntities(config) {
   const county = config.geo.county.toLowerCase();
   const city = config.geo.city.toLowerCase();
@@ -148,11 +183,12 @@ export function siteGraphJsonLd(config, page) {
     ...(!isHomePage ? { breadcrumb: { "@id": breadcrumbId } } : {})
   });
   if (page.serviceName) {
+    const names = serviceNames(page.serviceName, config.geo);
     graph.push({
       "@type": "Service",
       "@id": `${pageUrl}#service`,
-      name: `${page.serviceName} in ${config.geo.city}`,
-      serviceType: page.serviceName,
+      name: names.name,
+      serviceType: names.serviceType,
       url: pageUrl,
       ...(page.description ? { description: page.description } : {}),
       provider: { "@id": agencyId },

@@ -7,6 +7,9 @@ import test from "node:test";
 const repositoryRoot = resolve(import.meta.dirname, "..");
 const fixtureSlug = "_example";
 
+process.env.WICFL_SITE_CONFIG = resolve(repositoryRoot, "sites/_example/site.config.json");
+const { serviceNames } = await import(`../packages/template/src/lib/site-data.mjs?service-names=${Date.now()}`);
+
 function buildSite(slug) {
   const build = spawnSync(process.execPath, [resolve(repositoryRoot, "scripts/build-site.mjs"), slug], {
     cwd: repositoryRoot,
@@ -78,6 +81,29 @@ function sourceForRoute(slug, route, config) {
 function hasServiceName(slug, route, config) {
   return /^\s*serviceName:\s*\S/m.test(readFileSync(sourceForRoute(slug, route, config), "utf8"));
 }
+
+test("serviceNames removes a trailing fixture location without duplicating the city", () => {
+  const stuart = { city: "Stuart", state: "FL" };
+  const cases = [
+    ["Flood Insurance", { serviceType: "Flood Insurance", name: "Flood Insurance in Stuart" }],
+    ["Flood Insurance in Stuart, FL", { serviceType: "Flood Insurance", name: "Flood Insurance in Stuart" }],
+    ["Flood Insurance in Stuart", { serviceType: "Flood Insurance", name: "Flood Insurance in Stuart" }],
+    ["Homeowners Insurance Stuart, FL", { serviceType: "Homeowners Insurance", name: "Homeowners Insurance in Stuart" }],
+    ["Flood Insurance in Stuart, Florida", { serviceType: "Flood Insurance", name: "Flood Insurance in Stuart" }],
+    ["Stuart Flood Insurance", { serviceType: "Stuart Flood Insurance", name: "Stuart Flood Insurance" }]
+  ];
+  for (const [serviceName, expected] of cases) assert.deepEqual(serviceNames(serviceName, stuart), expected);
+
+  const portStLucie = { city: "Port St. Lucie", state: "FL" };
+  assert.deepEqual(serviceNames("Flood Insurance in Port St. Lucie, FL", portStLucie), {
+    serviceType: "Flood Insurance",
+    name: "Flood Insurance in Port St. Lucie"
+  });
+  assert.deepEqual(serviceNames("Port St. Lucie Flood Insurance", portStLucie), {
+    serviceType: "Port St. Lucie Flood Insurance",
+    name: "Port St. Lucie Flood Insurance"
+  });
+});
 
 test("schema fixture covers agency, service, breadcrumb, and FAQ contracts", async () => {
   buildSite(fixtureSlug);
@@ -153,7 +179,6 @@ test("schema fixture covers agency, service, breadcrumb, and FAQ contracts", asy
   assert.equal(faqScripts.length, 1);
   assert.equal(faqScripts[0].data.mainEntity.length, 6);
 
-  process.env.WICFL_SITE_CONFIG = resolve(repositoryRoot, "sites/_example/site.config.json");
   const { serviceAreaEntities, siteGraphJsonLd } = await import(`../packages/template/src/lib/site-data.mjs?without-agency=${Date.now()}`);
   const configWithoutAgency = structuredClone(fixtureConfig);
   delete configWithoutAgency.agency;
