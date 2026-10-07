@@ -103,7 +103,8 @@ export const text = {
   fieldNavOrderHint: "1 goes first after Home. Pages without a number come after the numbered ones.",
   fieldServiceName: "Service name",
   fieldServiceNameHint:
-    "Only for a page about one service, like Flood Insurance. Search engines read it. Otherwise leave it empty.",
+    "Only for a page about one service. Write just the service, like Flood Insurance, without the city: " +
+    "the site adds it. Otherwise leave it empty.",
   fieldPageType: "Page type",
   pageTypes: { home: "Home page", content: "Content page", coverage: "Coverage page" },
   fieldBody: "Page text",

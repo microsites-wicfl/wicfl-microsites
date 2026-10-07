@@ -268,14 +268,18 @@ select {
   padding: 0.5rem 0.6rem;
   height: 2.75rem;
 }
+/* A heading on the left and its action on the right. The row owns the space around it, so the
+   action button never sits against the list or panel that follows. */
 .section-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 2rem;
+  gap: 1rem;
+  margin: 2rem 0 0.9rem;
 }
+.section-head h1,
 .section-head h2 {
-  margin: 0 0 0.6rem;
+  margin: 0;
 }
 .page-row.deleted {
   opacity: 0.7;
