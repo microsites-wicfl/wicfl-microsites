@@ -1,3 +1,13 @@
+## 2026-10-07 (mañana) · Kevin aprueba el upgrade de Google Cloud
+
+**Quién:** Vic, Kevin, cowork.
+
+- **Kevin (6:14 am, chat del equipo):** "Yes, you can go ahead and upgrade so that we're good to go". Aprobado el paso de la cuenta de Google Cloud de prueba gratuita a cuenta de pago. Lo hace Vic con `microsites@wicfl.com` (botón Upgrade); después se ponen el tope diario de Autocomplete y la alerta de presupuesto, que la prueba gratuita no dejaba editar.
+- Kevin no dijo nada todavía de la política de privacidad: no la ha recibido, porque Pavel aún no la crea en Studio.
+- **Estado de Stuart a las 6:15 am (hora de Vic):** el borrador sigue en `fccdd2d`, el guardado de SEO de Pavel de ayer a las 15:30. Sin guardados nuevos. Siguen tres avisos: las dos páginas de prueba y la política.
+
+---
+
 ## 2026-10-06 (cierre del día) · Pavel volvió: SEO listo y política aprobada; quedan tres avisos
 
 **Quién:** Vic, Pavel, cowork.
