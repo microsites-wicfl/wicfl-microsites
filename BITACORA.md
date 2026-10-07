@@ -1,3 +1,13 @@
+## 2026-10-07 (7:15) · Studio: espacio del botón New page y ayuda del Service name; prompt 038
+
+**Quién:** Vic, cowork.
+
+- **Studio (cowork):** la fila de encabezado con acción (`.section-head`: "Pages" + New page, el título del sitio + Site settings, "Your sites" + New site) ahora es dueña de su espacio: 0.9rem debajo, y los títulos sin margen propio para que el botón quede alineado. Reportado por Vic el 6-oct con captura. Y la ayuda del campo Service name pide escribir solo el servicio, sin la ciudad. 131 pruebas.
+- **Prompt 038 escrito (Codex):** el template deja de duplicar la ciudad en `Service.name` cuando el operador ya la escribió, con una función pura y una tabla de casos. No toca el contenido de Stuart.
+- Push de los cinco commits de docs de ayer y hoy confirmado por Codex (`056c811`), sin workflows, como se esperaba.
+
+---
+
 ## 2026-10-07 (mañana) · Kevin aprueba el upgrade de Google Cloud
 
 **Quién:** Vic, Kevin, cowork.
