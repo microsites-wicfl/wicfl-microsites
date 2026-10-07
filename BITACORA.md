@@ -3,6 +3,7 @@
 **Quién:** Vic, Kevin, cowork.
 
 - **Kevin (6:14 am, chat del equipo):** "Yes, you can go ahead and upgrade so that we're good to go". Aprobado el paso de la cuenta de Google Cloud de prueba gratuita a cuenta de pago. Lo hace Vic con `microsites@wicfl.com` (botón Upgrade); después se ponen el tope diario de Autocomplete y la alerta de presupuesto, que la prueba gratuita no dejaba editar.
+- **Hecho por Vic a las 6:45 am:** upgrade a **pago por uso** (sin suscripción: Google ofrecía planes de 100, 275 y 1,200 USD al mes, y no se eligió ninguno); presupuesto mensual de 10 USD con avisos al 50, 90 y 100 %; y tope de **1,000 solicitudes de Autocomplete al día** (antes 175,000). Con eso, el gasto máximo posible queda acotado y avisado.
 - Kevin no dijo nada todavía de la política de privacidad: no la ha recibido, porque Pavel aún no la crea en Studio.
 - **Estado de Stuart a las 6:15 am (hora de Vic):** el borrador sigue en `fccdd2d`, el guardado de SEO de Pavel de ayer a las 15:30. Sin guardados nuevos. Siguen tres avisos: las dos páginas de prueba y la política.
 
