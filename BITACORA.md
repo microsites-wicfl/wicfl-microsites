@@ -1,3 +1,15 @@
+## 2026-10-07 (11:30) · El schema de servicio ya no repite la ciudad (prompt 038 aceptado)
+
+**Quién:** Codex, cowork.
+
+- **Codex ejecutó el prompt 038** (`0a78df6`, reporte `e8b1289`): `serviceNames()` en el template quita la ciudad que el operador haya escrito al final del Service name y la agrega una sola vez. Los tres workflows del push en verde (Validate and build, Deploy WICFL Studio, Publish site Workers), revisados uno por uno.
+- **Revisión de cowork: aceptado.** Diff dentro de lo pedido; la función corrida aparte con los siete nombres reales de Stuart; y la copia publicada leída página por página: las siete dicen "<Servicio> in Stuart" con `serviceType` limpio. Antes decían "Flood Insurance in Stuart, FL in Stuart".
+- **Para Pavel cambia la lista:** el Service name ya no es tarea suya. Le quedan dos cosas: crear la página Privacy Policy y borrar las dos páginas de prueba.
+- Con el mismo push se desplegó Studio con el espacio del botón New page y la ayuda nueva del Service name (`2fb4bce`). Falta verlo en el Studio real: cowork no tiene sesión; lo confirma Vic con una captura.
+- **Estado de Stuart a las 11:30:** el borrador sigue en `fccdd2d` (guardado de Pavel de ayer 15:30). Sin guardados hoy. Siguen los tres avisos del gate.
+
+---
+
 ## 2026-10-07 (7:15) · Studio: espacio del botón New page y ayuda del Service name; prompt 038
 
 **Quién:** Vic, cowork.

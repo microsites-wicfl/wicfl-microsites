@@ -53,3 +53,18 @@
 
 - `0a78df6` `fix(template): Service schema name no longer repeats the city when the operator already wrote it`.
 - Pendiente al momento de actualizar este reporte: documentación de resultados de CI y producción.
+
+## Revisión de cowork
+
+**Veredicto: aceptado. Cierra la parte de template de W-125.** Revisado el 2026-10-07 contra el diff y contra el resultado real.
+
+- **Diff de `0a78df6`:** cuatro archivos, todos dentro de lo pedido (`packages/template/src/lib/site-data.mjs`, `scripts/schema.test.mjs`, `sites/_example/content/coverage-fixture.md` y este reporte). Nada de Studio, de workflows ni de `sites/stuart-homeowners/`.
+- **La función, corrida por cowork** con los siete Service name reales de Stuart: los siete dan `<Servicio> in Stuart` y `serviceType` `<Servicio>`. El escape de expresión regular funciona con `Port St. Lucie`.
+- **Las pruebas no nombran un sitio real:** los casos usan la función pura con ciudades escritas en la tabla y el fixture `_example`. La guardia del prompt 037 sigue en verde.
+- **Workflows del push, los tres revisados uno por uno en el API de GitHub:** Validate and build `37655760864`, Deploy WICFL Studio `37655761004` y Publish site Workers `37655761072`, todos `completed/success` sobre `0a78df6`. El commit del reporte (`e8b1289`) no dispara nada, como corresponde a un cambio solo de docs.
+- **Resultado real, leído por cowork en la copia publicada** (`wicfl-stuart-homeowners-published…workers.dev`), las siete páginas con Service name y no solo las dos del reporte: coastal, difficult-to-insure, flood, high-value, after-nonrenewal, homeowners-insurance-stuart-fl y waterfront. Las siete con `name` "<Servicio> in Stuart" y `serviceType` sin ciudad. Antes: "Flood Insurance in Stuart, FL in Stuart".
+
+**Consecuencia para Pavel:** ya no tiene que corregir el Service name de sus páginas. El campo acepta el nombre con o sin ciudad; la ayuda de Studio (`2fb4bce`) pide escribirlo sin ciudad para los sitios nuevos.
+
+**Queda fuera de este prompt:** la página `homeowners-insurance-stuart-fl` declara el mismo servicio que la portada persigue como palabra clave. No es un defecto del schema: es una decisión de contenido que se habla con Pavel.
+
