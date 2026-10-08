@@ -1,5 +1,5 @@
 ---
-title: "Homeowners Insurance Stuart, FL"
+title: "Homeowners Insurance"
 description: "Homeowners Insurance Stuart, FL – Compare home insurance coverage and get personalized protection for your Stuart, Florida home."
 navLabel: "Homeowners Insurance"
 pageType: content
