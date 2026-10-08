@@ -1,10 +1,3 @@
----
-title: "Privacy Policy"
-description: "How Walker Insurance of Central FL Inc. collects, uses, shares and protects the information you submit through this website and its quote form."
-showInNav: false
-pageType: content
----
-
 Effective date: October 9, 2026
 
 Walker Insurance of Central FL Inc. ("we," "us," or "our") respects your privacy and is committed to protecting the personal information entrusted to us.
