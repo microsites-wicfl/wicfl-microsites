@@ -1,3 +1,22 @@
+## 2026-10-08 (cierre) · Stuart listo para salir mañana: política maestra, ensayo limpio y portada de Pavel en borrador
+
+**Quién:** Vic, Kevin, Pavel, Codex, cowork.
+
+- **7-oct, tarde (cowork en Studio, con Vic):** página Privacy Policy creada (`7f3cdac`), páginas de prueba `about-demo` y `coverage-demo` borradas (`ff1a492`, `f12861f`). El gate corrido por cowork contra el borrador pasó limpio por primera vez. El 7-oct no se cerró el día: no hubo update ni bitácora.
+- **8-oct, 10:18:** Vic publicó el borrador desde Studio (`b223191`). El clic de cowork en Publish lo bloqueó el control de seguridad por ser una publicación no pedida en ese turno; Vic lo hizo a mano.
+- **Ensayo final (precondición 5 del runbook):** run `37812348404`, todos los pasos en verde, incluido el gate. `preview.stuarthomeownersinsurance.com` con la política, sin páginas de prueba y con `noindex, nofollow` en cada página.
+- **QA de cowork sobre el ensayo:** 10 páginas en 200, cero ligas internas rotas, imágenes con alt, `tel:` siempre al número de rastreo, un H1 por página, canonical al dominio real, sin rastro de demo. Sin scroll horizontal ni encimes en 375/768/1024/1280/1440. Corrección: el "encime del menú" reportado el 7-oct era un parpadeo al cargar, antes de que el header se compacte; no es un error persistente. Menores para después: seis títulos de más de 60 caracteres con el sufijo de marca, descripción de Coastal de 179, ícono de teléfono chico en celular.
+- **Kevin y la política:** confirmó grabación de llamadas y el correo de Stuart, y que el nombre legal es **Walker Insurance of Central FL Inc.** (solo ese, sin "doing business as"). Luego mandó una revisión hecha con GPT y una política maestra: la nuestra se quedaba corta frente a lo que la agencia hace (aseguradoras y MGAs, Google Ads, NowCerts, asistentes fuera de EE. UU., llamadas y textos con IA, marketing a futuro, archivos que se conservan). Cowork adaptó la maestra (nombre legal, contacto de Stuart, sin corchetes, sin H1) y Codex la publicó directo a `main` con el prompt 039 (`39b3f26`), sin pasar por el borrador de Pavel. Revisión de cowork: aceptado, cuerpo idéntico byte por byte al preparado.
+- **Abierto con Kevin:** no contestó si los leads de estos sitios quedan fuera de las campañas automáticas con IA mientras no exista la casilla de consentimiento. La casilla necesita un campo en GHL: va después del lanzamiento. El aviso de contacto bajo el formulario (Section A de su borrador) es el siguiente prompt.
+- **Pavel:** armó en Studio el hero con foto y la banda de cotización final de la portada (`286ef2d`, vista previa en verde, revisada por cowork). Dos cosas antes de publicar su borrador: (1) **les quitó "in Stuart, FL" a los Title de las siete páginas de servicio** (confundió Title con Service name); hay que regresarlos; (2) las dos fotos pesan 3.0 y 2.5 MB en PNG, y una se llama `dasdkgfas.png`.
+- **Hallazgo de Studio:** la vista rápida del editor no dibuja los botones (`**[texto](/url)**` solo), por eso Pavel creyó que su botón estaba mal. El sitio sí lo dibuja. Mejora de Studio para después del lanzamiento.
+
+**Estado al cierre:** `origin/main` en `f3fc6cd`; borrador de Pavel en `286ef2d` (10 commits por delante, 3 por detrás de `main`, sin archivos en común). Gate limpio en `main`.
+
+**Mañana 9-oct, en orden:** (1) Pavel regresa la ciudad a los títulos; cowork revisa y Vic publica el borrador; (2) aviso bajo el formulario (prompt 040); (3) gate y ensayo otra vez sobre `main` final; (4) lanzamiento, runbook pasos 1 a 8; (5) GoTo: la línea de Stuart reproduce aviso de grabación.
+
+---
+
 ## 2026-10-07 (11:30) · El schema de servicio ya no repite la ciudad (prompt 038 aceptado)
 
 **Quién:** Codex, cowork.
