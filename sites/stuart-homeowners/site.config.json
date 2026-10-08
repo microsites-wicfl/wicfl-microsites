@@ -13,10 +13,10 @@
   },
   "products": ["homeowners"],
   "seo": {
-    "title": "Stuart Homeowners Insurance | Internal Demo",
-    "description": "Internal preview of the Stuart, Florida homeowners insurance microsite template. Not published content and not insurance advice or an offer of coverage.",
-    "primaryKeyword": "Stuart homeowners insurance demo",
-    "secondaryKeywords": ["waterfront homeowners insurance Stuart FL", "Martin County high value home insurance demo"]
+    "title": "Stuart Homeowners Insurance | Florida Coverage",
+    "description": "Get homeowners insurance in Stuart, FL with local guidance for coastal, waterfront, high-value and Florida homes. Request a personalized quote today.",
+    "primaryKeyword": "Stuart homeowners insurance",
+    "secondaryKeywords": ["homeowners insurance Stuart FL", "home insurance Stuart FL", "Stuart FL home insurance", "waterfront homeowners insurance Stuart", "coastal homeowners insurance Stuart", "high value home insurance Stuart", "Martin County homeowners insurance", "Florida homeowners insurance", "home insurance Martin County FL"]
   },
   "analytics": { "ga4": "G-YBYQXRCBLN", "gtm": "GTM-TV5RN2DB" },
   "crm": { "formId": "wicfl-quote-v1", "leadSource": "stuart-homeowners" },
