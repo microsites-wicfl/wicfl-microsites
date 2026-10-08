@@ -6,7 +6,10 @@ pageType: home
 
 :::hero
 eyebrow: LOCAL HOME INSURANCE EXPERTS
-![Insured house on Stuart, FL](/images/dasdkgfas.png)
+![Insured house on Stuart, FL]
+
+![Describe this image](/images/casa-2.png)
+
 # Homeowners Insurance in Stuart, FL
 ## Specialized coverage for high-value, waterfront, and coastal homes.
 Protect your Stuart home with coverage options tailored to your property, location, and insurance needs.
