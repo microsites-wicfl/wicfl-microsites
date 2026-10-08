@@ -20,7 +20,8 @@
 - `grep -n "Walker Insurance Agency\\|\\[" sites/stuart-homeowners/content/privacy-policy.md`: salida vacía.
 - `node scripts/check-production-config.mjs stuart-homeowners`: salida vacía y código de salida 0.
 - `npm run check`: configuración válida, 0 errores y 0 warnings de tipos; 30 pruebas de bloques/configuración, 1 de analytics y 4 de schema pasaron.
-- Pendiente de registrar tras el push: workflows y comprobación de la copia publicada.
+- [Validate and build #37837913552](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/37837913552) y [Publish site Workers #37837913587](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/37837913587) concluyeron en `success`.
+- La copia publicada `https://wicfl-stuart-homeowners-published.wicfl-microsites.workers.dev/privacy-policy/` respondió `200` y contiene `Effective date: October 9, 2026`, `Walker Insurance of Central FL Inc.`, la sección `15. Contact us`, `(772) 247-0106` e `info@stuarthomeownersinsurance.com`.
 
 ## Lo que tocaste fuera de lo pedido
 
@@ -28,7 +29,7 @@
 
 ## Lo que no pudiste verificar
 
-- Pendiente al momento de este commit: la página publicada, que depende de Publish site Workers.
+- Nada. La página publicada se comprobó después de que Publish site Workers terminó en verde.
 
 ## Dónde dudaste
 
@@ -48,4 +49,5 @@
 
 ## Commits
 
-- Pendiente al momento de redactar: `content(stuart-homeowners): privacy policy replaced with Kevin's master version`.
+- `39b3f26` `content(stuart-homeowners): privacy policy replaced with Kevin's master version`.
+- Pendiente al momento de actualizar este reporte: documentación de resultados de CI y producción.
