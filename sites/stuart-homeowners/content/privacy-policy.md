@@ -1,113 +1,219 @@
 ---
 title: "Privacy Policy"
-description: "How Stuart Homeowners Insurance, operated by Walker Insurance Agency, collects, uses and protects the information you share on this website."
+description: "How Walker Insurance of Central FL Inc. collects, uses, shares and protects the information you submit through this website and its quote form."
 showInNav: false
 pageType: content
 ---
 
-Last updated: October 9, 2026
-## Privacy Policy
+Effective date: October 9, 2026
 
-This Privacy Policy explains how Stuart Homeowners Insurance collects, uses, stores, and shares information when you visit stuarthomeownersinsurance.com or submit a request through our website. It also describes the choices available to you regarding your personal information.
+Walker Insurance of Central FL Inc. ("we," "us," or "our") respects your privacy and is committed to protecting the personal information entrusted to us.
 
-Stuart Homeowners Insurance is a website operated by Walker Insurance Agency, an independent insurance agency serving Stuart, Florida, and Martin County. In this Privacy Policy, “we,” “us,” and “our” refer to Walker Insurance Agency.
+This Privacy Policy explains how we collect, use, disclose, retain and safeguard information through our websites, insurance quote forms, telephone communications, customer relationship systems and other insurance agency operations.
 
-## Information We Collect
+It applies to this website, stuarthomeownersinsurance.com, and to the other local and insurance-specific websites operated by Walker Insurance of Central FL Inc., including websites that use separate domain names or local marketing names.
 
-**Information you provide directly.** When you submit a homeowners insurance quote request, we may collect information such as your property's ZIP code and address, the reason for your request, your first and last name, phone number, email address, desired coverage start date, current insurer, and, if you choose to provide it, your current annual premium. You may also have the option to upload a copy of your current policy declaration page as a PDF or image.
+## 1. About us
 
-Please provide only information that is necessary for your request. Do not upload documents containing information that is not needed to evaluate your homeowners insurance options.
+Walker Insurance of Central FL Inc. is an independent insurance agency serving customers in Florida. We help consumers obtain quotations, compare insurance options, place coverage and service insurance policies.
 
-**Information collected automatically.** When you visit our website, certain technical and usage information may be collected automatically. Depending on the tools enabled, this may include pages viewed, links and buttons clicked, interactions with quote forms, clicks on telephone links, approximate location inferred from your internet connection, browser type, device information, and cookie or similar identifiers used for analytics.
+Our websites may use different geographic or insurance-specific names. Unless otherwise indicated, information submitted through those websites is received and processed by Walker Insurance of Central FL Inc.
 
-We use this information to understand how visitors use our website, evaluate its performance, and improve the experience. Analytics information may be associated with online identifiers or device information even when we do not directly identify a visitor by name.
+## 2. Information we collect
 
-**Phone calls and communications.** If you call the telephone number displayed on our website or communicate with us by email, text message, or another available channel, we may collect your contact details, the date and time of the communication, and information you choose to share. Calls may be recorded for quality assurance, training, or business purposes where applicable. Where required by law, we will obtain the necessary consent before recording a call.
+Depending on how you interact with us, we may collect the following categories of information.
 
-## How We Use Your Information
+**Personal and contact information**
 
-We may use the information we collect to:
+- Name, address, telephone number and email address
+- Preferred contact methods and appointment availability
+- Information submitted through online forms or other communications
 
-- Review your request and discuss available homeowners insurance options for your property.
-- Contact you to respond to questions, request additional information, or follow up on a quote request.
-- Communicate with you about your inquiry through available communication channels.
-- Review policy information or supporting documents you voluntarily submit.
-- Maintain business, customer service, and transaction records as required or permitted by applicable law.
-- Measure website traffic, understand how visitors interact with our content, and evaluate which pages or features generate inquiries.
-- Maintain website security, prevent misuse, troubleshoot technical issues, and improve our services.
-- Comply with applicable legal obligations and protect our legitimate business interests.
+**Property and insurance information**
 
-We do not sell personal information to third parties or share it with third parties for their own independent marketing purposes.
+- Property address, characteristics, occupancy and construction information
+- Current insurance carrier, coverage information, renewal dates and premiums
+- Insurance application details, coverage requests and quotation history
+- Mortgage lender and mortgagee information
+- Claims and loss history where relevant and legally permitted
+- Current insurance policy documents, declarations pages and other uploaded records
 
-## How We Share Your Information
+**Additional underwriting information**
 
-We may share information with service providers that help us operate our website, manage inquiries, measure website performance, or communicate with you. These providers may process information on our behalf, subject to applicable agreements and privacy obligations.
+We may request or obtain additional information needed to prepare insurance quotations, assess eligibility or assist with an application. This information may come directly from you, from insurance carriers, from authorized reporting services, from public records and from other permitted sources.
 
-Depending on the services enabled and used by Walker Insurance Agency, these providers may include:
+We collect and use nonpublic personal financial information, and any nonpublic personal health information if applicable, subject to the insurance privacy laws that apply to it.
 
-- **Customer relationship management (GoHighLevel):** May store quote requests, contact details, and follow-up communications.
-- **Website infrastructure and file storage (Cloudflare):** May support website security, performance, and the storage or processing of files submitted through the website.
-- **Analytics and tag management (Google Analytics and Google Tag Manager):** May help us understand website traffic and visitor interactions. Depending on configuration, these services may use cookies or similar technologies.
-- **Address autocomplete (Google Maps Platform):** If address suggestions are enabled on our quote form, the address information you enter may be transmitted to Google to provide matching address suggestions.
-- **Telephone services (GoTo):** May facilitate calls to our published telephone number and, if enabled, call recording.
+**Website and technical information**
 
-The specific information processed by each provider depends on the tools and settings in use. We encourage you to review the applicable providers' privacy policies for additional information about their practices. Information about how Google uses data from websites that use its services is available at policies.google.com/technologies/partner-sites.
+- IP address and approximate geographic location
+- Browser, device and operating system information
+- Pages visited and interactions with forms and buttons
+- Referral sources, advertising attribution and campaign information
+- Cookies and similar technologies
 
-We may also disclose information when reasonably necessary to comply with applicable laws, regulations, legal processes, or lawful requests; protect our rights, property, or safety; investigate suspected fraud or misuse; or support a business transaction, merger, sale, or reorganization, subject to applicable legal requirements.
+**Communications information**
 
-## How Long We Retain Your Information
+- Emails, text messages and correspondence
+- Call dates, times and contact information
+- Telephone recordings and transcripts where lawfully obtained
+- Customer service inquiries and communications with our staff or automated systems
+- Communication preferences, consent records and opt-out requests
 
-We retain personal information only for as long as reasonably necessary for the purposes described in this Privacy Policy, including responding to your inquiry, maintaining business records, resolving disputes, and meeting applicable legal, regulatory, or recordkeeping requirements.
+## 3. How we use your information
 
-The retention period may vary depending on the type of information and the circumstances of your request. Documents uploaded with a quote request should be retained only as long as needed for the stated purpose and applicable retention obligations. Analytics information is retained according to the settings of the analytics services we use.
+We may use your information to:
 
-When information is no longer needed and we are not required or permitted to retain it, we will take reasonable steps to delete it or otherwise dispose of it securely.
+- Respond to insurance quote requests and inquiries
+- Obtain and compare quotations from multiple insurance companies
+- Evaluate and present available insurance options
+- Assist with insurance applications, placement, renewals and servicing
+- Contact you about the insurance products or services you requested
+- Send reminders, appointment confirmations and follow-up communications
+- Send future insurance-related offers and marketing communications where legally permitted
+- Maintain customer relationships and business records
+- Operate automated customer service and communication systems
+- Analyze website performance and advertising effectiveness
+- Protect against fraud, misuse and unauthorized activity
+- Meet applicable legal, regulatory and contractual obligations
 
-## Cookies and Analytics
+We may use information from previous inquiries to help provide future insurance services and offers, subject to applicable privacy, marketing and insurance information-sharing restrictions.
 
-Our website may use cookies and similar technologies to support functionality, measure website performance, and understand visitor interactions. These technologies may collect information about your browser, device, and activity on the website.
+## 4. Automated communications and artificial intelligence
 
-You can manage or delete cookies through your browser settings. Blocking certain cookies may affect the functionality of some website features. Depending on the analytics tools and settings in use, additional controls may be available through those providers.
+We use or may use customer relationship management platforms, automated workflows, artificial intelligence and virtual assistants to support our operations. These technologies may help us:
 
-## Your Choices and Privacy Requests
+- Respond to online insurance inquiries
+- Answer incoming calls
+- Make permitted outbound telephone calls
+- Send automated text messages and emails
+- Schedule appointments and deliver reminders
+- Follow up on quotations
+- Respond to routine customer service questions
+- Identify requests that need an insurance professional
 
-Depending on applicable law and the circumstances, you may be able to:
+Some communications may be generated, processed or supported by AI systems, including AI-generated voice technology.
 
-- **Manage cookies:** Block or delete cookies through your browser settings.
-- **Opt out of communications:** Request that we stop sending marketing communications by following the instructions in the message, such as replying STOP to a text where supported or using an unsubscribe link in an email. You may also contact us directly. We may still send communications necessary to respond to an active request or meet legal obligations.
-- **Request access or correction:** Ask us about personal information we maintain about you or request that inaccurate information be corrected.
-- **Request deletion:** Ask us to delete personal information, subject to applicable legal, regulatory, recordkeeping, and other permitted exceptions.
+The use of automated technology for marketing calls or texts is subject to applicable consent requirements. Submitting information through a website does not, by itself, authorize every form of automated marketing.
 
-To submit a privacy request, use the contact information in the “Contact Us” section below. We may need to verify your identity before responding. We will handle requests in accordance with applicable law and respond within any legally required timeframe.
+**AI systems do not replace licensed insurance professionals in giving insurance advice or determining coverage.**
 
-## Data Security
+We may process communications through authorized technology providers to operate these services, subject to applicable confidentiality, security and privacy requirements.
 
-We use reasonable administrative, technical, and organizational safeguards designed to protect personal information against unauthorized access, disclosure, alteration, or destruction. Depending on the systems in use, these safeguards may include encrypted website connections (HTTPS), access restrictions, and controls for handling submitted documents.
+## 5. Telephone calls, recordings and text messages
 
-However, no website, electronic transmission, or storage system can be guaranteed to be completely secure. We cannot guarantee absolute security, and you should avoid sending sensitive information through channels that are not intended for that purpose.
+Calls to or from us may be handled by agency representatives, authorized service providers or automated AI-assisted systems.
 
-## Children's Privacy
+Where legally permitted, and after obtaining any required consent, calls may be recorded or transcribed for service, quality assurance, training, compliance and recordkeeping purposes. We provide recording notices and obtain required consent in accordance with applicable law.
 
-This website is intended for adults seeking homeowners insurance. It is not directed to children under 18, and we do not knowingly collect personal information from children under 18 through this website. If you believe a child has provided personal information to us, please contact us so we can review the matter and take appropriate action as required by law.
+Text messages may relate to insurance inquiries, appointments, quotations, customer service or, where authorized, marketing. You may opt out of marketing text messages by replying STOP or by contacting us. Message and data rates may apply.
 
-## Third-Party Websites and Services
+## 6. Insurance companies and information sharing
 
-Our website may contain links to third-party websites or use third-party services. Those websites and services operate under their own privacy policies and practices. We are not responsible for the privacy, security, or content of third-party websites that we do not operate.
+As an independent insurance agency, we work with multiple insurance companies and insurance-market participants. We may disclose information, as appropriate and legally permitted, to:
 
-We encourage you to review the applicable privacy policies before providing information directly to a third party.
+- Insurance carriers
+- Managing general agents (MGAs)
+- Wholesale insurance brokers
+- Insurance underwriting and rating platforms
+- Authorized insurance reporting services
+- Insurance policy administration and servicing providers
 
-## Changes to This Privacy Policy
+We disclose information to them to evaluate eligibility, obtain requested quotations, submit applications, place coverage, administer policies or support insurance services.
 
-We may update this Privacy Policy from time to time to reflect changes in our practices, website features, service providers, or applicable legal requirements. The “Last updated” date at the top of this page indicates when the policy was most recently revised.
+Additional sharing for future products, different insurance needs or other purposes is subject to applicable notice, consent and opt-out requirements.
 
-Where required by applicable law, we will provide additional notice of material changes. We encourage you to review this page periodically to stay informed about how we handle personal information.
+We do not sell customer lists or nonpublic personal information to unrelated businesses for their own marketing.
 
-## Contact Us
+## 7. Technology providers, employees and contractors
 
-If you have questions about this Privacy Policy or would like to submit a privacy-related request, contact Walker Insurance Agency:
+We use authorized technology and business service providers to operate our websites and our agency. These may include:
 
-**Email:** info@stuarthomeownersinsurance.com
+- GoHighLevel and other customer relationship management platforms
+- NowCerts and other insurance agency management systems
+- Cloudflare and other website hosting, security or document storage providers
+- Google Analytics, Google Ads, Google Tag Manager and Google Maps services
+- GoTo and other telephone or communications providers
+- Email, SMS, AI, automation and communications technology providers
+- Other authorized providers supporting our agency operations
 
-**Phone:** (772) 247-0106
+Our employees, independent contractors and authorized virtual assistants may access the information they need to perform their assigned responsibilities. Some authorized personnel or service providers may be located outside the United States.
 
-**Website:** stuarthomeownersinsurance.com
+We apply access restrictions and security safeguards, and we require authorized personnel and service providers to handle information according to applicable confidentiality and privacy obligations.
+
+We may also disclose information as required by law, to regulatory authorities, in legal proceedings or as part of a permitted business transaction.
+
+## 8. Cookies, website analytics and advertising
+
+Our websites may use cookies, similar technologies and advertising measurement tools to improve website functionality, understand visitor activity, measure quote requests and evaluate advertising campaigns. These tools may include Google Analytics, Google Ads, Google Tag Manager and related services.
+
+Depending on the services enabled, these technologies may collect browser identifiers, IP addresses, page interactions, advertising referral information and conversion events. We may use this information to measure advertising effectiveness and provide relevant advertising, subject to applicable law and your preferences.
+
+We aim to limit the disclosure of sensitive insurance application information through advertising and analytics technologies.
+
+You may manage cookies through your browser settings. Google explains how it uses information from sites that use its services at policies.google.com/technologies/partner-sites.
+
+## 9. Information storage and retention
+
+We retain information for legitimate insurance agency and business purposes, subject to applicable legal and regulatory requirements. Records may include:
+
+- Insurance inquiries and quote requests
+- Insurance applications and supporting documents
+- Uploaded declarations pages and other policy records
+- CRM communications and activity histories
+- Customer correspondence and service records
+- Lawfully obtained call recordings and transcripts
+- Communication consent and opt-out records
+
+Uploaded insurance documents may remain with your lead or customer record after the initial quotation review.
+
+Information may be stored in agency management systems, customer relationship platforms, secure cloud storage and other authorized business systems. Retention periods may differ by record type and by legal obligation. We securely delete or dispose of information when it is no longer needed and its retention is not otherwise required.
+
+## 10. Information security
+
+We maintain reasonable administrative, technical and physical safeguards designed to protect personal information against unauthorized access, use, alteration and disclosure. These may include encrypted transmission, restricted system access, authentication controls and confidentiality obligations.
+
+No electronic information system can be guaranteed to be completely secure.
+
+## 11. Your privacy choices and rights
+
+Depending on applicable law and your relationship with us, you may ask to:
+
+- Review certain personal information we maintain about you
+- Correct inaccurate information
+- Delete eligible information
+- Update your communication preferences
+- Opt out of marketing communications
+- Exercise applicable insurance information-sharing rights
+
+Some information may need to be retained for legal, regulatory, insurance, recordkeeping or other permitted purposes. Requests may be subject to reasonable identity verification and applicable legal exceptions.
+
+To stop marketing emails, use the unsubscribe option in the message. To stop marketing text messages, reply STOP or contact us. You may also contact us to ask that we stop marketing telephone calls.
+
+Opting out of marketing generally does not stop necessary communications about an insurance transaction, policy or service when otherwise permitted by law.
+
+Where applicable law gives you a separate right to opt out of specific disclosures of nonpublic personal information, we will provide the required notice and a way to exercise that right.
+
+## 12. Third-party websites
+
+Our websites may link to insurance carrier websites, external services or other third-party resources. Those websites have their own privacy policies and data practices, which we do not control.
+
+## 13. Children's privacy
+
+Our websites and insurance services are intended for adults. We do not knowingly collect personal information directly from anyone under 18 through our insurance quote websites.
+
+## 14. Updates to this policy
+
+We may update this Privacy Policy to reflect changes in our business practices, technology, legal requirements or insurance operations. The effective date at the top shows when it was last updated. When required by applicable law, we will provide additional notice or obtain consent before making material changes that affect personal information.
+
+## 15. Contact us
+
+Questions about this Privacy Policy, requests about your personal information and requests to opt out of communications may be sent to:
+
+**Walker Insurance of Central FL Inc.**
+
+Telephone: (772) 247-0106
+
+Email: info@stuarthomeownersinsurance.com
+
+Where required, additional insurance-specific privacy notices may be provided in connection with an insurance application, policy or customer relationship.
