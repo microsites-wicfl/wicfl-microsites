@@ -19,7 +19,9 @@
 
 - `node --test scripts/analytics.test.mjs`: 2 pruebas, 2 pasaron, incluida la nueva prueba del aviso.
 - `npm run check`: configuración válida, 0 errores y 0 warnings de tipos; 30 pruebas de bloques/configuración, 2 de analytics y 4 de schema pasaron.
-- Pendiente tras el push: resultados de workflows, verificación de HTML publicado y `node scripts/check-production-config.mjs stuart-homeowners`.
+- [Publish site Workers #37965562369](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/37965562369) y [Validate and build #37965562425](https://github.com/microsites-wicfl/wicfl-microsites/actions/runs/37965562425) concluyeron en `success`.
+- La copia publicada de Stuart respondió `200`; el aviso aparece dentro del paso 3, antes de `Request my quote`, y su liga es `/privacy-policy/`.
+- `node scripts/check-production-config.mjs stuart-homeowners`: `Production-readiness check passed for sites/stuart-homeowners/site.config.json.`
 
 ## Lo que tocaste fuera de lo pedido
 
@@ -27,7 +29,7 @@
 
 ## Lo que no pudiste verificar
 
-- Pendiente al momento de este commit: la publicación de Workers y la copia publicada de Stuart.
+- Nada. La copia publicada se verificó después de que Publish site Workers terminó en verde.
 
 ## Dónde dudaste
 
@@ -47,4 +49,5 @@
 
 ## Commits
 
-- Pendiente al momento de redactar: `feat(template): contact notice above the quote form submit button`.
+- `7206997` `feat(template): contact notice above the quote form submit button`.
+- Pendiente al momento de actualizar este reporte: documentación de resultados de CI y producción.
