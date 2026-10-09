@@ -1,3 +1,21 @@
+## 2026-10-09 · Stuart en vivo en stuarthomeownersinsurance.com
+
+**Quién:** Vic, Kevin, Pavel, Codex, cowork.
+
+- **Kevin y el consentimiento:** propuso que la casilla de marketing sea obligatoria para mandar el formulario; cowork explicó que el permiso solo vale si es opcional (lo dice también su propio borrador de GPT). Pendiente su respuesta sobre dejar los leads fuera de las campañas de IA hasta que exista la casilla.
+- **Prompt 040 (aviso bajo el formulario, `7206997`):** aceptado. Texto de la Section A de Kevin con el nombre legal, en el paso 3 antes de "Request my quote", liga a `/privacy-policy/`; prueba con `_example`; verificado en la copia publicada.
+- **Prompt 041 (`02aecd0` en el borrador):** Pavel había reescrito la política vieja en su borrador (salió antes del 039), lo que dejó el PR #22 en conflicto y sin vistas previas. Codex regresó solo ese archivo a la versión de `main`; PR limpio. Pavel también regresó la ciudad a los siete títulos, armó el hero y la banda final y borró un renglón suelto de imagen.
+- **Publicación (`42d27d7`, Vic desde Studio)** y ensayo final sobre esa versión (run `37980867552`), todo verde.
+- **Cloudflare:** SSL a Full (strict) por cowork en el Chrome de Vic (pedido explícito). Los cuatro registros (dos A de GoDaddy, CNAME www, CNAME _domainconnect) los borró Vic: el control de seguridad bloqueó a cowork en cambios de DNS.
+- **Producción:** run `37982704375`, `wrangler.pod-1.toml`, W-103 limpio. Verificado por cowork: apex y www en 200 sin `X-Robots-Tag`, robots y sitemap con el dominio real (10 URLs), canonical al apex, GTM cargado, política y aviso presentes, `/about-demo/` en 404.
+- **Pruebas de Vic:** lead real desde celular (autocompletado de Google funciona; llega a GHL con `stuart-homeowners`, dirección y ZIP; la subida de la declaración funciona). GA4 en tiempo real recibe `generate_lead`, `quote_start`, `quote_step`, `policy_upload`. Search Console verificado por TXT (autorización de Cloudflare), sitemap enviado (primer intento "Couldn't fetch", normal), prueba en vivo "URL is available to Google" e indexación solicitada.
+- **Hallazgos nuevos:** W-133 submenús (el menú de 9 páginas necesita ~1,600 px y en laptops sale como hamburguesa; plan aprobado por Vic), W-134 dominio con punto final, W-135 mensaje de subida en rojo, W-136 la declaración no llega a GHL. Además: el formulario crea el contacto en GHL en cuanto se escribe teléfono o correo, aunque no se mande; el dominio trae ligas de spam de antes (vigilar en Search Console).
+- **Pendiente de Kevin:** llamada de prueba, aviso de grabación en GoTo (la política dice que se avisa; Florida exige consentimiento de todas las partes) y confirmar el correo de prueba a `info@`.
+
+**Próximo:** lunes 12-oct Pavel arranca PSL. Semana: W-133, W-136, casilla de consentimiento con campo en GHL, prompt 033 (despliegue automático a producción), W-134, W-135. Mañana Vic marca `generate_lead` y `phone_click` como key events en GA4.
+
+---
+
 ## 2026-10-08 (cierre) · Stuart listo para salir mañana: política maestra, ensayo limpio y portada de Pavel en borrador
 
 **Quién:** Vic, Kevin, Pavel, Codex, cowork.

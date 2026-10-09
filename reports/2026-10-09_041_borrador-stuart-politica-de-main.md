@@ -50,3 +50,7 @@
 
 - `02aecd0` `content(stuart-homeowners): privacy policy back to the approved master version from main`.
 - Pendiente al momento de redactar: commit de este prompt y reporte en `main`.
+
+## Revisión de cowork
+
+**Veredicto: aceptado.** Un commit normal en el borrador (`02aecd0`) restauró solo `privacy-policy.md` desde `main`; PR #22 pasó a `mergeable: true, clean`; la vista previa mostró la política maestra. Que el diff del PR siga listando el archivo es cosmético (base de merge antigua): al publicar no cambió nada de la política.

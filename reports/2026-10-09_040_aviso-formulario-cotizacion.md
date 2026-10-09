@@ -51,3 +51,7 @@
 
 - `7206997` `feat(template): contact notice above the quote form submit button`.
 - Pendiente al momento de actualizar este reporte: documentación de resultados de CI y producción.
+
+## Revisión de cowork
+
+**Veredicto: aceptado.** Diff limitado a `ContactForm.astro`, una prueba sobre `_example` y el reporte; texto idéntico al pedido; estilo con variables existentes (#5b6675, contraste AA). Verificado por cowork en la copia publicada: aviso en el paso 3 antes del botón, liga a `/privacy-policy/`, nombre legal.
