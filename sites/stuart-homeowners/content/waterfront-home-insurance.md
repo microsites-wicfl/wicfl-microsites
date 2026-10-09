@@ -1,5 +1,5 @@
 ---
-title: "Waterfront Home Insurance"
+title: "Waterfront Home Insurance in Stuart, FL"
 description: "Explore waterfront home insurance in Stuart, FL for riverfront, canal-front and coastal properties. Find coverage options based on your home's location and needs."
 pageType: content
 navLabel: "Waterfront"
