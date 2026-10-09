@@ -6,7 +6,6 @@ pageType: home
 
 :::hero
 eyebrow: LOCAL HOME INSURANCE EXPERTS
-![Insured house on Stuart, FL]
 
 ![Stuart, FL home near to the sea with Stuart Florida Homeowners insurance Logo](/images/casa-2.png)
 
