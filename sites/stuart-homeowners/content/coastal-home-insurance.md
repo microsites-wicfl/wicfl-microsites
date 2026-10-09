@@ -1,5 +1,5 @@
 ---
-  title: "Coastal Home Insurance"
+  title: "Coastal Home Insurance in Stuart, FL"
   description: "Explore coastal home insurance in Stuart, FL for properties near the Atlantic coast, rivers and coastal communities. Find coverage options based on your home's location and needs."
   pageType: content
   navLabel: "Coastal"
