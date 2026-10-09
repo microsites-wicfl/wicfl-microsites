@@ -24,3 +24,15 @@ test("GTM markup is limited to the production host", () => {
   assert.match(fixtureHtml, /location\.hostname === domain/);
   assert.doesNotMatch(fixtureHtml, /gtag\/js\?id=G-/);
 });
+
+test("quote form fixture places the privacy notice before the submit button", () => {
+  buildSite(fixtureSlug);
+  const fixtureHtml = readFileSync(resolve(repositoryRoot, "dist/sites", fixtureSlug, "contact/index.html"), "utf8");
+  const stepThree = fixtureHtml.match(/<fieldset data-step="3"[\s\S]*?<\/fieldset>/)?.[0];
+  assert.ok(stepThree, "Expected the fixture contact page to contain step 3");
+  const notice = stepThree.indexOf('class="contact-form-consent"');
+  const submit = stepThree.indexOf("Request my quote");
+  assert.ok(notice >= 0, "Expected the privacy notice in step 3");
+  assert.ok(notice < submit, "Expected the privacy notice before the quote submit button");
+  assert.match(stepThree, /class="contact-form-consent"[\s\S]*?href="\/privacy-policy\/"/);
+});
