@@ -4,7 +4,7 @@
   "brand": { "name": "Stuart Homeowners Insurance", "parent": "WICFL", "logo": "/logo.svg" },
   "agency": { "name": "Walker Insurance Agency", "url": "https://www.walkerinsuranceagency.com/" },
   "niche": { "product": "homeowners", "audience": "homeowner" },
-  "geo": { "city": "Stuart", "county": "Martin", "state": "FL", "serviceArea": ["Stuart", "Sewall's Point", "Sailfish Point", "Hutchinson Island", "Palm City", "Rocky Point", "Martin County"] },
+  "geo": { "city": "Stuart", "county": "Martin", "state": "FL", "serviceArea": ["Stuart", "Sewall's Point", "Sailfish Point", "Hutchinson Island", "Palm City", "Rocky Point", "Martin County", "Jensen Beach", "Hobe Sound", "Port Salerno", "Indiantown"] },
   "locale": { "primary": "en", "alternates": [] },
   "contact": {
     "trackingPhone": "+17722470106",
@@ -14,9 +14,9 @@
   "products": ["homeowners"],
   "seo": {
     "title": "Stuart Homeowners Insurance | Florida Coverage",
-    "description": "Get homeowners insurance in Stuart, FL with local guidance for coastal, waterfront, high-value and Florida homes. Request a personalized quote today.",
+    "description": "Get homeowners insurance in Stuart, FL, for coastal, waterfront and high-value homes. Explore coverage options and request a personalized quote today.",
     "primaryKeyword": "Stuart homeowners insurance",
-    "secondaryKeywords": ["homeowners insurance Stuart FL", "home insurance Stuart FL", "Stuart FL home insurance", "waterfront homeowners insurance Stuart", "coastal homeowners insurance Stuart", "high value home insurance Stuart", "Martin County homeowners insurance", "Florida homeowners insurance", "home insurance Martin County FL"]
+    "secondaryKeywords": ["homeowners insurance Stuart FL", "home insurance Stuart FL", "Stuart Florida homeowners insurance", "homeowners insurance Martin County FL", "coastal home insurance Stuart FL", "waterfront home insurance Stuart FL", "high-value home insurance Stuart FL", "Florida homeowners insurance", "home insurance quotes Stuart FL", "property insurance Stuart Florida"]
   },
   "analytics": { "ga4": "G-YBYQXRCBLN", "gtm": "GTM-TV5RN2DB" },
   "crm": { "formId": "wicfl-quote-v1", "leadSource": "stuart-homeowners" },
